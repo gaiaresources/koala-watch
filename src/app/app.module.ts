@@ -9,13 +9,17 @@ import { ObservationPage } from '../pages/observation/observation';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
+import { QuestionService } from "../pages/dynamic-form/question.service";
+import { QuestionControlService } from "../pages/dynamic-form/question-control.service";
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     ListPage,
-    ObservationPage
+    ObservationPage,
+    DynamicFormQuestionComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +35,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
+    QuestionService,
+    QuestionControlService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
