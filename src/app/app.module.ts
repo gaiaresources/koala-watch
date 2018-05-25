@@ -5,15 +5,21 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { ObservationPage } from '../pages/observation/observation';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
+import { QuestionService } from "../pages/dynamic-form/question.service";
+import { QuestionControlService } from "../pages/dynamic-form/question-control.service";
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ListPage
+    ListPage,
+    ObservationPage,
+    DynamicFormQuestionComponent
   ],
   imports: [
     BrowserModule,
@@ -23,11 +29,14 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage
+    ListPage,
+    ObservationPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    QuestionService,
+    QuestionControlService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

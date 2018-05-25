@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Observation</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div>
+        <form (ngSubmit)="onSubmit()" [formGroup]="form">
+
+            <div *ngFor="let question of questions" class="form-row">
+                <app-question [question]="question" [form]="form"></app-question>
+            </div>
+
+            <div class="form-row">
+                <button type="submit" [disabled]="!form.valid">Save</button>
+            </div>
+        </form>
+
+        <div *ngIf="payLoad" class="form-row">
+            <strong>Saved the following values</strong><br>{{payLoad}}
+        </div>
+    </div>
+</ion-content>
