@@ -12,6 +12,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
 import { QuestionService } from "../pages/dynamic-form/question.service";
 import { QuestionControlService } from "../pages/dynamic-form/question-control.service";
+import { StorageService } from "./biosys-core/services/storage.service";
+import { IonicStorageModule } from "@ionic/storage";
+import { DataList } from "../pages/data-list/data-list";
 
 @NgModule({
   declarations: [
@@ -19,25 +22,30 @@ import { QuestionControlService } from "../pages/dynamic-form/question-control.s
     HomePage,
     ListPage,
     ObservationPage,
-    DynamicFormQuestionComponent
+    DynamicFormQuestionComponent,
+    DataList
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
     ListPage,
-    ObservationPage
+    ObservationPage,
+    DataList
   ],
   providers: [
     StatusBar,
     SplashScreen,
     QuestionService,
     QuestionControlService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    StorageService
   ]
 })
+
 export class AppModule {}
