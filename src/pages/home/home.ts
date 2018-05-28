@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { NavController } from 'ionic-angular';
-import {StorageService} from "../../app/biosys-core/services/storage.service";
+import {StorageService} from "../../app/storage.service";
 import {Record} from "../../app/biosys-core/interfaces/api.interfaces";
 import {UUID} from "angular2-uuid";
 

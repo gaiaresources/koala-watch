@@ -12,7 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
 import { QuestionService } from "../pages/dynamic-form/question.service";
 import { QuestionControlService } from "../pages/dynamic-form/question-control.service";
-import { StorageService } from "./biosys-core/services/storage.service";
+import { StorageService } from "./storage.service";
 import { IonicStorageModule } from "@ionic/storage";
 import { DataList } from "../pages/data-list/data-list";
 
