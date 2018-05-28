@@ -3,6 +3,7 @@ import { Injectable }       from '@angular/core';
 import { DropdownQuestion } from './question-dropdown';
 import { QuestionBase }     from './question-base';
 import { TextboxQuestion }  from './question-textbox';
+import {DatetimeQuestion} from "./question-datetime";
 
 @Injectable()
 export class QuestionService {
@@ -16,7 +17,8 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'index',
                 label: 'Index',
-                value: '',
+                value: '999',
+                type: 'text',
                 required: false,
                 order: 1
             }),
@@ -24,6 +26,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'type',
                 label: 'Type',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 2
@@ -32,6 +35,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'speciesCode',
                 label: 'Species Code',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 3
@@ -40,6 +44,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'commonName',
                 label: 'Common Name',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 4
@@ -48,22 +53,25 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'scientificName',
                 label: 'Scientific Name',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 5
             }),
 
-            new TextboxQuestion({
+            new DatetimeQuestion({
                 key: 'firstDate',
                 label: 'First Date',
+                type: 'datetime',
                 value: '',
                 required: false,
                 order: 6
             }),
 
-            new TextboxQuestion({
+            new DatetimeQuestion({
                 key: 'lastDate',
                 label: 'Last Date',
+                type: 'datetime',
                 value: '',
                 required: false,
                 order: 7
@@ -72,6 +80,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'count',
                 label: 'Count',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 8
@@ -80,6 +89,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'estimateCode',
                 label: 'Estimate Code',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 9
@@ -88,6 +98,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'sexCode',
                 label: 'Sex Code',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 10
@@ -96,6 +107,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'breedingType',
                 label: 'Breeding Type',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 11
@@ -104,6 +116,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'sourceCode',
                 label: 'Source Code',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 12
@@ -112,6 +125,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'datum',
                 label: 'Datum',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 13
@@ -120,6 +134,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'gps',
                 label: 'GPS',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 14
@@ -128,6 +143,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'zone',
                 label: 'Zone',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 15
@@ -136,6 +152,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'easting',
                 label: 'Easting',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 16
@@ -144,6 +161,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'northing',
                 label: 'Northing',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 17
@@ -152,6 +170,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'latitude',
                 label: 'Latitude',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 18
@@ -160,6 +179,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'longitude',
                 label: 'Longitude',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 19
@@ -168,6 +188,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'latitudeDegrees',
                 label: 'Latitude Degrees',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 20
@@ -176,6 +197,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'latitudeMinutes',
                 label: 'Latitude Minutes',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 21
@@ -184,6 +206,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'latitudeSeconds',
                 label: 'Latitude Seconds',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 22
@@ -192,6 +215,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'longitudeDegrees',
                 label: 'Longitude Degrees',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 23
@@ -200,6 +224,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'longitudeMinutes',
                 label: 'Longitude Minutes',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 24
@@ -208,6 +233,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'longitudeSeconds',
                 label: 'Longitude Seconds',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 25
@@ -216,6 +242,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'accuracy',
                 label: 'Accuracy',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 26
@@ -224,6 +251,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'locationDescription',
                 label: 'Location Description',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 27
@@ -232,6 +260,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'altitude',
                 label: 'Altitude',
+                type: 'number',
                 value: '',
                 required: false,
                 order: 28
@@ -240,6 +269,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'geologyCode',
                 label: 'Geology Code',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 29
@@ -248,6 +278,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'vegetationCode',
                 label: 'Vegetation Code',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 30
@@ -256,6 +287,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'slope',
                 label: 'Slope',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 31
@@ -264,6 +296,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'aspect',
                 label: 'Aspect',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 32
@@ -272,6 +305,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'locationNotes',
                 label: 'Location Notes',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 33
@@ -280,6 +314,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'observerName',
                 label: 'Observer Name',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 34
@@ -288,6 +323,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'specimenLocation',
                 label: 'Specimen Location',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 35
@@ -296,6 +332,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'externalKey',
                 label: 'External Key',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 36
@@ -304,6 +341,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'notes',
                 label: 'Notes',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 37
@@ -312,6 +350,7 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'observationType',
                 label: 'Observation Type',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 38
@@ -320,12 +359,25 @@ export class QuestionService {
             new TextboxQuestion({
                 key: 'microhabitatType',
                 label: 'Microhabitat Type',
+                type: 'text',
                 value: '',
                 required: false,
                 order: 39
-            })
+            }),
 
-    ];
+            new DropdownQuestion({
+                key: 'brave',
+            label: 'Bravery Rating',
+            options: [
+              {key: 'solid',  value: 'Solid'},
+              {key: 'great',  value: 'Great'},
+              {key: 'good',   value: 'Good'},
+              {key: 'unproven', value: 'Unproven'}
+            ],
+            order: 40
+          }),
+
+        ];
 
     return questions.sort((a, b) => a.order - b.order);
   }
