@@ -3,6 +3,7 @@ import { Record } from "./biosys-core/interfaces/api.interfaces";
 import { UUID } from 'angular2-uuid'
 import { Observable } from "rxjs/Observable";
 import { Injectable } from "@angular/core";
+import { fromPromise } from 'rxjs/observable/fromPromise';
 
 @Injectable()
 export class StorageService {
@@ -10,18 +11,10 @@ export class StorageService {
     }
   
     public putRecord(record: Record): Observable<boolean> {
-        return new Observable(observer => {
-            let uuid = UUID.UUID();
-            //let key = 'Record_' + uuid;
-            let key = uuid;
-            this.storage.set(key, record).then(ok => {
-                observer.next(true);
-                observer.complete();
-            }, notOK => {
-            observer.next(false);
-            observer.complete();
-            });
-        })
+        const key = UUID.UUID();
+        let thePromise: Promise<any>;
+        thePromise = this.storage.set(key, record);
+        return fromPromise(thePromise);
     }
   
     public getRecords(pickCriteria = undefined): Observable<Record> {
@@ -41,41 +34,15 @@ export class StorageService {
         });
     }
   
-    public patchRecord(record: Record, key: string): Observable<boolean> {
-        return new Observable<boolean>(observer => {
-            this.storage.set(key, record).then(ok => {
-                observer.next(true);
-                observer.complete();
-            }, notOK => {
-                observer.next(false);
-                observer.complete();
-            })
-        });
-    }
-  
     public deleteRecord(key: string): Observable<boolean> {
-        return new Observable<boolean>(observer => {
-            this.storage.remove(key).then(
-            ok => {
-                observer.next(true);
-                observer.complete();
-            },
-            bad => {
-                observer.next(false);
-                observer.complete();
-            })
-        });
+        let thePromise: Promise<any>;
+        thePromise = this.storage.remove(key);
+        return fromPromise(thePromise);
     }
   
     public clearRecords(): Observable<boolean> {
-        return new Observable<boolean>(observer => {
-            this.storage.clear().then(ok => {
-                observer.next(true);
-                observer.complete();
-            }, bad => {
-                observer.next(false);
-                observer.complete();
-            });
-        })
+        let thePromise: Promise<any>;
+        thePromise = this.storage.clear();
+        return fromPromise(thePromise);
     }
 }

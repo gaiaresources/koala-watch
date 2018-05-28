@@ -28,6 +28,7 @@ export class HomePage implements OnInit {
     }
     
     ngOnInit(): void {
+        this.storageTest();
         return;
     }
     
