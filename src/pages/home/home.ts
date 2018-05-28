@@ -4,6 +4,7 @@ import { StorageService } from "../../app/storage.service";
 import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
 import { UUID } from "angular2-uuid";
 
+// FIXME: this can be removed once we start to get "real" data, along with the storageTest()
 class FooBoo implements Record {
     public created: string;
     public data: {};
