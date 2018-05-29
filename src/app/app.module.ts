@@ -12,6 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
 import { QuestionService } from "../pages/dynamic-form/question.service";
 import { QuestionControlService } from "../pages/dynamic-form/question-control.service";
+import {APIService} from "./biosys-core/services/api.service";
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { QuestionControlService } from "../pages/dynamic-form/question-control.s
     SplashScreen,
     QuestionService,
     QuestionControlService,
+    APIService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
