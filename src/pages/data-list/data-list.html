@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <div id="category-legend-div">
+    <table id="category-legend">
+      <td class="category-legend-colour" id="category-completed"></td>
+      <td class="category-legend-label">Complete</td>
+      <td class="category-legend-colour" id="category-incomplete"></td>
+      <td class="category-legend-label">Incomplete</td>
+    </table>
+  </div>
+
+  <ion-list>
+    <button ion-item *ngFor="let row of data" (click)="itemTapped($event, item)" [style.background-color]="status(row)">
+      <img class="data-row-img" [src]="dataIcon(row)"/>
+      <span class="data-row-time">{{row.datetime}}</span>
+      <img class="data-row-koala-icon" src="assets/imgs/koala_data_koala.png">
+      <span class="data-row-koala-count">{{koalaCount(row)}}</span>
+    </button>
+  </ion-list>
+
+  <ion-fab bottom right>
+    <button ion-fab (click)="clickedSync()"><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="clickedNew(DataType.Poop)"><img class="home-fab-icon" src="assets/imgs/koala_new_poop.png"></button>
+      <button ion-fab (click)="clickedNew(DataType.Torch)"><img class="home-fab-icon" src="assets/imgs/koala_new_torch.png"></button>
+      <button ion-fab (click)="clickedNew(DataType.Visual)"><img class="home-fab-icon" src="assets/imgs/koala_new_eye.png"></button>
+    </ion-fab-list>
+  </ion-fab>
+  <ion-fab bottom left>
+    <button ion-fab><ion-icon name="cloud-upload"></ion-icon></button>
+  </ion-fab>
+</ion-content>
