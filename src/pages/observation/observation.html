@@ -11,8 +11,15 @@
     <div>
         <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
-            <div *ngFor="let question of questions" class="form-row">
-                <app-question [question]="question" [form]="form"></app-question>
+            <div  class="form-row">
+              <ion-item *ngFor="let field of formDescriptor.fields">
+                <ion-label floating>{{field.label}}</ion-label>
+                <ion-input *ngIf="field.type=='text'" [type]="field.type" [formControlName]="field.key"></ion-input>
+                <ion-select *ngIf="field.type=='select'" [formControlName]="field.key">
+                  <ion-option *ngFor="let opt of field.options" [value]="opt.key">{{opt.value}}</ion-option>
+                </ion-select>
+                <ion-datetime *ngIf="field.type=='datetime'" [formControlName]="field.key"></ion-datetime>
+              </ion-item>
             </div>
 
             <div class="form-row">
