@@ -1,11 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { FormGroup } from "@angular/forms";
-import { APIService } from "../../app/biosys-core/services/api.service";
-import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
-import { LineString, MultiLineString, MultiPolygon, Point, Polygon } from "geojson";
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
-import { SchemaService } from "../../app/biosys-core/services/schema.service";
+import { NavController } from 'ionic-angular';
+
+import { SchemaService } from '../../biosys-core/services/schema.service';
 
 @Component({
     selector: 'page-observation',
@@ -16,254 +14,254 @@ import { SchemaService } from "../../app/biosys-core/services/schema.service";
 export class ObservationPage {
 
     dataset = {
-      name: "Gary",
+      name: 'Gary',
       id: 11,
       data_package: {
-        "name": "koala-opportunistic-observations",
-        "title": "Koala Opportunistic",
-        "profile": "tabular-data-package",
-        "resources": [
+        'name': 'koala-opportunistic-observations',
+        'title': 'Koala Opportunistic',
+        'profile': 'tabular-data-package',
+        'resources': [
           {
-            "name": "koala-opportunistic-biosys-master",
-            "path": "tmpXt6PQe.upload",
-            "format": "csv",
-            "schema": {
-              "fields": [
+            'name': 'koala-opportunistic-biosys-master',
+            'path': 'tmpXt6PQe.upload',
+            'format': 'csv',
+            'schema': {
+              'fields': [
                 {
-                  "name": "Index",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Index',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Type",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Type',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Species Code",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Species Code',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Common Name",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Common Name',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Scientific Name",
-                  "type": "string",
-                  "biosys": {
-                    "type": "speciesName"
+                  'name': 'Scientific Name',
+                  'type': 'string',
+                  'biosys': {
+                    'type': 'speciesName'
                   },
-                  "format": "default",
-                  "constraints": {
-                    "required": true
+                  'format': 'default',
+                  'constraints': {
+                    'required': true
                   }
                 },
                 {
-                  "name": "First Date",
-                  "type": "datetime",
-                  "biosys": {
-                    "type": "observationDate"
+                  'name': 'First Date',
+                  'type': 'datetime',
+                  'biosys': {
+                    'type': 'observationDate'
                   },
-                  "format": "any"
+                  'format': 'any'
                 },
                 {
-                  "name": "Last Date",
-                  "type": "datetime",
-                  "format": "any"
+                  'name': 'Last Date',
+                  'type': 'datetime',
+                  'format': 'any'
                 },
                 {
-                  "name": "Count",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Count',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Estimate Code",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Estimate Code',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Sex Code",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Sex Code',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Breeding Type",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Breeding Type',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Source Code",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Source Code',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Datum",
-                  "type": "string",
-                  "biosys": {
-                    "type": "datum"
+                  'name': 'Datum',
+                  'type': 'string',
+                  'biosys': {
+                    'type': 'datum'
                   },
-                  "format": "default"
+                  'format': 'default'
                 },
                 {
-                  "name": "GPS",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'GPS',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Zone",
-                  "type": "integer",
-                  "biosys": {
-                    "type": "zone"
+                  'name': 'Zone',
+                  'type': 'integer',
+                  'biosys': {
+                    'type': 'zone'
                   },
-                  "format": "default"
+                  'format': 'default'
                 },
                 {
-                  "name": "Easting",
-                  "type": "number",
-                  "biosys": {
-                    "type": "easting"
+                  'name': 'Easting',
+                  'type': 'number',
+                  'biosys': {
+                    'type': 'easting'
                   },
-                  "format": "default"
+                  'format': 'default'
                 },
                 {
-                  "name": "Northing",
-                  "type": "number",
-                  "biosys": {
-                    "type": "northing"
+                  'name': 'Northing',
+                  'type': 'number',
+                  'biosys': {
+                    'type': 'northing'
                   },
-                  "format": "default"
+                  'format': 'default'
                 },
                 {
-                  "name": "Latitude",
-                  "type": "number",
-                  "biosys": {
-                    "type": "latitude"
+                  'name': 'Latitude',
+                  'type': 'number',
+                  'biosys': {
+                    'type': 'latitude'
                   },
-                  "format": "default"
+                  'format': 'default'
                 },
                 {
-                  "name": "Longitude",
-                  "type": "number",
-                  "biosys": {
-                    "type": "longitude"
+                  'name': 'Longitude',
+                  'type': 'number',
+                  'biosys': {
+                    'type': 'longitude'
                   },
-                  "format": "default"
+                  'format': 'default'
                 },
                 {
-                  "name": "Latitude Degrees",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Latitude Degrees',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Latitude Minutes",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Latitude Minutes',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Latitude Seconds",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Latitude Seconds',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Longitude Degrees",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Longitude Degrees',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Longitude Minutes",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Longitude Minutes',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Longitude Seconds",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Longitude Seconds',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Accuracy",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Accuracy',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Location Description",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Location Description',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Altitude",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Altitude',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Geology Code",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Geology Code',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Vegetation Code",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Vegetation Code',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Slope",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Slope',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Aspect",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Aspect',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Location Notes",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Location Notes',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Observer Name",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Observer Name',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Specimen Rego",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Specimen Rego',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Specimen Location",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Specimen Location',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "External Key",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'External Key',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Notes",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Notes',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Observation Type",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Observation Type',
+                  'type': 'string',
+                  'format': 'default'
                 },
                 {
-                  "name": "Microhabitat Type",
-                  "type": "string",
-                  "format": "default"
+                  'name': 'Microhabitat Type',
+                  'type': 'string',
+                  'format': 'default'
                 }
               ],
-              "missingValues": [
-                ""
+              'missingValues': [
+                ''
               ]
             },
-            "profile": "tabular-data-resource",
-            "encoding": "utf-8",
-            "mediatype": "text/csv"
+            'profile': 'tabular-data-resource',
+            'encoding': 'utf-8',
+            'mediatype': 'text/csv'
           }
         ]
       }

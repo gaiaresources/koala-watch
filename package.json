@@ -12,7 +12,7 @@
     "ionic:serve": "ionic-app-scripts serve"
   },
   "dependencies": {
-    "biosys-core": "src/biosys-core",
+    "biosys-core": "./src/biosys-core",
     "@angular/animations": "5.2.10",
     "@angular/common": "5.2.10",
     "@angular/compiler": "5.2.10",
