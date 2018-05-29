@@ -5,12 +5,12 @@ import { APIService } from "../../app/biosys-core/services/api.service";
 import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
 import { LineString, MultiLineString, MultiPolygon, Point, Polygon } from "geojson";
 
-import {SchemaService} from "../../app/biosys-core/services/schema.service";
+import { SchemaService } from "../../app/biosys-core/services/schema.service";
 
 @Component({
     selector: 'page-observation',
     templateUrl: 'observation.html',
-    providers: [ ]
+    providers: [ SchemaService ]
 })
 
 export class ObservationPage {
