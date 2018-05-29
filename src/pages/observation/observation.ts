@@ -7,14 +7,13 @@ import { QuestionService } from "../dynamic-form/question.service";
 import { APIService } from "../../app/biosys-core/services/api.service";
 import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
 import { LineString, MultiLineString, MultiPolygon, Point, Polygon } from "geojson";
-import { SchemaService } from "../../app/biosys-core/services/schema.service";
 
 import {flatMap, map} from 'rxjs/operators';
 
 @Component({
     selector: 'page-observation',
     templateUrl: 'observation.html',
-    providers: [ QuestionControlService, QuestionService, SchemaService ]
+    providers: [ QuestionControlService, QuestionService ]
 })
 
 export class ObservationPage {
@@ -280,23 +279,10 @@ export class ObservationPage {
     constructor(public navCtrl: NavController, private questionControlService: QuestionControlService, private questionService: QuestionService, private schemaService: SchemaService) {
         this.questions = questionService.getQuestions();
 
-        /*
-        this.apiService.getDatasetById(11).pipe(flatMap((dataset, index) =>
-          this.schemaService.getFormDescriptorAndGroupFromDataPackage(dataset)
-        ),map((results, index) => {
-          this.formDescriptor = results[0];
-          this.form = results[1];
-        })).subscribe(
-
-        );
-        */
-
-      this.schemaService.getFormDescriptorAndGroupFromDataPackage(this.dataset).subscribe(
-        (results) => {
-          this.formDescriptor = results[0];
-          this.form = results[1];
-        }
-      );
+        this.schemaService.getFormDescriptorAndGroupFromDataPackage(this.dataset).subscribe((results) => {
+            this.formDescriptor = results[0];
+            this.form = results[1];
+        });
     }
 
     ngOnInit() {
