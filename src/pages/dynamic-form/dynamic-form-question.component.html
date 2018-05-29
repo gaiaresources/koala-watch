@@ -1,8 +1,0 @@
-<ion-item>
-  <ion-label [attr.for]="question.key" floating>{{question.label}}</ion-label>
-  <ion-input *ngIf="question.controlType=='textbox'" [attr.name]="question.key" id="{{question.key}}" value="{{question.value}}" [type]="question.type"></ion-input>
-  <ion-select *ngIf="question.controlType=='dropdown'" [attr.name]="question.key" id="{{question.key}}">
-    <ion-option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</ion-option>
-  </ion-select>
-  <ion-datetime *ngIf="question.controlType=='datetime'" [attr.name]="question.key" id="{{question.key}}"></ion-datetime>
-</ion-item>
