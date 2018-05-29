@@ -1,19 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { FormGroup } from "@angular/forms";
-import { QuestionBase } from "../dynamic-form/question-base";
-import { QuestionControlService } from "../dynamic-form/question-control.service";
-import { QuestionService } from "../dynamic-form/question.service";
 import { APIService } from "../../app/biosys-core/services/api.service";
 import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
 import { LineString, MultiLineString, MultiPolygon, Point, Polygon } from "geojson";
 
-import {flatMap, map} from 'rxjs/operators';
+import {SchemaService} from "../../app/biosys-core/services/schema.service";
 
 @Component({
     selector: 'page-observation',
     templateUrl: 'observation.html',
-    providers: [ QuestionControlService, QuestionService ]
+    providers: [ ]
 })
 
 export class ObservationPage {
@@ -271,14 +268,11 @@ export class ObservationPage {
         ]
       }
     };
-    questions: QuestionBase<any>[] = [];
     form: FormGroup;
     formDescriptor: object;
     payLoad = '';
 
-    constructor(public navCtrl: NavController, private questionControlService: QuestionControlService, private questionService: QuestionService, private schemaService: SchemaService) {
-        this.questions = questionService.getQuestions();
-
+    constructor(public navCtrl: NavController, private schemaService: SchemaService) {
         this.schemaService.getFormDescriptorAndGroupFromDataPackage(this.dataset).subscribe((results) => {
             this.formDescriptor = results[0];
             this.form = results[1];
