@@ -1,17 +1,21 @@
 <ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-header>
+        <ion-toolbar>
+        </ion-toolbar>
+    </ion-header>
 
-  <ion-content>
-    <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
-      </button>
-    </ion-list>
-  </ion-content>
+    <ion-content>
+        <ion-list>
+            <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+                <table>
+                    <tr>
+                        <td><img class="sidepanel-icon" [src]="p.img"></td>
+                        <td class="sidepanel-title">{{p.title}}</td>
+                    </tr>
+                </table>
+            </button>
+        </ion-list>
+    </ion-content>
 
 </ion-menu>
 
