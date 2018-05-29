@@ -9,9 +9,6 @@ import { ObservationPage } from '../pages/observation/observation';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
-import { QuestionService } from "../pages/dynamic-form/question.service";
-import { QuestionControlService } from "../pages/dynamic-form/question-control.service";
 import {APIService} from "./biosys-core/services/api.service";
 
 @NgModule({
@@ -20,7 +17,7 @@ import {APIService} from "./biosys-core/services/api.service";
     HomePage,
     ListPage,
     ObservationPage,
-    DynamicFormQuestionComponent
+    ListPage
   ],
   imports: [
     BrowserModule,
@@ -36,8 +33,6 @@ import {APIService} from "./biosys-core/services/api.service";
   providers: [
     StatusBar,
     SplashScreen,
-    QuestionService,
-    QuestionControlService,
     APIService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
