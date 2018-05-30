@@ -17,7 +17,6 @@ import { IonicStorageModule } from "@ionic/storage";
 import { DataList } from "../pages/data-list/data-list";
 import { HomeMapPage } from "../pages/home-map/home-map";
 import { GoogleMap, GoogleMaps } from "@ionic-native/google-maps";
-import { HomeTabsPage } from "../pages/home-tabs/home-tabs";
 
 @NgModule({
     declarations: [
@@ -28,7 +27,7 @@ import { HomeTabsPage } from "../pages/home-tabs/home-tabs";
         DynamicFormQuestionComponent,
         DataList,
         HomeMapPage,
-        HomeTabsPage
+        HomePage
     ],
     imports: [
         BrowserModule,
@@ -42,7 +41,8 @@ import { HomeTabsPage } from "../pages/home-tabs/home-tabs";
         ListPage,
         ObservationPage,
         DataList,
-        HomeMapPage
+        HomeMapPage,
+        HomePage
     ],
     providers: [
         StatusBar,

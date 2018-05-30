@@ -27,9 +27,8 @@ export class MyApp {
         
         // used for an example of ngFor and navigation
         this.pages = [
-            { title: 'Home', component: DataList, img: 'assets/imgs/koala_home.png' },
+            { title: 'Home', component: HomePage, img: 'assets/imgs/koala_home.png' },
             { title: 'Observation', component: ObservationPage, img: 'assets/imgs/koala_data_eye.png' },
-            { title: 'Map', component: HomeMapPage, img: 'assets/imgs/koala_data_torch.png' },
             { title: 'Settings', component: ListPage, img: 'assets/imgs/koala_settings.png' },
             { title: 'About', component: ListPage, img: 'assets/imgs/koala_about.png' },
             { title: 'Logout', component: ListPage, img: 'assets/imgs/koala_logout.png' },

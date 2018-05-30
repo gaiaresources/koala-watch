@@ -3,6 +3,15 @@ import { NavController } from 'ionic-angular';
 import { StorageService } from "../../app/storage.service";
 import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
 import { UUID } from "angular2-uuid";
+import { DataList } from "../data-list/data-list";
+import { HomeMapPage } from "../home-map/home-map";
+import { ObservationPage } from "../observation/observation";
+
+enum DataType {
+    Poop = 0,
+    Torch = 1,
+    Visual = 2
+}
 
 // FIXME: this can be removed once we start to get "real" data, along with the storageTest()
 class FooBoo implements Record {
@@ -24,11 +33,24 @@ class FooBoo implements Record {
     templateUrl: 'home.html'
 })
 export class HomePage implements OnInit {
+    public listRoot = DataList;
+    public mapRoot = HomeMapPage;
+    
     constructor(public navCtrl: NavController, private store: StorageService) {
     }
     
     ngOnInit(): void {
         this.storageTest();
+        return;
+    }
+    
+    
+    clickedSync() {
+        return;
+    }
+    
+    clickedNew(type: DataType) {
+        this.navCtrl.setRoot(ObservationPage);
         return;
     }
     

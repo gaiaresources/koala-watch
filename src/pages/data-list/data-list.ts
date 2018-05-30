@@ -3,13 +3,6 @@ import { NavController, NavParams } from 'ionic-angular';
 import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
 import { ObservationPage } from "../observation/observation";
 
-// A modification of the templatey ListPage for koala purposes
-enum DataType {
-    Poop = 0,
-    Torch = 1,
-    Visual = 2
-}
-
 class FooBoo implements Record {
     public created: string;
     public data: {};
@@ -93,16 +86,7 @@ export class DataList {
         record.icon = rv;
         return rv;
     }
-    
-    clickedSync() {
-        return;
-    }
-    
-    clickedNew(type: DataType) {
-        this.navCtrl.setRoot(ObservationPage);
-        return;
-    }
-    
+
     itemTapped(event, item) {
         // That's right, we're pushing to ourselves!
         this.navCtrl.push(DataList, {
