@@ -1,49 +1,40 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
-import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { ObservationPage } from '../pages/observation/observation';
+import { AppComponent } from './app.component';
 
+import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
 import { QuestionService } from "../pages/dynamic-form/question.service";
 import { QuestionControlService } from "../pages/dynamic-form/question-control.service";
-import { StorageService } from "./storage.service";
 import { IonicStorageModule } from "@ionic/storage";
-import { DataList } from "../pages/data-list/data-list";
-import { HomeMapPage } from "../pages/home-map/home-map";
-import { GoogleMap, GoogleMaps } from "@ionic-native/google-maps";
+import { GoogleMaps } from "@ionic-native/google-maps";
+import { ReactiveFormsModule } from '@angular/forms';
+import { StorageService } from '../shared/services/storage.service';
+import { MobileAuthService } from '../shared/services/mobile-auth.service';
+import { LoginPageModule } from '../pages/login/login.module';
+import { APIService } from "./biosys-core/services/api.service";
+import { ApiInterceptor } from "./biosys-core/services/api.interceptor";
+import { AuthService } from "./biosys-core/services/auth.service";
+import { ComponentsModule } from "../components/components.module";
 
 @NgModule({
     declarations: [
-        MyApp,
-        HomePage,
-        ListPage,
-        ObservationPage,
+        AppComponent,
         DynamicFormQuestionComponent,
-        DataList,
-        HomeMapPage,
-        HomePage
     ],
     imports: [
         BrowserModule,
-        IonicModule.forRoot(MyApp),
-        IonicStorageModule.forRoot()
+        HttpClientModule,
+        ReactiveFormsModule,
+        IonicModule.forRoot(AppComponent),
+        IonicStorageModule.forRoot(),
+        ComponentsModule
     ],
     bootstrap: [IonicApp],
-    entryComponents: [
-        MyApp,
-        HomePage,
-        ListPage,
-        ObservationPage,
-        DataList,
-        HomeMapPage,
-        HomePage
-    ],
     providers: [
         StatusBar,
         SplashScreen,
@@ -51,8 +42,24 @@ import { GoogleMap, GoogleMaps } from "@ionic-native/google-maps";
         QuestionControlService,
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         StorageService,
-        GoogleMaps
+        GoogleMaps,
+        APIService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ApiInterceptor,
+            multi: true
+        },
+        {
+            provide: AuthService,
+            useClass: MobileAuthService
+        },
+        {
+            provide: ErrorHandler,
+            useClass: IonicErrorHandler
+        },
+        StorageService
     ]
 })
 
-export class AppModule {}
+export class AppModule {
+}

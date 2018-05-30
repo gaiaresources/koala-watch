@@ -8,10 +8,10 @@ import {
 import { Component, OnInit } from "@angular/core/";
 
 @Component({
-    selector: 'home-map',
-    templateUrl: 'home-map.html'
+    selector: 'records-map',
+    templateUrl: 'records-map.html'
 })
-export class HomeMapPage {
+export class RecordsMapComponent {
     private map: GoogleMap;
     
     private randoCoordMins = {

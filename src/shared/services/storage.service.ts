@@ -1,9 +1,9 @@
-import { Storage } from "@ionic/storage";
-import { Dataset, Record } from "./biosys-core/interfaces/api.interfaces";
+import { Storage } from '@ionic/storage';
 import { UUID } from 'angular2-uuid'
-import { Observable } from "rxjs/Observable";
-import { Injectable } from "@angular/core";
+import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
+import { Dataset, Record } from "../../app/biosys-core/interfaces/api.interfaces";
 
 @Injectable()
 export class StorageService {
@@ -38,7 +38,7 @@ export class StorageService {
     }
     
     public getRecord(key: string): Observable<Record> {
-        return fromPromise(this.storage.get(key));
+        return fromPromise(this.storage.get(this.Label_Record + "_" + key));
     }
     
     public getRecords(pickCriteria = undefined): Observable<Record> {
@@ -58,11 +58,11 @@ export class StorageService {
             });
         });
     }
-  
+
     public deleteRecord(key: string): Observable<boolean> {
         return fromPromise(this.storage.remove(key));
     }
-  
+
     public clearRecords(): Observable<boolean> {
         let thePromise: Promise<any>;
         thePromise = this.storage.clear();

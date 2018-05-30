@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { StorageService } from "../../app/storage.service";
 import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
-import { UUID } from "angular2-uuid";
-import { DataList } from "../data-list/data-list";
-import { HomeMapPage } from "../home-map/home-map";
 import { ObservationPage } from "../observation/observation";
+import { APIService } from "../../app/biosys-core/services/api.service";
+import { StorageService } from "../../shared/services/storage.service";
+import { AuthService } from "../../app/biosys-core/services/auth.service";
+import { RecordsListComponent } from "../../components/records-list/records-list";
+import { RecordsMapComponent } from "../../components/records-map/records-map";
+import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { Component } from "@angular/core";
+import { UUID } from "angular2-uuid";
 
 enum DataType {
     Poop = 0,
@@ -28,23 +30,19 @@ class FooBoo implements Record {
     public species_name: string;
 }
 
+@IonicPage()
 @Component({
     selector: 'page-home',
     templateUrl: 'home.html'
 })
-export class HomePage implements OnInit {
-    public listRoot = DataList;
-    public mapRoot = HomeMapPage;
+export class HomePage {
+    public listRoot = RecordsListComponent;
+    public mapRoot = RecordsMapComponent;
     
-    constructor(public navCtrl: NavController, private store: StorageService) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
+                private authService: AuthService, private store: StorageService) {
     }
-    
-    ngOnInit(): void {
-        this.storageTest();
-        return;
-    }
-    
-    
+
     clickedSync() {
         return;
     }
@@ -56,14 +54,14 @@ export class HomePage implements OnInit {
     
     storageTest() {
         let rec: FooBoo;
-        
+
         rec = new FooBoo();
         rec.data = { 'uuid': UUID.UUID() };
-        
+
         let picker = function (value, key) {
-            return key.startsWith("Record");
+            return key.startsWith('Record');
         };
-        
+
         this.store.clearRecords().subscribe(clearResult => {
             this.store.putRecord(rec).subscribe(result => {
                 if (result) {
