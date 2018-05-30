@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
-import { ObservationPage } from "../observation/observation";
+import { Record } from '../../app/biosys-core/interfaces/api.interfaces';
 
 class FooBoo implements Record {
     public created: string;
@@ -22,10 +21,10 @@ class FooBoo implements Record {
 }
 
 @Component({
-    selector: 'data-list',
-    templateUrl: 'data-list.html'
+    selector: 'records-list',
+    templateUrl: 'records-list.html'
 })
-export class DataList {
+export class RecordsListComponent {
     selectedItem: any;
     items: Array<{ title: string, note: string, icon: string }>;
     
@@ -53,26 +52,26 @@ export class DataList {
     
     status(record: FooBoo) {
         // fixme: eventually this will reflect reality
-        // FIXME: Move into a "Record" object implementation
-        if (record.data_status !== undefined)
+        if (record.data_status !== undefined) {
             return record.data_status;
+        }
         record.data_status = (Math.floor(Math.random() * 2) > 0) ? '#ebffef' : '#ebf6ff';
         return record.data_status;
     }
     
     koalaCount(record: FooBoo): number {
-        // FIXME: Move into a "Record" object implementation
-        if (record.koala_count !== undefined)
+        if (record.koala_count !== undefined) {
             return record.koala_count;
+        }
         // FIXME: find out how to determine number of koalas from inside Record.data
         record.koala_count = Math.floor(Math.random() * 10);
         return record.koala_count;
     }
     
     dataIcon(record: FooBoo): string {
-        // FIXME: Move into a "Record" object implementation
-        if (record.icon !== undefined)
+        if (record.icon !== undefined) {
             return record.icon;
+        }
         let rv = this.itemIcons[2];
         // FIXME: find out how to determine observation type from inside Record.data
         switch (Math.floor(Math.random() * 3)) {
@@ -86,10 +85,10 @@ export class DataList {
         record.icon = rv;
         return rv;
     }
-
+    
     itemTapped(event, item) {
         // That's right, we're pushing to ourselves!
-        this.navCtrl.push(DataList, {
+        this.navCtrl.push(RecordsListComponent, {
             item: item
         });
     }
