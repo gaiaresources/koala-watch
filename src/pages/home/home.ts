@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StorageService } from '../../shared/services/storage.service';
 import { Record } from '../../biosys-core/interfaces/api.interfaces';
 import { UUID } from 'angular2-uuid';
@@ -21,13 +21,14 @@ class FooBoo implements Record {
     public species_name: string;
 }
 
+@IonicPage()
 @Component({
     selector: 'page-home',
     templateUrl: 'home.html'
 })
 export class HomePage implements OnInit {
-    constructor(public navCtrl: NavController, private apiService: APIService, private authService: AuthService,
-                private store: StorageService) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
+                private authService: AuthService, private store: StorageService) {
     }
 
     ngOnInit(): void {

@@ -281,6 +281,6 @@ export class ObservationPage {
     }
 
     onSubmit() {
+        console.log(this.form.value);
     }
-
 }
