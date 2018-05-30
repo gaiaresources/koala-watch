@@ -4,9 +4,6 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { AppComponent } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { ObservationPage } from '../pages/observation/observation';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -15,7 +12,6 @@ import { QuestionService } from '../pages/dynamic-form/question.service';
 import { QuestionControlService } from '../pages/dynamic-form/question-control.service';
 import { StorageService } from '../shared/services/storage.service';
 import { IonicStorageModule } from '@ionic/storage';
-import { DataList } from '../pages/data-list/data-list';
 import { APIService } from '../biosys-core/services/api.service';
 import { AuthService } from '../biosys-core/services/auth.service';
 import { MobileAuthService } from '../shared/services/mobile-auth.service';
@@ -26,11 +22,7 @@ import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
 @NgModule({
     declarations: [
         AppComponent,
-        HomePage,
-        ListPage,
-        ObservationPage,
         DynamicFormQuestionComponent,
-        DataList
     ],
     imports: [
         BrowserModule,
@@ -41,13 +33,7 @@ import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
         LoginPageModule
     ],
     bootstrap: [IonicApp],
-    entryComponents: [
-        AppComponent,
-        HomePage,
-        ListPage,
-        ObservationPage,
-        DataList
-    ],
+
     providers: [
         StatusBar,
         SplashScreen,
