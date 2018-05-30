@@ -60,6 +60,7 @@ export class DataList {
     
     status(record: FooBoo) {
         // fixme: eventually this will reflect reality
+        // FIXME: Move into a "Record" object implementation
         if (record.data_status !== undefined)
             return record.data_status;
         record.data_status = (Math.floor(Math.random() * 2) > 0) ? '#ebffef' : '#ebf6ff';
@@ -67,6 +68,7 @@ export class DataList {
     }
     
     koalaCount(record: FooBoo): number {
+        // FIXME: Move into a "Record" object implementation
         if (record.koala_count !== undefined)
             return record.koala_count;
         // FIXME: find out how to determine number of koalas from inside Record.data
@@ -75,6 +77,7 @@ export class DataList {
     }
     
     dataIcon(record: FooBoo): string {
+        // FIXME: Move into a "Record" object implementation
         if (record.icon !== undefined)
             return record.icon;
         let rv = this.itemIcons[2];

@@ -15,37 +15,44 @@ import { QuestionControlService } from "../pages/dynamic-form/question-control.s
 import { StorageService } from "./storage.service";
 import { IonicStorageModule } from "@ionic/storage";
 import { DataList } from "../pages/data-list/data-list";
+import { HomeMapPage } from "../pages/home-map/home-map";
+import { GoogleMap, GoogleMaps } from "@ionic-native/google-maps";
+import { HomeTabsPage } from "../pages/home-tabs/home-tabs";
 
 @NgModule({
-  declarations: [
-    MyApp,
-    HomePage,
-    ListPage,
-    ObservationPage,
-    DynamicFormQuestionComponent,
-    DataList
-  ],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage,
-    ListPage,
-    ObservationPage,
-    DataList
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    QuestionService,
-    QuestionControlService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    StorageService
-  ]
+    declarations: [
+        MyApp,
+        HomePage,
+        ListPage,
+        ObservationPage,
+        DynamicFormQuestionComponent,
+        DataList,
+        HomeMapPage,
+        HomeTabsPage
+    ],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(MyApp),
+        IonicStorageModule.forRoot()
+    ],
+    bootstrap: [IonicApp],
+    entryComponents: [
+        MyApp,
+        HomePage,
+        ListPage,
+        ObservationPage,
+        DataList,
+        HomeMapPage
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        QuestionService,
+        QuestionControlService,
+        {provide: ErrorHandler, useClass: IonicErrorHandler},
+        StorageService,
+        GoogleMaps
+    ]
 })
 
 export class AppModule {}

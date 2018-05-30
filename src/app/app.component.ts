@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { DataList } from "../pages/data-list/data-list";
 import { ObservationPage } from '../pages/observation/observation';
+import { HomeMapPage } from "../pages/home-map/home-map";
 
 @Component({
     templateUrl: 'app.html'
@@ -28,6 +29,7 @@ export class MyApp {
         this.pages = [
             { title: 'Home', component: DataList, img: 'assets/imgs/koala_home.png' },
             { title: 'Observation', component: ObservationPage, img: 'assets/imgs/koala_data_eye.png' },
+            { title: 'Map', component: HomeMapPage, img: 'assets/imgs/koala_data_torch.png' },
             { title: 'Settings', component: ListPage, img: 'assets/imgs/koala_settings.png' },
             { title: 'About', component: ListPage, img: 'assets/imgs/koala_about.png' },
             { title: 'Logout', component: ListPage, img: 'assets/imgs/koala_logout.png' },
