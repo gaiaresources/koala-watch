@@ -1,3 +1,57 @@
-records-list {
-
+table#category-legend {
+  min-height: 2em;
+  margin-left: auto;
+  margin-right: auto;
 }
+
+td.category-legend-colour {
+  height: 2em;
+  width: 2em;
+}
+
+td.category-legend-label {
+  vertical-align: middle;
+  padding-left: 2em;
+  padding-right: 4em;
+  text-align: center;
+}
+
+div#category-legend-div {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+#category-completed {
+  background-color: #ebffef;
+}
+
+#category-incomplete {
+  background-color: #ebf6ff;
+}
+
+img.data-row-img {
+  height: 40px;
+  width: 40px;
+  vertical-align: middle;
+}
+
+span.data-row-time {
+  font-size: 1.2em;
+  vertical-align: middle;
+}
+
+img.data-row-koala-icon {
+  height: 40px;
+  width: 40px;
+  vertical-align: middle;
+}
+
+span.data-row-koala-count {
+  font-size: 1.5em;
+  vertical-align: middle;
+}
+
+.fab {
+  background-color: green;
+}
+

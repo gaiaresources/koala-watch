@@ -5,19 +5,22 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { AppComponent } from './app.component';
 
+import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { DynamicFormQuestionComponent } from '../pages/dynamic-form/dynamic-form-question.component';
-import { QuestionService } from '../pages/dynamic-form/question.service';
-import { QuestionControlService } from '../pages/dynamic-form/question-control.service';
+import { QuestionService } from "../pages/dynamic-form/question.service";
+import { QuestionControlService } from "../pages/dynamic-form/question-control.service";
+import { IonicStorageModule } from "@ionic/storage";
+import { GoogleMaps } from "@ionic-native/google-maps";
+import { ReactiveFormsModule } from '@angular/forms';
 import { StorageService } from '../shared/services/storage.service';
-import { IonicStorageModule } from '@ionic/storage';
-import { APIService } from '../biosys-core/services/api.service';
-import { AuthService } from '../biosys-core/services/auth.service';
 import { MobileAuthService } from '../shared/services/mobile-auth.service';
 import { LoginPageModule } from '../pages/login/login.module';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
+import { APIService } from "../biosys-core/services/api.service";
+import { ApiInterceptor } from "../biosys-core/services/api.interceptor";
+import { AuthService } from "../biosys-core/services/auth.service";
+import { ComponentsModule } from "../components/components.module";
+import { ObservationPageModule } from "../pages/observation/observation.module";
 
 @NgModule({
     declarations: [
@@ -30,15 +33,18 @@ import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
         ReactiveFormsModule,
         IonicModule.forRoot(AppComponent),
         IonicStorageModule.forRoot(),
-        LoginPageModule
+        ComponentsModule,
+        ObservationPageModule
     ],
     bootstrap: [IonicApp],
-
     providers: [
         StatusBar,
         SplashScreen,
         QuestionService,
         QuestionControlService,
+        {provide: ErrorHandler, useClass: IonicErrorHandler},
+        StorageService,
+        GoogleMaps,
         APIService,
         {
             provide: HTTP_INTERCEPTORS,

@@ -1,32 +1,56 @@
 import { Storage } from '@ionic/storage';
-import { Record } from '../../biosys-core/interfaces/api.interfaces';
 import { UUID } from 'angular2-uuid'
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
+import { Dataset, Record } from "../../biosys-core/interfaces/api.interfaces";
 
 @Injectable()
 export class StorageService {
     constructor(private storage: Storage) {
     }
-
-    public putRecord(record: Record): Observable<boolean> {
-        const key = UUID.UUID();
-        let thePromise: Promise<any>;
-        thePromise = this.storage.set(key, record);
-        return fromPromise(thePromise);
+    
+    private Label_Dataset='Dataset';
+    private Label_Record='Record';
+    
+    public putDataset(dataset: Dataset): Observable<boolean> {
+        const key = this.Label_Dataset + "_" + dataset.id;
+        return fromPromise(this.storage.set(key, dataset));
     }
-
-    public getRecords(pickCriteria?): Observable<Record> {
+    
+    public getDatasets(pickCriteria=undefined) : Observable<Dataset> {
+        return new Observable( observer => {
+            this.storage.forEach((value, key) => {
+                if (key.split('_')[0] === this.Label_Dataset)
+                    if (pickCriteria == undefined || pickCriteria(value, key))
+                        observer.next(value);
+            }).then( value => {
+                observer.complete();
+            }, reason => {
+                observer.error(reason);
+            });
+        });
+    }
+  
+    public putRecord(record: Record): Observable<boolean> {
+        const key = this.Label_Record + "_"  + UUID.UUID();
+        return fromPromise(this.storage.set(key, record));
+    }
+    
+    public getRecord(key: string): Observable<Record> {
+        return fromPromise(this.storage.get(this.Label_Record + "_" + key));
+    }
+    
+    public getRecords(pickCriteria = undefined): Observable<Record> {
         return new Observable(observer => {
             this.storage.forEach((value: Record, key) => {
-                if (pickCriteria === undefined || pickCriteria(value, key)) {
-                    if (value === undefined) {
-                        return;
+                if (key.split('_')[0] === this.Label_Dataset)
+                    if (pickCriteria === undefined || pickCriteria(value, key)) {
+                        if (value === undefined)
+                            return;
+                        value.data['uuid'] = key;
+                        observer.next(value);
                     }
-                    value.data['uuid'] = key;
-                    observer.next(value);
-                }
             }).then(value => {
                 observer.complete();
             }, reason => {
@@ -36,9 +60,7 @@ export class StorageService {
     }
 
     public deleteRecord(key: string): Observable<boolean> {
-        let thePromise: Promise<any>;
-        thePromise = this.storage.remove(key);
-        return fromPromise(thePromise);
+        return fromPromise(this.storage.remove(key));
     }
 
     public clearRecords(): Observable<boolean> {

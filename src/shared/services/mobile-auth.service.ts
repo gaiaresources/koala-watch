@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { APIService } from '../../biosys-core/services/api.service';
+import { APIService } from  '../../biosys-core/services/api.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
 
 @Injectable()

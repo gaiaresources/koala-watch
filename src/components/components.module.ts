@@ -1,13 +1,20 @@
-import { NgModule } from '@angular/core';
 import { RecordsListComponent } from './records-list/records-list';
 import { RecordsMapComponent } from './records-map/records-map';
+import { IonicModule } from "ionic-angular";
+import { NgModule } from "@angular/core";
 
 @NgModule({
     declarations: [
         RecordsListComponent,
         RecordsMapComponent,
     ],
-    imports: [],
+    imports: [
+        IonicModule
+    ],
+    entryComponents: [
+        RecordsListComponent,
+        RecordsMapComponent,
+    ],
     exports: [
         RecordsListComponent,
         RecordsMapComponent,
