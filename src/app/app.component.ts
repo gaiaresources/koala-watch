@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
                 private store: StorageService) {
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.platform.ready().then(() => {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
@@ -54,7 +54,7 @@ export class AppComponent implements OnInit {
         });
     }
 
-    askLogout() {
+    public askLogout() {
         const alert = this.alertController.create({
             title: 'Are you sure?',
             message: 'Are you sure you wish to log out?',
@@ -72,7 +72,7 @@ export class AppComponent implements OnInit {
         alert.present();
     }
 
-    openPage(menuItem) {
+    private openPage(menuItem) {
         // Reset the content nav to have just this page
         // we wouldn't want the back button to show in this scenario
         if (menuItem.title === 'Logout') {

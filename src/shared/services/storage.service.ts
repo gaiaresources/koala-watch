@@ -48,6 +48,8 @@ export class StorageService {
                     if (pickCriteria === undefined || pickCriteria(value, key)) {
                         if (value === undefined)
                             return;
+                        if (value.data === undefined)
+                            value.data = {};
                         value.data['uuid'] = key;
                         observer.next(value);
                     }

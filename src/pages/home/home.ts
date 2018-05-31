@@ -5,7 +5,7 @@ import { StorageService } from "../../shared/services/storage.service";
 import { AuthService } from "../../biosys-core/services/auth.service";
 import { RecordsListComponent } from "../../components/records-list/records-list";
 import { RecordsMapComponent } from "../../components/records-map/records-map";
-import { FabContainer, IonicPage, NavController, NavParams } from "ionic-angular";
+import { FabContainer, IonicPage, Loading, LoadingController, NavController, NavParams } from "ionic-angular";
 import { Component, ViewChild } from "@angular/core";
 import { UUID } from "angular2-uuid";
 
@@ -32,47 +32,42 @@ class FooBoo implements Record {
 export class HomePage {
     public listRoot = RecordsListComponent;
     public mapRoot = RecordsMapComponent;
-    public dataTypes = DataType;
-    @ViewChild('fabNew') fabNew: FabContainer;
-
+    
+    private loadingDialog: Loading;
+    
     constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
-                private authService: AuthService, private store: StorageService) {
+                private authService: AuthService,
+                private store: StorageService,
+                public loadingCtrl: LoadingController) {
     }
 
     public clickedUpload() {
-        return;
-    }
-
-    public clickedNew(datasetId: number) {
-        this.navCtrl.push('ObservationPage', {datasetId: datasetId});
-    }
-
-    private storageTest() {
-        let rec: FooBoo;
-
-        rec = new FooBoo();
-        rec.data = { 'uuid': UUID.UUID() };
-
-        this.store.clearRecords().subscribe(clearResult => {
-            this.store.putRecord(rec).subscribe(result => {
-                if (result) {
-                    this.store.putRecord(rec).subscribe((nextResult) => {
-                        this.store.getRecords().subscribe((next) => {
-                                alert(next.data['uuid']);
-                            },
-                            (err) => {
-                                alert('Sorry: ' + err.message);
-                            },
-                            () => {
-                                alert('Done');
-                            });
-                    });
-                }
-            });
+        this.loadingDialog = this.loadingCtrl.create({
+            content: 'Uploading Data To BioSys Server...'
         });
+        
+        this.store.getRecords(() => {return true;}).subscribe(value => {
+             this.apiService.createRecord(value).subscribe(value => {
+             }, error => {
+                // TODO: error handling
+             },
+             () => {
+                 // TODO: in the real version, delete Record from "views"
+             });
+            },
+            error1 => {
+                // TODO: error handling
+                this.loadingDialog.dismiss();
+            },
+            () => {
+            this.loadingDialog.dismiss();
+        });
+        this.loadingDialog.present();
+    }
 
-    public clickedNew(type: DataType, fabContainer: FabContainer) {
+    public clickedNew(datasetId: number, fabContainer: FabContainer) {
         fabContainer.close();
-        this.navCtrl.push('ObservationPage');
+        // datasetId = 101; // VLC: borking countermeasure
+        this.navCtrl.push('ObservationPage', {datasetId: datasetId});
     }
 }
