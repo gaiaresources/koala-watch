@@ -25,11 +25,11 @@ export class RecordsMapComponent {
     
     constructor() { }
     
-    ionViewDidLoad() {
+    public ionViewDidLoad() {
         this.loadMap();
     }
     
-    loadMap() {
+    private loadMap() {
         let location = new LatLng(-25,132);
         let mapOptions: GoogleMapOptions = {
             'backgroundColor': 'white',
