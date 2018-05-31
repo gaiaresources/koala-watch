@@ -33,8 +33,7 @@ import { ObservationPageModule } from "../pages/observation/observation.module";
         ReactiveFormsModule,
         IonicModule.forRoot(AppComponent),
         IonicStorageModule.forRoot(),
-        ComponentsModule,
-        ObservationPageModule // FIXME: FAB buttons don't work without this
+        ComponentsModule
     ],
     bootstrap: [IonicApp],
     providers: [
