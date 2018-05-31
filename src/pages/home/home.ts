@@ -1,13 +1,13 @@
-import { Record } from "../../biosys-core/interfaces/api.interfaces";
-import { ObservationPage } from "../observation/observation";
-import { APIService } from "../../biosys-core/services/api.service";
-import { StorageService } from "../../shared/services/storage.service";
-import { AuthService } from "../../biosys-core/services/auth.service";
-import { RecordsListComponent } from "../../components/records-list/records-list";
-import { RecordsMapComponent } from "../../components/records-map/records-map";
-import { FabContainer, IonicPage, NavController, NavParams } from "ionic-angular";
-import { Component, ViewChild } from "@angular/core";
-import { UUID } from "angular2-uuid";
+import { Record } from '../../biosys-core/interfaces/api.interfaces';
+import { ObservationPage } from '../observation/observation';
+import { APIService } from '../../biosys-core/services/api.service';
+import { StorageService } from '../../shared/services/storage.service';
+import { AuthService } from '../../biosys-core/services/auth.service';
+import { RecordsListComponent } from '../../components/records-list/records-list';
+import { RecordsMapComponent } from '../../components/records-map/records-map';
+import { FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { UUID } from 'angular2-uuid';
 
 // FIXME: this can be removed once we start to get 'real' data, along with the storageTest()
 class FooBoo implements Record {
@@ -32,26 +32,34 @@ class FooBoo implements Record {
 export class HomePage {
     public listRoot = RecordsListComponent;
     public mapRoot = RecordsMapComponent;
-    public dataTypes = DataType;
-    @ViewChild('fabNew') fabNew: FabContainer;
+
+    // @ViewChild('fabNew') fabNew: FabContainer;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
                 private authService: AuthService, private store: StorageService) {
     }
 
-    public clickedUpload() {
-        return;
+    private ionViewWillEnter() {
+        this.apiService.getDatasets().subscribe(datasets => {
+            for (let i = 0; i < datasets.length; i++) {
+                this.store.putDataset(datasets[i]);
+            }
+        });
     }
 
-    public clickedNew(datasetId: number) {
+    public clickedUpload() {
+    }
+
+    public clickedNew(datasetId: number, fabContainer: FabContainer) {
         this.navCtrl.push('ObservationPage', {datasetId: datasetId});
+        fabContainer.close();
     }
 
     private storageTest() {
         let rec: FooBoo;
 
         rec = new FooBoo();
-        rec.data = { 'uuid': UUID.UUID() };
+        rec.data = {'uuid': UUID.UUID()};
 
         this.store.clearRecords().subscribe(clearResult => {
             this.store.putRecord(rec).subscribe(result => {
@@ -70,9 +78,5 @@ export class HomePage {
                 }
             });
         });
-
-    public clickedNew(type: DataType, fabContainer: FabContainer) {
-        fabContainer.close();
-        this.navCtrl.push('ObservationPage');
     }
 }
