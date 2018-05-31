@@ -5,7 +5,7 @@ import { StorageService } from "../../shared/services/storage.service";
 import { AuthService } from "../../biosys-core/services/auth.service";
 import { RecordsListComponent } from "../../components/records-list/records-list";
 import { RecordsMapComponent } from "../../components/records-map/records-map";
-import { FabContainer, IonicPage, NavController, NavParams } from "ionic-angular";
+import { FabContainer, IonicPage, Loading, LoadingController, NavController, NavParams } from "ionic-angular";
 import { Component, ViewChild } from "@angular/core";
 import { UUID } from "angular2-uuid";
 
@@ -41,11 +41,23 @@ export class HomePage {
     public dataTypes = DataType;
     @ViewChild('fabNew') fabNew: FabContainer;
     
+    private loadingDialog: Loading;
+    
     constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
-                private authService: AuthService, private store: StorageService) {
+                private authService: AuthService,
+                private store: StorageService,
+                public loadingCtrl: LoadingController) {
     }
 
     public clickedUpload() {
+        this.loadingDialog = this.loadingCtrl.create({
+            content: 'Uploading Data To BioSys Server...'
+        });
+        
+        this.store.getRecords(() => {return true;})
+        
+        
+        
         return;
     }
     
