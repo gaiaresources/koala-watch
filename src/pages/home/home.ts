@@ -49,38 +49,8 @@ export class HomePage {
         return;
     }
     
-    public clickedNew(type: DataType=undefined, fabContainer: FabContainer) {
+    public clickedNew(type: DataType, fabContainer: FabContainer) {
         fabContainer.close();
-        this.navCtrl.push(ObservationPage);
-        return;
-    }
-    
-    private storageTest() {
-        let rec: FooBoo;
-
-        rec = new FooBoo();
-        rec.data = { 'uuid': UUID.UUID() };
-
-        let picker = function (value, key) {
-            return key.startsWith('Record');
-        };
-
-        this.store.clearRecords().subscribe(clearResult => {
-            this.store.putRecord(rec).subscribe(result => {
-                if (result) {
-                    this.store.putRecord(rec).subscribe((nextResult) => {
-                        this.store.getRecords().subscribe((next) => {
-                                alert(next.data['uuid']);
-                            },
-                            (err) => {
-                                alert('Sorry: ' + err.message);
-                            },
-                            () => {
-                                alert('Done');
-                            });
-                    });
-                }
-            });
-        });
+        this.navCtrl.push('ObservationPage');
     }
 }
