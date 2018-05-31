@@ -34,7 +34,7 @@ import { ObservationPageModule } from "../pages/observation/observation.module";
         IonicModule.forRoot(AppComponent),
         IonicStorageModule.forRoot(),
         ComponentsModule,
-        ObservationPageModule
+        ObservationPageModule // FIXME: FAB buttons don't work without this
     ],
     bootstrap: [IonicApp],
     providers: [

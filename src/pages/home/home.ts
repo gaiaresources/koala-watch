@@ -5,8 +5,8 @@ import { StorageService } from "../../shared/services/storage.service";
 import { AuthService } from "../../biosys-core/services/auth.service";
 import { RecordsListComponent } from "../../components/records-list/records-list";
 import { RecordsMapComponent } from "../../components/records-map/records-map";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
-import { Component } from "@angular/core";
+import { FabContainer, IonicPage, NavController, NavParams } from "ionic-angular";
+import { Component, ViewChild } from "@angular/core";
 import { UUID } from "angular2-uuid";
 
 enum DataType {
@@ -38,17 +38,20 @@ class FooBoo implements Record {
 export class HomePage {
     public listRoot = RecordsListComponent;
     public mapRoot = RecordsMapComponent;
+    public dataTypes = DataType;
+    @ViewChild('fabNew') fabNew: FabContainer;
     
     constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
                 private authService: AuthService, private store: StorageService) {
     }
 
-    public clickedSync() {
+    public clickedUpload() {
         return;
     }
     
-    public clickedNew(type: DataType) {
-        this.navCtrl.setRoot(ObservationPage);
+    public clickedNew(type: DataType=undefined, fabContainer: FabContainer) {
+        fabContainer.close();
+        this.navCtrl.push(ObservationPage);
         return;
     }
     
