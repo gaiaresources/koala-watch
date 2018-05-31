@@ -32,42 +32,53 @@ class FooBoo implements Record {
 export class HomePage {
     public listRoot = RecordsListComponent;
     public mapRoot = RecordsMapComponent;
-    
+
     private loadingDialog: Loading;
-    
+
     constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
                 private authService: AuthService,
                 private store: StorageService,
                 public loadingCtrl: LoadingController) {
     }
 
+    private ionViewWillEnter() {
+        this.apiService.getDatasets().subscribe(datasets => {
+            for (let i = 0; i < datasets.length; i++) {
+                this.store.putDataset(datasets[i]);
+            }
+        });
+    }
+
     public clickedUpload() {
-        this.loadingDialog = this.loadingCtrl.create({
-            content: 'Uploading Data To BioSys Server...'
-        });
-        
-        this.store.getRecords(() => {return true;}).subscribe(value => {
-             this.apiService.createRecord(value).subscribe(value => {
-             }, error => {
-                // TODO: error handling
-             },
-             () => {
-                 // TODO: in the real version, delete Record from "views"
-             });
-            },
-            error1 => {
-                // TODO: error handling
-                this.loadingDialog.dismiss();
-            },
-            () => {
-            this.loadingDialog.dismiss();
-        });
-        this.loadingDialog.present();
     }
 
     public clickedNew(datasetId: number, fabContainer: FabContainer) {
-        fabContainer.close();
-        // datasetId = 101; // VLC: borking countermeasure
         this.navCtrl.push('ObservationPage', {datasetId: datasetId});
+        fabContainer.close();
+    }
+
+    private storageTest() {
+        let rec: FooBoo;
+
+        rec = new FooBoo();
+        rec.data = {'uuid': UUID.UUID()};
+
+        this.store.clearRecords().subscribe(clearResult => {
+            this.store.putRecord(rec).subscribe(result => {
+                if (result) {
+                    this.store.putRecord(rec).subscribe((nextResult) => {
+                        this.store.getRecords().subscribe((next) => {
+                                alert(next.data['uuid']);
+                            },
+                            (err) => {
+                                alert('Sorry: ' + err.message);
+                            },
+                            () => {
+                                alert('Done');
+                            });
+                    });
+                }
+            });
+        });
     }
 }
