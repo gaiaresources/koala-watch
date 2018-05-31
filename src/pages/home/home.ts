@@ -55,7 +55,7 @@ export class HomePage {
         });
         
         this.store.getRecords(() => {return true;}).subscribe(value => {
-             this.apiService.updateRecord(value.id, value).subscribe(value => {
+             this.apiService.createRecord(value).subscribe(value => {
              }, error => {
                 // TODO: error handling
              },
@@ -70,6 +70,7 @@ export class HomePage {
             () => {
             this.loadingDialog.dismiss();
         });
+        this.loadingDialog.present();
         return;
     }
     
