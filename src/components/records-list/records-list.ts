@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Record } from '../../app/biosys-core/interfaces/api.interfaces';
+import { Record } from '../../biosys-core/interfaces/api.interfaces';
 
 class FooBoo implements Record {
     public created: string;
@@ -42,7 +42,7 @@ export class RecordsListComponent {
         this.selectedItem = navParams.get('item');
         
         this.data = [];
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 40; i++) {
             let row = new FooBoo();
             row.datetime = new Date().toISOString();
             this.data.push(row);

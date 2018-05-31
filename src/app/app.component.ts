@@ -3,7 +3,7 @@ import { AlertController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ObservationPage } from '../pages/observation/observation';
-import { AuthService } from "./biosys-core/services/auth.service";
+import { AuthService } from "../biosys-core/services/auth.service";
 
 @Component({
     templateUrl: 'app.html'
