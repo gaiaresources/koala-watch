@@ -54,10 +54,22 @@ export class HomePage {
             content: 'Uploading Data To BioSys Server...'
         });
         
-        this.store.getRecords(() => {return true;})
-        
-        
-        
+        this.store.getRecords(() => {return true;}).subscribe(value => {
+             this.apiService.updateRecord(value.id, value).subscribe(value => {
+             }, error => {
+                // TODO: error handling
+             },
+             () => {
+                 // TODO: in the real version, delete Record from "views"
+             });
+            },
+            error1 => {
+                // TODO: error handling
+                this.loadingDialog.dismiss();
+            },
+            () => {
+            this.loadingDialog.dismiss();
+        });
         return;
     }
     
