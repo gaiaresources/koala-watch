@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Geolocation } from '@ionic-native/geolocation';
 import { filter, flatMap } from 'rxjs/operators';
 
+import { Geolocation } from '@ionic-native/geolocation';
 import { SchemaService } from '../../biosys-core/services/schema.service';
 import { FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
 import { APIService } from '../../biosys-core/services/api.service';

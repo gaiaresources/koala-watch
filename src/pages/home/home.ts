@@ -32,7 +32,6 @@ class FooBoo implements Record {
 export class HomePage {
     public listRoot = RecordsListComponent;
     public mapRoot = RecordsMapComponent;
-    @ViewChild('fabNew') fabNew: FabContainer;
     
     private loadingDialog: Loading;
     
@@ -64,11 +63,11 @@ export class HomePage {
             this.loadingDialog.dismiss();
         });
         this.loadingDialog.present();
-        return;
     }
 
     public clickedNew(datasetId: number, fabContainer: FabContainer) {
         fabContainer.close();
+        // datasetId = 101; // VLC: borking countermeasure
         this.navCtrl.push('ObservationPage', {datasetId: datasetId});
     }
 }
