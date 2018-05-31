@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { NavController } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 
 import { SchemaService } from '../../biosys-core/services/schema.service';
 
+@IonicPage()
 @Component({
     selector: 'page-observation',
     templateUrl: 'observation.html',

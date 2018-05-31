@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { ObservationPage } from '../pages/observation/observation';
 import { AuthService } from "../biosys-core/services/auth.service";
+import { APIService } from "../biosys-core/services/api.service";
+import { StorageService } from "../shared/services/storage.service";
 
 @Component({
     templateUrl: 'app.html'
@@ -13,7 +14,6 @@ export class AppComponent implements OnInit {
 
     public menuItems: object[] = [
         {title: 'Home', page: 'HomePage', img: 'assets/imgs/koala_home.png'},
-        {title: 'Observation', page: ObservationPage, img: 'assets/imgs/koala_data_eye.png' },
         {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/koala_settings.png'},
         {title: 'About', page: 'AboutPage', img: 'assets/imgs/koala_about.png'},
         {title: 'Logout', img: 'assets/imgs/koala_logout.png'},
@@ -23,7 +23,9 @@ export class AppComponent implements OnInit {
                 public statusBar: StatusBar,
                 public splashScreen: SplashScreen,
                 private alertController: AlertController,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private api: APIService,
+                private store: StorageService) {
     }
 
     ngOnInit() {
@@ -38,6 +40,17 @@ export class AppComponent implements OnInit {
             } else {
                 this.nav.setRoot('HomePage');
             }
+            
+            /*  FIXME: The backend needs to support the dataset API endpoint WITHOUT authentication,
+                or some sort of weird default auth_token needs to be created, so as to avoid stopping
+                a user from entering data despite not having logged in. */
+            localStorage.setItem('auth_token', '27eb3ec6b0370f78b7bd5c3ad865c30cf7ea3493');
+            this.api.getDatasets().subscribe(datasets =>{
+                for (let i=0; i < datasets.length; i++) {
+                    this.store.putDataset(datasets[i]);
+                }
+            }, apiError => {
+            });
         });
     }
 

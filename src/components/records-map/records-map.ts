@@ -52,12 +52,11 @@ export class RecordsMapComponent {
         
         // create 20 random points:
         for (let i=0; i < 20; i++) {
-            const colours = ['blue', 'red', 'purple', 'green' ];
-            
+            const colours = ['blue', 'green' ];
             
             let marker: Marker = this.map.addMarkerSync({
                 title: "Point " + i.toString(10),
-                icon: colours[i % 4],
+                icon: colours[i % colours.length],
                 animation: 'DROP',
                 position: {
                     lat: this.randoCoordMins.lat + (Math.random() * this.randoCoordDeltas.lat),

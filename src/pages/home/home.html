@@ -12,16 +12,16 @@
     <ion-tab tabTitle="Map" [root]="mapRoot"></ion-tab>
 </ion-tabs>
 
-<ion-fab bottom right>
-    <button ion-fab (click)="clickedSync()">
+<ion-fab bottom right #adds>
+    <button ion-fab>
         <ion-icon name="add"></ion-icon>
     </button>
     <ion-fab-list side="top">
-        <button ion-fab (click)="clickedNew(DataType.Poop)"><img alt="New Scat Observation" class="home-fab-icon" src="assets/imgs/koala_new_poop.png"></button>
-        <button ion-fab (click)="clickedNew(DataType.Torch)"><img alt="New SearchLight Observation"class="home-fab-icon" src="assets/imgs/koala_new_torch.png"></button>
-        <button ion-fab (click)="clickedNew(DataType.Visual)"><img alt="New Visual Observation" class="home-fab-icon" src="assets/imgs/koala_new_eye.png"></button>
+        <button ion-fab  (click)="clickedNew(dataTypes.Poop, adds)"><img alt="New Scat Observation" class="home-fab-icon" src="assets/imgs/koala_new_poop.png"></button>
+        <!--<button ion-fab (click)="clickedNew(DataType.Torch)"><img alt="New SearchLight Observation"class="home-fab-icon" src="assets/imgs/koala_new_torch.png"></button>-->
+        <button ion-fab #addSight (click)="clickedNew(dataTypes.Visual, adds)"><img alt="New Visual Observation" class="home-fab-icon" src="assets/imgs/koala_new_eye.png"></button>
     </ion-fab-list>
 </ion-fab>
 <ion-fab bottom left>
-    <button ion-fab><ion-icon name="cloud-upload"></ion-icon></button>
+    <button ion-fab (click)="clickedUpload()"><ion-icon name="cloud-upload"></ion-icon></button>
 </ion-fab>

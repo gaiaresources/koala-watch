@@ -31,7 +31,7 @@ export class RecordsListComponent {
     // mapping from DataType to an icon
     public itemIcons = [
         'assets/imgs/koala_data_poop.png',
-        'assets/imgs/koala_data_torch.png',
+//        'assets/imgs/koala_data_torch.png',
         'assets/imgs/koala_data_eye.png'
     ];
     
@@ -72,18 +72,8 @@ export class RecordsListComponent {
         if (record.icon !== undefined) {
             return record.icon;
         }
-        let rv = this.itemIcons[2];
-        // FIXME: find out how to determine observation type from inside Record.data
-        switch (Math.floor(Math.random() * 3)) {
-            case 0:
-                rv = this.itemIcons[0];
-                break;
-            case 1:
-                rv = this.itemIcons[1];
-                break;
-        }
-        record.icon = rv;
-        return rv;
+        record.icon = this.itemIcons[Math.floor(Math.random() * this.itemIcons.length)];
+        return record.icon;
     }
     
     public itemTapped(event, item) {

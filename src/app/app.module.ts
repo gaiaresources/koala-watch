@@ -33,8 +33,7 @@ import { ObservationPageModule } from "../pages/observation/observation.module";
         ReactiveFormsModule,
         IonicModule.forRoot(AppComponent),
         IonicStorageModule.forRoot(),
-        ComponentsModule,
-        ObservationPageModule
+        ComponentsModule
     ],
     bootstrap: [IonicApp],
     providers: [
