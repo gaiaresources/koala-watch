@@ -5,27 +5,23 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { AppComponent } from './app.component';
 
-import { DynamicFormQuestionComponent } from "../pages/dynamic-form/dynamic-form-question.component";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { QuestionService } from "../pages/dynamic-form/question.service";
-import { QuestionControlService } from "../pages/dynamic-form/question-control.service";
-import { IonicStorageModule } from "@ionic/storage";
-import { GoogleMaps } from "@ionic-native/google-maps";
+import { IonicStorageModule } from '@ionic/storage';
+import { GoogleMaps } from '@ionic-native/google-maps';
+import { Camera } from '@ionic-native/camera';
+import { Geolocation } from '@ionic-native/geolocation';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StorageService } from '../shared/services/storage.service';
 import { MobileAuthService } from '../shared/services/mobile-auth.service';
-import { LoginPageModule } from '../pages/login/login.module';
-import { APIService } from "../biosys-core/services/api.service";
-import { ApiInterceptor } from "../biosys-core/services/api.interceptor";
-import { AuthService } from "../biosys-core/services/auth.service";
-import { ComponentsModule } from "../components/components.module";
-import { ObservationPageModule } from "../pages/observation/observation.module";
+import { APIService } from '../biosys-core/services/api.service';
+import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
+import { AuthService } from '../biosys-core/services/auth.service';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
     declarations: [
-        AppComponent,
-        DynamicFormQuestionComponent,
+        AppComponent
     ],
     imports: [
         BrowserModule,
@@ -39,11 +35,11 @@ import { ObservationPageModule } from "../pages/observation/observation.module";
     providers: [
         StatusBar,
         SplashScreen,
-        QuestionService,
-        QuestionControlService,
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         StorageService,
         GoogleMaps,
+        Camera,
+        Geolocation,
         APIService,
         {
             provide: HTTP_INTERCEPTORS,
@@ -57,8 +53,7 @@ import { ObservationPageModule } from "../pages/observation/observation.module";
         {
             provide: ErrorHandler,
             useClass: IonicErrorHandler
-        },
-        StorageService
+        }
     ]
 })
 

@@ -9,13 +9,7 @@ import { FabContainer, IonicPage, Loading, LoadingController, NavController, Nav
 import { Component, ViewChild } from "@angular/core";
 import { UUID } from "angular2-uuid";
 
-enum DataType {
-    Poop = 0,
-    Torch = 1,
-    Visual = 2
-}
-
-// FIXME: this can be removed once we start to get "real" data, along with the storageTest()
+// FIXME: this can be removed once we start to get 'real' data, along with the storageTest()
 class FooBoo implements Record {
     public created: string;
     public data: {};
@@ -38,7 +32,6 @@ class FooBoo implements Record {
 export class HomePage {
     public listRoot = RecordsListComponent;
     public mapRoot = RecordsMapComponent;
-    public dataTypes = DataType;
     @ViewChild('fabNew') fabNew: FabContainer;
     
     private loadingDialog: Loading;
@@ -73,9 +66,9 @@ export class HomePage {
         this.loadingDialog.present();
         return;
     }
-    
-    public clickedNew(type: DataType, fabContainer: FabContainer) {
+
+    public clickedNew(datasetId: number, fabContainer: FabContainer) {
         fabContainer.close();
-        this.navCtrl.push('ObservationPage');
+        this.navCtrl.push('ObservationPage', {datasetId: datasetId});
     }
 }

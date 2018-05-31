@@ -1,34 +1,47 @@
 <ion-header>
     <ion-navbar>
-        <button ion-button menuToggle>
-            <ion-icon name="menu"></ion-icon>
-        </button>
         <ion-title>Observation</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-end solid color="primary" (click)="save()">
+                Save
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+    <ion-segment [(ngModel)]="showForm" color="secondary">
+        <ion-segment-button [value]="true">
+            Form
+        </ion-segment-button>
+        <ion-segment-button [value]="false">
+            Photos
+        </ion-segment-button>
+    </ion-segment>
+
     <div>
-        <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        <div *ngIf="showForm && formDescriptor">
+            <form [formGroup]="form">
+                <ion-item *ngFor="let field of formDescriptor.fields" [ngSwitch]="field.type">
+                    <ion-label *ngIf="field.type !== 'boolean'" floating>{{field.label}}</ion-label>
+                    <ion-label *ngIf="field.type === 'boolean'">{{field.label}}</ion-label>
 
-            <div  class="form-row">
-              <ion-item *ngFor="let field of formDescriptor.fields">
-                <ion-label floating>{{field.label}}</ion-label>
-                <ion-input *ngIf="field.type=='text'" [type]="field.type" [formControlName]="field.key"></ion-input>
-                <ion-select *ngIf="field.type=='select'" [formControlName]="field.key">
-                  <ion-option *ngFor="let opt of field.options" [value]="opt.key">{{opt.value}}</ion-option>
-                </ion-select>
-                <ion-datetime *ngIf="field.type=='datetime'" [formControlName]="field.key"></ion-datetime>
-              </ion-item>
-            </div>
+                    <ion-input *ngSwitchCase="'text'" [formControlName]="field.key"></ion-input>
+                    <ion-input *ngSwitchCase="'number'" [type]="field.type" [formControlName]="field.key"></ion-input>
 
-            <div class="form-row">
-                <button type="submit" [disabled]="!form.valid">Save</button>
-            </div>
-        </form>
+                    <ion-select *ngSwitchCase="'select'" [formControlName]="field.key">
+                        <ion-option *ngFor="let opt of field.options" [value]="opt">{{ opt }}</ion-option>
+                    </ion-select>
 
-        <div *ngIf="payLoad" class="form-row">
-            <strong>Saved the following values</strong><br>{{payLoad}}
+                    <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
+
+                    <ion-toggle *ngSwitchCase="'boolean'" color="primary"></ion-toggle>
+                </ion-item>
+            </form>
+        </div>
+        <div *ngIf="!showForm">
+
         </div>
     </div>
 </ion-content>
