@@ -16,9 +16,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { StorageService } from '../shared/services/storage.service';
 import { MobileAuthService } from '../shared/services/mobile-auth.service';
 import { LoginPageModule } from '../pages/login/login.module';
-import { APIService } from "./biosys-core/services/api.service";
-import { ApiInterceptor } from "./biosys-core/services/api.interceptor";
-import { AuthService } from "./biosys-core/services/auth.service";
+import { APIService } from "../biosys-core/services/api.service";
+import { ApiInterceptor } from "../biosys-core/services/api.interceptor";
+import { AuthService } from "../biosys-core/services/auth.service";
 import { ComponentsModule } from "../components/components.module";
 
 @NgModule({

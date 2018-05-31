@@ -1,8 +1,8 @@
-import { Record } from "../../app/biosys-core/interfaces/api.interfaces";
+import { Record } from "../../biosys-core/interfaces/api.interfaces";
 import { ObservationPage } from "../observation/observation";
-import { APIService } from "../../app/biosys-core/services/api.service";
+import { APIService } from "../../biosys-core/services/api.service";
 import { StorageService } from "../../shared/services/storage.service";
-import { AuthService } from "../../app/biosys-core/services/auth.service";
+import { AuthService } from "../../biosys-core/services/auth.service";
 import { RecordsListComponent } from "../../components/records-list/records-list";
 import { RecordsMapComponent } from "../../components/records-map/records-map";
 import { IonicPage, NavController, NavParams } from "ionic-angular";

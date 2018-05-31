@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 
 import { NavController } from 'ionic-angular';
 
-import { SchemaService } from '../../app/biosys-core/services/schema.service';
+import { SchemaService } from '../../biosys-core/services/schema.service';
 
 @Component({
     selector: 'page-observation',
