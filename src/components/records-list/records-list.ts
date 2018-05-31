@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Record } from '../../app/biosys-core/interfaces/api.interfaces';
+import { Record } from '../../biosys-core/interfaces/api.interfaces';
 
 class FooBoo implements Record {
     public created: string;

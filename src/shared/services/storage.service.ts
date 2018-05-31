@@ -3,7 +3,7 @@ import { UUID } from 'angular2-uuid'
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { Dataset, Record } from "../../app/biosys-core/interfaces/api.interfaces";
+import { Dataset, Record } from "../../biosys-core/interfaces/api.interfaces";
 
 @Injectable()
 export class StorageService {

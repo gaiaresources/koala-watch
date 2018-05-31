@@ -3,7 +3,8 @@ import { AlertController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ObservationPage } from '../pages/observation/observation';
-import { AuthService } from "./biosys-core/services/auth.service";
+import { AuthService } from "../biosys-core/services/auth.service";
+import { APIService } from "../biosys-core/services/api.service";
 
 @Component({
     templateUrl: 'app.html'
@@ -23,7 +24,8 @@ export class AppComponent implements OnInit {
                 public statusBar: StatusBar,
                 public splashScreen: SplashScreen,
                 private alertController: AlertController,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private api: APIService) {
     }
 
     ngOnInit() {
@@ -38,6 +40,9 @@ export class AppComponent implements OnInit {
             } else {
                 this.nav.setRoot('HomePage');
             }
+            
+            // load in dataset / schema:
+            this.api.getDatasets()
         });
     }
 

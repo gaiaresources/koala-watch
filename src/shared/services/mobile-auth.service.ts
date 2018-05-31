@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { APIService } from  '../../app/biosys-core/services/api.service';
-import { AuthService } from '../../app/biosys-core/services/auth.service';
+import { APIService } from  '../../biosys-core/services/api.service';
+import { AuthService } from '../../biosys-core/services/auth.service';
 
 @Injectable()
 export class MobileAuthService extends AuthService {
