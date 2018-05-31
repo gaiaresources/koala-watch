@@ -27,20 +27,20 @@ class FooBoo implements Record {
 export class RecordsListComponent {
     selectedItem: any;
     items: Array<{ title: string, note: string, icon: string }>;
-    
+
     // mapping from DataType to an icon
     public itemIcons = [
         'assets/imgs/koala_data_poop.png',
         'assets/imgs/koala_data_torch.png',
         'assets/imgs/koala_data_eye.png'
     ];
-    
+
     public data: Record[];
-    
+
     constructor(public navCtrl: NavController, public navParams: NavParams) {
         // If we navigated to this page, we will have an item available as a nav param
         this.selectedItem = navParams.get('item');
-        
+
         this.data = [];
         for (let i = 0; i < 40; i++) {
             let row = new FooBoo();
@@ -49,7 +49,7 @@ export class RecordsListComponent {
         }
         return;
     }
-    
+
     public status(record: FooBoo) {
         // fixme: eventually this will reflect reality
         if (record.data_status !== undefined) {
@@ -58,7 +58,7 @@ export class RecordsListComponent {
         record.data_status = (Math.floor(Math.random() * 2) > 0) ? '#ebffef' : '#ebf6ff';
         return record.data_status;
     }
-    
+
     public koalaCount(record: FooBoo): number {
         if (record.koala_count !== undefined) {
             return record.koala_count;
@@ -67,7 +67,7 @@ export class RecordsListComponent {
         record.koala_count = Math.floor(Math.random() * 10);
         return record.koala_count;
     }
-    
+
     public dataIcon(record: FooBoo): string {
         if (record.icon !== undefined) {
             return record.icon;
@@ -85,7 +85,7 @@ export class RecordsListComponent {
         record.icon = rv;
         return rv;
     }
-    
+
     public itemTapped(event, item) {
         // That's right, we're pushing to ourselves!
         this.navCtrl.push(RecordsListComponent, {
