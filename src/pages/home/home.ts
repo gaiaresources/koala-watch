@@ -43,16 +43,16 @@ export class HomePage {
                 private authService: AuthService, private store: StorageService) {
     }
 
-    clickedSync() {
+    public clickedSync() {
         return;
     }
     
-    clickedNew(type: DataType) {
+    public clickedNew(type: DataType) {
         this.navCtrl.setRoot(ObservationPage);
         return;
     }
     
-    storageTest() {
+    private storageTest() {
         let rec: FooBoo;
 
         rec = new FooBoo();

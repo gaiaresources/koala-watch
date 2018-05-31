@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
 
     public menuItems: object[] = [
         {title: 'Home', page: 'HomePage', img: 'assets/imgs/koala_home.png'},
-        {title: 'Observation', component: ObservationPage, img: 'assets/imgs/koala_data_eye.png' },
+        {title: 'Observation', page: ObservationPage, img: 'assets/imgs/koala_data_eye.png' },
         {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/koala_settings.png'},
         {title: 'About', page: 'AboutPage', img: 'assets/imgs/koala_about.png'},
         {title: 'Logout', img: 'assets/imgs/koala_logout.png'},

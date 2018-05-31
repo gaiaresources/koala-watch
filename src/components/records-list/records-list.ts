@@ -42,7 +42,7 @@ export class RecordsListComponent {
         this.selectedItem = navParams.get('item');
         
         this.data = [];
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 40; i++) {
             let row = new FooBoo();
             row.datetime = new Date().toISOString();
             this.data.push(row);
@@ -50,7 +50,7 @@ export class RecordsListComponent {
         return;
     }
     
-    status(record: FooBoo) {
+    public status(record: FooBoo) {
         // fixme: eventually this will reflect reality
         if (record.data_status !== undefined) {
             return record.data_status;
@@ -59,7 +59,7 @@ export class RecordsListComponent {
         return record.data_status;
     }
     
-    koalaCount(record: FooBoo): number {
+    public koalaCount(record: FooBoo): number {
         if (record.koala_count !== undefined) {
             return record.koala_count;
         }
@@ -68,7 +68,7 @@ export class RecordsListComponent {
         return record.koala_count;
     }
     
-    dataIcon(record: FooBoo): string {
+    public dataIcon(record: FooBoo): string {
         if (record.icon !== undefined) {
             return record.icon;
         }
@@ -76,7 +76,7 @@ export class RecordsListComponent {
         return record.icon;
     }
     
-    itemTapped(event, item) {
+    public itemTapped(event, item) {
         // That's right, we're pushing to ourselves!
         this.navCtrl.push(RecordsListComponent, {
             item: item
