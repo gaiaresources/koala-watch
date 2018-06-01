@@ -11,16 +11,16 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-segment [(ngModel)]="showForm" color="secondary">
-        <ion-segment-button [value]="true">
-            Form
-        </ion-segment-button>
-        <ion-segment-button [value]="false">
-            Photos
-        </ion-segment-button>
-    </ion-segment>
+    <!--<ion-segment [(ngModel)]="showForm" color="secondary">-->
+        <!--<ion-segment-button [value]="true">-->
+            <!--Form-->
+        <!--</ion-segment-button>-->
+        <!--<ion-segment-button [value]="false">-->
+            <!--Photos-->
+        <!--</ion-segment-button>-->
+    <!--</ion-segment>-->
 
-    <div>
+    <!--<div>-->
         <div *ngIf="showForm && formDescriptor">
             <form [formGroup]="form">
                 <ion-item *ngFor="let field of formDescriptor.fields" [ngSwitch]="field.type">
@@ -40,8 +40,8 @@
                 </ion-item>
             </form>
         </div>
-        <div *ngIf="!showForm">
+        <!--<div *ngIf="!showForm">-->
 
-        </div>
-    </div>
+        <!--</div>-->
+    <!--</div>-->
 </ion-content>

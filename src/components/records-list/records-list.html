@@ -1,4 +1,3 @@
-<ion-content>
 <div id="category-legend-div">
     <table id="category-legend">
         <td class="category-legend-colour" id="category-completed"></td>
@@ -8,12 +7,10 @@
     </table>
 </div>
 
-<ion-grid>
-    <button ion-row align-items-center nowrap *ngFor="let row of data" (click)="itemTapped($event, item)" [style.background-color]="status(row)">
-        <img ion-col col-auto class="data-row-img" [src]="dataIcon(row)"/>
-        <span ion-col col-8 class="data-row-time">{{row.datetime}}</span>
-        <img  ion-col col-auto class="data-row-koala-icon" src="assets/imgs/koala_data_koala.png">
-        <span ion-col col-1 class="data-row-koala-count">{{koalaCount(row)}}</span>
+<ion-list>
+    <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
+            (click)="itemTapped($event, record)">
+        <img ion-col col-auto class="data-row-img" [src]="getIcon(record)"/>
+        <span ion-col col-8 class="data-row-time">{{record.datetime }}</span>
     </button>
-</ion-grid>
-</ion-content>
+</ion-list>
