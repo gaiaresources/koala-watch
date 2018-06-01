@@ -1,28 +1,8 @@
-import { Record } from "../../biosys-core/interfaces/api.interfaces";
-import { ObservationPage } from "../observation/observation";
-import { APIService } from "../../biosys-core/services/api.service";
-import { StorageService } from "../../shared/services/storage.service";
-import { AuthService } from "../../biosys-core/services/auth.service";
-import { RecordsListComponent } from "../../components/records-list/records-list";
-import { RecordsMapComponent } from "../../components/records-map/records-map";
-import { FabContainer, IonicPage, Loading, LoadingController, NavController, NavParams } from "ionic-angular";
-import { Component, ViewChild } from "@angular/core";
-import { UUID } from "angular2-uuid";
-
-// FIXME: this can be removed once we start to get 'real' data, along with the storageTest()
-class FooBoo implements Record {
-    public created: string;
-    public data: {};
-    public dataset: number;
-    public datetime: string;
-    public geometry;
-    public id: number;
-    public last_modified: string;
-    public name_id: number;
-    public site: number;
-    public source_info: {};
-    public species_name: string;
-}
+import { FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
+import { StorageService } from '../../shared/services/storage.service';
+import { APIService } from '../../biosys-core/services/api.service';
 
 @IonicPage()
 @Component({
@@ -30,55 +10,38 @@ class FooBoo implements Record {
     templateUrl: 'home.html'
 })
 export class HomePage {
-    public listRoot = RecordsListComponent;
-    public mapRoot = RecordsMapComponent;
+    public showList: boolean = true;
 
-    private loadingDialog: Loading;
+    public records: ClientRecord[];
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
-                private authService: AuthService,
-                private store: StorageService,
-                public loadingCtrl: LoadingController) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService,
+                private apiService: APIService) {
     }
 
-    private ionViewWillEnter() {
-        this.apiService.getDatasets().subscribe(datasets => {
-            for (let i = 0; i < datasets.length; i++) {
-                this.store.putDataset(datasets[i]);
-            }
-        });
+    public ionViewWillEnter() {
+        this.records = [];
+        this.storageService.getAllRecords().subscribe(
+            (record: ClientRecord) => this.records.push(record)
+        );
     }
 
     public clickedUpload() {
+        // refactor to use flatmap once server handling clientId
+        this.storageService.getAllValidRecords().subscribe(
+            (clientRecords: ClientRecord[]) => clientRecords.map((clientRecord: ClientRecord) => {
+                let clientId = clientRecord.clientId;
+                this.apiService.createRecord(clientRecord).subscribe(
+                    () => this.storageService.deleteRecord(clientId).subscribe(() => {
+                        this.records = [];
+                        this.storageService.getAllRecords().subscribe((record: ClientRecord) => this.records.push(record));
+                    })
+                );
+            })
+        );
     }
 
-    public clickedNew(datasetId: number, fabContainer: FabContainer) {
-        this.navCtrl.push('ObservationPage', {datasetId: datasetId});
+    public clickedNew(datasetName: number, fabContainer: FabContainer) {
+        this.navCtrl.push('ObservationPage', {datasetName: datasetName});
         fabContainer.close();
-    }
-
-    private storageTest() {
-        let rec: FooBoo;
-
-        rec = new FooBoo();
-        rec.data = {'uuid': UUID.UUID()};
-
-        this.store.clearRecords().subscribe(clearResult => {
-            this.store.putRecord(rec).subscribe(result => {
-                if (result) {
-                    this.store.putRecord(rec).subscribe((nextResult) => {
-                        this.store.getRecords().subscribe((next) => {
-                                alert(next.data['uuid']);
-                            },
-                            (err) => {
-                                alert('Sorry: ' + err.message);
-                            },
-                            () => {
-                                alert('Done');
-                            });
-                    });
-                }
-            });
-        });
     }
 }

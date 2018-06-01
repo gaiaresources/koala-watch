@@ -3,6 +3,9 @@ import { AlertController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthService } from '../biosys-core/services/auth.service';
+import { APIService } from '../biosys-core/services/api.service';
+import { StorageService } from '../shared/services/storage.service';
+import { Dataset } from '../biosys-core/interfaces/api.interfaces';
 
 @Component({
     templateUrl: 'app.html'
@@ -17,11 +20,9 @@ export class AppComponent implements OnInit {
         {title: 'Logout', img: 'assets/imgs/koala_logout.png'},
     ];
 
-    constructor(public platform: Platform,
-                public statusBar: StatusBar,
-                public splashScreen: SplashScreen,
-                private alertController: AlertController,
-                private authService: AuthService) {
+    constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
+                private alertController: AlertController, private apiService: APIService,
+                private authService: AuthService, private storageService: StorageService) {
     }
 
     ngOnInit() {
@@ -34,6 +35,9 @@ export class AppComponent implements OnInit {
             if (!this.authService.isLoggedIn()) {
                 this.nav.setRoot('LoginPage');
             } else {
+                this.apiService.getDatasets({name: 'Koala Opportunistic Observation'}).subscribe(
+                    (datasets: Dataset[]) => this.storageService.putDataset(datasets[0])
+                );
                 this.nav.setRoot('HomePage');
             }
         });
@@ -57,7 +61,10 @@ export class AppComponent implements OnInit {
             buttons: [
                 {
                     text: 'Logout',
-                    handler: () => this.authService.logout()
+                    handler: () => {
+                        this.authService.logout();
+                        this.nav.setRoot('LoginPage');
+                    }
                 },
                 {
                     text: 'Cancel',

@@ -3,56 +3,70 @@ import { UUID } from 'angular2-uuid'
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { Dataset, Record } from "../../biosys-core/interfaces/api.interfaces";
+import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
+import { ClientRecord } from '../interfaces/mobile.interfaces';
 
 @Injectable()
 export class StorageService {
+    private static readonly DATASET_PREFIX = 'Dataset_';
+    private static readonly RECORD_PREFIX = 'Record_';
+
     constructor(private storage: Storage) {
+
     }
-    
-    private Label_Dataset='Dataset';
-    private Label_Record='Record';
-    
+
     public putDataset(dataset: Dataset): Observable<boolean> {
-        const key = this.Label_Dataset + "_" + dataset.id;
-        return fromPromise(this.storage.set(key, dataset));
+        return fromPromise(this.storage.set(`${StorageService.DATASET_PREFIX}${dataset.name}`, dataset));
     }
-    
-    public getDatasets(pickCriteria=undefined) : Observable<Dataset> {
-        return new Observable( observer => {
+
+    public getDataset(key: string): Observable<Dataset> {
+        return fromPromise(this.storage.get(`${StorageService.DATASET_PREFIX}${key}`));
+    }
+
+    public getAllDatasets(): Observable<Dataset> {
+        return new Observable(observer => {
             this.storage.forEach((value, key) => {
-                if (key.split('_')[0] === this.Label_Dataset)
-                    if (pickCriteria == undefined || pickCriteria(value, key))
-                        observer.next(value);
-            }).then( value => {
+                if (key.startsWith(StorageService.DATASET_PREFIX)) {
+                    observer.next(value);
+                }
+            }).then(value => {
                 observer.complete();
             }, reason => {
                 observer.error(reason);
             });
         });
     }
-  
-    public putRecord(record: Record): Observable<boolean> {
-        const key = this.Label_Record + "_"  + UUID.UUID();
-        return fromPromise(this.storage.set(key, record));
+
+    public putRecord(record: ClientRecord): Observable<boolean> {
+        return fromPromise(this.storage.set(`${StorageService.RECORD_PREFIX}${record.clientId}`, record));
     }
-    
-    public getRecord(key: string): Observable<Record> {
-        return fromPromise(this.storage.get(this.Label_Record + "_" + key));
+
+    public getRecord(key: string): Observable<ClientRecord> {
+        return fromPromise(this.storage.get(`${StorageService.RECORD_PREFIX}${key}`));
     }
-    
-    public getRecords(pickCriteria = undefined): Observable<Record> {
+
+    public getAllRecords(): Observable<ClientRecord> {
         return new Observable(observer => {
-            this.storage.forEach((value: Record, key) => {
-                if (key.split('_')[0] === this.Label_Dataset)
-                    if (pickCriteria === undefined || pickCriteria(value, key)) {
-                        if (value === undefined)
-                            return;
-                        if (value.data === undefined)
-                            value.data = {};
-                        value.data['uuid'] = key;
-                        observer.next(value);
-                    }
+            this.storage.forEach((value, key) => {
+                if (key.startsWith(StorageService.RECORD_PREFIX)) {
+                    observer.next(value);
+                }
+            }).then(value => {
+                observer.complete();
+            }, reason => {
+                observer.error(reason);
+            });
+        });
+    }
+
+    public getAllValidRecords(): Observable<ClientRecord[]> {
+        return new Observable(observer => {
+            const records: ClientRecord[] = [];
+            this.storage.forEach((value, key) => {
+                if (key.startsWith(StorageService.RECORD_PREFIX) && value.valid) {
+                    records.push(value);
+                }
+                observer.next(records);
             }).then(value => {
                 observer.complete();
             }, reason => {
@@ -62,12 +76,10 @@ export class StorageService {
     }
 
     public deleteRecord(key: string): Observable<boolean> {
-        return fromPromise(this.storage.remove(key));
+        return fromPromise(this.storage.remove(`${StorageService.RECORD_PREFIX}${key}`));
     }
 
-    public clearRecords(): Observable<boolean> {
-        let thePromise: Promise<any>;
-        thePromise = this.storage.clear();
-        return fromPromise(thePromise);
+    public clearRecords(): Observable<void> {
+        return fromPromise(this.storage.clear());
     }
 }
