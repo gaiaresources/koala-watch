@@ -36,7 +36,7 @@ export class RecordsListComponent {
     public itemTapped(event, record) {
         this.navCtrl.push('ObservationPage', {
             datasetName: record.datasetName,
-            recordClientId: record.clientId
+            recordClientId: record.client_id
         });
     }
 }

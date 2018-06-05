@@ -90,7 +90,7 @@ export class ObservationPage {
     public save() {
         this.storageService.putRecord({
             valid: this.form.valid,
-            clientId: !!this.record ? this.record.clientId : UUID.UUID(),
+            client_id: !!this.record ? this.record.client_id : UUID.UUID(),
             dataset: this.datasetId,
             datasetName: this.navParams.get('datasetName'),
             datetime: new Date().toISOString(),
