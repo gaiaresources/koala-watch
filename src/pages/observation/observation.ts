@@ -59,6 +59,10 @@ export class ObservationPage {
                     if (this.form.contains('Longitude')) {
                         this.form.patchValue({'Longitude': position.coords.longitude});
                     }
+
+                    if (this.form.contains('Accuracy')) {
+                        this.form.patchValue({'Accuracy': position.coords.accuracy});
+                    }
                 });
 
                 // patch in all single-value enum fields
