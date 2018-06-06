@@ -1,7 +1,15 @@
-import { FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
+import {
+    FabContainer,
+    IonicPage,
+    Loading,
+    LoadingController,
+    NavController,
+    NavParams,
+    ToastController
+} from 'ionic-angular';
 import { Component } from '@angular/core';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { Record } from '../../biosys-core/interfaces/api.interfaces';
+import { APIError, Record } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { APIService } from '../../biosys-core/services/api.service';
 import { mergeMap } from 'rxjs/operators';
@@ -13,24 +21,28 @@ import { from } from 'rxjs/observable/from';
     templateUrl: 'home.html'
 })
 export class HomePage {
+    public static readonly MESSAGE_DURATION = 3000;
+
     public showList: boolean = true;
-    public uploading: boolean = false;
 
     public records: ClientRecord[];
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService,
+    private loading: Loading;
+
+    constructor(public navCtrl: NavController, public navParams: NavParams, private loadingCtrl: LoadingController,
+                private toastCtrl: ToastController, private storageService: StorageService,
                 private apiService: APIService) {
+        this.loading = this.loadingCtrl.create({
+            content: 'Uploading records'
+        });
     }
 
-    public ionViewWillEnter() {
-        this.records = [];
-        this.storageService.getAllRecords().subscribe(
-            (record: ClientRecord) => this.records.push(record)
-        );
+    ionViewWillEnter() {
+        this.loadRecords();
     }
 
     public clickedUpload() {
-        this.uploading = true;
+        this.loading.present();
 
         // take all valid records, one-by-one create them on the server and after they've been successfully created,
         // delete from storage. One all records are created, refresh the records list.
@@ -45,13 +57,23 @@ export class HomePage {
                 )
             )
         ).subscribe({
-            error: () => this.uploading = false,
+            error: (error: APIError) => {
+                this.loading.dismiss();
+                this.toastCtrl.create({
+                    message: `Some records failed to upload: ${error.msg}`,
+                    duration: HomePage.MESSAGE_DURATION,
+                    cssClass: 'toast-message'
+                }).present();
+                this.loadRecords();
+            },
             complete: () => {
-                this.uploading = false;
-                this.records = [];
-                this.storageService.getAllRecords().subscribe(
-                    (record: ClientRecord) => this.records.push(record)
-                );
+                this.loading.dismiss();
+                this.toastCtrl.create({
+                    message: 'Records uploaded successfully',
+                    duration: HomePage.MESSAGE_DURATION,
+                    cssClass: 'toast-message'
+                }).present();
+                this.loadRecords();
             }
         });
     }
@@ -59,5 +81,12 @@ export class HomePage {
     public clickedNew(datasetName: number, fabContainer: FabContainer) {
         this.navCtrl.push('ObservationPage', {datasetName: datasetName});
         fabContainer.close();
+    }
+
+    private loadRecords() {
+        this.records = [];
+        this.storageService.getAllRecords().subscribe(
+            (record: ClientRecord) => this.records.push(record)
+        );
     }
 }
