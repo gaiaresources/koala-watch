@@ -30,6 +30,11 @@ export class ObservationPage {
     constructor(private navCtrl: NavController, private navParams: NavParams,
                 private schemaService: SchemaService, private storageService: StorageService,
                 private geolocation: Geolocation, private alertController: AlertController) {
+        if (!this.navParams.get('datasetName')) {
+            this.showLeavingAlertMessage = false;
+            this.navCtrl.pop();
+        }
+
         this.storageService.getDataset(this.navParams.get('datasetName')).pipe(
             flatMap((dataset: Dataset) => {
                 this.dataset = dataset;

@@ -18,10 +18,12 @@ import { APIService } from '../biosys-core/services/api.service';
 import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
 import { AuthService } from '../biosys-core/services/auth.service';
 import { ComponentsModule } from '../components/components.module';
+import { PyToIonicDateFormatConversionPipe } from '../shared/pipes/date-conversion.pipe';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        PyToIonicDateFormatConversionPipe
     ],
     imports: [
         BrowserModule,

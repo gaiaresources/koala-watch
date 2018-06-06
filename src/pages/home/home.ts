@@ -25,7 +25,6 @@ export class HomePage {
     public static readonly MESSAGE_DURATION = 3000;
 
     public showList: boolean = true;
-    
 
     public records: ClientRecord[];
 

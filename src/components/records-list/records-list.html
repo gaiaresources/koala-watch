@@ -11,6 +11,6 @@
     <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
             (click)="itemTapped($event, record)">
         <img ion-col col-auto class="data-row-img" [src]="getIcon(record)"/>
-        <span ion-col col-8 class="data-row-time">{{record.datetime }}</span>
+        <span ion-col col-8 class="data-row-time">{{ record.datetime | date: angularDateFormat }}</span>
     </button>
 </ion-list>

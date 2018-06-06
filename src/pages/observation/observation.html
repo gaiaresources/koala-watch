@@ -29,7 +29,7 @@
                 </ion-item-divider>
                 <ion-item *ngFor="let field of formDescriptor.dateFields">
                     <ion-label floating>{{field.label}}</ion-label>
-                    <ion-datetime [formControlName]="field.key"></ion-datetime>
+                    <ion-datetime [formControlName]="field.key" [displayFormat]="field.format"></ion-datetime>
                 </ion-item>
             </ion-item-group>
             <ion-item-group *ngIf="formDescriptor.locationFields.length > 0">
@@ -40,12 +40,11 @@
                 <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
                     <ion-label floating>{{field.label}}</ion-label>
 
-                    <ion-input *ngSwitchCase="'text'" [formControlName]="field.key"></ion-input>
-                    <ion-input *ngSwitchCase="'number'" [type]="field.type" [formControlName]="field.key"></ion-input>
-
                     <ion-select *ngSwitchCase="'select'" [formControlName]="field.key">
-                        <ion-option *ngFor="let opt of field.options" [value]="opt">{{ opt }}</ion-option>
+                        <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
                     </ion-select>
+
+                    <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
                 </ion-item>
             </ion-item-group>
             <ion-item-group *ngIf="formDescriptor.requiredFields.length > 0">
@@ -59,18 +58,15 @@
                     </ion-label>
                     <ion-label *ngIf="field.type === 'boolean'">{{field.label}}</ion-label>
 
-                    <ion-input *ngSwitchCase="'text'" [formControlName]="field.key"></ion-input>
-                    <ion-input *ngSwitchCase="'number'" [type]="field.type" [formControlName]="field.key"></ion-input>
-
                     <ion-select *ngSwitchCase="'select'" [formControlName]="field.key">
-                        <ion-option *ngFor="let opt of field.options" [value]="opt">{{ opt }}</ion-option>
+                        <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
                     </ion-select>
 
                     <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
                     <ion-toggle *ngSwitchCase="'boolean'" color="primary"></ion-toggle>
 
-                    <ion-input *ngSwitchCase="'hidden'" [type]="field.type" [formControlName]="field.key"></ion-input>
+                    <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
                 </ion-item>
             </ion-item-group>
             <ion-item-group *ngIf="formDescriptor.fields.length > 0">
@@ -84,17 +80,15 @@
                     </ion-label>
                     <ion-label *ngIf="field.type === 'boolean'">{{field.label}}</ion-label>
 
-                    <ion-input *ngSwitchCase="'text'" [formControlName]="field.key"></ion-input>
-                    <ion-input *ngSwitchCase="'number'" [type]="field.type" [formControlName]="field.key"></ion-input>
-
                     <ion-select *ngSwitchCase="'select'" [formControlName]="field.key">
-                        <ion-option *ngFor="let opt of field.options" [value]="opt">{{ opt }}</ion-option>
+                        <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
                     </ion-select>
 
                     <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
                     <ion-toggle *ngSwitchCase="'boolean'" color="primary"></ion-toggle>
 
+                    <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
                 </ion-item>
             </ion-item-group>
             <ion-input *ngFor="let field of formDescriptor.hiddenFields" [type]="field.type"

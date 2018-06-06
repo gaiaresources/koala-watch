@@ -1,29 +1,32 @@
-import {
-    GoogleMap,
-    GoogleMapOptions,
-    GoogleMaps,
-    GoogleMapsEvent,
-    LatLng, Marker,
-} from '@ionic-native/google-maps';
-import { Component, Input, OnInit, ViewChild } from '@angular/core/';
-import { IonicPage } from "ionic-angular";
-import { InputDecorator } from "@angular/core/src/metadata/directives";
-import { ClientRecord } from "../../shared/interfaces/mobile.interfaces";
+import { GoogleMap, GoogleMapOptions, GoogleMaps, LatLng } from '@ionic-native/google-maps';
+import { Component } from '@angular/core/';
+import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
+import { OnInit, Input } from '@angular/core';
 
 @Component({
     selector: 'records-map',
     templateUrl: 'records-map.html'
 })
 export class RecordsMapComponent implements OnInit {
-    private map: any;
-    
     @Input()
-    public records: ClientRecord[];
+    public set records(records: ClientRecord[]) {
+        this._records = records;
 
-    constructor() { }
+        if (this.map) {
+            this.loadMarkers();
+        }
+    }
 
-    private ionViewDidLoad() {
-        this.loadMap();
+    private map: GoogleMap;
+    private _records: ClientRecord[];
+
+    constructor() {
+    }
+
+    ngOnInit(): void {
+        if (!this.map) {
+            this.loadMap();
+        }
     }
 
     private loadMap() {
@@ -46,24 +49,27 @@ export class RecordsMapComponent implements OnInit {
 
         this.map = GoogleMaps.create('map', mapOptions);
 
-        for (let item of this.records) {
-            try {
-                let marker: Marker = this.map.addMarkerSync({
-                    title: item.datetime,
-                    icon: item.valid ? 'green' : 'red',
-                    animation: 'DROP',
-                    position: {
-                        // FIXME: stop assuming the geojson is a Point or LineString
-                        lat: item.geometry.coordinates[1],
-                        lng: item.geometry.coordinates[0]
-                    }
-                });
-            } catch(e) {
-            }
+        if (this._records) {
+            this.loadMarkers();
         }
     }
-    
-    ngOnInit(): void {
-        this.loadMap();
+
+    private loadMarkers() {
+        this.map.clear();
+
+        for (let record of this._records) {
+            if (record.hasOwnProperty('data') && record.data.hasOwnProperty('Latitude') &&
+                    record.data.hasOwnProperty('Longitude')) {
+                this.map.addMarkerSync({
+                    title: record.data['First Date'],
+                    icon: record.valid ? 'green' : 'blue',
+                    animation: 'DROP',
+                    position: {
+                        lat: record.data.Latitude,
+                        lng: record.data.Longitude,
+                    }
+                });
+            }
+        }
     }
 }
