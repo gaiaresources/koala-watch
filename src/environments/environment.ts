@@ -5,7 +5,7 @@
 
 export const environment = {
     production: false,
-    server: 'https://staging-biosys.gaiaresources.com.au/',
+    server: 'http://localhost:8000/',
     apiExtension: '/api/',
     logoutUrl: '/#/login/',
     cookieAuthToken: 'auth_token'
