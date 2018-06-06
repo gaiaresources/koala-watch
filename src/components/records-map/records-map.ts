@@ -5,23 +5,20 @@ import {
     GoogleMapsEvent,
     LatLng, Marker,
 } from '@ionic-native/google-maps';
-import { Component, OnInit } from '@angular/core/';
+import { Component, Input, OnInit, ViewChild } from '@angular/core/';
+import { IonicPage } from "ionic-angular";
+import { InputDecorator } from "@angular/core/src/metadata/directives";
+import { ClientRecord } from "../../shared/interfaces/mobile.interfaces";
 
 @Component({
     selector: 'records-map',
     templateUrl: 'records-map.html'
 })
-export class RecordsMapComponent {
-    private map: GoogleMap;
-
-    private randoCoordMins = {
-        'lon': 117.50976562499999,
-        'lat': -33.504759069226075
-    };
-    private randoCoordDeltas = {
-        'lon': 31.11328,
-        'lat': 12.2563368336
-    };
+export class RecordsMapComponent implements OnInit {
+    private map: any;
+    
+    @Input()
+    public records: ClientRecord[];
 
     constructor() { }
 
@@ -34,8 +31,8 @@ export class RecordsMapComponent {
         let mapOptions: GoogleMapOptions = {
             'backgroundColor': 'white',
             'controls': {
-                'compass': true,
-                'zoom': true
+                'compass': false,
+                'zoom': false
             },
             'gestures': {
                 'scroll': true,
@@ -49,19 +46,24 @@ export class RecordsMapComponent {
 
         this.map = GoogleMaps.create('map', mapOptions);
 
-        // create 20 random points:
-        for (let i = 0; i < 20; i++) {
-            const colours = ['blue', 'green' ];
-
-            let marker: Marker = this.map.addMarkerSync({
-                title: 'Point ' + i.toString(10),
-                icon: colours[i % colours.length],
-                animation: 'DROP',
-                position: {
-                    lat: this.randoCoordMins.lat + (Math.random() * this.randoCoordDeltas.lat),
-                    lng: this.randoCoordMins.lon + (Math.random() * this.randoCoordDeltas.lon)
-                }
-            });
+        for (let item of this.records) {
+            try {
+                let marker: Marker = this.map.addMarkerSync({
+                    title: item.datetime,
+                    icon: item.valid ? 'green' : 'red',
+                    animation: 'DROP',
+                    position: {
+                        // FIXME: stop assuming the geojson is a Point or LineString
+                        lat: item.geometry.coordinates[1],
+                        lng: item.geometry.coordinates[0]
+                    }
+                });
+            } catch(e) {
+            }
         }
+    }
+    
+    ngOnInit(): void {
+        this.loadMap();
     }
 }
