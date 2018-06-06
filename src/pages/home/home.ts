@@ -15,6 +15,7 @@ import { APIService } from '../../biosys-core/services/api.service';
 import { mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs/observable/from';
 
+
 @IonicPage()
 @Component({
     selector: 'page-home',
@@ -24,6 +25,7 @@ export class HomePage {
     public static readonly MESSAGE_DURATION = 3000;
 
     public showList: boolean = true;
+    
 
     public records: ClientRecord[];
 

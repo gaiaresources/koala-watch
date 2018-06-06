@@ -7,24 +7,24 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-    <!--<ion-segment [(ngModel)]="showList" color="secondary">-->
-        <!--<ion-segment-button [value]="true">-->
-            <!--List-->
-        <!--</ion-segment-button>-->
-        <!--<ion-segment-button [value]="false">-->
-            <!--Map-->
-        <!--</ion-segment-button>-->
-    <!--</ion-segment>-->
+<ion-content>
+    <ion-segment [(ngModel)]="showList" color="secondary">
+        <ion-segment-button [value]="true">
+            List
+        </ion-segment-button>
+        <ion-segment-button [value]="false">
+            Map
+        </ion-segment-button>
+    </ion-segment>
 
-    <!--<div>-->
-        <!--<div *ngIf="showList">-->
+    <div class="home-tab-content">
+        <div *ngIf="showList" class="home-tab-content">
             <records-list [records]="records"></records-list>
-        <!--</div>-->
-        <!--<div *ngIf="!showList">-->
-            <!--<records-map></records-map>-->
-        <!--</div>-->
-    <!--</div>-->
+        </div>
+        <div *ngIf="!showList" class="home-tab-content">
+            <records-map [records]="records"></records-map>
+        </div>
+    </div>
 </ion-content>
 
 <ion-fab bottom right #addFab>
