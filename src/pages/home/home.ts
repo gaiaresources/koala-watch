@@ -4,6 +4,7 @@ import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { APIService } from '../../biosys-core/services/api.service';
 
+
 @IonicPage()
 @Component({
     selector: 'page-home',
@@ -11,6 +12,7 @@ import { APIService } from '../../biosys-core/services/api.service';
 })
 export class HomePage {
     public showList: boolean = true;
+    
 
     public records: ClientRecord[];
 
