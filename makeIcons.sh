@@ -22,6 +22,11 @@ resize() {
 resize AppIcon29x29@2x.png 58x58
 resize AppIcon29x29@3x.png 87x87
 resize AppIcon40x40@2x.png 80x80
+resize AppIcon98x98@2x.png 196x196
+resize AppIcon86x86@2x.png 172x172 
+resize AppIcon44x44@2x.png 88x88
+resize AppIcon27.5x27.5@2x.png 55x55
+resize AppIcon24x24@2x.png 48x48
 resize icon-1024.png 1024x1024
 resize icon-20.png 20x20
 resize icon-20@2x.png 40x40
