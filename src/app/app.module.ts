@@ -35,12 +35,15 @@ import { ComponentsModule } from '../components/components.module';
     providers: [
         StatusBar,
         SplashScreen,
-        {provide: ErrorHandler, useClass: IonicErrorHandler},
         StorageService,
         GoogleMaps,
         Camera,
         Geolocation,
         APIService,
+        {
+            provide: ErrorHandler,
+            useClass: IonicErrorHandler
+        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: ApiInterceptor,

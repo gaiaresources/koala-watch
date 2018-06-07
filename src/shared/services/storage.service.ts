@@ -38,7 +38,7 @@ export class StorageService {
     }
 
     public putRecord(record: ClientRecord): Observable<boolean> {
-        return fromPromise(this.storage.set(`${StorageService.RECORD_PREFIX}${record.clientId}`, record));
+        return fromPromise(this.storage.set(`${StorageService.RECORD_PREFIX}${record.client_id}`, record));
     }
 
     public getRecord(key: string): Observable<ClientRecord> {
