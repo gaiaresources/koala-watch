@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
-import { filter, flatMap } from 'rxjs/operators';
+import { filter, mergeMap } from 'rxjs/operators';
 
 import { Geolocation } from '@ionic-native/geolocation';
 import { SchemaService } from '../../biosys-core/services/schema.service';
-import { FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
+import { FieldDescriptor, FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
@@ -31,7 +31,7 @@ export class ObservationPage {
                 private schemaService: SchemaService, private storageService: StorageService,
                 private geolocation: Geolocation, private alertController: AlertController) {
         this.storageService.getDataset(this.navParams.get('datasetName')).pipe(
-            flatMap((dataset: Dataset) => {
+            mergeMap((dataset: Dataset) => {
                 this.datasetId = dataset.id;
                 return this.schemaService.getFormDescriptorAndGroupFromDataPackage(dataset);
             })
@@ -58,6 +58,21 @@ export class ObservationPage {
 
                     if (this.form.contains('Longitude')) {
                         this.form.patchValue({'Longitude': position.coords.longitude});
+                    }
+
+                    if (this.form.contains('Accuracy')) {
+                        this.form.patchValue({'Accuracy': position.coords.accuracy});
+                    }
+                });
+
+                // patch in all single-value enum fields
+                this.formDescriptor.fields.forEach((field: FieldDescriptor) => {
+                    if (field.type === 'select' && field.options.length === 1) {
+                        // for some reason patching straight into the form (this.form.patchValue) doesn't work,
+                        // possibly because the form hasn't rendered yet so options aren't available. This work-around
+                        // from https://stackoverflow.com/questions/48514515/value-not-rendering-in-textarea-using-patch
+                        // value?rq=1 seems to work
+                        this.form.controls[field.key].patchValue(field.options[0]);
                     }
                 });
             }
