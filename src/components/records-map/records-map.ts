@@ -6,7 +6,7 @@ import {
     LatLng, Marker,
 } from '@ionic-native/google-maps';
 import { Component, Input, OnInit, ViewChild } from '@angular/core/';
-import { IonicPage } from "ionic-angular";
+import { IonicPage, NavParams, Platform } from "ionic-angular";
 import { InputDecorator } from "@angular/core/src/metadata/directives";
 import { ClientRecord } from "../../shared/interfaces/mobile.interfaces";
 
@@ -20,13 +20,17 @@ export class RecordsMapComponent implements OnInit {
     @Input()
     public records: ClientRecord[];
 
-    constructor() { }
-
+    constructor(navParams: NavParams) {
+        if (navParams.data !== undefined && navParams.data.hasOwnProperty('data'))
+            this.records = navParams.data.data;
+    }
+    
     private ionViewDidLoad() {
         this.loadMap();
     }
 
     private loadMap() {
+        // alert('here');
         let location = new LatLng(-25, 132);
         let mapOptions: GoogleMapOptions = {
             'backgroundColor': 'white',
@@ -45,8 +49,9 @@ export class RecordsMapComponent implements OnInit {
         };
 
         this.map = GoogleMaps.create('map', mapOptions);
-
+ 
         for (let item of this.records) {
+            // alert(item.geometry.coordinates[0]);
             try {
                 let marker: Marker = this.map.addMarkerSync({
                     title: item.datetime,

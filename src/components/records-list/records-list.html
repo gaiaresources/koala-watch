@@ -1,4 +1,5 @@
-<div id="category-legend-div">
+<ion-content>
+<div *ngIf="showLegend" id="category-legend-div">
     <table id="category-legend">
         <td class="category-legend-colour" id="category-completed"></td>
         <td class="category-legend-label">Complete</td>
@@ -14,3 +15,4 @@
         <span ion-col col-8 class="data-row-time">{{record.datetime }}</span>
     </button>
 </ion-list>
+</ion-content>

@@ -12,15 +12,18 @@ export class RecordsListComponent {
     // mapping from DataType to an icon
     public itemIcons = [
         'assets/imgs/koala_data_poop.png',
-//        'assets/imgs/koala_data_torch.png',
         'assets/imgs/koala_data_eye.png'
     ];
 
     @Input()
     public records: ClientRecord[];
+    
+    @Input()
+    public showLegend: boolean = true;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
-
+        if (navParams.data !== undefined && navParams.data.hasOwnProperty('data'))
+            this.records = navParams.data.data;
     }
 
     public getStatusColor(record: ClientRecord) {

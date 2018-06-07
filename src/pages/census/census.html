@@ -5,14 +5,34 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>census</ion-title>
+    <ion-title>KLM SAT Census</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content padding>
+    <ion-segment [(ngModel)]="showSat" color="secondary">
+        <ion-segment-button [value]="true">
+            Census Overview
+        </ion-segment-button>
+        <ion-segment-button [value]="false">
+            KLM SAT Tree Sightings ({{observations.length}})
+        </ion-segment-button>
+    </ion-segment>
+
+    <div class="home-tab-content">
+        <div *ngIf="showSat" class="home-tab-content">
+        </div>
+        <div *ngIf="!showSat" class="home-tab-content">
+            <records-list [showLegend]="false" [records]="observations"></records-list>
+        </div>
+    </div>
+
+    <ion-fab *ngIf="!showSat" bottom right>
+        <button ion-fab (click)="addSatObo()">
+            <ion-icon name="add"></ion-icon>
+        </button>
+    </ion-fab>
 
 </ion-content>
