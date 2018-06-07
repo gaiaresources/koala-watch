@@ -53,11 +53,3 @@ resize icon-small@3x.png 87x87
 resize icon.png 57x57
 resize icon@2x.png 114x114
 
-dest="platforms/ios/Koala Watch/Images.xcassets/LaunchImage.launchimage"
-cp Default-2436h.png "${dest}/Default-2436h.png"
-cp Default-Landscape-2436h.png "${dest}/Default-Landscape-2436h.png"
-cp Default-Landscape.png "${dest}/Default-Landscape.png"
-cp Default-Landscape@2x.png "${dest}/Default-Landscape@2x.png"
-cp Default-Portrait.png "${dest}/Default-Portrait.png"
-cp Default-Portrait@2x.png "${dest}/Default-Portrait@2x.png"
-
