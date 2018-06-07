@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
-import { filter, flatMap } from 'rxjs/operators';
+import { filter, mergeMap } from 'rxjs/operators';
 
 import * as moment from 'moment/moment';
 
@@ -40,7 +40,7 @@ export class ObservationPage {
         }
 
         this.storageService.getDataset(this.navParams.get('datasetName')).pipe(
-            flatMap((dataset: Dataset) => {
+            mergeMap((dataset: Dataset) => {
                 this.dataset = dataset;
                 return this.schemaService.getFormDescriptorAndGroupFromDataset(dataset);
             })
