@@ -22,8 +22,12 @@ export class RecordsListComponent {
     public showLegend: boolean = true;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
-        if (navParams.data !== undefined && navParams.data.hasOwnProperty('data'))
-            this.records = navParams.data.data;
+        if (navParams.data !== undefined) {
+            if (navParams.data.hasOwnProperty('data'))
+                this.records = navParams.data.data;
+            if (!navParams.data.hasOwnProperty('showLegend'))
+                this.showLegend = navParams.data.showLegend;
+        }
     }
 
     public getStatusColor(record: ClientRecord) {

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ClientRecord } from "../../shared/interfaces/mobile.interfaces";
 import { CensusObservationPage } from "../census-observation/census-observation";
+import { RecordsListComponent } from "../../components/records-list/records-list";
 
 /**
  * Generated class for the CensusPage page.
@@ -17,7 +18,8 @@ import { CensusObservationPage } from "../census-observation/census-observation"
 })
 export class CensusPage {
     public observations: ClientRecord[];
-    public showSat: boolean = true;
+    public showOboAdd: boolean = false;
+    public observationsList = RecordsListComponent;
     
   constructor(public navCtrl: NavController, public navParams: NavParams) {
       this.observations = new Array();
@@ -28,7 +30,7 @@ export class CensusPage {
   }
   
   public addSatObo() {
-      this.navCtrl.push('CensusObservationPage');
+      this.navCtrl.push('CensusObservationPage', {'datasetName': 'Koala Opportunistic Observation'});
   }
-
+  
 }

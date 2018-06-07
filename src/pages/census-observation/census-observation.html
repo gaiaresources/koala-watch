@@ -1,0 +1,18 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>SAT Tree Sighting</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-end solid color="primary" (click)="save()">
+                Save
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-tabs tabsPlacement="top">
+        <ion-tab tabTitle="KLM SAT Tree Sighting" [root]="treeSighting"></ion-tab>
+        <ion-tab tabTitle="Photos ({{photos.length}})" [root]="mediaPage"></ion-tab>
+    </ion-tabs>
+</ion-content>

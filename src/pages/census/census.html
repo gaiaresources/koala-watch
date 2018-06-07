@@ -10,29 +10,23 @@
   </ion-navbar>
 </ion-header>
 
+<ion-content>
+    <ion-tabs tabsPlacement="top">
+        <ion-tab (ionSelect)="showOboAdd=false"
+                 [root]="observationsList"
+                 tabTitle="KLM SAT Census Overview"></ion-tab>
+        <ion-tab (ionSelect)="showOboAdd=true"
+                 tabTitle="KLM SAT Tree Observations ({{observations.length}})"
+                 [root]="observationsList"
+                 [rootParams]="{data: observations, showLegend: false}"></ion-tab>
+        <ion-tab (ionSelect)="showOboAdd=false"
+                 [root]="observationsList"
+                 tabTitle="KLM SAT Census Media (0)"></ion-tab>
+    </ion-tabs>
 
-<ion-content padding>
-    <ion-segment [(ngModel)]="showSat" color="secondary">
-        <ion-segment-button [value]="true">
-            Census Overview
-        </ion-segment-button>
-        <ion-segment-button [value]="false">
-            KLM SAT Tree Sightings ({{observations.length}})
-        </ion-segment-button>
-    </ion-segment>
-
-    <div class="home-tab-content">
-        <div *ngIf="showSat" class="home-tab-content">
-        </div>
-        <div *ngIf="!showSat" class="home-tab-content">
-            <records-list [showLegend]="false" [records]="observations"></records-list>
-        </div>
-    </div>
-
-    <ion-fab *ngIf="!showSat" bottom right>
+    <ion-fab *ngIf="showOboAdd" bottom right>
         <button ion-fab (click)="addSatObo()">
             <ion-icon name="add"></ion-icon>
         </button>
     </ion-fab>
-
 </ion-content>
