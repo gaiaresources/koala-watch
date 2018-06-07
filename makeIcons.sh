@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# 'Default-2436h.png', width: 1125, height: 2436, orientation: 'portrait', ratio 0.46182266009
+
+# Default-Portrait.png - 1x iPad Portrait Without Status Bar iOS 5,6 768x1004
+# Default-Landscape.png - 1x iPad Landscape Without Status Bar iOS 5,6 1024x748
+
 icon=icon1024.png
 dest="platforms/ios/Koala Watch/Images.xcassets/AppIcon.appiconset"
 
@@ -48,5 +53,11 @@ resize icon-small@3x.png 87x87
 resize icon.png 57x57
 resize icon@2x.png 114x114
 
-exit 0
+dest="platforms/ios/Koala Watch/Images.xcassets/LaunchImage.launchimage"
+cp Default-2436h.png "${dest}/Default-2436h.png"
+cp Default-Landscape-2436h.png "${dest}/Default-Landscape-2436h.png"
+cp Default-Landscape.png "${dest}/Default-Landscape.png"
+cp Default-Landscape@2x.png "${dest}/Default-Landscape@2x.png"
+cp Default-Portrait.png "${dest}/Default-Portrait.png"
+cp Default-Portrait@2x.png "${dest}/Default-Portrait@2x.png"
 
