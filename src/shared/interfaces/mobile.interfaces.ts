@@ -4,4 +4,5 @@ export interface ClientRecord extends Record {
     valid: boolean;
     datasetName: string;
     datetime: string;
+    count: number;
 }

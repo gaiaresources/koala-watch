@@ -18,12 +18,10 @@ import { APIService } from '../biosys-core/services/api.service';
 import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
 import { AuthService } from '../biosys-core/services/auth.service';
 import { ComponentsModule } from '../components/components.module';
-import { PyToIonicDateFormatConversionPipe } from '../shared/pipes/date-conversion.pipe';
 
 @NgModule({
     declarations: [
-        AppComponent,
-        PyToIonicDateFormatConversionPipe
+        AppComponent
     ],
     imports: [
         BrowserModule,
@@ -37,12 +35,15 @@ import { PyToIonicDateFormatConversionPipe } from '../shared/pipes/date-conversi
     providers: [
         StatusBar,
         SplashScreen,
-        {provide: ErrorHandler, useClass: IonicErrorHandler},
         StorageService,
         GoogleMaps,
         Camera,
         Geolocation,
         APIService,
+        {
+            provide: ErrorHandler,
+            useClass: IonicErrorHandler
+        },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: ApiInterceptor,

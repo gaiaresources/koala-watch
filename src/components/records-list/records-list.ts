@@ -15,7 +15,6 @@ export class RecordsListComponent {
     // mapping from DataType to an icon
     public itemIcons = [
         'assets/imgs/koala_data_poop.png',
-//        'assets/imgs/koala_data_torch.png',
         'assets/imgs/koala_data_eye.png'
     ];
 

@@ -10,6 +10,9 @@ export function pyDateFormatToIonicDateFormat(pythonDateFormat: string): string 
     }
 
     ionicDateFormat = ionicDateFormat.replace(/fmt:/, '');
+    ionicDateFormat = ionicDateFormat.replace(/%S/, 'ss');
+    ionicDateFormat = ionicDateFormat.replace(/%M/, 'mm');
+    ionicDateFormat = ionicDateFormat.replace(/%H/, 'HH');
     ionicDateFormat = ionicDateFormat.replace(/%a/, 'DDD');
     ionicDateFormat = ionicDateFormat.replace(/%A/, 'DDDD');
     ionicDateFormat = ionicDateFormat.replace(/%d/, 'DD');
