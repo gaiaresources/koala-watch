@@ -52,7 +52,13 @@ Fix the XCode project app icons and splash images using the bash script makeIcon
 ./makeIcons.sh
 ```
 
-Open the XCode project using XCode and set the development team to Gaia Resources, from there the ios build command should succeed
+In Xcode:
+
+* Set the development team to Gaia Resources, from there the ios build command should succeed
+* Drag the spash image Default-Portrait.png -> iPad Portrait Without Status Bar iOS 5,6 1x
+* Drag the spash image Default-Portrait@2x.png -> iPad Portrait Without Status Bar iOS 5,6 2x
+* Drag the spash image Default-Landscape.png -> iPad Landscape Without Status Bar iOS 5,6 1x
+* Drag the spash image Default-Landscape@2x.png -> iPad Landscape Without Status Bar iOS 5,6 2x
 
 Deploy to an iphone using the command:
 
