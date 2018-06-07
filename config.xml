@@ -62,6 +62,11 @@
         <icon height="87" platform="ios" src="resources/ios/icon/icon-small@3x.png" width="87" />
         <icon height="1024" platform="ios" src="resources/ios/icon/icon-1024.png" width="1024" />
         <icon height="48" platform="ios" src="resources/ios/icon/icon-24x24@2x.png" width="48" />
+        <icon height="55" platform="ios" src="resources/ios/icon/icon-27.5x27.5@2x.png" width="55" />
+        <icon height="88" platform="ios" src="resources/ios/icon/icon-44x44@2x.png" width="88" />
+        <icon height="172" platform="ios" src="resources/ios/icon/icon-86x86@2x.png" width="172" />
+        <icon height="196" platform="ios" src="resources/ios/icon/icon-98x98@2x.png" width="196" />
+        <icon height="167" platform="ios" src="resources/ios/icon/icon-83.5@2x.png" width="167" />
         <splash height="1136" platform="ios" src="resources/ios/splash/Default-568h@2x~iphone.png" width="640" />
         <splash height="1334" platform="ios" src="resources/ios/splash/Default-667h.png" width="750" />
         <splash height="2208" platform="ios" src="resources/ios/splash/Default-736h.png" width="1242" />
