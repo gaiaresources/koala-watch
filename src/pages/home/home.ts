@@ -7,23 +7,6 @@ import { RecordsMapComponent } from "../../components/records-map/records-map";
 import { RecordsListComponent } from "../../components/records-list/records-list";
 import { LineString, MultiLineString, MultiPolygon, Point, Polygon } from "geojson";
 
-class FooBoo implements ClientRecord {
-    clientId: string;
-    created: string;
-    data: { [p: string]: any } | null;
-    dataset: number;
-    datasetName: string;
-    datetime: string;
-    geometry: Point | LineString | MultiLineString | Polygon | MultiPolygon | null;
-    id: number;
-    last_modified: string;
-    name_id: number;
-    site: number | null;
-    source_info: { [p: string]: string | number };
-    species_name: string;
-    valid: boolean;
-}
-
 @IonicPage()
 @Component({
     selector: 'page-home',
