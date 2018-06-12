@@ -34,7 +34,7 @@ export class ObservationPage {
         }
 
         let recordClientId = this.navParams.get('recordClientId');
-        this.isNewRecord = !!recordClientId;
+        this.isNewRecord = !recordClientId;
 
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
                 this.dataset = dataset;

@@ -73,35 +73,37 @@ export class RecordFormComponent {
                 this._dateFieldKey = this.formDescriptor.dateFields[0].key;
             }
 
-            // if this is a new record, patch in default form values where appropriate
-            this.geolocation.watchPosition().pipe(
-                filter(position => !!position['coords']) // filter out errors
-            ).subscribe(position => {
-                const valuesToPatch = {}
+            if (this.initializeDefaultValues) {
+                // if this is a new record, patch in default form values where appropriate
+                this.geolocation.watchPosition().pipe(
+                    filter(position => !!position['coords']) // filter out errors
+                ).subscribe(position => {
+                    const valuesToPatch = {}
 
-                if (this.form.contains('Latitude')) {
-                    valuesToPatch['Latitude'] = position.coords.latitude;
+                    if (this.form.contains('Latitude')) {
+                        valuesToPatch['Latitude'] = position.coords.latitude;
+                    }
+
+                    if (this.form.contains('Longitude')) {
+                        valuesToPatch['Longitude'] = position.coords.longitude;
+                    }
+
+                    if (this.form.contains('Accuracy')) {
+                        valuesToPatch['Accuracy'] = position.coords.accuracy;
+                    }
+
+                    this.form.patchValue(valuesToPatch);
+                });
+
+                if (this._dateFieldKey) {
+                    // moment().format() will return the current date/time in local timezone
+                    this.form.controls[this._dateFieldKey].setValue(moment().format());
                 }
 
-                if (this.form.contains('Longitude')) {
-                    valuesToPatch['Longitude'] = position.coords.longitude;
-                }
-
-                if (this.form.contains('Accuracy')) {
-                    valuesToPatch['Accuracy'] = position.coords.accuracy;
-                }
-
-                this.form.patchValue(valuesToPatch);
-            });
-
-            if (this._dateFieldKey) {
-                // moment().format() will return the current date/time in local timezone
-                this.form.controls[this._dateFieldKey].setValue(moment().format());
+                this.formDescriptor.hiddenFields.map((field: FieldDescriptor) =>
+                    this.form.controls[field.key].setValue(field.defaultValue)
+                );
             }
-
-            this.formDescriptor.hiddenFields.map((field: FieldDescriptor) =>
-                this.form.controls[field.key].setValue(field.defaultValue)
-            );
         });
     }
 
