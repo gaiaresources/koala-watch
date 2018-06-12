@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ObservationPage } from './observation';
-import { SharedModule } from '../../shared/shared.module';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
     declarations: [
@@ -9,7 +9,7 @@ import { SharedModule } from '../../shared/shared.module';
     ],
     imports: [
         IonicPageModule.forChild(ObservationPage),
-        SharedModule
+        ComponentsModule
     ],
 })
 export class ObservationPageModule {
