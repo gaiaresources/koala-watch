@@ -6,3 +6,11 @@ export interface ClientRecord extends Record {
     datetime: string;
     count: number;
 }
+
+export interface PhotoRecord {
+    id: string;
+    parentId: string;
+    fileName: string;
+    base64: string;
+    datetime: string;
+}
