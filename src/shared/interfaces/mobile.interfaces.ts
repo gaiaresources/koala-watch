@@ -5,6 +5,7 @@ export interface ClientRecord extends Record {
     datasetName: string;
     datetime: string;
     count: number;
+    photoIds: string[];
 }
 
 export interface PhotoRecord {
