@@ -8,4 +8,17 @@
             </ion-row>
         </ion-card-content>
     </ion-card>
+    <ion-card>
+        <ion-card-content>
+            <ion-slides slidesPerView="3">
+                <ion-slide *ngFor="let slide of slides">
+                    <img [src]="domSanitizer.bypassSecurityTrustUrl(slide.src)" padding="50">
+                    <button ion-button icon-end solid color="primary" (click)="delete(slide)">
+                        Delete
+                        <ion-icon name="trash"></ion-icon>
+                    </button>
+                </ion-slide>
+            </ion-slides>
+        </ion-card-content>
+    </ion-card>
 </ion-content>
