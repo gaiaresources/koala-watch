@@ -4,6 +4,8 @@ import { StorageService } from "../../shared/services/storage.service";
 import { UUID } from "angular2-uuid";
 import { DomSanitizer } from "@angular/platform-browser";
 import * as moment from 'moment/moment';
+import {from} from "rxjs/observable/from";
+import {mergeMap} from "rxjs/operators";
 
 class ImageRecord {
     public id: string;
@@ -53,7 +55,7 @@ export class PhotoGalleryComponent {
     }
 
     public recordId: string;
-    
+
     constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService) {
     }
 
@@ -157,28 +159,15 @@ export class PhotoGalleryComponent {
     }
 
     public commit() {
-        this.deleteNextDeletedPhoto(0);
+        from(this.deletedPhotoIds).pipe(
+            mergeMap( photoId => this.storageService.deletePhoto(photoId) )
+        ).subscribe();
     }
 
     public rollback() {
-        this.deleteNextAddedPhoto(0);
-    }
-
-    private deleteNextAddedPhoto(photoIndex: number) {
-        if(photoIndex < this.addedPhotoIds.length) {
-            console.log('deleteing added: ' + this.addedPhotoIds[photoIndex]);
-            this.storageService.deletePhoto(this.addedPhotoIds[photoIndex]).subscribe( deleted => {
-                this.deleteNextAddedPhoto(photoIndex + 1);
-            })
-        }
-    }
-
-    private deleteNextDeletedPhoto(photoIndex: number) {
-        if(photoIndex < this.deletedPhotoIds.length) {
-            this.storageService.deletePhoto(this.deletedPhotoIds[photoIndex]).subscribe( deleted => {
-                this.deleteNextDeletedPhoto(photoIndex + 1);
-            })
-        }
+        from(this.addedPhotoIds).pipe(
+            mergeMap( photoId => this.storageService.deletePhoto(photoId) )
+        ).subscribe();
     }
 
     private deletePhotoUsingId(photoId: string) {
