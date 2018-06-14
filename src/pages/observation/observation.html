@@ -11,21 +11,21 @@
 </ion-header>
 
 <ion-content padding>
-    <!--<ion-segment [(ngModel)]="showForm" color="secondary">-->
-    <!--<ion-segment-button [value]="true">-->
-    <!--Form-->
-    <!--</ion-segment-button>-->
-    <!--<ion-segment-button [value]="false">-->
-    <!--Photos-->
-    <!--</ion-segment-button>-->
-    <!--</ion-segment>-->
+    <ion-segment [(ngModel)]="showForm" color="secondary">
+        <ion-segment-button [value]="true">
+            Form
+        </ion-segment-button>
+        <ion-segment-button [value]="false">
+            Photos
+        </ion-segment-button>
+    </ion-segment>
 
-    <!--<div>-->
-    <div *ngIf="showForm">
-        <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord"></record-form>
+    <div>
+        <div [hidden]="!showForm">
+            <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord"></record-form>
+        </div>
+        <div [hidden]="showForm">
+            <photo-gallery></photo-gallery>
+        </div>
     </div>
-    <!--<div *ngIf="!showForm">-->
-
-    <!--</div>-->
-    <!--</div>-->
 </ion-content>

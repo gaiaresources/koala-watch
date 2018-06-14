@@ -9,6 +9,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { UUID } from 'angular2-uuid';
 import { RecordFormComponent } from '../../components/record-form/record-form';
+import {PhotoGalleryComponent} from "../../components/photo-gallery/photo-gallery";
 
 @IonicPage()
 @Component({
@@ -21,6 +22,9 @@ export class ObservationPage {
 
     @ViewChild(RecordFormComponent)
     private recordForm: RecordFormComponent;
+
+    @ViewChild(PhotoGalleryComponent)
+    private photoGallery: PhotoGalleryComponent;
 
     private showLeavingAlertMessage: boolean = true;
     private record: ClientRecord;
@@ -45,6 +49,7 @@ export class ObservationPage {
                     record => {
                         this.record = record;
                         this.recordForm.value = record.data;
+                        this.photoGallery.setPhotoIds(record.photoIds);
                     }
                 );
             }
@@ -61,6 +66,7 @@ export class ObservationPage {
                     {
                         text: 'Yes',
                         handler: () => {
+                            this.photoGallery.rollback();
                             this.showLeavingAlertMessage = false;
                             this.navCtrl.pop();
                         }
@@ -75,6 +81,7 @@ export class ObservationPage {
     }
 
     public save() {
+        this.photoGallery.commit();
         const formValues: object = this.recordForm.value;
 
         this.storageService.putRecord({
@@ -84,7 +91,8 @@ export class ObservationPage {
             datasetName: this.navParams.get('datasetName'),
             datetime: this.recordForm.dateFieldKey ? formValues[this.recordForm.dateFieldKey] : moment().format(),
             data: formValues,
-            count: !!formValues['Count'] ? formValues['Count'] : 0
+            count: !!formValues['Count'] ? formValues['Count'] : 0,
+            photoIds: this.photoGallery.photoIds
         }).subscribe((result: boolean) => {
             if (result) {
                 this.showLeavingAlertMessage = false;
