@@ -4,8 +4,8 @@ import { StorageService } from "../../shared/services/storage.service";
 import { UUID } from "angular2-uuid";
 import { DomSanitizer } from "@angular/platform-browser";
 import * as moment from 'moment/moment';
-import {from} from "rxjs/observable/from";
-import {mergeMap} from "rxjs/operators";
+import { from } from "rxjs/observable/from";
+import { mergeMap } from "rxjs/operators";
 
 class ImageRecord {
     public id: string;
@@ -21,8 +21,8 @@ export class PhotoGalleryComponent {
     public slides: ImageRecord[] = [];
     public src: string;
     public slideIndex: number = 0;
-    public photoIds: string[];
 
+    public _photoIds: string[];
     private addedPhotoIds: string[] = [];
     private deletedPhotoIds: string[] = [];
 
@@ -44,11 +44,11 @@ export class PhotoGalleryComponent {
         }
     }
 
-    public setPhotoIds(photoIds: string[]) {
-        this.photoIds = photoIds;
+    public set PhotoIds(thePhotoIds: string[]) {
+        this._photoIds = thePhotoIds;
 
-        if(this.photoIds == undefined || this.photoIds == null) {
-            this.photoIds = [];
+        if(this._photoIds == undefined || this._photoIds == null) {
+            this._photoIds = [];
         }
 
         this.loadPhotos();
@@ -69,9 +69,9 @@ export class PhotoGalleryComponent {
             if (this.slideIndex > -1) {
                 this.slides.splice(this.slideIndex, 1);
             }
-            const photoIdIndex = this.photoIds.indexOf(imageRecord.id);
+            const photoIdIndex = this._photoIds.indexOf(imageRecord.id);
             if (photoIdIndex > -1) {
-                this.photoIds.splice(photoIdIndex, 1);
+                this._photoIds.splice(photoIdIndex, 1);
             }
             const addedPhotoIdIndex = this.addedPhotoIds.indexOf(imageRecord.id);
             if (addedPhotoIdIndex > -1) {
@@ -140,10 +140,10 @@ export class PhotoGalleryComponent {
     }
 
     public addPhotoIdToPhotosList(photoId: string) {
-        if(this.photoIds == undefined || this.photoIds == null) {
-            this.photoIds = [photoId];
+        if(this._photoIds == undefined || this._photoIds == null) {
+            this._photoIds = [photoId];
         } else {
-            this.photoIds.push(photoId);
+            this._photoIds.push(photoId);
         }
     }
 
@@ -175,7 +175,7 @@ export class PhotoGalleryComponent {
     private loadPhotos() {
             let photoIndex = 0;
 
-            from(this.photoIds).pipe(
+            from(this._photoIds).pipe(
                 mergeMap( photoId => this.storageService.getPhoto(photoId) )
             ).subscribe(photoRecord => {
                 if(photoRecord != undefined && photoRecord != null) {
@@ -184,7 +184,7 @@ export class PhotoGalleryComponent {
                         this.src = imageSrc;
                     }
                     this.slides.push({
-                        id: this.photoIds[photoIndex],
+                        id: this._photoIds[photoIndex],
                         src: imageSrc
                     });
                 }
