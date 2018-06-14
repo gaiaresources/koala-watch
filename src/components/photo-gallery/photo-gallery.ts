@@ -1,6 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Camera, CameraOptions } from "@ionic-native/camera";
 import { StorageService } from "../../shared/services/storage.service";
 import { UUID } from "angular2-uuid";
@@ -73,7 +71,7 @@ export class PhotoGalleryComponent implements OnInit {
     }
 
     public takePhoto() {
-        if(this.photoIds != undefined && this.photoIds != null && this.photoIds.length >= 3) {
+        if(this.slides.length >= 3) {
             alert('Maximum number of photos reached');
             return;
         }
@@ -99,7 +97,6 @@ export class PhotoGalleryComponent implements OnInit {
                 if(put) {
                     this.addPhotoIdToPhotosList(photoId);
                     this.addedPhotoIds.push(photoId);
-                    alert('Photo added ' + photoId);
                     let imageSrc = PhotoGalleryComponent.makeImageSrc(base64);
                     this.slides.push({
                         id: photoId,
@@ -155,7 +152,6 @@ export class PhotoGalleryComponent implements OnInit {
     }
 
     private deletePhotoUsingId(photoId: string) {
-        console.log('Deleting photo from storage ' + photoId);
         this.storageService.deletePhoto(photoId).subscribe(deleted => {
         });
     }
