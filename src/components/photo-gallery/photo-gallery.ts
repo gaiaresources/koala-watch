@@ -20,11 +20,27 @@ export class PhotoGalleryComponent implements OnInit {
     private deletedPhotoIds: string[] = [];
 
     public slides: ImageRecord[] = [];
+    public src: string;
+    public slideIndex: number = 0;
 
     public photoIds: string[];
 
     public showPhotos() {
         return this.slides.length > 0;
+    }
+
+    public pageLeft() {
+        if(this.slideIndex > 0) {
+            this.slideIndex -= 1;
+            this.src = this.slides[this.slideIndex].src;
+        }
+    }
+
+    public pageRight() {
+        if(this.slideIndex < this.slides.length - 1) {
+            this.slideIndex += 1;
+            this.src = this.slides[this.slideIndex].src;
+        }
     }
 
     public setPhotoIds(photoIds: string[]) {
@@ -54,11 +70,14 @@ export class PhotoGalleryComponent implements OnInit {
     }
 
     public delete(imageRecord: ImageRecord) {
+        if(this.slides.length <= 0) {
+            return;
+        }
+
         if(confirm("Delete photo? ")) {
-            let slide = this.slides.filter(item => item.id === imageRecord.id).pop();
-            const slideIndex = this.slides.indexOf(slide);
-            if (slideIndex > -1) {
-                this.slides.splice(slideIndex, 1);
+            const imageRecord = this.slides[this.slideIndex];
+            if (this.slideIndex > -1) {
+                this.slides.splice(this.slideIndex, 1);
             }
             const photoIdIndex = this.photoIds.indexOf(imageRecord.id);
             if (photoIdIndex > -1) {
@@ -70,6 +89,18 @@ export class PhotoGalleryComponent implements OnInit {
                 this.addedPhotoIds.splice(photoIdIndex, 1);
             } else {
                 this.addPhotoIdToDeletedList(imageRecord.id);
+            }
+
+            if(this.slideIndex >= this.slides.length) {
+                this.slideIndex -= 1;
+                if(this.slideIndex >= 0) {
+                    this.src = this.slides[this.slideIndex].src;
+                } else {
+                    this.src = null;
+                    this.slideIndex = null;
+                }
+            } else {
+                this.src = this.slides[this.slideIndex].src;
             }
         }
     }
@@ -106,6 +137,8 @@ export class PhotoGalleryComponent implements OnInit {
                         id: photoId,
                         src: imageSrc
                     });
+                    this.slideIndex = this.slides.length - 1;
+                    this.src = this.slides[this.slideIndex].src;
                 } else {
                     alert('Photo save failed, try again');
                 }
@@ -183,6 +216,14 @@ export class PhotoGalleryComponent implements OnInit {
                     }
                 }
             );
+        } else {
+            if(photoIndex > 0) {
+                this.slideIndex = 0;
+                this.src = this.slides[0].src;
+            } else {
+                this.slideIndex = null;
+                this.src = null;
+            }
         }
     }
 
