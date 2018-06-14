@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
             this.splashScreen.hide();
 
             if (!this.authService.isLoggedIn()) {
+                //this.nav.setRoot('HomePage');
                 this.nav.setRoot('LoginPage');
             } else {
                 this.apiService.getDatasets({name: 'Koala Opportunistic Observation'}).subscribe(

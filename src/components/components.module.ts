@@ -4,12 +4,14 @@ import { IonicModule } from 'ionic-angular';
 import { NgModule } from '@angular/core';
 import { RecordFormComponent } from './record-form/record-form';
 import { SharedModule } from '../shared/shared.module';
+import { KlmSatCensusComponent } from "./klm-sat-census/klm-sat-census";
 
 @NgModule({
     declarations: [
         RecordsListComponent,
         RecordsMapComponent,
         RecordFormComponent,
+        KlmSatCensusComponent
     ],
     imports: [
         IonicModule,
@@ -18,11 +20,13 @@ import { SharedModule } from '../shared/shared.module';
     entryComponents: [
         RecordsListComponent,
         RecordsMapComponent,
+        KlmSatCensusComponent
     ],
     exports: [
         RecordsListComponent,
         RecordsMapComponent,
         RecordFormComponent,
+        KlmSatCensusComponent
     ]
 })
 export class ComponentsModule {

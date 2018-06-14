@@ -86,12 +86,15 @@ export class HomePage {
     }
     
     public clickedNewSat(fabContainer: FabContainer, theThing: RecordsMapComponent) {
-        this.navCtrl.push('CensusPage', {datasetName: 'KLM-SAT Census'});
+        this.navCtrl.push('CensusPage', {
+            isNew: true,
+        });
         fabContainer.close();
     }
 
     private loadRecords() {
-        this.records = [];
+        while (this.records.length > 0)
+            this.records.pop();
         this.storageService.getAllRecords().subscribe(
             (record: ClientRecord) => this.records.push(record)
         );

@@ -5,23 +5,30 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
-    <ion-title>KLM SAT Census</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>KLM SAT Census</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-end solid color="primary" (click)="save()">
+                Save
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
 </ion-header>
 
 <ion-content>
     <ion-tabs tabsPlacement="top">
         <ion-tab (ionSelect)="showOboAdd=false"
-                 [root]="observationsList"
-                 tabTitle="KLM SAT Census Overview"></ion-tab>
+                 [root]="klmSatCensus"
+                 tabTitle="Census"
+                 [rootParams]="{datasetName: 'KLM-SAT Census', parent: sightingUuid}"></ion-tab>
         <ion-tab (ionSelect)="showOboAdd=true"
-                 tabTitle="KLM SAT Tree Observations ({{observations.length}})"
+                 tabTitle="Tree Observations ({{observations.length}})"
                  [root]="observationsList"
-                 [rootParams]="{data: observations, showLegend: false}"></ion-tab>
-        <ion-tab (ionSelect)="showOboAdd=false"
-                 [root]="observationsList"
-                 tabTitle="KLM SAT Census Media (0)"></ion-tab>
+                 [rootParams]="{data: observations, showLegend: false, parent: sightingUuid}"></ion-tab>
+        <!--<ion-tab (ionSelect)="showOboAdd=false"-->
+                 <!--[root]="observationsList"-->
+                 <!--tabTitle="Media (0)"></ion-tab>-->
     </ion-tabs>
 
     <ion-fab *ngIf="showOboAdd" bottom right>

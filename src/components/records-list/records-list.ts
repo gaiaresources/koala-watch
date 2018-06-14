@@ -12,12 +12,6 @@ export class RecordsListComponent {
 
     public items: Array<{ title: string, note: string, icon: string }>;
 
-    // mapping from DataType to an icon
-    public itemIcons = [
-        'assets/imgs/koala_data_poop.png',
-        'assets/imgs/koala_data_eye.png'
-    ];
-
     @Input()
     public records: ClientRecord[];
     
@@ -28,7 +22,7 @@ export class RecordsListComponent {
         if (navParams.data !== undefined) {
             if (navParams.data.hasOwnProperty('data'))
                 this.records = navParams.data.data;
-            if (!navParams.data.hasOwnProperty('showLegend'))
+            if (navParams.data.hasOwnProperty('showLegend'))
                 this.showLegend = navParams.data.showLegend;
         }
     }
@@ -40,13 +34,20 @@ export class RecordsListComponent {
     public getIcon(record: ClientRecord): string {
         if (record.datasetName === 'Koala Opportunistic Observation') {
             return 'assets/imgs/koala_data_eye.png'
-        }
+        } else
+            return 'assets/imgs/koala_data_poop.png';
     }
 
     public itemTapped(event, record) {
-        this.navCtrl.push('ObservationPage', {
-            datasetName: record.datasetName,
-            recordClientId: record.client_id
-        });
+        if (record.datasetName === 'Koala Opportunistic Observation')
+            this.navCtrl.push('ObservationPage', {
+                datasetName: record.datasetName,
+                recordClientId: record.client_id
+            });
+        else
+            this.navCtrl.push('CensusPage', {
+                recordClientId: record.client_id,
+                isNew: false
+            });
     }
 }

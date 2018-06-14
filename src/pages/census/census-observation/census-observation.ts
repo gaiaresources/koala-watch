@@ -5,13 +5,13 @@ import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angu
 import { filter, flatMap } from 'rxjs/operators';
 
 import { Geolocation } from '@ionic-native/geolocation';
-import { SchemaService } from '../../biosys-core/services/schema.service';
-import { FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
-import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
-import { StorageService } from '../../shared/services/storage.service';
-import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
+import { SchemaService } from '../../../biosys-core/services/schema.service';
+import { FormDescriptor } from '../../../biosys-core/interfaces/form.interfaces';
+import { Dataset } from '../../../biosys-core/interfaces/api.interfaces';
+import { StorageService } from '../../../shared/services/storage.service';
+import { ClientRecord } from '../../../shared/interfaces/mobile.interfaces';
 import { UUID } from 'angular2-uuid';
-import { RecordsListComponent } from "../../components/records-list/records-list";
+import { RecordsListComponent } from "../../../components/records-list/records-list";
 
 @IonicPage()
 @Component({
@@ -43,7 +43,7 @@ export class CensusObservationPage {
         this.storageService.getDataset(this.navParams.get('datasetName')).pipe(
             flatMap((dataset: Dataset) => {
                 this.datasetId = dataset.id;
-                return this.schemaService.getFormDescriptorAndGroupFromDataPackage(dataset);
+                return this.schemaService.getFormDescriptorFromDataset(dataset);
             })
         ).subscribe((results) => {
             this.formDescriptor = results[0];
@@ -100,11 +100,12 @@ export class CensusObservationPage {
     public save() {
         this.storageService.putRecord({
             valid: this.form.valid,
-            clientId: !!this.record ? this.record.clientId : UUID.UUID(),
+            client_id: !!this.record ? this.record.client_id : UUID.UUID(),
             dataset: this.datasetId,
             datasetName: this.navParams.get('datasetName'),
             datetime: new Date().toISOString(),
-            data: this.form.value
+            data: this.form.value,
+            count: 0 // fixme
         }).subscribe((result: boolean) => {
             if (result) {
                 this.showLeavingAlertMessage = false;

@@ -9,6 +9,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { UUID } from 'angular2-uuid';
 import { RecordFormComponent } from '../../components/record-form/record-form';
+import { APIService } from "../../biosys-core/services/api.service";
 
 @IonicPage()
 @Component({
@@ -26,7 +27,10 @@ export class ObservationPage {
     private record: ClientRecord;
     private dataset: Dataset;
 
-    constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
+    constructor(private navCtrl: NavController,
+                private navParams: NavParams,
+                private storageService: StorageService,
+                private apiService: APIService,
                 private alertController: AlertController) {
         if (!this.navParams.get('datasetName')) {
             this.showLeavingAlertMessage = false;
@@ -37,17 +41,32 @@ export class ObservationPage {
         this.isNewRecord = !recordClientId;
 
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
+            if (dataset != null) {
                 this.dataset = dataset;
-
+    
                 if (recordClientId) {
-                // if this is an existing record, set form values from data
-                this.storageService.getRecord(recordClientId).subscribe(
-                    record => {
-                        this.record = record;
-                        this.recordForm.value = record.data;
-                    }
-                );
+                    // if this is an existing record, set form values from data
+                    this.storageService.getRecord(recordClientId).subscribe(
+                        record => {
+                            this.record = record;
+                            this.recordForm.value = record.data;
+                        }
+                    );
+                }
             }
+            else {
+                this.apiService.getDatasets().subscribe( (datasets: Dataset[]) => {
+                    for (let dataset of datasets) {
+                        if (dataset.name == this.navParams.get('datasetName')) {
+                            this.dataset = dataset;
+                            this.storageService.putDataset(dataset);
+                        }
+                    }
+                }, (error) => {
+                    alert('Error ' + error.msg);
+                })
+            }
+            
         });
     }
 
@@ -76,6 +95,7 @@ export class ObservationPage {
 
     public save() {
         const formValues: object = this.recordForm.value;
+        let parent_id = this.navParams.get('parent'); // FIXME: TONY PARENT_ID IS HERE
 
         this.storageService.putRecord({
             valid: this.recordForm.valid,

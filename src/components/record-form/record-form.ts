@@ -59,7 +59,8 @@ export class RecordFormComponent {
         if (this.form.invalid) {
             Object.keys(this.form.controls).forEach((fieldName: string) =>
                 this.form.get(fieldName).markAsDirty());
-        }    }
+        }
+    }
 
     constructor(private schemaService: SchemaService, private geolocation: Geolocation) {}
 
@@ -72,7 +73,7 @@ export class RecordFormComponent {
                 // use whatever is the first date field as the representative date field
                 this._dateFieldKey = this.formDescriptor.dateFields[0].key;
             }
-
+    
             if (this.initializeDefaultValues) {
                 // if this is a new record, patch in default form values where appropriate
                 this.geolocation.watchPosition().pipe(
@@ -99,10 +100,11 @@ export class RecordFormComponent {
                     // moment().format() will return the current date/time in local timezone
                     this.form.controls[this._dateFieldKey].setValue(moment().format());
                 }
-
-                this.formDescriptor.hiddenFields.map((field: FieldDescriptor) =>
-                    this.form.controls[field.key].setValue(field.defaultValue)
-                );
+    
+                if (this.formDescriptor.hiddenFields)
+                    this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
+                        this.form.controls[field.key].setValue(field.defaultValue)
+                    });
             }
         });
     }
@@ -111,7 +113,7 @@ export class RecordFormComponent {
         if (!this.form.controls[fieldDescriptor.key].errors) {
             return '';
         }
-
+    
         const errors: ValidationErrors = this.form.controls[fieldDescriptor.key].errors;
         const errorKey = Object.keys(errors)[0];
         const error = errors[errorKey];
