@@ -21,10 +21,9 @@ export class PhotoGalleryComponent {
     public slideIndex: number = 0;
     public photoIds: string[];
 
-    private _addedPhotoIds: string[] = [];
+    private addedPhotoIds: string[] = [];
     private deletedPhotoIds: string[] = [];
-
-
+    
     public showPhotos() {
         return this.slides.length > 0;
     }
@@ -55,10 +54,6 @@ export class PhotoGalleryComponent {
 
     public recordId: string;
 
-    public get addedPhotoIds() : string[] {
-        return this._addedPhotoIds;
-    }
-
     public getDeletedPhotoIds(): string[] {
         return this.deletedPhotoIds;
     }
@@ -83,10 +78,10 @@ export class PhotoGalleryComponent {
             if (photoIdIndex > -1) {
                 this.photoIds.splice(photoIdIndex, 1);
             }
-            const addedPhotoIdIndex = this._addedPhotoIds.indexOf(imageRecord.id);
+            const addedPhotoIdIndex = this.addedPhotoIds.indexOf(imageRecord.id);
             if (addedPhotoIdIndex > -1) {
                 this.deletePhotoUsingId(imageRecord.id);
-                this._addedPhotoIds.splice(photoIdIndex, 1);
+                this.addedPhotoIds.splice(photoIdIndex, 1);
             } else {
                 this.addPhotoIdToDeletedList(imageRecord.id);
             }
@@ -132,7 +127,7 @@ export class PhotoGalleryComponent {
             }).subscribe(put =>{
                 if(put) {
                     this.addPhotoIdToPhotosList(photoId);
-                    this._addedPhotoIds.push(photoId);
+                    this.addedPhotoIds.push(photoId);
                     let imageSrc = PhotoGalleryComponent.makeImageSrc(base64);
                     this.slides.push({
                         id: photoId,
@@ -174,9 +169,9 @@ export class PhotoGalleryComponent {
     }
 
     private deleteNextAddedPhoto(photoIndex: number) {
-        if(photoIndex < this._addedPhotoIds.length) {
-            console.log('deleteing added: ' + this._addedPhotoIds[photoIndex]);
-            this.storageService.deletePhoto(this._addedPhotoIds[photoIndex]).subscribe( deleted => {
+        if(photoIndex < this.addedPhotoIds.length) {
+            console.log('deleteing added: ' + this.addedPhotoIds[photoIndex]);
+            this.storageService.deletePhoto(this.addedPhotoIds[photoIndex]).subscribe( deleted => {
                 this.deleteNextAddedPhoto(photoIndex + 1);
             })
         }
