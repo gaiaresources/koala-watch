@@ -23,7 +23,7 @@ export class PhotoGalleryComponent {
 
     private addedPhotoIds: string[] = [];
     private deletedPhotoIds: string[] = [];
-    
+
     public showPhotos() {
         return this.slides.length > 0;
     }
@@ -53,11 +53,7 @@ export class PhotoGalleryComponent {
     }
 
     public recordId: string;
-
-    public getDeletedPhotoIds(): string[] {
-        return this.deletedPhotoIds;
-    }
-
+    
     constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService) {
     }
 
