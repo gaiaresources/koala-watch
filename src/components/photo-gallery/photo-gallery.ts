@@ -23,6 +23,10 @@ export class PhotoGalleryComponent implements OnInit {
 
     public photoIds: string[];
 
+    public showPhotos() {
+        return this.slides.length > 0;
+    }
+
     public setPhotoIds(photoIds: string[]) {
         this.photoIds = photoIds;
 
@@ -50,7 +54,7 @@ export class PhotoGalleryComponent implements OnInit {
     }
 
     public delete(imageRecord: ImageRecord) {
-        if(confirm("Delete photo? " + imageRecord.id)) {
+        if(confirm("Delete photo? ")) {
             let slide = this.slides.filter(item => item.id === imageRecord.id).pop();
             const slideIndex = this.slides.indexOf(slide);
             if (slideIndex > -1) {

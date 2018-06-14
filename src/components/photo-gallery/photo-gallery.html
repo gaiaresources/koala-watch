@@ -9,14 +9,19 @@
 </ion-card>
 <ion-card>
     <ion-card-content>
-        <ion-slides>
-            <ion-slide *ngFor="let slide of slides">
-                <img [src]="domSanitizer.bypassSecurityTrustUrl(slide.src)" padding="50">
-                <button ion-button icon-end solid color="primary" (click)="delete(slide)">
-                    Delete
-                    <ion-icon name="trash"></ion-icon>
-                </button>
-            </ion-slide>
-        </ion-slides>
+        <div *ngIf="showPhotos()">
+            <ion-slides>
+                <ion-slide *ngFor="let slide of slides">
+                    <img class="photo-gallery-image" [src]="domSanitizer.bypassSecurityTrustUrl(slide.src)">
+                    <button ion-button icon-end solid color="primary" (click)="delete(slide)">
+                        Delete
+                        <ion-icon name="trash"></ion-icon>
+                    </button>
+                </ion-slide>
+            </ion-slides>
+        </div>
+        <div *ngIf="!showPhotos()">
+            Add photos using the Take Photo button
+        </div>
     </ion-card-content>
 </ion-card>
