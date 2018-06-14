@@ -21,7 +21,7 @@ export class PhotoGalleryComponent implements OnInit {
     public slideIndex: number = 0;
     public photoIds: string[];
 
-    private addedPhotoIds: string[] = [];
+    private _addedPhotoIds: string[] = [];
     private deletedPhotoIds: string[] = [];
 
 
@@ -55,8 +55,8 @@ export class PhotoGalleryComponent implements OnInit {
 
     public recordId: string;
 
-    public getAddedPhotoIds() : string[] {
-        return this.addedPhotoIds;
+    public get addedPhotoIds() : string[] {
+        return this._addedPhotoIds;
     }
 
     public getDeletedPhotoIds(): string[] {
@@ -83,10 +83,10 @@ export class PhotoGalleryComponent implements OnInit {
             if (photoIdIndex > -1) {
                 this.photoIds.splice(photoIdIndex, 1);
             }
-            const addedPhotoIdIndex = this.addedPhotoIds.indexOf(imageRecord.id);
+            const addedPhotoIdIndex = this._addedPhotoIds.indexOf(imageRecord.id);
             if (addedPhotoIdIndex > -1) {
                 this.deletePhotoUsingId(imageRecord.id);
-                this.addedPhotoIds.splice(photoIdIndex, 1);
+                this._addedPhotoIds.splice(photoIdIndex, 1);
             } else {
                 this.addPhotoIdToDeletedList(imageRecord.id);
             }
@@ -122,6 +122,7 @@ export class PhotoGalleryComponent implements OnInit {
 
         this.camera.getPicture(options).then((base64) => {
             let photoId = UUID.UUID();
+            console.log('added ' + photoId);
             this.storageService.putPhoto(photoId, {
                 id: photoId,
                 fileName: photoId + ".jpg",
@@ -131,7 +132,7 @@ export class PhotoGalleryComponent implements OnInit {
             }).subscribe(put =>{
                 if(put) {
                     this.addPhotoIdToPhotosList(photoId);
-                    this.addedPhotoIds.push(photoId);
+                    this._addedPhotoIds.push(photoId);
                     let imageSrc = PhotoGalleryComponent.makeImageSrc(base64);
                     this.slides.push({
                         id: photoId,
@@ -173,8 +174,9 @@ export class PhotoGalleryComponent implements OnInit {
     }
 
     private deleteNextAddedPhoto(photoIndex: number) {
-        if(photoIndex < this.addedPhotoIds.length) {
-            this.storageService.deletePhoto(this.addedPhotoIds[photoIndex]).subscribe( deleted => {
+        if(photoIndex < this._addedPhotoIds.length) {
+            console.log('deleteing added: ' + this._addedPhotoIds[photoIndex]);
+            this.storageService.deletePhoto(this._addedPhotoIds[photoIndex]).subscribe( deleted => {
                 this.deleteNextAddedPhoto(photoIndex + 1);
             })
         }
