@@ -16,14 +16,14 @@ class ImageRecord {
 })
 export class PhotoGalleryComponent implements OnInit {
 
-    private addedPhotoIds: string[] = [];
-    private deletedPhotoIds: string[] = [];
-
     public slides: ImageRecord[] = [];
     public src: string;
     public slideIndex: number = 0;
-
     public photoIds: string[];
+
+    private addedPhotoIds: string[] = [];
+    private deletedPhotoIds: string[] = [];
+
 
     public showPhotos() {
         return this.slides.length > 0;
