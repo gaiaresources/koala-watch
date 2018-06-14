@@ -59,9 +59,6 @@ export class PhotoGalleryComponent {
     constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService) {
     }
 
-    ngOnInit() {
-    }
-
     public delete(imageRecord: ImageRecord) {
         if(this.slides.length <= 0) {
             return;
@@ -176,37 +173,22 @@ export class PhotoGalleryComponent {
     }
 
     private loadPhotos() {
-        if(this.photoIds != undefined && this.photoIds != null) {
-            this.loadNextPhoto(0);
-        }
-    }
+            let photoIndex = 0;
 
-    private loadNextPhoto(photoIndex: number) {
-        if(this.photoIds.length > photoIndex) {
-            this.storageService.getPhoto(this.photoIds[photoIndex]).subscribe(
-                photoRecord => {
-                    if(photoRecord != undefined && photoRecord != null) {
-                        let imageSrc = PhotoGalleryComponent.makeImageSrc(photoRecord.base64);
-
-                        this.slides.push({
-                            id: this.photoIds[photoIndex],
-                            src: imageSrc
-                        });
-                        this.loadNextPhoto(photoIndex + 1);
-                    } else {
-                        alert('Load photo failed ' + photoIndex + ' ' +  this.photoIds[photoIndex]);
+            from(this.photoIds).pipe(
+                mergeMap( photoId => this.storageService.getPhoto(photoId) )
+            ).subscribe(photoRecord => {
+                if(photoRecord != undefined && photoRecord != null) {
+                    let imageSrc = PhotoGalleryComponent.makeImageSrc(photoRecord.base64);
+                    if(!this.src) {
+                        this.src = imageSrc;
                     }
+                    this.slides.push({
+                        id: this.photoIds[photoIndex],
+                        src: imageSrc
+                    });
                 }
-            );
-        } else {
-            if(photoIndex > 0) {
-                this.slideIndex = 0;
-                this.src = this.slides[0].src;
-            } else {
-                this.slideIndex = null;
-                this.src = null;
-            }
-        }
+            });
     }
 
     private static makeImageSrc(base64: string): string {
