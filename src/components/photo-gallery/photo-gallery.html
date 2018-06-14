@@ -10,13 +10,23 @@
 <ion-card>
     <ion-card-content>
         <div *ngIf="showPhotos()">
-            <button ion-button icon-end solid color="primary" (click)="pageLeft()">
-                <ion-icon name="arrow-dropleft-circle"></ion-icon>
-            </button>
-            <img class="photo-gallery-image" [src]="domSanitizer.bypassSecurityTrustUrl(src)">
-            <button ion-button icon-end solid color="primary" (click)="pageRight()">
-                <ion-icon name="arrow-dropright-circle"></ion-icon>
-            </button>
+            <table>
+                <tr>
+                    <td>
+                        <button ion-button icon-end solid color="primary" (click)="pageLeft()">
+                            <ion-icon name="arrow-dropleft-circle"></ion-icon>
+                        </button>
+                    </td>
+                    <td>
+                        <img class="photo-gallery-image" [src]="domSanitizer.bypassSecurityTrustUrl(src)">
+                    </td>
+                    <td>
+                        <button ion-button icon-end solid color="primary" (click)="pageRight()">
+                            <ion-icon name="arrow-dropright-circle"></ion-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
             <button ion-button icon-end solid color="primary" (click)="delete()">
                 Delete
                 <ion-icon name="trash"></ion-icon>
