@@ -4,12 +4,13 @@ import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
-import { ClientRecord } from '../interfaces/mobile.interfaces';
+import {ClientRecord, PhotoRecord} from '../interfaces/mobile.interfaces';
 
 @Injectable()
 export class StorageService {
     private static readonly DATASET_PREFIX = 'Dataset_';
     private static readonly RECORD_PREFIX = 'Record_';
+    private static readonly PHOTO_PREFIX = 'Photo_';
 
     constructor(private storage: Storage) {
 
@@ -82,4 +83,17 @@ export class StorageService {
     public clearRecords(): Observable<void> {
         return fromPromise(this.storage.clear());
     }
+
+    public putPhoto(key: string, photoRecord: PhotoRecord): Observable<boolean> {
+        return fromPromise(this.storage.set(`${StorageService.PHOTO_PREFIX}${key}`, photoRecord));
+    }
+
+    public getPhoto(key: string): Observable<PhotoRecord> {
+        return fromPromise(this.storage.get(`${StorageService.PHOTO_PREFIX}${key}`));
+    }
+
+    public deletePhoto(key: string): Observable<boolean> {
+        return fromPromise(this.storage.remove(`${StorageService.PHOTO_PREFIX}${key}`));
+    }
+
 }
