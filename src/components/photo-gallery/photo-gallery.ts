@@ -7,49 +7,46 @@ import * as moment from 'moment/moment';
 import { from } from "rxjs/observable/from";
 import { mergeMap } from "rxjs/operators";
 
-class ImageRecord {
-    public id: string;
-    public src: string;
-}
-
 @Component({
     selector: 'photo-gallery',
     templateUrl: 'photo-gallery.html'
 })
 export class PhotoGalleryComponent {
 
-    public slides: ImageRecord[] = [];
     public src: string;
-    public slideIndex: number = 0;
 
-    private _photoIds: string[];
+    private _photoIds: string[] = [];
+    private photoIndex: number = 0;
     private addedPhotoIds: string[] = [];
     private deletedPhotoIds: string[] = [];
 
     public showPhotos() {
-        return this.slides.length > 0;
+        return this._photoIds.length > 0;
     }
 
-    public pageLeft() {
-        if(this.slideIndex > 0) {
-            this.slideIndex -= 1;
-            this.src = this.slides[this.slideIndex].src;
+    public pageLeftClick() {
+        if(this.photoIndex > 0) {
+            this.photoIndex -= 1;
+            this.updateImage();
         }
     }
 
-    public pageRight() {
-        if(this.slideIndex < this.slides.length - 1) {
-            this.slideIndex += 1;
-            this.src = this.slides[this.slideIndex].src;
+    public pageRightClick() {
+        if(this.photoIndex < this._photoIds.length - 1) {
+            this.photoIndex += 1;
+            this.updateImage();
         }
     }
 
     public set PhotoIds(thePhotoIds: string[]) {
-        this._photoIds = thePhotoIds;
-        if(this._photoIds == undefined || this._photoIds == null) {
+        if(thePhotoIds) {
+            this._photoIds = thePhotoIds;
+        } else {
             this._photoIds = [];
         }
-        this.loadPhotos();
+
+        this.photoIndex = 0;
+        this.updateImage();
     }
 
     public get PhotoIds(): string[] {
@@ -61,44 +58,59 @@ export class PhotoGalleryComponent {
     constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService) {
     }
 
-    public delete(imageRecord: ImageRecord) {
-        if(this.slides.length <= 0) {
+    public deleteClick() {
+        if(this._photoIds.length <= 0) {
             return;
         }
 
         if(confirm("Delete photo? ")) {
-            const imageRecord = this.slides[this.slideIndex];
-            if (this.slideIndex > -1) {
-                this.slides.splice(this.slideIndex, 1);
+            const photoId = this._photoIds[this.photoIndex];
+            if (this.photoIndex > -1) {
+                this._photoIds.splice(this.photoIndex, 1);
             }
-            const photoIdIndex = this._photoIds.indexOf(imageRecord.id);
+            const photoIdIndex = this._photoIds.indexOf(photoId);
             if (photoIdIndex > -1) {
                 this._photoIds.splice(photoIdIndex, 1);
             }
-            const addedPhotoIdIndex = this.addedPhotoIds.indexOf(imageRecord.id);
+            const addedPhotoIdIndex = this.addedPhotoIds.indexOf(photoId);
             if (addedPhotoIdIndex > -1) {
-                this.deletePhotoUsingId(imageRecord.id);
-                this.addedPhotoIds.splice(photoIdIndex, 1);
+                this.deletePhotoUsingId(photoId);
+                this.addedPhotoIds.splice(addedPhotoIdIndex, 1);
             } else {
-                this.deletedPhotoIds.push(imageRecord.id);
+                this.deletedPhotoIds.push(photoId);
             }
 
-            if(this.slideIndex >= this.slides.length) {
-                this.slideIndex -= 1;
-                if(this.slideIndex >= 0) {
-                    this.src = this.slides[this.slideIndex].src;
+            if(this.photoIndex >= this._photoIds.length) {
+                this.photoIndex -= 1;
+                if(this.photoIndex >= 0) {
+                    this.updateImage();
                 } else {
                     this.src = null;
-                    this.slideIndex = null;
+                    this.photoIndex = null;
                 }
             } else {
-                this.src = this.slides[this.slideIndex].src;
+                this.updateImage();
             }
         }
     }
 
+    private removeStringFromArray(array: string[], item: string): boolean {
+        const index = array.indexOf(item);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+
+        return index > -1;
+    }
+
+    private updateImage() {
+        this.storageService.getPhoto(this._photoIds[this.photoIndex]).subscribe(clientPhoto => {
+            this.src = PhotoGalleryComponent.makeImageSrc(clientPhoto.base64);
+        });
+    }
+
     public takePhoto() {
-        if(this.slides.length >= 3) {
+        if(this._photoIds.length >= 3) {
             alert('Maximum number of photos reached');
             return;
         }
@@ -125,12 +137,8 @@ export class PhotoGalleryComponent {
                     this._photoIds.push(photoId);
                     this.addedPhotoIds.push(photoId);
                     let imageSrc = PhotoGalleryComponent.makeImageSrc(base64);
-                    this.slides.push({
-                        id: photoId,
-                        src: imageSrc
-                    });
-                    this.slideIndex = this.slides.length - 1;
-                    this.src = this.slides[this.slideIndex].src;
+                    this.photoIndex = this._photoIds.length - 1;
+                    this.src = imageSrc;
                 } else {
                     alert('Photo save failed, try again');
                 }
@@ -155,24 +163,6 @@ export class PhotoGalleryComponent {
     private deletePhotoUsingId(photoId: string) {
         this.storageService.deletePhoto(photoId).subscribe(deleted => {
         });
-    }
-
-    private loadPhotos() {
-            let photoIndex = 0;
-            from(this._photoIds).pipe(
-                mergeMap( photoId => this.storageService.getPhoto(photoId) )
-            ).subscribe(photoRecord => {
-                if(photoRecord != undefined && photoRecord != null) {
-                    let imageSrc = PhotoGalleryComponent.makeImageSrc(photoRecord.base64);
-                    if(!this.src) {
-                        this.src = imageSrc;
-                    }
-                    this.slides.push({
-                        id: this._photoIds[photoIndex],
-                        src: imageSrc
-                    });
-                }
-            });
     }
 
     private static makeImageSrc(base64: string): string {
