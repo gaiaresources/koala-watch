@@ -18,7 +18,7 @@
                         </button>
                     </td>
                     <td>
-                        <img class="photo-gallery-image" [src]="domSanitizer.bypassSecurityTrustUrl(src)">
+                        <img class="photo-gallery-image" [photoSrc]="domSanitizer.bypassSecurityTrustUrl(src)">
                     </td>
                     <td>
                         <button ion-button icon-end solid color="primary" (click)="pageRightClick()">
