@@ -22,7 +22,7 @@ export class PhotoGalleryComponent {
     public src: string;
     public slideIndex: number = 0;
 
-    public _photoIds: string[];
+    private _photoIds: string[];
     private addedPhotoIds: string[] = [];
     private deletedPhotoIds: string[] = [];
 
@@ -46,12 +46,14 @@ export class PhotoGalleryComponent {
 
     public set PhotoIds(thePhotoIds: string[]) {
         this._photoIds = thePhotoIds;
-
         if(this._photoIds == undefined || this._photoIds == null) {
             this._photoIds = [];
         }
-
         this.loadPhotos();
+    }
+
+    public get PhotoIds(): string[] {
+        return this._photoIds;
     }
 
     public recordId: string;
@@ -78,7 +80,7 @@ export class PhotoGalleryComponent {
                 this.deletePhotoUsingId(imageRecord.id);
                 this.addedPhotoIds.splice(photoIdIndex, 1);
             } else {
-                this.addPhotoIdToDeletedList(imageRecord.id);
+                this.deletedPhotoIds.push(imageRecord.id);
             }
 
             if(this.slideIndex >= this.slides.length) {
@@ -112,7 +114,6 @@ export class PhotoGalleryComponent {
 
         this.camera.getPicture(options).then((base64) => {
             let photoId = UUID.UUID();
-            console.log('added ' + photoId);
             this.storageService.putPhoto(photoId, {
                 id: photoId,
                 fileName: photoId + ".jpg",
@@ -121,7 +122,7 @@ export class PhotoGalleryComponent {
                 datetime: moment().format()
             }).subscribe(put =>{
                 if(put) {
-                    this.addPhotoIdToPhotosList(photoId);
+                    this._photoIds.push(photoId);
                     this.addedPhotoIds.push(photoId);
                     let imageSrc = PhotoGalleryComponent.makeImageSrc(base64);
                     this.slides.push({
@@ -137,22 +138,6 @@ export class PhotoGalleryComponent {
         }, err => {
             alert('Photo failed, try again');
         });
-    }
-
-    public addPhotoIdToPhotosList(photoId: string) {
-        if(this._photoIds == undefined || this._photoIds == null) {
-            this._photoIds = [photoId];
-        } else {
-            this._photoIds.push(photoId);
-        }
-    }
-
-    public addPhotoIdToDeletedList(photoId: string) {
-        if(this.deletedPhotoIds == undefined || this.deletedPhotoIds == null) {
-            this.deletedPhotoIds = [photoId];
-        } else {
-            this.deletedPhotoIds.push(photoId);
-        }
     }
 
     public commit() {
@@ -174,7 +159,6 @@ export class PhotoGalleryComponent {
 
     private loadPhotos() {
             let photoIndex = 0;
-
             from(this._photoIds).pipe(
                 mergeMap( photoId => this.storageService.getPhoto(photoId) )
             ).subscribe(photoRecord => {
