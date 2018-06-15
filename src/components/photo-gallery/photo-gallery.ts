@@ -131,7 +131,7 @@ export class PhotoGalleryComponent {
                 recordId: this._recordId,
                 base64: base64,
                 datetime: moment().format()
-            }).subscribe(put =>{
+            }).subscribe(put => {
                 if(put) {
                     this._photoIds.push(photoId);
                     this.addedPhotoIds.push(photoId);
@@ -178,7 +178,7 @@ export class PhotoGalleryComponent {
     }
 
     private updateImage() {
-        if(this._photoIds[this.photoIndex].length == 0) {
+        if(this._photoIds[this.photoIndex].length === 0) {
             this.src = "";
             return;
         }
