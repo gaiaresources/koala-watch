@@ -14,31 +14,22 @@ import {AlertController} from "ionic-angular";
 })
 export class PhotoGalleryComponent {
 
+    // Template variables
+
     public src: string;
+
+    // Property variables
 
     private _recordId: string = "";
     private _photoIds: string[] = [];
+
+    // Private variables
+
     private photoIndex: number = 0;
     private addedPhotoIds: string[] = [];
     private deletedPhotoIds: string[] = [];
 
-    public showPhotos() {
-        return this._photoIds.length > 0;
-    }
-
-    public pageLeftClick() {
-        if(this.photoIndex > 0) {
-            this.photoIndex -= 1;
-            this.updateImage();
-        }
-    }
-
-    public pageRightClick() {
-        if(this.photoIndex < this._photoIds.length - 1) {
-            this.photoIndex += 1;
-            this.updateImage();
-        }
-    }
+    // Property getters and setters
 
     public set PhotoIds(thePhotoIds: string[]) {
         if(thePhotoIds) {
@@ -59,7 +50,29 @@ export class PhotoGalleryComponent {
         this._recordId = theRecordId;
     }
 
+    // Constructor
+
     constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService, private alertController: AlertController) {
+    }
+
+    // Template methods
+
+    public showPhotos() {
+        return this._photoIds.length > 0;
+    }
+
+    public pageLeftClick() {
+        if(this.photoIndex > 0) {
+            this.photoIndex -= 1;
+            this.updateImage();
+        }
+    }
+
+    public pageRightClick() {
+        if(this.photoIndex < this._photoIds.length - 1) {
+            this.photoIndex += 1;
+            this.updateImage();
+        }
     }
 
     public deleteClick() {
@@ -85,6 +98,7 @@ export class PhotoGalleryComponent {
                         if(this.photoIndex >= this._photoIds.length) {
                             this.photoIndex -= 1;
                         }
+                        console.log('photoIdex' + this.photoIndex);
                         this.updateImage();
                     }
                 },
@@ -92,29 +106,6 @@ export class PhotoGalleryComponent {
                     text: 'No'
                 }]
         }).present();
-    }
-
-    private removeStringFromArray(array: string[], item: string): boolean {
-        const index = array.indexOf(item);
-        if (index > -1) {
-            array.splice(index, 1);
-        }
-        return index > -1;
-    }
-
-    private updateImage() {
-        if(this._photoIds[this.photoIndex].length == 0) {
-            this.src = "";
-            return;
-        }
-
-        this.storageService.getPhoto(this._photoIds[this.photoIndex]).subscribe(clientPhoto => {
-            if(clientPhoto) {
-                this.src = PhotoGalleryComponent.makeImageSrc(clientPhoto.base64);
-            } else {
-                this.src = "";
-            }
-        });
     }
 
     public takePhoto() {
@@ -156,6 +147,8 @@ export class PhotoGalleryComponent {
         });
     }
 
+    // Public methods
+
     public commit() {
         from(this.deletedPhotoIds).pipe(
             mergeMap( photoId => this.storageService.deletePhoto(photoId) )
@@ -166,6 +159,31 @@ export class PhotoGalleryComponent {
         from(this.addedPhotoIds).pipe(
             mergeMap( photoId => this.storageService.deletePhoto(photoId) )
         ).subscribe();
+    }
+
+    // Private methods
+
+    private removeStringFromArray(array: string[], item: string): boolean {
+        const index = array.indexOf(item);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+        return index > -1;
+    }
+
+    private updateImage() {
+        if(this._photoIds[this.photoIndex].length == 0) {
+            this.src = "";
+            return;
+        }
+
+        this.storageService.getPhoto(this._photoIds[this.photoIndex]).subscribe(clientPhoto => {
+            if(clientPhoto) {
+                this.src = PhotoGalleryComponent.makeImageSrc(clientPhoto.base64);
+            } else {
+                this.src = "";
+            }
+        });
     }
 
     private deletePhotoUsingId(photoId: string) {
