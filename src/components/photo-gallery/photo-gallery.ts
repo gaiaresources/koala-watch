@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Camera, CameraOptions } from "@ionic-native/camera";
 import { StorageService } from "../../shared/services/storage.service";
 import { UUID } from "angular2-uuid";
@@ -124,7 +124,7 @@ export class PhotoGalleryComponent {
             this.storageService.putPhoto(photoId, {
                 id: photoId,
                 fileName: photoId + ".jpg",
-                parentId: this._recordId,
+                recordId: this._recordId,
                 base64: base64,
                 datetime: moment().format()
             }).subscribe(put =>{
