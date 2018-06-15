@@ -13,7 +13,7 @@
             <table>
                 <tr>
                     <td>
-                        <button ion-button icon-end solid color="primary" (click)="pageLeft()">
+                        <button ion-button icon-end solid color="primary" (click)="pageLeftClick()">
                             <ion-icon name="arrow-dropleft-circle"></ion-icon>
                         </button>
                     </td>
@@ -21,13 +21,13 @@
                         <img class="photo-gallery-image" [src]="domSanitizer.bypassSecurityTrustUrl(src)">
                     </td>
                     <td>
-                        <button ion-button icon-end solid color="primary" (click)="pageRight()">
+                        <button ion-button icon-end solid color="primary" (click)="pageRightClick()">
                             <ion-icon name="arrow-dropright-circle"></ion-icon>
                         </button>
                     </td>
                 </tr>
             </table>
-            <button ion-button icon-end solid color="primary" (click)="delete()">
+            <button ion-button icon-end solid color="primary" (click)="deleteClick()">
                 Delete
                 <ion-icon name="trash"></ion-icon>
             </button>
