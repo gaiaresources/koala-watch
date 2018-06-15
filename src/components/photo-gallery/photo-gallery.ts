@@ -6,6 +6,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import * as moment from 'moment/moment';
 import { from } from "rxjs/observable/from";
 import { mergeMap } from "rxjs/operators";
+import {AlertController} from "ionic-angular";
 
 @Component({
     selector: 'photo-gallery',
@@ -58,7 +59,7 @@ export class PhotoGalleryComponent {
         this._recordId = theRecordId;
     }
 
-    constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService) {
+    constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService, private alertController: AlertController) {
     }
 
     public deleteClick() {
@@ -66,19 +67,31 @@ export class PhotoGalleryComponent {
             return;
         }
 
-        if(confirm("Delete photo? ")) {
-            const photoId = this._photoIds[this.photoIndex];
-            this.removeStringFromArray(this._photoIds, photoId);
-            if(this.removeStringFromArray(this.addedPhotoIds, photoId)) {
-                this.deletePhotoUsingId(photoId);
-            } else {
-                this.deletedPhotoIds.push(photoId);
-            }
-            if(this.photoIndex >= this._photoIds.length) {
-                this.photoIndex -= 1;
-            }
-            this.updateImage();
-        }
+        this.alertController.create({
+            title: 'Photos',
+            message: 'Delete photo?',
+            enableBackdropDismiss: true,
+            buttons: [
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        const photoId = this._photoIds[this.photoIndex];
+                        this.removeStringFromArray(this._photoIds, photoId);
+                        if(this.removeStringFromArray(this.addedPhotoIds, photoId)) {
+                            this.deletePhotoUsingId(photoId);
+                        } else {
+                            this.deletedPhotoIds.push(photoId);
+                        }
+                        if(this.photoIndex >= this._photoIds.length) {
+                            this.photoIndex -= 1;
+                        }
+                        this.updateImage();
+                    }
+                },
+                {
+                    text: 'No'
+                }]
+        }).present();
     }
 
     private removeStringFromArray(array: string[], item: string): boolean {
