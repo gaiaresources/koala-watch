@@ -135,9 +135,9 @@ export class PhotoGalleryComponent {
                 if(put) {
                     this._photoIds.push(photoId);
                     this.addedPhotoIds.push(photoId);
-                    let imageSrc = PhotoGalleryComponent.makeImageSrc(base64);
+                    let photoSrc = PhotoGalleryComponent.makePhotoSrc(base64);
                     this.photoIndex = this._photoIds.length - 1;
-                    this.src = imageSrc;
+                    this.photoSrc = photoSrc;
                 } else {
                     alert('Photo save failed, try again');
                 }
@@ -163,7 +163,7 @@ export class PhotoGalleryComponent {
 
     // Private static methods
 
-    private static makeImageSrc(base64: string): string {
+    private static makePhotoSrc(base64: string): string {
         return 'data:image/jpeg;base64,' + base64;
     }
 
@@ -179,15 +179,15 @@ export class PhotoGalleryComponent {
 
     private updateImage() {
         if(this._photoIds[this.photoIndex].length === 0) {
-            this.src = "";
+            this.photoSrc = "";
             return;
         }
 
         this.storageService.getPhoto(this._photoIds[this.photoIndex]).subscribe(clientPhoto => {
             if(clientPhoto) {
-                this.src = PhotoGalleryComponent.makeImageSrc(clientPhoto.base64);
+                this.photoSrc = PhotoGalleryComponent.makePhotoSrc(clientPhoto.base64);
             } else {
-                this.src = "";
+                this.photoSrc = "";
             }
         });
     }
