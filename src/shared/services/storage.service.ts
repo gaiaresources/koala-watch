@@ -1,10 +1,9 @@
 import { Storage } from '@ionic/storage';
-import { UUID } from 'angular2-uuid'
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
-import {ClientRecord, PhotoRecord} from '../interfaces/mobile.interfaces';
+import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
 
 @Injectable()
 export class StorageService {
@@ -84,11 +83,11 @@ export class StorageService {
         return fromPromise(this.storage.clear());
     }
 
-    public putPhoto(key: string, photoRecord: PhotoRecord): Observable<boolean> {
-        return fromPromise(this.storage.set(`${StorageService.PHOTO_PREFIX}${key}`, photoRecord));
+    public putPhoto(key: string, clientPhoto: ClientPhoto): Observable<boolean> {
+        return fromPromise(this.storage.set(`${StorageService.PHOTO_PREFIX}${key}`, clientPhoto));
     }
 
-    public getPhoto(key: string): Observable<PhotoRecord> {
+    public getPhoto(key: string): Observable<ClientPhoto> {
         return fromPromise(this.storage.get(`${StorageService.PHOTO_PREFIX}${key}`));
     }
 
