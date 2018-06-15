@@ -65,32 +65,16 @@ export class PhotoGalleryComponent {
 
         if(confirm("Delete photo? ")) {
             const photoId = this._photoIds[this.photoIndex];
-            if (this.photoIndex > -1) {
-                this._photoIds.splice(this.photoIndex, 1);
-            }
-            const photoIdIndex = this._photoIds.indexOf(photoId);
-            if (photoIdIndex > -1) {
-                this._photoIds.splice(photoIdIndex, 1);
-            }
-            const addedPhotoIdIndex = this.addedPhotoIds.indexOf(photoId);
-            if (addedPhotoIdIndex > -1) {
+            this.removeStringFromArray(this._photoIds, photoId);
+            if(this.removeStringFromArray(this.addedPhotoIds, photoId)) {
                 this.deletePhotoUsingId(photoId);
-                this.addedPhotoIds.splice(addedPhotoIdIndex, 1);
             } else {
                 this.deletedPhotoIds.push(photoId);
             }
-
             if(this.photoIndex >= this._photoIds.length) {
                 this.photoIndex -= 1;
-                if(this.photoIndex >= 0) {
-                    this.updateImage();
-                } else {
-                    this.src = null;
-                    this.photoIndex = null;
-                }
-            } else {
-                this.updateImage();
             }
+            this.updateImage();
         }
     }
 
@@ -99,13 +83,21 @@ export class PhotoGalleryComponent {
         if (index > -1) {
             array.splice(index, 1);
         }
-
         return index > -1;
     }
 
     private updateImage() {
+        if(this._photoIds[this.photoIndex].length == 0) {
+            this.src = "";
+            return;
+        }
+
         this.storageService.getPhoto(this._photoIds[this.photoIndex]).subscribe(clientPhoto => {
-            this.src = PhotoGalleryComponent.makeImageSrc(clientPhoto.base64);
+            if(clientPhoto) {
+                this.src = PhotoGalleryComponent.makeImageSrc(clientPhoto.base64);
+            } else {
+                this.src = "";
+            }
         });
     }
 
