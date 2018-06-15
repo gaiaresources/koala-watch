@@ -8,7 +8,7 @@ export interface ClientRecord extends Record {
     photoIds: string[];
 }
 
-export interface PhotoRecord {
+export interface ClientPhoto {
     id: string;
     parentId: string;
     fileName: string;
