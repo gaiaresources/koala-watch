@@ -161,6 +161,12 @@ export class PhotoGalleryComponent {
         ).subscribe();
     }
 
+    // Private static methods
+
+    private static makeImageSrc(base64: string): string {
+        return 'data:image/jpeg;base64,' + base64;
+    }
+
     // Private methods
 
     private removeStringFromArray(array: string[], item: string): boolean {
@@ -189,10 +195,6 @@ export class PhotoGalleryComponent {
     private deletePhotoUsingId(photoId: string) {
         this.storageService.deletePhoto(photoId).subscribe(deleted => {
         });
-    }
-
-    private static makeImageSrc(base64: string): string {
-        return 'data:image/jpeg;base64,' + base64;
     }
 
 }
