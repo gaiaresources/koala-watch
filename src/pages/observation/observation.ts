@@ -49,7 +49,7 @@ export class ObservationPage {
                     record => {
                         this.record = record;
                         this.recordForm.value = record.data;
-                        this.photoGallery.setPhotoIds(record.photoIds);
+                        this.photoGallery.PhotoIds = record.photoIds;
                     }
                 );
             }
@@ -92,7 +92,7 @@ export class ObservationPage {
             datetime: this.recordForm.dateFieldKey ? formValues[this.recordForm.dateFieldKey] : moment().format(),
             data: formValues,
             count: !!formValues['Count'] ? formValues['Count'] : 0,
-            photoIds: this.photoGallery.photoIds
+            photoIds: this.photoGallery.PhotoIds
         }).subscribe((result: boolean) => {
             if (result) {
                 this.showLeavingAlertMessage = false;
