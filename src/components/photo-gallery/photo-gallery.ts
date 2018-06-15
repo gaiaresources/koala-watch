@@ -16,7 +16,7 @@ export class PhotoGalleryComponent {
 
     // Template variables
 
-    public photoSrc: string;
+    public photoSrc: string = "";
 
     // Property variables
 
