@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { CensusPage } from './census';
-import { ComponentsModule } from "../../components/components.module";
-import { CensusObservationModule } from "./census-observation/census-observation.module";
-import { ObservationPageModule } from "../observation/observation.module";
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
     declarations: [
@@ -11,9 +9,7 @@ import { ObservationPageModule } from "../observation/observation.module";
     ],
     imports: [
         IonicPageModule.forChild(CensusPage),
-        ComponentsModule,
-        ObservationPageModule,
-        CensusObservationModule,
+        ComponentsModule
     ],
     entryComponents: [
         CensusPage

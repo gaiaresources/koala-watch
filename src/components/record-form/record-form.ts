@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import * as moment from 'moment/moment';
 
-import { FieldDescriptor, ObservationFormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
+import { FieldDescriptor, FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
 import { filter } from 'rxjs/operators';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
@@ -22,7 +22,7 @@ import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 })
 export class RecordFormComponent {
     public form: FormGroup;
-    public formDescriptor: ObservationFormDescriptor;
+    public formDescriptor: FormDescriptor;
 
     private _dateFieldKey: string;
 
@@ -35,6 +35,9 @@ export class RecordFormComponent {
             this.setupForm(dataset);
         }
     }
+
+    @Input()
+    public key: string;
 
     public get invalid(): boolean {
         return !!this.form && this.form.invalid;
@@ -66,14 +69,14 @@ export class RecordFormComponent {
 
     private setupForm(dataset: Dataset) {
         this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
-            this.formDescriptor = results[0] as ObservationFormDescriptor;
+            this.formDescriptor = results[0];
             this.form = results[1];
 
             if (this.formDescriptor.dateFields) {
                 // use whatever is the first date field as the representative date field
                 this._dateFieldKey = this.formDescriptor.dateFields[0].key;
             }
-    
+
             if (this.initializeDefaultValues) {
                 // if this is a new record, patch in default form values where appropriate
                 this.geolocation.watchPosition().pipe(
@@ -100,11 +103,16 @@ export class RecordFormComponent {
                     // moment().format() will return the current date/time in local timezone
                     this.form.controls[this._dateFieldKey].setValue(moment().format());
                 }
-    
-                if (this.formDescriptor.hiddenFields)
+
+                if (this.formDescriptor.hiddenFields) {
                     this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
                         this.form.controls[field.key].setValue(field.defaultValue)
                     });
+                }
+
+                if (this.formDescriptor.keyField && this.key) {
+                    this.form.controls[this.formDescriptor.keyField].setValue(this.key);
+                }
             }
         });
     }
@@ -113,7 +121,7 @@ export class RecordFormComponent {
         if (!this.form.controls[fieldDescriptor.key].errors) {
             return '';
         }
-    
+
         const errors: ValidationErrors = this.form.controls[fieldDescriptor.key].errors;
         const errorKey = Object.keys(errors)[0];
         const error = errors[errorKey];

@@ -6,7 +6,7 @@
 -->
 <ion-header>
     <ion-navbar>
-        <ion-title>KLM SAT Census</ion-title>
+        <ion-title>{{ dataset?.name }}</ion-title>
         <ion-buttons end>
             <button ion-button icon-end solid color="primary" (click)="save()">
                 Save
@@ -17,23 +17,48 @@
 </ion-header>
 
 <ion-content>
-    <ion-tabs tabsPlacement="top">
-        <ion-tab (ionSelect)="showOboAdd=false"
-                 [root]="klmSatCensus"
-                 tabTitle="Census"
-                 [rootParams]="{datasetName: 'KLM-SAT Census', parent: sightingUuid}"></ion-tab>
-        <ion-tab (ionSelect)="showOboAdd=true"
-                 tabTitle="Tree Observations ({{observations.length}})"
-                 [root]="observationsList"
-                 [rootParams]="{data: observations, showLegend: false, parent: sightingUuid}"></ion-tab>
+    <!--<ion-tabs tabsPlacement="top">-->
+        <!--<ion-tab (ionSelect)="showOboAdd=false"-->
+                 <!--[root]="klmSatCensus"-->
+                 <!--tabTitle="Census"-->
+                 <!--[rootParams]="{datasetName: 'KLM-SAT Census', parent: sightingUuid}"></ion-tab>-->
+        <!--<ion-tab (ionSelect)="showOboAdd=true"-->
+                 <!--tabTitle="Tree Observations ({{observations.length}})"-->
+                 <!--[root]="observationsList"-->
+                 <!--[rootParams]="{data: observations, showLegend: false, parent: sightingUuid}"></ion-tab>-->
         <!--<ion-tab (ionSelect)="showOboAdd=false"-->
                  <!--[root]="observationsList"-->
                  <!--tabTitle="Media (0)"></ion-tab>-->
-    </ion-tabs>
+    <!--</ion-tabs>-->
 
-    <ion-fab *ngIf="showOboAdd" bottom right>
-        <button ion-fab (click)="addSatObo()">
-            <ion-icon name="add"></ion-icon>
+    <ion-segment [(ngModel)]="segmentContent" color="primary">
+        <ion-segment-button value="form">
+            Form
+        </ion-segment-button>
+        <ion-segment-button value="observations">
+            Tree Sightings List
+        </ion-segment-button>
+        <ion-segment-button value="photos">
+            Photos
+        </ion-segment-button>
+    </ion-segment>
+
+    <div>
+        <div [hidden]="segmentContent != 'form'">
+            <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord" [key]="recordClientId">
+            </record-form>
+        </div>
+        <div [hidden]="segmentContent != 'observations'">
+            <records-list [records]="observationRecords"></records-list>
+        </div>
+        <div [hidden]="segmentContent != 'photos'">
+
+        </div>
+    </div>
+
+    <ion-fab bottom right>
+        <button ion-fab (click)="onClickedNewRecord('KLM-SAT Tree Sighting')">
+            <img alt="KLM-SAT Tree Sighting" class="home-fab-icon" src="assets/imgs/koala_new_tree.png">
         </button>
     </ion-fab>
 </ion-content>

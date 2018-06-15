@@ -14,17 +14,12 @@ export class RecordsListComponent {
 
     @Input()
     public records: ClientRecord[];
-    
+
     @Input()
     public showLegend: boolean = true;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
-        if (navParams.data !== undefined) {
-            if (navParams.data.hasOwnProperty('data'))
-                this.records = navParams.data.data;
-            if (navParams.data.hasOwnProperty('showLegend'))
-                this.showLegend = navParams.data.showLegend;
-        }
+
     }
 
     public getStatusColor(record: ClientRecord) {
@@ -32,22 +27,23 @@ export class RecordsListComponent {
     }
 
     public getIcon(record: ClientRecord): string {
-        if (record.datasetName === 'Koala Opportunistic Observation') {
-            return 'assets/imgs/koala_data_eye.png'
-        } else
-            return 'assets/imgs/koala_data_poop.png';
+        switch (record.datasetName) {
+            case 'Koala Opportunistic Observation':
+                return 'assets/imgs/koala_data_eye.png';
+            case 'KLM-SAT Census':
+                return 'assets/imgs/koala_data_poop.png';
+            case 'KLM-SAT Tree Sighting':
+                return 'assets/imgs/koala_data_tree.png';
+        }
     }
 
     public itemTapped(event, record) {
-        if (record.datasetName === 'Koala Opportunistic Observation')
-            this.navCtrl.push('ObservationPage', {
-                datasetName: record.datasetName,
-                recordClientId: record.client_id
-            });
-        else
-            this.navCtrl.push('CensusPage', {
-                recordClientId: record.client_id,
-                isNew: false
-            });
+        const page = record.datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
+
+        this.navCtrl.push(page, {
+            datasetName: record.datasetName,
+            recordClientId: record.client_id,
+            parentId: record.parentId
+        });
     }
 }

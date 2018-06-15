@@ -2,14 +2,13 @@ import { Component, ViewChild } from '@angular/core';
 
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { UUID } from 'angular2-uuid';
 import { RecordFormComponent } from '../../components/record-form/record-form';
-import { APIService } from "../../biosys-core/services/api.service";
 
 @IonicPage()
 @Component({
@@ -19,6 +18,7 @@ import { APIService } from "../../biosys-core/services/api.service";
 export class ObservationPage {
     public showForm: boolean = true;
     public isNewRecord: boolean = true;
+    public parentId: string;
 
     @ViewChild(RecordFormComponent)
     private recordForm: RecordFormComponent;
@@ -27,46 +27,29 @@ export class ObservationPage {
     private record: ClientRecord;
     private dataset: Dataset;
 
-    constructor(private navCtrl: NavController,
-                private navParams: NavParams,
-                private storageService: StorageService,
-                private apiService: APIService,
+    constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
                 private alertController: AlertController) {
-        if (!this.navParams.get('datasetName')) {
-            this.showLeavingAlertMessage = false;
-            this.navCtrl.pop();
-        }
+    }
 
+    public ionViewDidEnter() {
         let recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !recordClientId;
 
+        this.parentId = this.navParams.get('parentId');
+
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
-            if (dataset != null) {
-                this.dataset = dataset;
-    
-                if (recordClientId) {
-                    // if this is an existing record, set form values from data
-                    this.storageService.getRecord(recordClientId).subscribe(
-                        record => {
-                            this.record = record;
-                            this.recordForm.value = record.data;
-                        }
-                    );
-                }
-            }
-            else {
-                this.apiService.getDatasets().subscribe( (datasets: Dataset[]) => {
-                    for (let dataset of datasets) {
-                        if (dataset.name == this.navParams.get('datasetName')) {
-                            this.dataset = dataset;
-                            this.storageService.putDataset(dataset);
-                        }
+            this.dataset = dataset;
+
+            if (recordClientId) {
+                // if this is an existing record, set form values from data
+                this.storageService.getRecord(recordClientId).subscribe(
+                    record => {
+                        this.record = record;
+                        console.log(this.recordForm);
+                        this.recordForm.value = record.data;
                     }
-                }, (error) => {
-                    alert('Error ' + error.msg);
-                })
+                );
             }
-            
         });
     }
 
@@ -95,13 +78,13 @@ export class ObservationPage {
 
     public save() {
         const formValues: object = this.recordForm.value;
-        let parent_id = this.navParams.get('parent'); // FIXME: TONY PARENT_ID IS HERE
 
         this.storageService.putRecord({
             valid: this.recordForm.valid,
             client_id: !!this.record ? this.record.client_id : UUID.UUID(),
             dataset: this.dataset.id,
             datasetName: this.navParams.get('datasetName'),
+            parentId: this.parentId,
             datetime: this.recordForm.dateFieldKey ? formValues[this.recordForm.dateFieldKey] : moment().format(),
             data: formValues,
             count: !!formValues['Count'] ? formValues['Count'] : 0
