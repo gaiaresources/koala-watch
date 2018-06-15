@@ -5,4 +5,13 @@ export interface ClientRecord extends Record {
     datasetName: string;
     datetime: string;
     count: number;
+    photoIds: string[];
+}
+
+export interface ClientPhoto {
+    id: string;
+    recordId: string;
+    fileName: string;
+    base64: string;
+    datetime: string;
 }
