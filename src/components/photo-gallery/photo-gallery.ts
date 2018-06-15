@@ -15,6 +15,7 @@ export class PhotoGalleryComponent {
 
     public src: string;
 
+    private _recordId: string = "";
     private _photoIds: string[] = [];
     private photoIndex: number = 0;
     private addedPhotoIds: string[] = [];
@@ -53,7 +54,9 @@ export class PhotoGalleryComponent {
         return this._photoIds;
     }
 
-    public recordId: string;
+    public set RecordId(theRecordId: string) {
+        this._recordId = theRecordId;
+    }
 
     constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService) {
     }
@@ -121,7 +124,7 @@ export class PhotoGalleryComponent {
             this.storageService.putPhoto(photoId, {
                 id: photoId,
                 fileName: photoId + ".jpg",
-                parentId: this.recordId,
+                parentId: this._recordId,
                 base64: base64,
                 datetime: moment().format()
             }).subscribe(put =>{
