@@ -10,7 +10,7 @@ export interface ClientRecord extends Record {
 
 export interface ClientPhoto {
     id: string;
-    parentId: string;
+    recordId: string;
     fileName: string;
     base64: string;
     datetime: string;
