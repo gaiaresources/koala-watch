@@ -49,6 +49,7 @@ export class ObservationPage {
                     record => {
                         this.record = record;
                         this.recordForm.value = record.data;
+                        this.photoGallery.RecordId = recordClientId;
                         this.photoGallery.PhotoIds = record.photoIds;
                     }
                 );
