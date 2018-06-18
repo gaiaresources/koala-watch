@@ -1,6 +1,11 @@
 div.home-tab-content {
-  height: 100%;
   width: 100%;
+  bottom: 0;
+  top: 0;
+}
+
+.fab-list-active {
+  z-index: 200;
 }
 
 .toast-message {

@@ -12,9 +12,10 @@ import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { APIError, Record } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { APIService } from '../../biosys-core/services/api.service';
+import { RecordsMapComponent } from '../../components/records-map/records-map';
+import { RecordsListComponent } from '../../components/records-list/records-list';
 import { mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs/observable/from';
-
 
 @IonicPage()
 @Component({
@@ -48,13 +49,9 @@ export class HomePage {
         // take all valid records, one-by-one create them on the server and after they've been successfully created,
         // delete from storage. One all records are created, refresh the records list.
         this.storageService.getAllValidRecords().pipe(
-            mergeMap((clientRecords: ClientRecord[]) =>
-                from(clientRecords).pipe(
-                    mergeMap( (clientRecord: ClientRecord) =>
-                        this.apiService.createRecord(clientRecord).pipe(
-                            mergeMap((record: Record) => this.storageService.deleteRecord(record.client_id))
-                        )
-                    )
+            mergeMap((clientRecord: ClientRecord) =>
+                this.apiService.createRecord(clientRecord).pipe(
+                    mergeMap((record: Record) => this.storageService.deleteRecord(record.client_id))
                 )
             )
         ).subscribe({
@@ -79,14 +76,16 @@ export class HomePage {
         });
     }
 
-    public clickedNew(datasetName: number, fabContainer: FabContainer) {
-        this.navCtrl.push('ObservationPage', {datasetName: datasetName});
+    public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
+        const page = datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
+
+        this.navCtrl.push(page, {datasetName: datasetName});
         fabContainer.close();
     }
 
     private loadRecords() {
         this.records = [];
-        this.storageService.getAllRecords().subscribe(
+        this.storageService.getParentRecords().subscribe(
             (record: ClientRecord) => this.records.push(record)
         );
     }

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import * as moment from 'moment/moment';
 
-import { FieldDescriptor, ObservationFormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
+import { FieldDescriptor, FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
 import { filter } from 'rxjs/operators';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
@@ -22,7 +22,7 @@ import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 })
 export class RecordFormComponent {
     public form: FormGroup;
-    public formDescriptor: ObservationFormDescriptor;
+    public formDescriptor: FormDescriptor;
 
     private _dateFieldKey: string;
 
@@ -35,6 +35,9 @@ export class RecordFormComponent {
             this.setupForm(dataset);
         }
     }
+
+    @Input()
+    public key: string;
 
     public get invalid(): boolean {
         return !!this.form && this.form.invalid;
@@ -59,13 +62,14 @@ export class RecordFormComponent {
         if (this.form.invalid) {
             Object.keys(this.form.controls).forEach((fieldName: string) =>
                 this.form.get(fieldName).markAsDirty());
-        }    }
+        }
+    }
 
     constructor(private schemaService: SchemaService, private geolocation: Geolocation) {}
 
     private setupForm(dataset: Dataset) {
         this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
-            this.formDescriptor = results[0] as ObservationFormDescriptor;
+            this.formDescriptor = results[0];
             this.form = results[1];
 
             if (this.formDescriptor.dateFields) {
@@ -100,9 +104,15 @@ export class RecordFormComponent {
                     this.form.controls[this._dateFieldKey].setValue(moment().format());
                 }
 
-                this.formDescriptor.hiddenFields.map((field: FieldDescriptor) =>
-                    this.form.controls[field.key].setValue(field.defaultValue)
-                );
+                if (this.formDescriptor.hiddenFields) {
+                    this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
+                        this.form.controls[field.key].setValue(field.defaultValue)
+                    });
+                }
+
+                if (this.formDescriptor.keyField && this.key) {
+                    this.form.controls[this.formDescriptor.keyField].setValue(this.key);
+                }
             }
         });
     }

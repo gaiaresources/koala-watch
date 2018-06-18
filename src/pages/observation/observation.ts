@@ -2,14 +2,14 @@ import { Component, ViewChild } from '@angular/core';
 
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { UUID } from 'angular2-uuid';
 import { RecordFormComponent } from '../../components/record-form/record-form';
-import { PhotoGalleryComponent } from "../../components/photo-gallery/photo-gallery";
+import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 
 @IonicPage()
 @Component({
@@ -19,6 +19,7 @@ import { PhotoGalleryComponent } from "../../components/photo-gallery/photo-gall
 export class ObservationPage {
     public showForm: boolean = true;
     public isNewRecord: boolean = true;
+    public parentId: string;
 
     @ViewChild(RecordFormComponent)
     private recordForm: RecordFormComponent;
@@ -32,22 +33,23 @@ export class ObservationPage {
 
     constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
                 private alertController: AlertController) {
-        if (!this.navParams.get('datasetName')) {
-            this.showLeavingAlertMessage = false;
-            this.navCtrl.pop();
-        }
+    }
 
+    public ionViewDidEnter() {
         let recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !recordClientId;
 
-        this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
-                this.dataset = dataset;
+        this.parentId = this.navParams.get('parentId');
 
-                if (recordClientId) {
+        this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
+            this.dataset = dataset;
+
+            if (recordClientId) {
                 // if this is an existing record, set form values from data
                 this.storageService.getRecord(recordClientId).subscribe(
                     record => {
                         this.record = record;
+                        console.log(this.recordForm);
                         this.recordForm.value = record.data;
                         this.photoGallery.RecordId = recordClientId;
                         this.photoGallery.PhotoIds = record.photoIds;
@@ -90,6 +92,7 @@ export class ObservationPage {
             client_id: !!this.record ? this.record.client_id : UUID.UUID(),
             dataset: this.dataset.id,
             datasetName: this.navParams.get('datasetName'),
+            parentId: this.parentId,
             datetime: this.recordForm.dateFieldKey ? formValues[this.recordForm.dateFieldKey] : moment().format(),
             data: formValues,
             count: !!formValues['Count'] ? formValues['Count'] : 0,

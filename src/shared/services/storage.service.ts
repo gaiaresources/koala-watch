@@ -45,10 +45,10 @@ export class StorageService {
         return fromPromise(this.storage.get(`${StorageService.RECORD_PREFIX}${key}`));
     }
 
-    public getAllRecords(): Observable<ClientRecord> {
+    public getParentRecords(): Observable<ClientRecord> {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
-                if (key.startsWith(StorageService.RECORD_PREFIX)) {
+                if (key.startsWith(StorageService.RECORD_PREFIX) && !value.parentId) {
                     observer.next(value);
                 }
             }).then(value => {
@@ -59,14 +59,26 @@ export class StorageService {
         });
     }
 
-    public getAllValidRecords(): Observable<ClientRecord[]> {
+    public getAllValidRecords(): Observable<ClientRecord> {
         return new Observable(observer => {
-            const records: ClientRecord[] = [];
             this.storage.forEach((value, key) => {
                 if (key.startsWith(StorageService.RECORD_PREFIX) && value.valid) {
-                    records.push(value);
+                    observer.next(value);
                 }
-                observer.next(records);
+            }).then(value => {
+                observer.complete();
+            }, reason => {
+                observer.error(reason);
+            });
+        });
+    }
+
+    public getChildRecords(parentId: string): Observable<ClientRecord> {
+        return new Observable(observer => {
+            this.storage.forEach((value, key) => {
+                if (key.startsWith(StorageService.RECORD_PREFIX) && value.parentId === parentId) {
+                    observer.next(value);
+                }
             }).then(value => {
                 observer.complete();
             }, reason => {

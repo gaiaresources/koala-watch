@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { Camera, CameraOptions } from "@ionic-native/camera";
-import { StorageService } from "../../shared/services/storage.service";
-import { UUID } from "angular2-uuid";
-import { DomSanitizer } from "@angular/platform-browser";
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { StorageService } from '../../shared/services/storage.service';
+import { UUID } from 'angular2-uuid';
+import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment/moment';
-import { from } from "rxjs/observable/from";
-import { mergeMap } from "rxjs/operators";
-import {AlertController} from "ionic-angular";
+import { from } from 'rxjs/observable/from';
+import { mergeMap } from 'rxjs/operators';
+import {AlertController} from 'ionic-angular';
 
 @Component({
     selector: 'photo-gallery',
@@ -16,11 +16,11 @@ export class PhotoGalleryComponent {
 
     // Template variables
 
-    public photoSrc: string = "";
+    public photoSrc: string = '';
 
     // Property variables
 
-    private _recordId: string = "";
+    private _recordId: string = '';
     private _photoIds: string[] = [];
 
     // Private variables
@@ -32,7 +32,7 @@ export class PhotoGalleryComponent {
     // Property getters and setters
 
     public set PhotoIds(thePhotoIds: string[]) {
-        if(thePhotoIds) {
+        if (thePhotoIds) {
             this._photoIds = thePhotoIds;
         } else {
             this._photoIds = [];
@@ -50,9 +50,16 @@ export class PhotoGalleryComponent {
         this._recordId = theRecordId;
     }
 
+    // Private static methods
+
+    private static makePhotoSrc(base64: string): string {
+        return 'data:image/jpeg;base64,' + base64;
+    }
+
     // Constructor
 
-    constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService, private alertController: AlertController) {
+    constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService,
+                private alertController: AlertController) {
     }
 
     // Template methods
@@ -62,21 +69,21 @@ export class PhotoGalleryComponent {
     }
 
     public pageLeftClick() {
-        if(this.photoIndex > 0) {
+        if (this.photoIndex > 0) {
             this.photoIndex -= 1;
             this.updateImage();
         }
     }
 
     public pageRightClick() {
-        if(this.photoIndex < this._photoIds.length - 1) {
+        if (this.photoIndex < this._photoIds.length - 1) {
             this.photoIndex += 1;
             this.updateImage();
         }
     }
 
     public deleteClick() {
-        if(this._photoIds.length <= 0) {
+        if (this._photoIds.length <= 0) {
             return;
         }
 
@@ -90,12 +97,12 @@ export class PhotoGalleryComponent {
                     handler: () => {
                         const photoId = this._photoIds[this.photoIndex];
                         this.removeStringFromArray(this._photoIds, photoId);
-                        if(this.removeStringFromArray(this.addedPhotoIds, photoId)) {
+                        if (this.removeStringFromArray(this.addedPhotoIds, photoId)) {
                             this.deletePhotoUsingId(photoId);
                         } else {
                             this.deletedPhotoIds.push(photoId);
                         }
-                        if(this.photoIndex >= this._photoIds.length) {
+                        if (this.photoIndex >= this._photoIds.length) {
                             this.photoIndex -= 1;
                         }
                         console.log('photoIdex' + this.photoIndex);
@@ -109,7 +116,7 @@ export class PhotoGalleryComponent {
     }
 
     public takePhoto() {
-        if(this._photoIds.length >= 3) {
+        if (this._photoIds.length >= 3) {
             alert('Maximum number of photos reached');
             return;
         }
@@ -127,12 +134,12 @@ export class PhotoGalleryComponent {
             let photoId = UUID.UUID();
             this.storageService.putPhoto(photoId, {
                 id: photoId,
-                fileName: photoId + ".jpg",
+                fileName: photoId + '.jpg',
                 recordId: this._recordId,
                 base64: base64,
                 datetime: moment().format()
             }).subscribe(put => {
-                if(put) {
+                if (put) {
                     this._photoIds.push(photoId);
                     this.addedPhotoIds.push(photoId);
                     let photoSrc = PhotoGalleryComponent.makePhotoSrc(base64);
@@ -161,12 +168,6 @@ export class PhotoGalleryComponent {
         ).subscribe();
     }
 
-    // Private static methods
-
-    private static makePhotoSrc(base64: string): string {
-        return 'data:image/jpeg;base64,' + base64;
-    }
-
     // Private methods
 
     private removeStringFromArray(array: string[], item: string): boolean {
@@ -178,16 +179,16 @@ export class PhotoGalleryComponent {
     }
 
     private updateImage() {
-        if(this._photoIds[this.photoIndex].length === 0) {
-            this.photoSrc = "";
+        if (this._photoIds[this.photoIndex].length === 0) {
+            this.photoSrc = '';
             return;
         }
 
         this.storageService.getPhoto(this._photoIds[this.photoIndex]).subscribe(clientPhoto => {
-            if(clientPhoto) {
+            if (clientPhoto) {
                 this.photoSrc = PhotoGalleryComponent.makePhotoSrc(clientPhoto.base64);
             } else {
-                this.photoSrc = "";
+                this.photoSrc = '';
             }
         });
     }
