@@ -10,6 +10,7 @@ import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ObservationPage } from '../observation/observation';
 import { StorageService } from '../../shared/services/storage.service';
 import { RecordFormComponent } from '../../components/record-form/record-form';
+import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 
 
 /**
@@ -36,6 +37,9 @@ export class CensusPage {
 
     @ViewChild(RecordFormComponent)
     private recordForm: RecordFormComponent;
+
+    @ViewChild(PhotoGalleryComponent)
+    private photoGallery: PhotoGalleryComponent;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService) {
         this.recordClientId = this.navParams.get('recordClientId');
@@ -87,7 +91,8 @@ export class CensusPage {
             datasetName: this.navParams.get('datasetName'),
             datetime: this.recordForm.dateFieldKey ? formValues[this.recordForm.dateFieldKey] : moment().format(),
             data: formValues,
-            count: this.observationRecords.length
+            count: this.observationRecords.length,
+            photoIds: this.photoGallery.PhotoIds
         }).subscribe((result: boolean) => {
             if (result) {
                 this.navCtrl.pop();

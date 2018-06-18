@@ -9,7 +9,7 @@ import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { RecordFormComponent } from '../../components/record-form/record-form';
-import { PhotoGalleryComponent } from "../../components/photo-gallery/photo-gallery";
+import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 
 @IonicPage()
 @Component({
