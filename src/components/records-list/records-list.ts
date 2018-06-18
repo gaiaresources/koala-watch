@@ -12,14 +12,11 @@ export class RecordsListComponent {
 
     public items: Array<{ title: string, note: string, icon: string }>;
 
-    // mapping from DataType to an icon
-    public itemIcons = [
-        'assets/imgs/koala_data_poop.png',
-        'assets/imgs/koala_data_eye.png'
-    ];
-
     @Input()
     public records: ClientRecord[];
+
+    @Input()
+    public showLegend: boolean = true;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
 
@@ -30,15 +27,23 @@ export class RecordsListComponent {
     }
 
     public getIcon(record: ClientRecord): string {
-        if (record.datasetName === 'Koala Opportunistic Observation') {
-            return 'assets/imgs/koala_data_eye.png'
+        switch (record.datasetName) {
+            case 'Koala Opportunistic Observation':
+                return 'assets/imgs/koala_data_eye.png';
+            case 'KLM-SAT Census':
+                return 'assets/imgs/koala_data_poop.png';
+            case 'KLM-SAT Tree Sighting':
+                return 'assets/imgs/koala_data_tree.png';
         }
     }
 
     public itemTapped(event, record) {
-        this.navCtrl.push('ObservationPage', {
+        const page = record.datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
+
+        this.navCtrl.push(page, {
             datasetName: record.datasetName,
-            recordClientId: record.client_id
+            recordClientId: record.client_id,
+            parentId: record.parentId
         });
     }
 }

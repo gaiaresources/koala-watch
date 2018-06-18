@@ -1,7 +1,6 @@
-import { GoogleMap, GoogleMapOptions, GoogleMaps, LatLng } from '@ionic-native/google-maps';
-import { Component } from '@angular/core/';
+import { GoogleMap, GoogleMaps, LatLng, } from '@ionic-native/google-maps';
+import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { OnInit, Input } from '@angular/core';
 
 @Component({
     selector: 'records-map',
@@ -11,7 +10,6 @@ export class RecordsMapComponent implements OnInit {
     @Input()
     public set records(records: ClientRecord[]) {
         this._records = records;
-
         if (this.map) {
             this.loadMarkers();
         }
@@ -24,14 +22,7 @@ export class RecordsMapComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (!this.map) {
-            this.loadMap();
-        }
-    }
-
-    private loadMap() {
-        let location = new LatLng(-25, 132);
-        let mapOptions: GoogleMapOptions = {
+        this.map = GoogleMaps.create('map', {
             'backgroundColor': 'white',
             'controls': {
                 'compass': false,
@@ -42,16 +33,17 @@ export class RecordsMapComponent implements OnInit {
                 'zoom': true
             },
             'camera': {
-                'target': location,
+                'target': new LatLng(-25, 132),
                 'zoom': 3.5,
             }
-        };
-
-        this.map = GoogleMaps.create('map', mapOptions);
-
-        if (this._records) {
+        });
+        if (!this.map) {
             this.loadMarkers();
         }
+    }
+
+    public ionViewWillEnter() {
+        this.loadMarkers();
     }
 
     private loadMarkers() {

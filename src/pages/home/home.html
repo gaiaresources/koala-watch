@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-    <ion-segment [(ngModel)]="showList" color="secondary">
+    <ion-segment [(ngModel)]="showList">
         <ion-segment-button [value]="true">
             List
         </ion-segment-button>
@@ -32,7 +32,10 @@
         <ion-icon name="add"></ion-icon>
     </button>
     <ion-fab-list side="top">
-        <button ion-fab (click)="clickedNew('Koala Opportunistic Observation', addFab)">
+        <button ion-fab (click)="onClickedNewRecord('KLM-SAT Census', addFab)">
+            <img alt="KLM-SAT Census" class="home-fab-icon" src="assets/imgs/koala_new_poop.png">
+        </button>
+        <button ion-fab (click)="onClickedNewRecord('Koala Opportunistic Observation', addFab)">
             <img alt="Koala Opportunistic Observation" class="home-fab-icon" src="assets/imgs/koala_new_eye.png">
         </button>
     </ion-fab-list>

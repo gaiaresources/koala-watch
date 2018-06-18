@@ -11,105 +11,21 @@
 </ion-header>
 
 <ion-content padding>
-    <!--<ion-segment [(ngModel)]="showForm" color="secondary">-->
-    <!--<ion-segment-button [value]="true">-->
-    <!--Form-->
-    <!--</ion-segment-button>-->
-    <!--<ion-segment-button [value]="false">-->
-    <!--Photos-->
-    <!--</ion-segment-button>-->
-    <!--</ion-segment>-->
+    <ion-segment [(ngModel)]="showForm" color="secondary">
+        <ion-segment-button [value]="true">
+            Form
+        </ion-segment-button>
+        <ion-segment-button [value]="false">
+            Photos
+        </ion-segment-button>
+    </ion-segment>
 
-    <!--<div>-->
-    <div *ngIf="showForm && formDescriptor">
-        <form [formGroup]="form">
-            <ion-item-group *ngIf="formDescriptor.dateFields.length > 0">
-                <ion-item-divider color="secondary">
-                    <ion-icon name="calendar"></ion-icon> Dates
-                </ion-item-divider>
-                <ion-item *ngFor="let field of formDescriptor.dateFields">
-                    <ion-label color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                               floating>
-                        {{ field.label }}
-                        <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                            ({{ getFieldError(field) }})
-                        </span>
-                    </ion-label>
-                    <ion-datetime [formControlName]="field.key" [displayFormat]="field.format | pyDateFormatToIonicDateFormat"></ion-datetime>
-                </ion-item>
-            </ion-item-group>
-            <ion-item-group *ngIf="formDescriptor.locationFields.length > 0">
-                <ion-item-divider color="secondary">
-                    <ion-icon name="locate"></ion-icon>
-                    Location
-                </ion-item-divider>
-                <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
-                    <ion-label color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                               floating>
-                        {{ field.label }}
-                        <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                            ({{ getFieldError(field) }})
-                        </span>
-                    </ion-label>
-                    <ion-select *ngSwitchCase="'select'" [formControlName]="field.key">
-                        <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
-                    </ion-select>
-                    <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
-                </ion-item>
-            </ion-item-group>
-            <ion-item-group *ngIf="formDescriptor.requiredFields.length > 0">
-                <ion-item-divider color="secondary">
-                    <ion-icon name="star"></ion-icon>
-                    Required Fields
-                </ion-item-divider>
-                <ion-item *ngFor="let field of formDescriptor.requiredFields" [ngSwitch]="field.type">
-                    <ion-label color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                               floating>
-                        {{ field.label }}
-                        <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                            ({{ getFieldError(field) }})
-                        </span>
-                    </ion-label>
-
-                    <ion-select *ngSwitchCase="'select'" [formControlName]="field.key">
-                        <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
-                    </ion-select>
-
-                    <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
-
-                    <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
-                </ion-item>
-            </ion-item-group>
-            <ion-item-group *ngIf="formDescriptor.fields.length > 0">
-                <ion-item-divider color="secondary">
-                    <ion-icon name="star-outline"></ion-icon>
-                    Optional Fields
-                </ion-item-divider>
-                <ion-item *ngFor="let field of formDescriptor.fields" [ngSwitch]="field.type">
-                    <ion-label color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                               floating>
-                        {{ field.label }}
-                        <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                            ({{ getFieldError(field) }})
-                        </span>
-                    </ion-label>
-
-                    <ion-select *ngSwitchCase="'select'" [formControlName]="field.key">
-                        <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
-                    </ion-select>
-
-                    <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
-
-                    <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
-                </ion-item>
-            </ion-item-group>
-            <ion-input *ngFor="let field of formDescriptor.hiddenFields" [type]="field.type"
-                       [formControlName]="field.key">
-            </ion-input>
-        </form>
+    <div>
+        <div [hidden]="!showForm">
+            <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord"></record-form>
+        </div>
+        <div [hidden]="showForm">
+            <photo-gallery></photo-gallery>
+        </div>
     </div>
-    <!--<div *ngIf="!showForm">-->
-
-    <!--</div>-->
-    <!--</div>-->
 </ion-content>

@@ -1,15 +1,15 @@
 import { Storage } from '@ionic/storage';
-import { UUID } from 'angular2-uuid'
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
-import { ClientRecord } from '../interfaces/mobile.interfaces';
+import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
 
 @Injectable()
 export class StorageService {
     private static readonly DATASET_PREFIX = 'Dataset_';
     private static readonly RECORD_PREFIX = 'Record_';
+    private static readonly PHOTO_PREFIX = 'Photo_';
 
     constructor(private storage: Storage) {
 
@@ -45,10 +45,10 @@ export class StorageService {
         return fromPromise(this.storage.get(`${StorageService.RECORD_PREFIX}${key}`));
     }
 
-    public getAllRecords(): Observable<ClientRecord> {
+    public getParentRecords(): Observable<ClientRecord> {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
-                if (key.startsWith(StorageService.RECORD_PREFIX)) {
+                if (key.startsWith(StorageService.RECORD_PREFIX) && !value.parentId) {
                     observer.next(value);
                 }
             }).then(value => {
@@ -59,14 +59,26 @@ export class StorageService {
         });
     }
 
-    public getAllValidRecords(): Observable<ClientRecord[]> {
+    public getAllValidRecords(): Observable<ClientRecord> {
         return new Observable(observer => {
-            const records: ClientRecord[] = [];
             this.storage.forEach((value, key) => {
                 if (key.startsWith(StorageService.RECORD_PREFIX) && value.valid) {
-                    records.push(value);
+                    observer.next(value);
                 }
-                observer.next(records);
+            }).then(value => {
+                observer.complete();
+            }, reason => {
+                observer.error(reason);
+            });
+        });
+    }
+
+    public getChildRecords(parentId: string): Observable<ClientRecord> {
+        return new Observable(observer => {
+            this.storage.forEach((value, key) => {
+                if (key.startsWith(StorageService.RECORD_PREFIX) && value.parentId === parentId) {
+                    observer.next(value);
+                }
             }).then(value => {
                 observer.complete();
             }, reason => {
@@ -82,4 +94,17 @@ export class StorageService {
     public clearRecords(): Observable<void> {
         return fromPromise(this.storage.clear());
     }
+
+    public putPhoto(key: string, clientPhoto: ClientPhoto): Observable<boolean> {
+        return fromPromise(this.storage.set(`${StorageService.PHOTO_PREFIX}${key}`, clientPhoto));
+    }
+
+    public getPhoto(key: string): Observable<ClientPhoto> {
+        return fromPromise(this.storage.get(`${StorageService.PHOTO_PREFIX}${key}`));
+    }
+
+    public deletePhoto(key: string): Observable<boolean> {
+        return fromPromise(this.storage.remove(`${StorageService.PHOTO_PREFIX}${key}`));
+    }
+
 }
