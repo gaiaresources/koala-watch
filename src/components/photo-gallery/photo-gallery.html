@@ -10,27 +10,18 @@
 <ion-card>
     <ion-card-content>
         <div *ngIf="showPhotos()">
-            <table>
-                <tr>
-                    <td>
-                        <button ion-button icon-end solid color="primary" (click)="pageLeftClick()">
-                            <ion-icon name="arrow-dropleft-circle"></ion-icon>
-                        </button>
-                    </td>
-                    <td>
-                        <img [src]="domSanitizer.bypassSecurityTrustUrl(photoSrc)">
-                    </td>
-                    <td>
-                        <button ion-button icon-end solid color="primary" (click)="pageRightClick()">
-                            <ion-icon name="arrow-dropright-circle"></ion-icon>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-            <button ion-button icon-end solid color="primary" (click)="deleteClick()">
-                Delete
-                <ion-icon name="trash"></ion-icon>
-            </button>
+            <div class="photo-container">
+                <img [src]="domSanitizer.bypassSecurityTrustUrl(photoSrc)">
+                <div class="bottom-right">
+                    <img src="assets/imgs/trash.png" (click)="deleteClick()">
+                </div>
+                <div class="center-left">
+                    <img src="assets/imgs/left_chevron.png" (click)="pageLeftClick()">
+                </div>
+                <div class="center-right">
+                    <img src="assets/imgs/right_chevron.png" (click)="pageRightClick()">
+                </div>
+            </div>
         </div>
         <div *ngIf="!showPhotos()">
             Add photos using the Take Photo button
