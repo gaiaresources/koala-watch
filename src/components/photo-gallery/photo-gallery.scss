@@ -1,0 +1,26 @@
+.photo-container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.center-left {
+    width: 10%;
+    position: absolute;
+    top: 50%;
+    left: 16px;
+}
+
+.center-right {
+    width: 10%;
+    position: absolute;
+    top: 50%;
+    right: 16px;
+}
+
+.bottom-right {
+    width: 10%;
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+}
