@@ -6,7 +6,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import * as moment from 'moment/moment';
 import { from } from "rxjs/observable/from";
 import { mergeMap } from "rxjs/operators";
-import {AlertController} from "ionic-angular";
+import { AlertController } from "ionic-angular";
 
 @Component({
     selector: 'photo-gallery',
@@ -58,7 +58,11 @@ export class PhotoGalleryComponent {
     // Template methods
 
     public showPhotos() {
-        return this._photoIds.length > 0;
+        if(this._photoIds) {
+            return this._photoIds.length > 0;
+        } else {
+            return 0;
+        }
     }
 
     public pageLeftClick() {
@@ -178,11 +182,11 @@ export class PhotoGalleryComponent {
     }
 
     private updateImage() {
-        if(this._photoIds[this.photoIndex].length === 0) {
+        if(!this._photoIds) {
             this.photoSrc = "";
             return;
         }
-
+        
         this.storageService.getPhoto(this._photoIds[this.photoIndex]).subscribe(clientPhoto => {
             if(clientPhoto) {
                 this.photoSrc = PhotoGalleryComponent.makePhotoSrc(clientPhoto.base64);
