@@ -184,9 +184,10 @@ export class PhotoGalleryComponent {
     private updateImage() {
         if(!this._photoIds) {
             this.photoSrc = "";
+            this.photoIndex = 0;
             return;
         }
-        
+
         this.storageService.getPhoto(this._photoIds[this.photoIndex]).subscribe(clientPhoto => {
             if(clientPhoto) {
                 this.photoSrc = PhotoGalleryComponent.makePhotoSrc(clientPhoto.base64);
