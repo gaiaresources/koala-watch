@@ -1,0 +1,39 @@
+<ion-card>
+    <ion-card-content>
+        <ion-row>
+            <ion-col col-6 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-3>
+                <button ion-button type="submit" (click)="takePhoto()" full>Take Photo</button>
+            </ion-col>
+        </ion-row>
+    </ion-card-content>
+</ion-card>
+<ion-card>
+    <ion-card-content>
+        <div *ngIf="showPhotos()">
+            <table>
+                <tr>
+                    <td>
+                        <button ion-button icon-end solid color="primary" (click)="pageLeftClick()">
+                            <ion-icon name="arrow-dropleft-circle"></ion-icon>
+                        </button>
+                    </td>
+                    <td>
+                        <img [src]="domSanitizer.bypassSecurityTrustUrl(photoSrc)">
+                    </td>
+                    <td>
+                        <button ion-button icon-end solid color="primary" (click)="pageRightClick()">
+                            <ion-icon name="arrow-dropright-circle"></ion-icon>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <button ion-button icon-end solid color="primary" (click)="deleteClick()">
+                Delete
+                <ion-icon name="trash"></ion-icon>
+            </button>
+        </div>
+        <div *ngIf="!showPhotos()">
+            Add photos using the Take Photo button
+        </div>
+    </ion-card-content>
+</ion-card>

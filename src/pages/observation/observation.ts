@@ -10,6 +10,7 @@ import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { UUID } from 'angular2-uuid';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { APIService } from "../../biosys-core/services/api.service";
+import { PhotoGalleryComponent } from "../../components/photo-gallery/photo-gallery";
 
 @IonicPage()
 @Component({
@@ -22,6 +23,9 @@ export class ObservationPage {
 
     @ViewChild(RecordFormComponent)
     private recordForm: RecordFormComponent;
+
+    @ViewChild(PhotoGalleryComponent)
+    private photoGallery: PhotoGalleryComponent;
 
     private showLeavingAlertMessage: boolean = true;
     private record: ClientRecord;
@@ -36,37 +40,45 @@ export class ObservationPage {
             this.showLeavingAlertMessage = false;
             this.navCtrl.pop();
         }
-
+    
         let recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !recordClientId;
-
+    
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
             if (dataset != null) {
                 this.dataset = dataset;
-    
+            
                 if (recordClientId) {
                     // if this is an existing record, set form values from data
                     this.storageService.getRecord(recordClientId).subscribe(
                         record => {
                             this.record = record;
                             this.recordForm.value = record.data;
+                            this.photoGallery.RecordId = recordClientId;
+                            this.photoGallery.PhotoIds = record.photoIds;
                         }
                     );
                 }
             }
             else {
-                this.apiService.getDatasets().subscribe( (datasets: Dataset[]) => {
+                this.apiService.getDatasets().subscribe((datasets: Dataset[]) => {
                     for (let dataset of datasets) {
                         if (dataset.name == this.navParams.get('datasetName')) {
                             this.dataset = dataset;
                             this.storageService.putDataset(dataset);
                         }
+                        // if this is an existing record, set form values from data
+                        this.storageService.getRecord(recordClientId).subscribe(
+                            record => {
+                                this.record = record;
+                                this.recordForm.value = record.data;
+                            }, (error) => {
+                                alert('Error ' + error.msg);
+                            });
                     }
-                }, (error) => {
-                    alert('Error ' + error.msg);
-                })
+                
+                });
             }
-            
         });
     }
 
@@ -80,6 +92,7 @@ export class ObservationPage {
                     {
                         text: 'Yes',
                         handler: () => {
+                            this.photoGallery.rollback();
                             this.showLeavingAlertMessage = false;
                             this.navCtrl.pop();
                         }
@@ -94,6 +107,7 @@ export class ObservationPage {
     }
 
     public save() {
+        this.photoGallery.commit();
         const formValues: object = this.recordForm.value;
         let parent_id = this.navParams.get('parent'); // FIXME: TONY PARENT_ID IS HERE
 
@@ -104,7 +118,8 @@ export class ObservationPage {
             datasetName: this.navParams.get('datasetName'),
             datetime: this.recordForm.dateFieldKey ? formValues[this.recordForm.dateFieldKey] : moment().format(),
             data: formValues,
-            count: !!formValues['Count'] ? formValues['Count'] : 0
+            count: !!formValues['Count'] ? formValues['Count'] : 0,
+            photoIds: this.photoGallery.PhotoIds
         }).subscribe((result: boolean) => {
             if (result) {
                 this.showLeavingAlertMessage = false;
