@@ -77,7 +77,7 @@ export class PhotoGalleryComponent {
     }
 
     public showRightChevron(): boolean {
-        return this._photoIds && this._photoIds.length > 0 && this.photoIndex < this._photoIds.length - 1;
+        return this._photoIds && this.photoIndex < this._photoIds.length - 1;
     }
 
     public pageLeftClick() {
