@@ -18,6 +18,7 @@ import { APIService } from '../biosys-core/services/api.service';
 import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
 import { AuthService } from '../biosys-core/services/auth.service';
 import { ComponentsModule } from '../components/components.module';
+import { UploadService } from '../shared/services/upload.service';
 
 @NgModule({
     declarations: [
@@ -40,6 +41,7 @@ import { ComponentsModule } from '../components/components.module';
         Camera,
         Geolocation,
         APIService,
+        UploadService,
         {
             provide: ErrorHandler,
             useClass: IonicErrorHandler

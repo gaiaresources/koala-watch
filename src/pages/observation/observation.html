@@ -26,7 +26,7 @@
 
     <div>
         <div [hidden]="!showForm">
-            <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord"></record-form>
+            <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord" [key]="parentId"></record-form>
         </div>
         <div [hidden]="showForm">
             <photo-gallery></photo-gallery>
