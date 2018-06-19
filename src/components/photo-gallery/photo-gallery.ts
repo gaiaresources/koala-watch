@@ -128,7 +128,7 @@ export class PhotoGalleryComponent {
     }
 
     public takePhoto() {
-        if (this._photoIds.length >= 3) {
+        if (this._photoIds.length >= 10) {
             alert('Maximum number of photos reached');
             return;
         }
