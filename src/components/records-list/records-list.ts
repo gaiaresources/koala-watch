@@ -48,15 +48,26 @@ export class RecordsListComponent {
     public getStatusColor(record: ClientRecord) {
         return record.valid ? '#ebffef' : '#ebf6ff';
     }
-    
-    public getIcon(record: ClientRecord): string {
+
+    public getDatasetIcon(record: ClientRecord): string {
         switch (record.datasetName) {
             case 'Koala Opportunistic Observation':
-                return 'assets/imgs/koala_data_eye.png';
+                return 'assets/imgs/eye.png';
             case 'KLM-SAT Census':
-                return 'assets/imgs/koala_data_poop.png';
+                return 'assets/imgs/poop.png';
             case 'KLM-SAT Tree Sighting':
-                return 'assets/imgs/koala_data_tree.png';
+                return 'assets/imgs/tree.png';
+        }
+    }
+
+    public getCountIcon(record: ClientRecord): string {
+        switch (record.datasetName) {
+            case 'Koala Opportunistic Observation':
+                return 'assets/imgs/koala.png';
+            case 'KLM-SAT Census':
+                return 'assets/imgs/tree.png';
+            case 'KLM-SAT Tree Sighting':
+                return 'assets/imgs/koala.png';
         }
     }
     
@@ -85,10 +96,8 @@ export class RecordsListComponent {
         if (datasetName.toLowerCase().indexOf('census') > -1)
             page = 'CensusPage';
         else {
-            if (this.parent) {
+            if (this.parent)
                 params['parentId'] = this.parent;
-                alert(this.parent);
-            }
             page = 'ObservationPage';
         }
         this.navPush(page, params);

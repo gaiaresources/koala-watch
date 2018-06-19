@@ -65,7 +65,19 @@ export class PhotoGalleryComponent {
     // Template methods
 
     public showPhotos() {
-        return this._photoIds.length > 0;
+        if(!this._photoIds) {
+            return  false;
+        } else {
+            return this._photoIds.length > 0;
+        }
+    }
+
+    public showLeftChevron(): boolean {
+        return this.photoIndex > 0
+    }
+
+    public showRightChevron(): boolean {
+        return this._photoIds && this.photoIndex < this._photoIds.length - 1;
     }
 
     public pageLeftClick() {
@@ -116,7 +128,7 @@ export class PhotoGalleryComponent {
     }
 
     public takePhoto() {
-        if (this._photoIds.length >= 3) {
+        if (this._photoIds.length >= 10) {
             alert('Maximum number of photos reached');
             return;
         }
@@ -179,8 +191,9 @@ export class PhotoGalleryComponent {
     }
 
     private updateImage() {
-        if (this._photoIds[this.photoIndex].length === 0) {
+        if (!this._photoIds) {
             this.photoSrc = '';
+            this.photoIndex = 0;
             return;
         }
 

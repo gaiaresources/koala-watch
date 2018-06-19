@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content style="min-height: 500px">
     <div [hidden]="records.length==0 || !showLegend" id="category-legend-div">
         <table id="category-legend">
             <td class="category-legend-colour" id="category-completed"></td>
@@ -12,7 +12,7 @@
         <ion-list>
             <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
                     (click)="itemTapped($event, record)">
-                <img item-start class="data-row" [src]="getIcon(record)"/>
+                <img item-start class="data-row" [src]="getDatasetIcon(record)"/>
                 <ion-label>{{ record.datetime | date: angularDateFormat }}</ion-label>
                 <img *ngIf="record.count" item-end class="data-row" src="assets/imgs/koala_data_koala.png"/>
                 <span item-end>{{ record.count }}</span>
@@ -21,7 +21,7 @@
     </div>
 
     <div [hidden]="records.length > 0" class="no-data-div">
-        <div style="padding: 10%; min-height: 300px">
+        <div id="no-data-div">
             <ion-grid>
                 <ion-row style="padding-bottom: 1em;">
                     <h1 class="no-stuff">No Data Is Available:</h1>
@@ -31,7 +31,7 @@
                         <button ion-fab style="background-color: green"
                                 (click)="onClickedNewRecord('Koala Opportunistic Observation')">
                             <img alt="Koala Opportunistic Observation"
-                                 src="assets/imgs/koala_new_eye.png">
+                                 src="assets/imgs/white_eye.png">
                         </button>
                     </ion-col>
                     <ion-col>
@@ -42,7 +42,7 @@
                     <ion-col>
                         <button ion-fab style="background-color: green" (click)="onClickedNewRecord('KLM-SAT Census')">
                             <img alt="Koala Census"
-                                 src="assets/imgs/koala_new_poop.png">
+                                 src="assets/imgs/white_poop.png">
                         </button>
                     </ion-col>
                     <ion-col>
@@ -53,7 +53,7 @@
                     <ion-col>
                         <button ion-fab style="background-color: green" (click)="onClickedNewRecord('KLM-SAT Tree Sighting')">
                             <img alt="Koala Tree Survey"
-                                 src="assets/imgs/koala_new_tree.png">
+                                 src="assets/imgs/white_tree.png">
                         </button>
                     </ion-col>
                     <ion-col>

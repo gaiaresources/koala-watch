@@ -59,6 +59,8 @@ export class CensusPage {
                     record => {
                         this.record = record;
                         this.recordForm.value = record.data;
+                        this.photoGallery.RecordId = this.recordClientId;
+                        this.photoGallery.PhotoIds = record.photoIds;
                     }
                 );
             }
