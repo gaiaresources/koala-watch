@@ -10,9 +10,11 @@
 <ion-list>
     <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
             (click)="itemTapped($event, record)">
-        <img item-start class="data-row" [src]="getIcon(record)"/>
+        <img item-start class="data-row" [src]="getDatasetIcon(record)"/>
         <ion-label>{{ record.datetime | date: angularDateFormat }}</ion-label>
-        <img *ngIf="record.count" item-end class="data-row" src="assets/imgs/koala_data_koala.png"/>
-        <span item-end>{{ record.count }}</span>
+        <img item-end class="data-row" [src]="getCountIcon(record)"/>
+        <span item-end>{{ record.count || 0 }}</span>
+        <img item-end class="data-row" src="assets/imgs/camera.png"/>
+        <span item-end>{{ record.photoIds?.length || 0 }}</span>
     </button>
 </ion-list>

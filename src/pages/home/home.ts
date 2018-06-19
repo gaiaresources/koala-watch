@@ -1,3 +1,4 @@
+import { Component } from '@angular/core';
 import {
     FabContainer,
     IonicPage,
@@ -7,15 +8,12 @@ import {
     NavParams,
     ToastController
 } from 'ionic-angular';
-import { Component } from '@angular/core';
+
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { APIError, Record } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
-import { APIService } from '../../biosys-core/services/api.service';
-import { RecordsMapComponent } from '../../components/records-map/records-map';
-import { RecordsListComponent } from '../../components/records-list/records-list';
 import { mergeMap } from 'rxjs/operators';
-import { from } from 'rxjs/observable/from';
+import { UploadService } from '../../shared/services/upload.service';
 
 @IonicPage()
 @Component({
@@ -33,7 +31,7 @@ export class HomePage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private loadingCtrl: LoadingController,
                 private toastCtrl: ToastController, private storageService: StorageService,
-                private apiService: APIService) {
+                private uploadService: UploadService) {
         this.loading = this.loadingCtrl.create({
             content: 'Uploading records'
         });
@@ -46,22 +44,19 @@ export class HomePage {
     public clickedUpload() {
         this.loading.present();
 
-        // take all valid records, one-by-one create them on the server and after they've been successfully created,
-        // delete from storage. One all records are created, refresh the records list.
-        this.storageService.getAllValidRecords().pipe(
-            mergeMap((clientRecord: ClientRecord) =>
-                this.apiService.createRecord(clientRecord).pipe(
-                    mergeMap((record: Record) => this.storageService.deleteRecord(record.client_id))
-                )
-            )
+        this.uploadService.uploadValidRecords().pipe(
+            mergeMap(([clientRecord, record]: [ClientRecord, Record]) =>
+                this.uploadService.uploadRecordPhotos(record, clientRecord.photoIds))
         ).subscribe({
             error: (error: APIError) => {
                 this.loading.dismiss();
+
                 this.toastCtrl.create({
                     message: `Some records failed to upload: ${error.msg}`,
                     duration: HomePage.MESSAGE_DURATION,
                     cssClass: 'toast-message'
                 }).present();
+
                 this.loadRecords();
             },
             complete: () => {
@@ -71,6 +66,7 @@ export class HomePage {
                     duration: HomePage.MESSAGE_DURATION,
                     cssClass: 'toast-message'
                 }).present();
+
                 this.loadRecords();
             }
         });
