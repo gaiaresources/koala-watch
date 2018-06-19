@@ -32,28 +32,33 @@ export class ObservationPage {
     private showLeavingAlertMessage: boolean = true;
     private record: ClientRecord;
     private dataset: Dataset;
+    private recordClientId: string;
 
     constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
                 private alertController: AlertController) {
     }
 
     public ionViewDidEnter() {
-        let recordClientId = this.navParams.get('recordClientId');
-        this.isNewRecord = !recordClientId;
-
+        this.recordClientId = this.navParams.get('recordClientId');
+        this.isNewRecord = !this.recordClientId;
+        if (!this.recordClientId) {
+            this.recordClientId = UUID.UUID();
+            this.photoGallery.RecordId = this.recordClientId;
+        }
+        console.log('recordClientId: ', this.recordClientId);
         this.parentId = this.navParams.get('parentId');
 
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
             this.dataset = dataset;
 
-            if (recordClientId) {
+            if (!this.isNewRecord) {
                 // if this is an existing record, set form values from data
-                this.storageService.getRecord(recordClientId).subscribe(
+                this.storageService.getRecord(this.recordClientId).subscribe(
                     record => {
                         this.record = record;
                         console.log(this.recordForm);
                         this.recordForm.value = record.data;
-                        this.photoGallery.RecordId = recordClientId;
+                        this.photoGallery.RecordId = this.recordClientId;
                         this.photoGallery.PhotoIds = record.photoIds;
                     }
                 );
@@ -93,7 +98,7 @@ export class ObservationPage {
 
         this.storageService.putRecord({
             valid: this.recordForm.valid,
-            client_id: !!this.record ? this.record.client_id : UUID.UUID(),
+            client_id: this.recordClientId,
             dataset: this.dataset.id,
             datasetName: this.navParams.get('datasetName'),
             parentId: this.parentId,
