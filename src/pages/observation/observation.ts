@@ -2,12 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { UUID } from 'angular2-uuid';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { APIService } from "../../biosys-core/services/api.service";
 import { PhotoGalleryComponent } from "../../components/photo-gallery/photo-gallery";
@@ -20,6 +20,7 @@ import { PhotoGalleryComponent } from "../../components/photo-gallery/photo-gall
 export class ObservationPage {
     public showForm: boolean = true;
     public isNewRecord: boolean = true;
+    public parentId: string;
 
     @ViewChild(RecordFormComponent)
     private recordForm: RecordFormComponent;
@@ -31,11 +32,8 @@ export class ObservationPage {
     private record: ClientRecord;
     private dataset: Dataset;
 
-    constructor(private navCtrl: NavController,
-                private navParams: NavParams,
-                private storageService: StorageService,
-                private apiService: APIService,
-                private alertController: AlertController) {
+    constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
+                private alertController: AlertController, private apiService: APIService) {
         if (!this.navParams.get('datasetName')) {
             this.showLeavingAlertMessage = false;
             this.navCtrl.pop();
@@ -109,13 +107,13 @@ export class ObservationPage {
     public save() {
         this.photoGallery.commit();
         const formValues: object = this.recordForm.value;
-        let parent_id = this.navParams.get('parent'); // FIXME: TONY PARENT_ID IS HERE
 
         this.storageService.putRecord({
             valid: this.recordForm.valid,
             client_id: !!this.record ? this.record.client_id : UUID.UUID(),
             dataset: this.dataset.id,
             datasetName: this.navParams.get('datasetName'),
+            parentId: this.parentId,
             datetime: this.recordForm.dateFieldKey ? formValues[this.recordForm.dateFieldKey] : moment().format(),
             data: formValues,
             count: !!formValues['Count'] ? formValues['Count'] : 0,

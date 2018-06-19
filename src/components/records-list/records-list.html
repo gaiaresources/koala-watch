@@ -1,20 +1,66 @@
 <ion-content>
-<div *ngIf="showLegend" id="category-legend-div">
-    <table id="category-legend">
-        <td class="category-legend-colour" id="category-completed"></td>
-        <td class="category-legend-label">Complete</td>
-        <td class="category-legend-colour" id="category-incomplete"></td>
-        <td class="category-legend-label">Incomplete</td>
-    </table>
-</div>
+    <div [hidden]="records.length==0 || !showLegend" id="category-legend-div">
+        <table id="category-legend">
+            <td class="category-legend-colour" id="category-completed"></td>
+            <td class="category-legend-label">Complete</td>
+            <td class="category-legend-colour" id="category-incomplete"></td>
+            <td class="category-legend-label">Incomplete</td>
+        </table>
+    </div>
 
-<ion-list>
-    <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
-            (click)="itemTapped($event, record)">
-        <img item-start class="data-row" [src]="getIcon(record)"/>
-        <ion-label>{{ record.datetime | date: angularDateFormat }}</ion-label>
-        <img *ngIf="record.count" item-end class="data-row" src="assets/imgs/koala_data_koala.png"/>
-        <span item-end>{{ record.count }}</span>
-    </button>
-</ion-list>
+    <div [hidden]="records.length==0">
+        <ion-list>
+            <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
+                    (click)="itemTapped($event, record)">
+                <img item-start class="data-row" [src]="getIcon(record)"/>
+                <ion-label>{{ record.datetime | date: angularDateFormat }}</ion-label>
+                <img *ngIf="record.count" item-end class="data-row" src="assets/imgs/koala_data_koala.png"/>
+                <span item-end>{{ record.count }}</span>
+            </button>
+        </ion-list>
+    </div>
+
+    <div [hidden]="records.length > 0" class="no-data-div">
+        <div style="padding: 10%; min-height: 300px">
+            <ion-grid>
+                <ion-row style="padding-bottom: 1em;">
+                    <h1 class="no-stuff">No Data Is Available:</h1>
+                </ion-row>
+                <ion-row *ngIf="haveObo">
+                    <ion-col>
+                        <button ion-fab style="background-color: green"
+                                (click)="onClickedNewRecord('Koala Opportunistic Observation')">
+                            <img alt="Koala Opportunistic Observation"
+                                 src="assets/imgs/koala_new_eye.png">
+                        </button>
+                    </ion-col>
+                    <ion-col>
+                        <h1 class="no-stuff" style="vertical-align: middle">Create an Opportunistic Observation</h1>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="haveCensus">
+                    <ion-col>
+                        <button ion-fab style="background-color: green" (click)="onClickedNewRecord('KLM-SAT Census')">
+                            <img alt="Koala Census"
+                                 src="assets/imgs/koala_new_poop.png">
+                        </button>
+                    </ion-col>
+                    <ion-col>
+                        <h1 class="no-stuff" style="vertical-align: middle">Start a Census</h1>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="haveTree">
+                    <ion-col>
+                        <button ion-fab style="background-color: green" (click)="onClickedNewRecord('KLM-SAT Tree Sighting')">
+                            <img alt="Koala Tree Survey"
+                                 src="assets/imgs/koala_new_tree.png">
+                        </button>
+                    </ion-col>
+                    <ion-col>
+                        <h1 class="no-stuff" style="vertical-align: middle">Start a Tree Survey</h1>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+    </div>
 </ion-content>

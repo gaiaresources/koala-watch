@@ -1,7 +1,6 @@
-import { GoogleMap, GoogleMapOptions, GoogleMaps, LatLng, } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, LatLng, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
-import { ClientRecord } from "../../shared/interfaces/mobile.interfaces";
-import { l } from "@angular/core/src/render3";
+import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 
 @Component({
     selector: 'records-map',
@@ -42,9 +41,9 @@ export class RecordsMapComponent implements OnInit {
             this.loadMarkers();
         }
     }
-    
+
     public ionViewWillEnter() {
-        //this.loadMarkers();
+        this.loadMarkers();
     }
 
     private loadMarkers() {
