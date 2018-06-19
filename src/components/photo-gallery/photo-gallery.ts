@@ -72,6 +72,14 @@ export class PhotoGalleryComponent {
         }
     }
 
+    public showLeftChevron(): boolean {
+        return this.photoIndex > 0
+    }
+
+    public showRightChevron(): boolean {
+        return this._photoIds && this.photoIndex < this._photoIds.length - 1;
+    }
+
     public pageLeftClick() {
         if (this.photoIndex > 0) {
             this.photoIndex -= 1;
@@ -120,7 +128,7 @@ export class PhotoGalleryComponent {
     }
 
     public takePhoto() {
-        if (this._photoIds.length >= 3) {
+        if (this._photoIds.length >= 10) {
             alert('Maximum number of photos reached');
             return;
         }
