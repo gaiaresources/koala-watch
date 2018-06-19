@@ -16,10 +16,10 @@ export class AppComponent implements OnInit {
     @ViewChild(Nav) nav: Nav;
 
     public menuItems: object[] = [
-        {title: 'Home', page: 'HomePage', img: 'assets/imgs/koala_home.png'},
-        {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/koala_settings.png'},
-        {title: 'About', page: 'AboutPage', img: 'assets/imgs/koala_about.png'},
-        {title: 'Logout', img: 'assets/imgs/koala_logout.png'},
+        {title: 'Home', page: 'HomePage', img: 'assets/imgs/home.png'},
+        {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/settings.png'},
+        {title: 'About', page: 'AboutPage', img: 'assets/imgs/about.png'},
+        {title: 'Logout', img: 'assets/imgs/logout.png'},
     ];
 
     constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,

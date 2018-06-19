@@ -87,6 +87,8 @@ export class ObservationPage {
         this.photoGallery.commit();
         const formValues: object = this.recordForm.value;
 
+        const count = !!formValues['Count'] ? formValues['Count'] : !!formValues['Koala #'] ? formValues['Koala #'] : 0;
+
         this.storageService.putRecord({
             valid: this.recordForm.valid,
             client_id: !!this.record ? this.record.client_id : UUID.UUID(),
@@ -95,7 +97,7 @@ export class ObservationPage {
             parentId: this.parentId,
             datetime: this.recordForm.dateFieldKey ? formValues[this.recordForm.dateFieldKey] : moment().format(),
             data: formValues,
-            count: !!formValues['Count'] ? formValues['Count'] : 0,
+            count: count,
             photoIds: this.photoGallery.PhotoIds
         }).subscribe((result: boolean) => {
             if (result) {
