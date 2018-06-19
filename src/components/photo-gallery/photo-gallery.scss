@@ -9,6 +9,7 @@
     position: absolute;
     top: 50%;
     left: 16px;
+    transform: translate(0%, -50%);
 }
 
 .center-right {
@@ -16,6 +17,7 @@
     position: absolute;
     top: 50%;
     right: 16px;
+    transform: translate(0%, -50%);
 }
 
 .bottom-right {

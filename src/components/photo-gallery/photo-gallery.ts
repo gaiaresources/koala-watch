@@ -72,6 +72,14 @@ export class PhotoGalleryComponent {
         }
     }
 
+    public showLeftChevron(): boolean {
+        return this.photoIndex > 0
+    }
+
+    public showRightChevron(): boolean {
+        return this._photoIds && this._photoIds.length > 0 && this.photoIndex < this._photoIds.length - 1;
+    }
+
     public pageLeftClick() {
         if (this.photoIndex > 0) {
             this.photoIndex -= 1;
