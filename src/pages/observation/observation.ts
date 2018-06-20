@@ -55,13 +55,10 @@ export class ObservationPage {
                 this.storageService.getRecord(this.recordClientId).subscribe(
                     record => {
                         this.record = record;
-                        console.log(this.recordForm);
                         this.recordForm.value = record.data;
                         this.photoGallery.PhotoIds = record.photoIds;
                     }
                 );
-            } else {
-                this.photoGallery.RecordId = this.recordClientId;
             }
         });
     }
