@@ -33,9 +33,9 @@ export class CensusPage {
 
     public segmentContent = 'form';
     public dataset: Dataset;
-    public recordClientId: string;
 
     private record: ClientRecord;
+    private recordClientId: string;
 
     @ViewChild(RecordFormComponent)
     private recordForm: RecordFormComponent;
@@ -45,8 +45,15 @@ export class CensusPage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService,
                 private alertController: AlertController) {
+    }
+
+    public ionViewDidEnter() {
         this.recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !this.recordClientId;
+        if (this.isNewRecord) {
+            this.recordClientId = UUID.UUID();
+        }
+        this.photoGallery.RecordId = this.recordClientId;
 
         // just during dev
         const datasetName = this.navParams.get('datasetName') || 'KLM-SAT Census';
@@ -54,18 +61,15 @@ export class CensusPage {
         this.storageService.getDataset(datasetName).subscribe((dataset: Dataset) => {
             this.dataset = dataset;
 
-            if (this.recordClientId) {
+            if (!this.isNewRecord) {
                 // if this is an existing record, set form values from data
                 this.storageService.getRecord(this.recordClientId).subscribe(
                     record => {
                         this.record = record;
                         this.recordForm.value = record.data;
-                        this.photoGallery.RecordId = this.recordClientId;
                         this.photoGallery.PhotoIds = record.photoIds;
                     }
                 );
-            } else {
-                this.recordClientId = UUID.UUID();
             }
         });
     }
@@ -91,7 +95,7 @@ export class CensusPage {
 
         this.storageService.putRecord({
             valid: this.recordForm.valid && this.observationRecords.reduce((acc, cur) => cur.valid && acc, true),
-            client_id: !!this.record ? this.record.client_id : UUID.UUID(),
+            client_id: this.recordClientId,
             dataset: this.dataset.id,
             datasetName: this.navParams.get('datasetName'),
             datetime: this.recordForm.dateFieldKey ? formValues[this.recordForm.dateFieldKey] : moment().format(),
