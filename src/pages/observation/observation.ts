@@ -19,8 +19,8 @@ import { mergeMap } from 'rxjs/operators';
     templateUrl: 'observation.html'
 })
 export class ObservationPage {
-    public showForm: boolean = true;
-    public isNewRecord: boolean = true;
+    public showForm = true;
+    public isNewRecord = true;
     public parentId: string;
 
     @ViewChild(RecordFormComponent)
@@ -29,34 +29,39 @@ export class ObservationPage {
     @ViewChild(PhotoGalleryComponent)
     private photoGallery: PhotoGalleryComponent;
 
-    private showLeavingAlertMessage: boolean = true;
+    private showLeavingAlertMessage = true;
     private record: ClientRecord;
     private dataset: Dataset;
+    private recordClientId: string;
 
     constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
                 private alertController: AlertController) {
     }
 
     public ionViewDidEnter() {
-        let recordClientId = this.navParams.get('recordClientId');
-        this.isNewRecord = !recordClientId;
-
+        this.recordClientId = this.navParams.get('recordClientId');
+        this.isNewRecord = !this.recordClientId;
+        if (this.isNewRecord) {
+            this.recordClientId = UUID.UUID();
+        }
+        this.photoGallery.RecordId = this.recordClientId;
         this.parentId = this.navParams.get('parentId');
 
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
             this.dataset = dataset;
 
-            if (recordClientId) {
+            if (!this.isNewRecord) {
                 // if this is an existing record, set form values from data
-                this.storageService.getRecord(recordClientId).subscribe(
+                this.storageService.getRecord(this.recordClientId).subscribe(
                     record => {
                         this.record = record;
                         console.log(this.recordForm);
                         this.recordForm.value = record.data;
-                        this.photoGallery.RecordId = recordClientId;
                         this.photoGallery.PhotoIds = record.photoIds;
                     }
                 );
+            } else {
+                this.photoGallery.RecordId = this.recordClientId;
             }
         });
     }
@@ -93,7 +98,7 @@ export class ObservationPage {
 
         this.storageService.putRecord({
             valid: this.recordForm.valid,
-            client_id: !!this.record ? this.record.client_id : UUID.UUID(),
+            client_id: !!this.record ? this.record.client_id : this.recordClientId,
             dataset: this.dataset.id,
             datasetName: this.navParams.get('datasetName'),
             parentId: this.parentId,
