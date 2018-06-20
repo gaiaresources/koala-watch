@@ -16,19 +16,21 @@ export class RecordsListComponent {
     @Input()
     public showLegend = true;
     @Input()
-    public theRealNavController: NavController = undefined;
+    public baseNavController: NavController;
     @Input()
     public parent: string;
     @Input()
-    public haveObo = true;
+    public haveObservation = true;
     @Input()
     public haveCensus = true;
     @Input()
     public haveTree = true;
+    @Input()
+    public haveWelcome = true;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams) {
-        this.theRealNavController = (this.navParams.data.hasOwnProperty('navCtrl') ? this.navParams.get('navCtrl') : undefined);
+        this.baseNavController = (this.navParams.data.hasOwnProperty('navCtrl') ? this.navParams.get('navCtrl') : undefined);
         this.records = (this.navParams.data.hasOwnProperty('data') ? this.navParams.get('data') : []);
         if (this.navParams.data.hasOwnProperty('haveTree')) {
             this.haveTree = this.navParams.get('haveTree');
@@ -36,8 +38,8 @@ export class RecordsListComponent {
         if (this.navParams.data.hasOwnProperty('haveCensus')) {
             this.haveCensus = this.navParams.get('haveCensus');
         }
-        if (this.navParams.data.hasOwnProperty('haveObo')) {
-            this.haveObo = this.navParams.get('haveObo');
+        if (this.navParams.data.hasOwnProperty('haveObservation')) {
+            this.haveObservation = this.navParams.get('haveObservation');
         }
         if (this.navParams.data.hasOwnProperty('showLegend')) {
             this.showLegend = this.navParams.get('showLegend');
@@ -71,10 +73,10 @@ export class RecordsListComponent {
     }
 
     private navPush(page, params) {
-        if (this.theRealNavController === undefined) {
+        if (this.baseNavController === undefined) {
             this.navCtrl.push(page, params);
         } else {
-            this.theRealNavController.push(page, params);
+            this.baseNavController.push(page, params);
         }
     }
 

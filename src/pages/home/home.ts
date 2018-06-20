@@ -83,9 +83,6 @@ export class HomePage {
     }
 
     private loadRecords() {
-        this.storageService.getParentRecords().subscribe(
-            (record: ClientRecord) => {
-                this.records.push(record);
-            });
+        this.storageService.getParentRecords().subscribe((record: ClientRecord) => this.records.push(record));
     }
 }

@@ -1,5 +1,5 @@
 <ion-content style="min-height: 500px">
-    <div [hidden]="records.length==0 || !showLegend" id="category-legend-div">
+    <div [hidden]="!records.length || !showLegend" id="category-legend-div">
         <table id="category-legend">
             <td class="category-legend-colour" id="category-completed"></td>
             <td class="category-legend-label">Complete</td>
@@ -8,7 +8,7 @@
         </table>
     </div>
 
-    <div [hidden]="records.length==0">
+    <div [hidden]="!records.length">
         <ion-list>
             <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
                     (click)="itemTapped($event, record)">
@@ -23,10 +23,15 @@
     <div [hidden]="records.length > 0" class="no-data-div">
         <div id="no-data-div">
             <ion-grid>
-                <ion-row style="padding-bottom: 1em;">
-                    <h1 class="no-stuff">No Data Is Available:</h1>
+                <ion-row *ngIf="haveWelcome" style="padding-bottom: 1em;">
+                    <h1 class="no-data">Welcome to Koala Watch</h1>
+                    <p class="no-data">On this screen you can view records you are currently
+                    working with, and start a new census or observation. You can also switch between a list or map of your data using the tabs above.</p>
                 </ion-row>
-                <ion-row *ngIf="haveObo">
+                <ion-row *ngIf="!haveWelcome" style="padding-bottom: 1em;">
+                    <h1 class="no-data">No Data Is Available:</h1>
+                </ion-row>
+                <ion-row *ngIf="haveObservation">
                     <ion-col>
                         <button ion-fab style="background-color: green"
                                 (click)="onClickedNewRecord('Koala Opportunistic Observation')">
@@ -35,7 +40,7 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-stuff" style="vertical-align: middle">Create an Opportunistic Observation</h1>
+                        <h1 class="no-data" style="vertical-align: middle">Create an Opportunistic Observation</h1>
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveCensus">
@@ -46,7 +51,7 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-stuff" style="vertical-align: middle">Start a Census</h1>
+                        <h1 class="no-data" style="vertical-align: middle">Start a Census</h1>
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveTree">
@@ -57,7 +62,7 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-stuff" style="vertical-align: middle">Start a Tree Survey</h1>
+                        <h1 class="no-data" style="vertical-align: middle">Start a Tree Survey</h1>
                     </ion-col>
                 </ion-row>
             </ion-grid>

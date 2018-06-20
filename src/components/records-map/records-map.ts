@@ -59,8 +59,6 @@ export class RecordsMapComponent implements OnInit {
                     if (record.hasOwnProperty('data') &&
                         record.data.hasOwnProperty('Latitude') &&
                         record.data.hasOwnProperty('Longitude')) {
-                        console.log(record.data);
-                        alert(record.data.toString());
                         this.map.addMarkerSync({
                             title: record.data['First Date'],
                             icon: record.valid ? 'green' : 'blue',

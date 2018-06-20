@@ -52,9 +52,10 @@
         </div>
         <div [hidden]="segmentContent != 'observations'">
             <records-list
+                    [haveWelcome]="false"
                     [showLegend]="true"
-                    [haveCensus]="false" [haveObo]="false" [haveTree]="true"
-                    [theRealNavController]="censusNavCtrl"
+                    [haveCensus]="false" [haveObservation]="false" [haveTree]="true"
+                    [baseNavController]="censusNavCtrl"
                     [parent]="recordClientId"
                     [records]="observationRecords"></records-list>
         </div>
