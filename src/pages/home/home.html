@@ -8,40 +8,23 @@
 </ion-header>
 
 <ion-content>
-    <ion-segment [(ngModel)]="showList">
-        <ion-segment-button [value]="true">
-            List
-        </ion-segment-button>
-        <ion-segment-button [value]="false">
-            Map
-        </ion-segment-button>
-    </ion-segment>
+    <ion-tabs tabsPlacement="top">
+        <ion-tab tabTitle="List" title="List" [rootParams]="{showLegend: true, data: records, navCtrl: navCtrl, haveTree: false}" [root]="recordsList"></ion-tab>
+        <ion-tab tabTitle="Map" title="Map"  [rootParams]="{data:records}" [root]="recordsMap"></ion-tab>
+    </ion-tabs>
 
-    <div class="home-tab-content">
-        <div *ngIf="showList" class="home-tab-content">
-            <records-list [records]="records"></records-list>
-        </div>
-        <div *ngIf="!showList" class="home-tab-content">
-            <records-map [records]="records"></records-map>
-        </div>
-    </div>
-</ion-content>
-
-<ion-fab bottom right #addFab>
-    <button ion-fab>
-        <ion-icon name="add"></ion-icon>
-    </button>
-    <ion-fab-list side="top">
-        <button ion-fab (click)="onClickedNewRecord('KLM-SAT Census', addFab)">
+    <ion-fab bottom left>
+        <button ion-fab (click)="clickedUpload()">
+            <ion-icon name="cloud-upload"></ion-icon>
+        </button>
+    </ion-fab>
+    <ion-fab bottom right>
+        <button ion-fab (click)="onClickedNewRecord('KLM-SAT Census')">
             <img alt="KLM-SAT Census" class="home-fab-icon" src="assets/imgs/white_poop.png">
         </button>
-        <button ion-fab (click)="onClickedNewRecord('Koala Opportunistic Observation', addFab)">
+        <button ion-fab (click)="onClickedNewRecord('Koala Opportunistic Observation')">
             <img alt="Koala Opportunistic Observation" class="home-fab-icon" src="assets/imgs/white_eye.png">
         </button>
-    </ion-fab-list>
-</ion-fab>
-<ion-fab bottom left>
-    <button ion-fab (click)="clickedUpload()">
-        <ion-icon name="cloud-upload"></ion-icon>
-    </button>
-</ion-fab>
+    </ion-fab>
+
+</ion-content>

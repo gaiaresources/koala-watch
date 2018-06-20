@@ -4,14 +4,14 @@ import { IonicModule } from 'ionic-angular';
 import { NgModule } from '@angular/core';
 import { RecordFormComponent } from './record-form/record-form';
 import { SharedModule } from '../shared/shared.module';
-import { PhotoGalleryComponent } from './photo-gallery/photo-gallery';
+import { PhotoGalleryComponent } from "./photo-gallery/photo-gallery";
 
 @NgModule({
     declarations: [
         RecordsListComponent,
         RecordsMapComponent,
         RecordFormComponent,
-        PhotoGalleryComponent
+        PhotoGalleryComponent,
     ],
     imports: [
         IonicModule,
@@ -19,13 +19,14 @@ import { PhotoGalleryComponent } from './photo-gallery/photo-gallery';
     ],
     entryComponents: [
         RecordsListComponent,
-        RecordsMapComponent
+        RecordsMapComponent,
+        RecordsMapComponent,
     ],
     exports: [
         RecordsListComponent,
         RecordsMapComponent,
         RecordFormComponent,
-        PhotoGalleryComponent
+        PhotoGalleryComponent,
     ]
 })
 export class ComponentsModule {

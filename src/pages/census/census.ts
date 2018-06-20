@@ -27,7 +27,7 @@ import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gall
 })
 export class CensusPage {
     public observationRecords: ClientRecord[] = [];
-    public isNewRecord: boolean = true;
+    public isNewRecord = true;
 
     public segmentContent = 'form';
     public dataset: Dataset;
@@ -41,17 +41,20 @@ export class CensusPage {
     @ViewChild(PhotoGalleryComponent)
     private photoGallery: PhotoGalleryComponent;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService) {
+    constructor(public censusNavCtrl: NavController,
+                public navParams: NavParams,
+                private storageService: StorageService) {
         this.recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !this.recordClientId;
-
+        if (this.isNewRecord) {
+            this.recordClientId = UUID.UUID();
+        }
         // just during dev
         const datasetName = this.navParams.get('datasetName') || 'KLM-SAT Census';
 
         this.storageService.getDataset(datasetName).subscribe((dataset: Dataset) => {
             this.dataset = dataset;
-
-            if (this.recordClientId) {
+            if (!this.isNewRecord) {
                 // if this is an existing record, set form values from data
                 this.storageService.getRecord(this.recordClientId).subscribe(
                     record => {
@@ -61,14 +64,12 @@ export class CensusPage {
                         this.photoGallery.PhotoIds = record.photoIds;
                     }
                 );
-            } else {
-                this.recordClientId = UUID.UUID();
             }
         });
     }
 
     public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
-        this.navCtrl.push('ObservationPage', {
+        this.censusNavCtrl.push('ObservationPage', {
             datasetName: datasetName,
             parentId: this.recordClientId
         });
@@ -97,7 +98,7 @@ export class CensusPage {
             photoIds: this.photoGallery.PhotoIds
         }).subscribe((result: boolean) => {
             if (result) {
-                this.navCtrl.pop();
+                this.censusNavCtrl.pop();
             }
         });
     }

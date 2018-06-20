@@ -45,11 +45,19 @@
 
     <div>
         <div [hidden]="segmentContent != 'form'">
-            <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord" [key]="recordClientId">
+            <record-form [dataset]="dataset"
+                         [initializeDefaultValues]="isNewRecord"
+                         [key]="recordClientId">
             </record-form>
         </div>
         <div [hidden]="segmentContent != 'observations'">
-            <records-list [records]="observationRecords"></records-list>
+            <records-list
+                    [haveWelcome]="false"
+                    [showLegend]="true"
+                    [haveCensus]="false" [haveObservation]="false" [haveTree]="true"
+                    [baseNavController]="censusNavCtrl"
+                    [parent]="recordClientId"
+                    [records]="observationRecords"></records-list>
         </div>
         <div [hidden]="segmentContent != 'photos'">
             <photo-gallery></photo-gallery>

@@ -1,7 +1,5 @@
 div.home-tab-content {
   width: 100%;
-  bottom: 0;
-  top: 0;
 }
 
 .fab-list-active {
@@ -10,4 +8,13 @@ div.home-tab-content {
 
 .toast-message {
     text-align: center;
+}
+
+ion-fab {
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+button.fab.fab-md {
+  margin-top: 1em;
 }

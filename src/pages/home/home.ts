@@ -13,6 +13,8 @@ import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { APIError, Record } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { mergeMap } from 'rxjs/operators';
+import { RecordsListComponent } from '../../components/records-list/records-list';
+import { RecordsMapComponent } from '../../components/records-map/records-map';
 import { UploadService } from '../../shared/services/upload.service';
 
 @IonicPage()
@@ -23,15 +25,19 @@ import { UploadService } from '../../shared/services/upload.service';
 export class HomePage {
     public static readonly MESSAGE_DURATION = 3000;
 
-    public showList: boolean = true;
+    public showList = true;
 
     public records: ClientRecord[];
 
     private loading: Loading;
 
+    public recordsList = RecordsListComponent;
+    public recordsMap = RecordsMapComponent;
+
     constructor(public navCtrl: NavController, public navParams: NavParams, private loadingCtrl: LoadingController,
                 private toastCtrl: ToastController, private storageService: StorageService,
                 private uploadService: UploadService) {
+        this.records = [];
         this.loading = this.loadingCtrl.create({
             content: 'Uploading records'
         });
@@ -43,7 +49,6 @@ export class HomePage {
 
     public clickedUpload() {
         this.loading.present();
-
         this.uploadService.uploadValidRecords().pipe(
             mergeMap(([clientRecord, record]: [ClientRecord, Record]) =>
                 this.uploadService.uploadRecordPhotos(record, clientRecord.photoIds))
@@ -72,17 +77,15 @@ export class HomePage {
         });
     }
 
-    public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
+    public onClickedNewRecord(datasetName: string) {
         const page = datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
-
         this.navCtrl.push(page, {datasetName: datasetName});
-        fabContainer.close();
     }
 
     private loadRecords() {
-        this.records = [];
-        this.storageService.getParentRecords().subscribe(
-            (record: ClientRecord) => this.records.push(record)
-        );
+        while (this.records.length > 0) {
+            this.records.pop();
+        }
+        this.storageService.getParentRecords().subscribe((record: ClientRecord) => this.records.push(record));
     }
 }

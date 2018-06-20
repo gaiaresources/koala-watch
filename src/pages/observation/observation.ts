@@ -9,6 +9,7 @@ import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { RecordFormComponent } from '../../components/record-form/record-form';
+import { APIService } from '../../biosys-core/services/api.service';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
@@ -19,8 +20,8 @@ import { mergeMap } from 'rxjs/operators';
     templateUrl: 'observation.html'
 })
 export class ObservationPage {
-    public showForm: boolean = true;
-    public isNewRecord: boolean = true;
+    public showForm = true;
+    public isNewRecord = true;
     public parentId: string;
 
     @ViewChild(RecordFormComponent)
@@ -29,34 +30,52 @@ export class ObservationPage {
     @ViewChild(PhotoGalleryComponent)
     private photoGallery: PhotoGalleryComponent;
 
-    private showLeavingAlertMessage: boolean = true;
+    private showLeavingAlertMessage = true;
     private record: ClientRecord;
     private dataset: Dataset;
 
     constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
-                private alertController: AlertController) {
-    }
+                private alertController: AlertController, private apiService: APIService) {
+        if (!this.navParams.get('datasetName')) {
+            this.showLeavingAlertMessage = false;
+            this.navCtrl.pop();
+        }
 
-    public ionViewDidEnter() {
-        let recordClientId = this.navParams.get('recordClientId');
+        const recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !recordClientId;
 
-        this.parentId = this.navParams.get('parentId');
-
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
-            this.dataset = dataset;
+            if (dataset) {
+                this.dataset = dataset;
 
-            if (recordClientId) {
-                // if this is an existing record, set form values from data
-                this.storageService.getRecord(recordClientId).subscribe(
-                    record => {
-                        this.record = record;
-                        console.log(this.recordForm);
-                        this.recordForm.value = record.data;
-                        this.photoGallery.RecordId = recordClientId;
-                        this.photoGallery.PhotoIds = record.photoIds;
+                if (recordClientId) {
+                    // if this is an existing record, set form values from data
+                    this.storageService.getRecord(recordClientId).subscribe(
+                        record => {
+                            this.record = record;
+                            this.recordForm.value = record.data;
+                            this.photoGallery.RecordId = recordClientId;
+                            this.photoGallery.PhotoIds = record.photoIds;
+                        }
+                    );
+                }
+            } else {
+                this.apiService.getDatasets().subscribe((datasets: Dataset[]) => {
+                    for (const ds of datasets) {
+                        if (ds.name === this.navParams.get('datasetName')) {
+                            this.dataset = ds;
+                            this.storageService.putDataset(ds);
+                        }
+                        // if this is an existing record, set form values from data
+                        this.storageService.getRecord(recordClientId).subscribe(
+                            record => {
+                                this.record = record;
+                                this.recordForm.value = record.data;
+                            }, (error) => {
+                                alert('Error ' + error.msg);
+                            });
                     }
-                );
+                });
             }
         });
     }
