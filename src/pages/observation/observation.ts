@@ -41,6 +41,10 @@ export class ObservationPage {
             this.navCtrl.pop();
         }
 
+        if (this.navParams.data.hasOwnProperty('parentId')) {
+            this.parentId = this.navParams.get('parentId');
+        }
+
         const recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !recordClientId;
 

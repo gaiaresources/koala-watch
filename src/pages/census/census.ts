@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { AlertController, Events, FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
@@ -77,7 +77,10 @@ export class CensusPage {
 
     public ionViewWillEnter() {
         if (this.recordClientId) {
-            this.observationRecords = [];
+            while (this.observationRecords.length > 0) {
+                this.observationRecords.pop();
+            }
+            // this.observationRecords = [];
             this.storageService.getChildRecords(this.recordClientId).subscribe(
                 (record: ClientRecord) => this.observationRecords.push(record)
             );

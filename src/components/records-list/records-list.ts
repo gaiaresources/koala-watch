@@ -18,7 +18,7 @@ export class RecordsListComponent {
     @Input()
     public baseNavController: NavController;
     @Input()
-    public parent: string;
+    public parentId: string;
     @Input()
     public haveObservation = true;
     @Input()
@@ -98,8 +98,8 @@ export class RecordsListComponent {
         if (datasetName.toLowerCase().indexOf('census') > -1) {
             page = 'CensusPage';
         } else {
-            if (this.parent) {
-                params['parentId'] = this.parent;
+            if (this.parentId) {
+                params['parentId'] = this.parentId;
             }
             page = 'ObservationPage';
         }

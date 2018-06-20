@@ -53,10 +53,10 @@
         <div [hidden]="segmentContent != 'observations'">
             <records-list
                     [haveWelcome]="false"
-                    [showLegend]="true"
+                    [showLegend]="false"
                     [haveCensus]="false" [haveObservation]="false" [haveTree]="true"
                     [baseNavController]="censusNavCtrl"
-                    [parent]="recordClientId"
+                    [parentId]="recordClientId"
                     [records]="observationRecords"></records-list>
         </div>
         <div [hidden]="segmentContent != 'photos'">
