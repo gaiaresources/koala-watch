@@ -11,6 +11,8 @@ import { ObservationPage } from '../observation/observation';
 import { StorageService } from '../../shared/services/storage.service';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
+import { from } from 'rxjs/observable/from';
+import { mergeMap } from 'rxjs/operators';
 
 
 /**
@@ -27,7 +29,7 @@ import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gall
 })
 export class CensusPage {
     public observationRecords: ClientRecord[] = [];
-    public isNewRecord: boolean = true;
+    public isNewRecord = true;
 
     public segmentContent = 'form';
     public dataset: Dataset;
@@ -41,7 +43,8 @@ export class CensusPage {
     @ViewChild(PhotoGalleryComponent)
     private photoGallery: PhotoGalleryComponent;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService,
+                private alertController: AlertController) {
         this.recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !this.recordClientId;
 
@@ -101,4 +104,31 @@ export class CensusPage {
             }
         });
     }
+
+    public delete() {
+        this.alertController.create({
+            title: 'Census',
+            message: 'Are you sure you want to delete this census?',
+            enableBackdropDismiss: true,
+            buttons: [
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        this.photoGallery.rollback();
+                        this.storageService.deleteRecord(this.record.client_id).subscribe( deleted => {
+                            if (this.record.photoIds) {
+                                from(this.record.photoIds).pipe(
+                                    mergeMap( photoId => this.storageService.deletePhoto(photoId) )
+                                ).subscribe();
+                            }
+                            this.navCtrl.pop();
+                        });
+                    }
+                },
+                {
+                    text: 'No'
+                }]
+        }).present();
+    }
+
 }
