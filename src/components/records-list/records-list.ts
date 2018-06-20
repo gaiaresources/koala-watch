@@ -16,7 +16,7 @@ export class RecordsListComponent {
     public records: ClientRecord[];
 
     @Input()
-    public showLegend: boolean = true;
+    public showLegend = true;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
 

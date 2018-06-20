@@ -29,7 +29,7 @@ export class LoginPage {
         this.form = this.formBuilder.group({
             'username': ['', Validators.required],
             'password': ['', Validators.required]
-        })
+        });
     }
 
     public login() {
@@ -40,7 +40,7 @@ export class LoginPage {
                     ))
                 ).subscribe();
 
-                this.navCtrl.setRoot('HomePage')
+                this.navCtrl.setRoot('HomePage');
             },
             (error) => this.alertController.create({
                 title: 'Login Problem',

@@ -49,7 +49,7 @@ export class RecordsMapComponent implements OnInit {
     private loadMarkers() {
         this.map.clear();
 
-        for (let record of this._records) {
+        for (const record of this._records) {
             if (record.hasOwnProperty('data') && record.data.hasOwnProperty('Latitude') &&
                     record.data.hasOwnProperty('Longitude')) {
                 this.map.addMarkerSync({
