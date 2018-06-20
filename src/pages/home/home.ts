@@ -23,7 +23,7 @@ import { UploadService } from '../../shared/services/upload.service';
 export class HomePage {
     public static readonly MESSAGE_DURATION = 3000;
 
-    public showList: boolean = true;
+    public showList = true;
 
     public records: ClientRecord[];
 

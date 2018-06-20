@@ -27,7 +27,7 @@ export class RecordFormComponent {
     private _dateFieldKey: string;
 
     @Input()
-    public initializeDefaultValues: boolean = false;
+    public initializeDefaultValues = false;
 
     @Input()
     public set dataset(dataset: Dataset) {
@@ -82,7 +82,7 @@ export class RecordFormComponent {
                 this.geolocation.watchPosition().pipe(
                     filter(position => !!position['coords']) // filter out errors
                 ).subscribe(position => {
-                    const valuesToPatch = {}
+                    const valuesToPatch = {};
 
                     if (this.form.contains('Latitude')) {
                         valuesToPatch['Latitude'] = position.coords.latitude;
@@ -106,7 +106,7 @@ export class RecordFormComponent {
 
                 if (this.formDescriptor.hiddenFields) {
                     this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
-                        this.form.controls[field.key].setValue(field.defaultValue)
+                        this.form.controls[field.key].setValue(field.defaultValue);
                     });
                 }
 
