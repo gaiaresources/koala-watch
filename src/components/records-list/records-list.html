@@ -14,7 +14,7 @@
                     (click)="itemTapped($event, record)">
                 <img item-start class="data-row" [src]="getDatasetIcon(record)"/>
                 <ion-label>{{ record.datetime | date: angularDateFormat }}</ion-label>
-                <img *ngIf="record.count" item-end class="data-row" src="assets/imgs/koala_data_koala.png"/>
+                <img *ngIf="record.count" item-end class="data-row" [src]="getCountIcon(record)"/>
                 <span item-end>{{ record.count }}</span>
             </button>
         </ion-list>
