@@ -10,6 +10,8 @@ import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
+import { from } from 'rxjs/observable/from';
+import { mergeMap } from 'rxjs/operators';
 
 @IonicPage()
 @Component({
@@ -106,4 +108,32 @@ export class ObservationPage {
             }
         });
     }
+
+    public delete() {
+        this.alertController.create({
+            title: 'Observation',
+            message: 'Are you sure you want to delete this observation?',
+            enableBackdropDismiss: true,
+            buttons: [
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        this.photoGallery.rollback();
+                        this.storageService.deleteRecord(this.record.client_id).subscribe( deleted => {
+                            if (this.record.photoIds) {
+                                from(this.record.photoIds).pipe(
+                                    mergeMap( photoId => this.storageService.deletePhoto(photoId) )
+                                ).subscribe();
+                            }
+                            this.showLeavingAlertMessage = false;
+                            this.navCtrl.pop();
+                        });
+                    }
+                },
+                {
+                    text: 'No'
+                }]
+        }).present();
+    }
+
 }
