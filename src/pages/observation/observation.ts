@@ -98,7 +98,7 @@ export class ObservationPage {
 
         this.storageService.putRecord({
             valid: this.recordForm.valid,
-            client_id: !!this.record ? this.record.client_id : this.recordClientId,
+            client_id: this.recordClientId,
             dataset: this.dataset.id,
             datasetName: this.navParams.get('datasetName'),
             parentId: this.parentId,
