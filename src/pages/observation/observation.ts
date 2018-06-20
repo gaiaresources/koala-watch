@@ -9,8 +9,8 @@ import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { RecordFormComponent } from '../../components/record-form/record-form';
-import { APIService } from "../../biosys-core/services/api.service";
-import { PhotoGalleryComponent } from "../../components/photo-gallery/photo-gallery";
+import { APIService } from '../../biosys-core/services/api.service';
+import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 
 @IonicPage()
 @Component({
@@ -18,8 +18,8 @@ import { PhotoGalleryComponent } from "../../components/photo-gallery/photo-gall
     templateUrl: 'observation.html'
 })
 export class ObservationPage {
-    public showForm: boolean = true;
-    public isNewRecord: boolean = true;
+    public showForm = true;
+    public isNewRecord = true;
     public parentId: string;
 
     @ViewChild(RecordFormComponent)
@@ -28,7 +28,7 @@ export class ObservationPage {
     @ViewChild(PhotoGalleryComponent)
     private photoGallery: PhotoGalleryComponent;
 
-    private showLeavingAlertMessage: boolean = true;
+    private showLeavingAlertMessage = true;
     private record: ClientRecord;
     private dataset: Dataset;
 
@@ -38,14 +38,14 @@ export class ObservationPage {
             this.showLeavingAlertMessage = false;
             this.navCtrl.pop();
         }
-    
-        let recordClientId = this.navParams.get('recordClientId');
+
+        const recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !recordClientId;
-    
+
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
             if (dataset != null) {
                 this.dataset = dataset;
-            
+
                 if (recordClientId) {
                     // if this is an existing record, set form values from data
                     this.storageService.getRecord(recordClientId).subscribe(
@@ -57,13 +57,12 @@ export class ObservationPage {
                         }
                     );
                 }
-            }
-            else {
+            } else {
                 this.apiService.getDatasets().subscribe((datasets: Dataset[]) => {
-                    for (let dataset of datasets) {
-                        if (dataset.name == this.navParams.get('datasetName')) {
-                            this.dataset = dataset;
-                            this.storageService.putDataset(dataset);
+                    for (const ds of datasets) {
+                        if (ds.name === this.navParams.get('datasetName')) {
+                            this.dataset = ds;
+                            this.storageService.putDataset(ds);
                         }
                         // if this is an existing record, set form values from data
                         this.storageService.getRecord(recordClientId).subscribe(
@@ -74,7 +73,6 @@ export class ObservationPage {
                                 alert('Error ' + error.msg);
                             });
                     }
-                
                 });
             }
         });

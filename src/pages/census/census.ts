@@ -27,7 +27,7 @@ import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gall
 })
 export class CensusPage {
     public observationRecords: ClientRecord[] = [];
-    public isNewRecord: boolean = true;
+    public isNewRecord = true;
 
     public segmentContent = 'form';
     public dataset: Dataset;
@@ -46,8 +46,9 @@ export class CensusPage {
                 private storageService: StorageService) {
         this.recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !this.recordClientId;
-        if (this.isNewRecord)
+        if (this.isNewRecord) {
             this.recordClientId = UUID.UUID();
+        }
         // just during dev
         const datasetName = this.navParams.get('datasetName') || 'KLM-SAT Census';
 
