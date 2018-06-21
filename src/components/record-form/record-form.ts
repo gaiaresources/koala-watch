@@ -29,10 +29,13 @@ export class RecordFormComponent {
     @Input()
     public initializeDefaultValues = false;
 
+    private theDataset: Dataset;
+
     @Input()
     public set dataset(dataset: Dataset) {
         if (dataset) {
             this.setupForm(dataset);
+            this.theDataset = dataset;
         }
     }
 
@@ -140,5 +143,22 @@ export class RecordFormComponent {
             case 'pattern':
                 return `Must match pattern: ${error['pattern']}`;
         }
+    }
+
+    public getPlaceholderRequired(key: String) {
+        for (const field of this.formDescriptor.requiredFields) {
+            if (field.key === key && field.description) {
+                return field.description;
+            }
+        }
+        return key;
+    }
+    public getPlaceholderOptional(key: String) {
+        for (const field of this.formDescriptor.optionalFields) {
+            if (field.key === key && field.description) {
+                return field.description;
+            }
+        }
+        return key;
     }
 }
