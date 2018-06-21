@@ -44,7 +44,7 @@ export class LoginPage {
             },
             (error) => this.alertController.create({
                 title: 'Login Problem',
-                subTitle: error.msg,
+                subTitle: error.msg.non_field_errors,
                 buttons: ['Ok']
             }).present()
         );
