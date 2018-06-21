@@ -60,6 +60,7 @@
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
                 <ion-input [placeholder]="field.description|| field.label"  *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
+
             </ion-item>
         </ion-item-group>
         <ion-item-group *ngIf="formDescriptor.optionalFields && formDescriptor.optionalFields.length">
