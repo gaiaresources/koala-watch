@@ -1,8 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
-
-import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
@@ -33,6 +31,7 @@ export class ObservationPage {
     private showLeavingAlertMessage = true;
     private record: ClientRecord;
     private dataset: Dataset;
+    private recordClientId: string;
 
     constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
                 private alertController: AlertController, private apiService: APIService) {
@@ -116,7 +115,7 @@ export class ObservationPage {
 
         this.storageService.putRecord({
             valid: this.recordForm.valid,
-            client_id: !!this.record ? this.record.client_id : UUID.UUID(),
+            client_id: this.recordClientId,
             dataset: this.dataset.id,
             datasetName: this.navParams.get('datasetName'),
             parentId: this.parentId,
@@ -141,16 +140,33 @@ export class ObservationPage {
                 {
                     text: 'Yes',
                     handler: () => {
-                        this.photoGallery.rollback();
-                        this.storageService.deleteRecord(this.record.client_id).subscribe( deleted => {
-                            if (this.record.photoIds) {
-                                from(this.record.photoIds).pipe(
-                                    mergeMap( photoId => this.storageService.deletePhoto(photoId) )
-                                ).subscribe();
-                            }
+                        if (this.record) {
+                            this.photoGallery.rollback();
+                            this.storageService.deleteRecord(this.record.client_id).subscribe(deleted => {
+                                if (this.record.photoIds) {
+                                    from(this.record.photoIds).pipe(
+                                        mergeMap(photoId => this.storageService.deletePhoto(photoId))
+                                    ).subscribe();
+                                }
+                                this.showLeavingAlertMessage = false;
+                                this.navCtrl.pop();
+                            }, (error) => {
+                                this.alertController.create({
+                                    title: 'Cannot Delete',
+                                    message: 'Sorry, cannot delete this observation.',
+                                    enableBackdropDismiss: true,
+                                    buttons: [
+                                        {
+                                            text: 'OK',
+                                            handler: () => {}
+                                        }
+                                    ]
+                                }).present();
+                            });
+                        } else {
                             this.showLeavingAlertMessage = false;
                             this.navCtrl.pop();
-                        });
+                        }
                     }
                 },
                 {
@@ -158,5 +174,4 @@ export class ObservationPage {
                 }]
         }).present();
     }
-
 }

@@ -61,6 +61,5 @@ import { UploadService } from '../shared/services/upload.service';
         }
     ]
 })
-
 export class AppModule {
 }

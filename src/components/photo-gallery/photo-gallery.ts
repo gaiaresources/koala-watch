@@ -16,16 +16,16 @@ export class PhotoGalleryComponent {
 
     // Template variables
 
-    public photoSrc: string = '';
+    public photoSrc = '';
 
     // Property variables
 
-    private _recordId: string = '';
+    private _recordId = '';
     private _photoIds: string[] = [];
 
     // Private variables
 
-    private photoIndex: number = 0;
+    private photoIndex = 0;
     private addedPhotoIds: string[] = [];
     private deletedPhotoIds: string[] = [];
 
@@ -65,7 +65,7 @@ export class PhotoGalleryComponent {
     // Template methods
 
     public showPhotos() {
-        if(!this._photoIds) {
+        if (!this._photoIds) {
             return  false;
         } else {
             return this._photoIds.length > 0;
@@ -73,7 +73,7 @@ export class PhotoGalleryComponent {
     }
 
     public showLeftChevron(): boolean {
-        return this.photoIndex > 0
+        return this.photoIndex > 0;
     }
 
     public showRightChevron(): boolean {
@@ -143,7 +143,7 @@ export class PhotoGalleryComponent {
         };
 
         this.camera.getPicture(options).then((base64) => {
-            let photoId = UUID.UUID();
+            const photoId = UUID.UUID();
             this.storageService.putPhoto(photoId, {
                 id: photoId,
                 fileName: photoId + '.jpg',
@@ -154,13 +154,13 @@ export class PhotoGalleryComponent {
                 if (put) {
                     this._photoIds.push(photoId);
                     this.addedPhotoIds.push(photoId);
-                    let photoSrc = PhotoGalleryComponent.makePhotoSrc(base64);
+                    const photoSrc = PhotoGalleryComponent.makePhotoSrc(base64);
                     this.photoIndex = this._photoIds.length - 1;
                     this.photoSrc = photoSrc;
                 } else {
                     alert('Photo save failed, try again');
                 }
-            })
+            });
         }, err => {
             alert('Photo failed, try again');
         });
