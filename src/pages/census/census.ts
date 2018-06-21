@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { AlertController, Events, FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
@@ -43,17 +43,15 @@ export class CensusPage {
     @ViewChild(PhotoGalleryComponent)
     private photoGallery: PhotoGalleryComponent;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService,
+    constructor(public censusNavCtrl: NavController,
+                public navParams: NavParams,
+                private storageService: StorageService,
                 private alertController: AlertController) {
-    }
-
-    public ionViewDidEnter() {
         this.recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !this.recordClientId;
         if (this.isNewRecord) {
             this.recordClientId = UUID.UUID();
         }
-        this.photoGallery.RecordId = this.recordClientId;
 
         // just during dev
         const datasetName = this.navParams.get('datasetName') || 'KLM-SAT Census';
@@ -75,15 +73,17 @@ export class CensusPage {
     }
 
     public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
-        this.navCtrl.push('ObservationPage', {
+        this.censusNavCtrl.push('ObservationPage', {
             datasetName: datasetName,
             parentId: this.recordClientId
         });
     }
 
     public ionViewWillEnter() {
+        this.photoGallery.RecordId = this.recordClientId;
         if (this.recordClientId) {
-            this.observationRecords = [];
+            this.observationRecords.length = 0;
+            // this.observationRecords = [];
             this.storageService.getChildRecords(this.recordClientId).subscribe(
                 (record: ClientRecord) => this.observationRecords.push(record)
             );
@@ -104,7 +104,7 @@ export class CensusPage {
             photoIds: this.photoGallery.PhotoIds
         }).subscribe((result: boolean) => {
             if (result) {
-                this.navCtrl.pop();
+                this.censusNavCtrl.pop();
             }
         });
     }
@@ -118,15 +118,32 @@ export class CensusPage {
                 {
                     text: 'Yes',
                     handler: () => {
-                        this.photoGallery.rollback();
-                        this.storageService.deleteRecord(this.record.client_id).subscribe( deleted => {
-                            if (this.record.photoIds) {
-                                from(this.record.photoIds).pipe(
-                                    mergeMap( photoId => this.storageService.deletePhoto(photoId) )
-                                ).subscribe();
-                            }
-                            this.navCtrl.pop();
-                        });
+                        if (this.record) {
+                            this.photoGallery.rollback();
+                            this.storageService.deleteRecord(this.record.client_id).subscribe(deleted => {
+                                if (this.record.photoIds) {
+                                    from(this.record.photoIds).pipe(
+                                        mergeMap(photoId => this.storageService.deletePhoto(photoId))
+                                    ).subscribe();
+                                }
+                                this.censusNavCtrl.pop();
+                            }, (error) => {
+                                this.alertController.create({
+                                    title: 'Cannot Delete',
+                                    message: 'Sorry, cannot delete this observation.',
+                                    enableBackdropDismiss: true,
+                                    buttons: [
+                                        {
+                                            text: 'OK',
+                                            handler: () => {}
+                                        }
+                                    ]
+                                }).present();
+
+                            });
+                        } else {
+                            this.censusNavCtrl.pop();
+                        }
                     }
                 },
                 {
@@ -134,5 +151,4 @@ export class CensusPage {
                 }]
         }).present();
     }
-
 }

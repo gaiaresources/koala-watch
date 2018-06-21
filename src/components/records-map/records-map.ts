@@ -22,24 +22,29 @@ export class RecordsMapComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.map = GoogleMaps.create('map', {
+        this.map = GoogleMaps.create('map');
+        this.map.setOptions({
             'backgroundColor': 'white',
+            'building': false,
+            'mapType': 'MAP_TYPE_HYBRID',
             'controls': {
                 'compass': false,
-                'zoom': false
+                'zoom': false,
+                'indoorPicker': false,
+                'myLocationButton': true,
             },
             'gestures': {
                 'scroll': true,
-                'zoom': true
+                'zoom': true,
+                'tilt': false,
+                'rotate': false,
             },
             'camera': {
                 'target': new LatLng(-25, 132),
                 'zoom': 3.5,
             }
         });
-        if (!this.map) {
-            this.loadMarkers();
-        }
+        this.loadMarkers();
     }
 
     public ionViewWillEnter() {
@@ -47,20 +52,24 @@ export class RecordsMapComponent implements OnInit {
     }
 
     private loadMarkers() {
-        this.map.clear();
-
-        for (const record of this._records) {
-            if (record.hasOwnProperty('data') && record.data.hasOwnProperty('Latitude') &&
-                    record.data.hasOwnProperty('Longitude')) {
-                this.map.addMarkerSync({
-                    title: record.data['First Date'],
-                    icon: record.valid ? 'green' : 'blue',
-                    animation: 'DROP',
-                    position: {
-                        lat: record.data.Latitude,
-                        lng: record.data.Longitude,
+        if (this.map) {
+            this.map.clear();
+            if (this._records && this._records.length) {
+                for (const record of this._records) {
+                    if (record.hasOwnProperty('data') &&
+                        record.data.hasOwnProperty('Latitude') &&
+                        record.data.hasOwnProperty('Longitude')) {
+                        this.map.addMarkerSync({
+                            title: record.data['First Date'],
+                            icon: record.valid ? 'green' : 'blue',
+                            animation: 'DROP',
+                            position: {
+                                lat: record.data.Latitude,
+                                lng: record.data.Longitude,
+                            }
+                        });
                     }
-                });
+                }
             }
         }
     }

@@ -1,13 +1,21 @@
 div.home-tab-content {
-  width: 100%;
-  bottom: 0;
-  top: 0;
+    width: 100%;
 }
 
 .fab-list-active {
-  z-index: 200;
+    z-index: 200;
 }
 
 .toast-message {
     text-align: center;
+}
+
+ion-fab {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+button.fab.fab-md {
+    margin-top: 1em;
+    background-color: green;
 }

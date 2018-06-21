@@ -1,41 +1,54 @@
 table#category-legend {
-  min-height: 2em;
-  margin-left: auto;
-  margin-right: auto;
+    min-height: 2em;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 td.category-legend-colour {
-  height: 2em;
-  width: 2em;
+    height: 2em;
+    width: 2em;
 }
 
 td.category-legend-label {
-  vertical-align: middle;
-  padding-left: 2em;
-  padding-right: 4em;
-  text-align: center;
+    vertical-align: middle;
+    padding-left: 2em;
+    padding-right: 4em;
+    text-align: center;
 }
 
 div#category-legend-div {
-  margin-bottom: 1em;
-  margin-top: 1em;
+    margin-bottom: 1em;
+    margin-top: 1em;
 }
 
 #category-completed {
-  background-color: #ebffef;
+    background-color: #ebffef;
 }
 
 #category-incomplete {
-  background-color: #ebf6ff;
+    background-color: #ebf6ff;
 }
 
 img.data-row {
-  height: 40px;
-  width: 40px;
-  vertical-align: middle;
+    height: 40px;
+    width: 40px;
+    vertical-align: middle;
 }
 
-.fab {
-  background-color: green;
+.local-fab {
+    background-color: green;
 }
 
+#no-data-div {
+    height: 100%;
+    width: 100%;
+    padding: 10%;
+}
+
+.no-data {
+    color: grey;
+}
+
+.row {
+    align-items: center;
+}
