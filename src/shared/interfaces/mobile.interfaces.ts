@@ -16,3 +16,7 @@ export interface ClientPhoto {
     base64: string;
     datetime: string;
 }
+
+export interface ApiResponse {
+    non_field_errors: string[];
+}

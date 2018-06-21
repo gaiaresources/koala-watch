@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../biosys-core/services/auth.service';
-import { APIError, Dataset } from '../../biosys-core/interfaces/api.interfaces';
+import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { APIService } from '../../biosys-core/services/api.service';
 import { StorageService } from '../../shared/services/storage.service';
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
+import { formatAPIError } from '../../biosys-core/utils/functions';
+import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
 
 /**
  * Generated class for the LoginPage page.
@@ -46,11 +48,12 @@ export class LoginPage {
             },
             (error) => {
                 this.showSpinner = false;
-                this.alertController.create({
-                title: 'Login Problem',
-                subTitle: error.msg.non_field_errors,
-                buttons: ['Ok']
-            }).present();
+                const apiResponse = formatAPIError(error) as ApiResponse;
+                from(apiResponse.non_field_errors).pipe(mergeMap(message => this.alertController.create({
+                    title: 'Login Problem',
+                    subTitle: message,
+                    buttons: ['Ok']
+                }).present())).subscribe();
             }
         );
     }
