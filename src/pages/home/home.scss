@@ -1,9 +1,9 @@
 div.home-tab-content {
-  width: 100%;
+    width: 100%;
 }
 
 .fab-list-active {
-  z-index: 200;
+    z-index: 200;
 }
 
 .toast-message {
@@ -11,10 +11,11 @@ div.home-tab-content {
 }
 
 ion-fab {
-  padding-right: 30px;
-  padding-left: 30px;
+    padding-right: 30px;
+    padding-left: 30px;
 }
 
 button.fab.fab-md {
-  margin-top: 1em;
+    margin-top: 1em;
+    background-color: green;
 }

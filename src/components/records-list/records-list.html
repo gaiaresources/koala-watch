@@ -41,7 +41,7 @@
                 </ion-row>
                 <ion-row *ngIf="haveObservation">
                     <ion-col>
-                        <button ion-fab style="background-color: green"
+                        <button ion-fab class="local-fab"
                                 (click)="onClickedNewRecord('Koala Opportunistic Observation')">
                             <img alt="Koala Opportunistic Observation"
                                  src="assets/imgs/white_eye.png">
@@ -53,7 +53,7 @@
                 </ion-row>
                 <ion-row *ngIf="haveCensus">
                     <ion-col>
-                        <button ion-fab style="background-color: green" (click)="onClickedNewRecord('KLM-SAT Census')">
+                        <button ion-fab class="local-fab" (click)="onClickedNewRecord('KLM-SAT Census')">
                             <img alt="Koala Census"
                                  src="assets/imgs/white_poop.png">
                         </button>
@@ -64,7 +64,7 @@
                 </ion-row>
                 <ion-row *ngIf="haveTree">
                     <ion-col>
-                        <button ion-fab style="background-color: green" (click)="onClickedNewRecord('KLM-SAT Tree Sighting')">
+                        <button ion-fab class="local-fab" (click)="onClickedNewRecord('KLM-SAT Tree Sighting')">
                             <img alt="Koala Tree Survey"
                                  src="assets/imgs/white_tree.png">
                         </button>

@@ -82,9 +82,7 @@ export class CensusPage {
     public ionViewWillEnter() {
         this.photoGallery.RecordId = this.recordClientId;
         if (this.recordClientId) {
-            while (this.observationRecords.length > 0) {
-                this.observationRecords.pop();
-            }
+            this.observationRecords.length = 0;
             // this.observationRecords = [];
             this.storageService.getChildRecords(this.recordClientId).subscribe(
                 (record: ClientRecord) => this.observationRecords.push(record)

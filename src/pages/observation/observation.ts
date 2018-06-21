@@ -62,23 +62,6 @@ export class ObservationPage {
                         }
                     );
                 }
-            } else {
-                this.apiService.getDatasets().subscribe((datasets: Dataset[]) => {
-                    for (const ds of datasets) {
-                        if (ds.name === this.navParams.get('datasetName')) {
-                            this.dataset = ds;
-                            this.storageService.putDataset(ds);
-                        }
-                        // if this is an existing record, set form values from data
-                        this.storageService.getRecord(recordClientId).subscribe(
-                            record => {
-                                this.record = record;
-                                this.recordForm.value = record.data;
-                            }, (error) => {
-                                alert('Error ' + error.msg);
-                            });
-                    }
-                });
             }
         });
     }

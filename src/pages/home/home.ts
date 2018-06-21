@@ -83,9 +83,7 @@ export class HomePage {
     }
 
     private loadRecords() {
-        while (this.records.length > 0) {
-            this.records.pop();
-        }
+        this.records.length = 0;
         this.storageService.getParentRecords().subscribe((record: ClientRecord) => this.records.push(record));
     }
 }
