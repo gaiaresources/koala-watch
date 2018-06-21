@@ -8,7 +8,7 @@
             <ion-item *ngFor="let field of formDescriptor.dateFields">
                 <ion-label
                     color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                    floating>
+                    stacked>
                     {{ field.label }}
                     <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
                             ({{ getFieldError(field) }})
@@ -26,7 +26,7 @@
             <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
                 <ion-label
                     color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                    floating>
+                    stacked>
                     {{ field.label }}
                     <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
                             ({{ getFieldError(field) }})
@@ -46,20 +46,21 @@
             <ion-item *ngFor="let field of formDescriptor.requiredFields" [ngSwitch]="field.type">
                 <ion-label
                     color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                    floating>
+                    stacked>
                     {{ field.label }}
                     <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
                             ({{ getFieldError(field) }})
                         </span>
                 </ion-label>
 
-                <ion-select *ngSwitchCase="'select'" [formControlName]="field.key">
+                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key">
                     <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
                 </ion-select>
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
-                <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
+                <ion-input [placeholder]="field.description || ''"  *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
+
             </ion-item>
         </ion-item-group>
         <ion-item-group *ngIf="formDescriptor.optionalFields && formDescriptor.optionalFields.length">
@@ -70,20 +71,25 @@
             <ion-item *ngFor="let field of formDescriptor.optionalFields" [ngSwitch]="field.type">
                 <ion-label
                     color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                    floating>
+                    stacked>
                     {{ field.label }}
                     <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
                             ({{ getFieldError(field) }})
                         </span>
                 </ion-label>
 
-                <ion-select *ngSwitchCase="'select'" [formControlName]="field.key">
+                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key">
                     <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
                 </ion-select>
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
-                <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
+                <!--This is for the hypothetical "tool tip required" scenario:-->
+                <!--npm i &#45;&#45;save ionic-tooltips-->
+                <!--<button icon-only ion-button clear type="button" [tooltip]="field.description || field.label" item-right>-->
+                <!--<ion-icon name="help-circle"></ion-icon>-->
+                <!--</button>-->
+                <ion-input [placeholder]="field.description || ''" *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
             </ion-item>
         </ion-item-group>
         <ion-input *ngFor="let field of formDescriptor.hiddenFields" [type]="field.type"
