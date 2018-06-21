@@ -5,6 +5,7 @@
                 <img width="100%" src="assets/imgs/koalawatch_heading.png"/>
             </ion-col>
         </ion-row>
+        <ion-spinner *ngIf="showSpinner"></ion-spinner>
         <form [formGroup]="form" (ngSubmit)="login()">
 
             <ion-row>

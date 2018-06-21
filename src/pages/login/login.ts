@@ -22,6 +22,7 @@ import { mergeMap } from 'rxjs/operators';
 })
 export class LoginPage {
     public form: FormGroup;
+    public showSpinner = false;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
                 private authService: AuthService, private storageService: StorageService,
@@ -33,20 +34,24 @@ export class LoginPage {
     }
 
     public login() {
+        this.showSpinner = true;
         this.authService.login(this.form.value['username'], this.form.value['password']).subscribe(() => {
                 this.apiService.getDatasets({project__name: 'NSW Koala Data Capture'}).pipe(
                     mergeMap((datasets: Dataset[]) => from(datasets).pipe(
                         mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
                     ))
                 ).subscribe();
-
+                this.showSpinner = false;
                 this.navCtrl.setRoot('HomePage');
             },
-            (error) => this.alertController.create({
+            (error) => {
+                this.showSpinner = false;
+                this.alertController.create({
                 title: 'Login Problem',
                 subTitle: error.msg.non_field_errors,
                 buttons: ['Ok']
-            }).present()
+            }).present();
+            }
         );
     }
 }
