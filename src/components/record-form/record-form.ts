@@ -144,21 +144,4 @@ export class RecordFormComponent {
                 return `Must match pattern: ${error['pattern']}`;
         }
     }
-
-    public getPlaceholderRequired(key: String) {
-        for (const field of this.formDescriptor.requiredFields) {
-            if (field.key === key && field.description) {
-                return field.description;
-            }
-        }
-        return key;
-    }
-    public getPlaceholderOptional(key: String) {
-        for (const field of this.formDescriptor.optionalFields) {
-            if (field.key === key && field.description) {
-                return field.description;
-            }
-        }
-        return key;
-    }
 }
