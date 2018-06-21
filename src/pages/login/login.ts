@@ -49,11 +49,11 @@ export class LoginPage {
             (error) => {
                 this.showSpinner = false;
                 const apiResponse = formatAPIError(error) as ApiResponse;
-                from(apiResponse.non_field_errors).pipe(mergeMap(message => this.alertController.create({
+                this.alertController.create({
                     title: 'Login Problem',
-                    subTitle: message,
+                    subTitle: apiResponse.non_field_errors[0],
                     buttons: ['Ok']
-                }).present())).subscribe();
+                }).present();
             }
         );
     }
