@@ -29,13 +29,10 @@ export class RecordFormComponent {
     @Input()
     public initializeDefaultValues = false;
 
-    private theDataset: Dataset;
-
     @Input()
     public set dataset(dataset: Dataset) {
         if (dataset) {
             this.setupForm(dataset);
-            this.theDataset = dataset;
         }
     }
 
