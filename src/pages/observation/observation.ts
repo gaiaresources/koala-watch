@@ -11,6 +11,7 @@ import { APIService } from '../../biosys-core/services/api.service';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
+import { UUID } from 'angular2-uuid';
 
 @IonicPage()
 @Component({
@@ -44,20 +45,23 @@ export class ObservationPage {
             this.parentId = this.navParams.get('parentId');
         }
 
-        const recordClientId = this.navParams.get('recordClientId');
-        this.isNewRecord = !recordClientId;
+        this.recordClientId = this.navParams.get('recordClientId');
+        this.isNewRecord = !this.recordClientId;
+        if (this.isNewRecord) {
+            this.recordClientId = UUID.UUID();
+        }
 
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
             if (dataset) {
                 this.dataset = dataset;
 
-                if (recordClientId) {
+                if (this.recordClientId) {
                     // if this is an existing record, set form values from data
-                    this.storageService.getRecord(recordClientId).subscribe(
+                    this.storageService.getRecord(this.recordClientId).subscribe(
                         record => {
                             this.record = record;
                             this.recordForm.value = record.data;
-                            this.photoGallery.RecordId = recordClientId;
+                            this.photoGallery.RecordId = record.client_id;
                             this.photoGallery.PhotoIds = record.photoIds;
                         }
                     );
