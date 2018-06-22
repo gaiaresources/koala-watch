@@ -36,6 +36,9 @@ export class ObservationPage {
 
     constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
                 private alertController: AlertController, private apiService: APIService) {
+    }
+
+    public ionViewWillEnter() {
         if (!this.navParams.get('datasetName')) {
             this.showLeavingAlertMessage = false;
             this.navCtrl.pop();
@@ -50,6 +53,7 @@ export class ObservationPage {
         if (this.isNewRecord) {
             this.recordClientId = UUID.UUID();
         }
+        this.photoGallery.RecordId = this.recordClientId;
 
         this.storageService.getDataset(this.navParams.get('datasetName')).subscribe((dataset: Dataset) => {
             if (dataset) {
@@ -59,10 +63,11 @@ export class ObservationPage {
                     // if this is an existing record, set form values from data
                     this.storageService.getRecord(this.recordClientId).subscribe(
                         record => {
-                            this.record = record;
-                            this.recordForm.value = record.data;
-                            this.photoGallery.RecordId = record.client_id;
-                            this.photoGallery.PhotoIds = record.photoIds;
+                            if (record) {
+                                this.record = record;
+                                this.recordForm.value = record.data;
+                                this.photoGallery.PhotoIds = record.photoIds;
+                            }
                         }
                     );
                 }

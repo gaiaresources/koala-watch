@@ -47,11 +47,22 @@ export class CensusPage {
                 public navParams: NavParams,
                 private storageService: StorageService,
                 private alertController: AlertController) {
+    }
+
+    public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
+        this.censusNavCtrl.push('ObservationPage', {
+            datasetName: datasetName,
+            parentId: this.recordClientId
+        });
+    }
+
+    public ionViewWillEnter() {
         this.recordClientId = this.navParams.get('recordClientId');
         this.isNewRecord = !this.recordClientId;
         if (this.isNewRecord) {
             this.recordClientId = UUID.UUID();
         }
+        this.photoGallery.RecordId = this.recordClientId;
 
         // just during dev
         const datasetName = this.navParams.get('datasetName') || 'KLM-SAT Census';
@@ -63,24 +74,16 @@ export class CensusPage {
                 // if this is an existing record, set form values from data
                 this.storageService.getRecord(this.recordClientId).subscribe(
                     record => {
-                        this.record = record;
-                        this.recordForm.value = record.data;
-                        this.photoGallery.PhotoIds = record.photoIds;
+                        if (record) {
+                            this.record = record;
+                            this.recordForm.value = record.data;
+                            this.photoGallery.PhotoIds = record.photoIds;
+                        }
                     }
                 );
             }
         });
-    }
 
-    public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
-        this.censusNavCtrl.push('ObservationPage', {
-            datasetName: datasetName,
-            parentId: this.recordClientId
-        });
-    }
-
-    public ionViewWillEnter() {
-        this.photoGallery.RecordId = this.recordClientId;
         if (this.recordClientId) {
             this.observationRecords.length = 0;
             // this.observationRecords = [];
