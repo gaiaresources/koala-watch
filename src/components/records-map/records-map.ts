@@ -1,7 +1,10 @@
-import { GoogleMap, GoogleMaps, LatLng, } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { NavParams } from "ionic-angular";
+import { Events, NavParams } from 'ionic-angular';
+import { TimerObservable } from "rxjs/observable/TimerObservable";
+import { Observable } from "rxjs/Observable";
+import { timer } from "rxjs/observable/timer";
 
 @Component({
     selector: 'records-map',
@@ -11,15 +14,13 @@ export class RecordsMapComponent implements OnInit {
     @Input()
     public set records(records: ClientRecord[]) {
         this._records = records;
-        if (this.map) {
-            this.loadMarkers();
-        }
     }
 
     private map: GoogleMap;
     private _records: ClientRecord[];
 
-    constructor(private navParams: NavParams) {
+    constructor(private navParams: NavParams,
+                private events: Events) {
     }
 
     ngOnInit(): void {
@@ -48,6 +49,10 @@ export class RecordsMapComponent implements OnInit {
         if (this.navParams.data.hasOwnProperty('data')) {
             this.records = this.navParams.get('data');
         }
+        this.events.subscribe('home-willenter', () => timer(500).subscribe((foo) => this.ionViewWillEnter()));
+    }
+
+    public ionViewWillEnter() {
         this.loadMarkers();
     }
 
@@ -59,15 +64,30 @@ export class RecordsMapComponent implements OnInit {
                     if (record.hasOwnProperty('data') &&
                         record.data.hasOwnProperty('Latitude') &&
                         record.data.hasOwnProperty('Longitude')) {
-                        alert(record.data.Latitude);
-                        this.map.addMarkerSync({
-                            title: record.data['First Date'] || '',
-                            icon: record.valid ? 'green' : 'blue',
+                        let title = record.data['Site ID'];
+                        if (record.data['First Date']) {
+                            title += ` ${record.data['First Date']}`;
+                        }
+                        const snippet = record.client_id || '';
+                        const marker = this.map.addMarkerSync({
+                            snippet: snippet,
+                            title: title,
+                            icon: record.valid ? '#ebffef' : '#ebf6ff',
                             animation: 'DROP',
                             position: {
                                 lat: record.data.Latitude,
                                 lng: record.data.Longitude,
                             }
+                        });
+                        marker.on(GoogleMapsEvent.INFO_CLICK).subscribe(() => {
+                            const page = record.datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
+                            const params = {
+                                datasetName: record.datasetName,
+                                recordClientId: record.client_id,
+                                parentId: record.parentId
+                            };
+                            this.navParams.get('navCtrl').push(page, params);
+                            return;
                         });
                     }
                 }

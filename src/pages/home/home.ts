@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
+    Events,
     FabContainer,
     IonicPage,
     Loading,
     LoadingController,
     NavController,
-    NavParams,
+    NavParams, Tabs,
     ToastController
 } from 'ionic-angular';
 
@@ -34,9 +35,11 @@ export class HomePage {
     public recordsList = RecordsListComponent;
     public recordsMap = RecordsMapComponent;
 
+    @ViewChild('homeTabs') tabRef: Tabs;
+
     constructor(public navCtrl: NavController, public navParams: NavParams, private loadingCtrl: LoadingController,
                 private toastCtrl: ToastController, private storageService: StorageService,
-                private uploadService: UploadService) {
+                private uploadService: UploadService, private event: Events) {
         this.records = [];
         this.loading = this.loadingCtrl.create({
             content: 'Uploading records'
@@ -45,6 +48,7 @@ export class HomePage {
 
     ionViewWillEnter() {
         this.loadRecords();
+        this.event.publish('home-willenter');
     }
 
     public clickedUpload() {
@@ -83,7 +87,9 @@ export class HomePage {
     }
 
     private loadRecords() {
-        this.records.length = 0;
+        while (this.records.length) {
+            this.records.pop();
+        }
         this.storageService.getParentRecords().subscribe((record: ClientRecord) => this.records.push(record));
     }
 }
