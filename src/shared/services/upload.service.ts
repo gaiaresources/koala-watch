@@ -4,10 +4,10 @@ import { Injectable } from '@angular/core';
 import { mergeMap } from 'rxjs/operators';
 import { StorageService } from './storage.service';
 
-import { Record } from '../../biosys-core/interfaces/api.interfaces';
+import { Media, Record } from '../../biosys-core/interfaces/api.interfaces';
 import { APIService } from '../../biosys-core/services/api.service';
 
-import { ClientRecord } from '../interfaces/mobile.interfaces';
+import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
 
 
 @Injectable()
@@ -28,15 +28,17 @@ export class UploadService {
         );
     }
 
-    public uploadPendingRecordPhotos() {
-        this.storageService.getAllPendingPhotos().subscribe(clientPhoto => {
-            this.storageService.getRecord(clientPhoto.record_client_id).subscribe( record => {
-                this.storageService.updatePhotoRecordServerId(clientPhoto, record.id).subscribe(success => {
-                    this.apiService.uploadRecordMediaBase64(clientPhoto.record, clientPhoto.base64).subscribe(media => {
-                        this.storageService.updatePhotoMediaId(clientPhoto, media.id).subscribe();
-                    });
-                });
-            });
-        });
+    public uploadPendingRecordPhotos(): Observable<[ClientPhoto, Media]> {
+        return this.storageService.getAllPendingPhotos().pipe(
+            mergeMap((clientPhoto: ClientPhoto) =>
+                    this.apiService.uploadRecordMediaBase64(clientPhoto.record, clientPhoto.base64).pipe(
+                        mergeMap((media: Media) => this.storageService.updatePhotoMediaId(clientPhoto, media.id),
+                            (media: Media, photoUpdated: boolean) => media)
+                    ),
+                (clientPhoto: ClientPhoto, media: Media) =>
+                    [clientPhoto, media] as [ClientPhoto, Media]
+
+            )
+        );
     }
 }
