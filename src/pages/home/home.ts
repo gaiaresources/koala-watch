@@ -42,7 +42,6 @@ export class HomePage {
     }
 
     ionViewWillEnter() {
-        console.log('ionViewWillEnter');
         this.loadRecords();
     }
 
