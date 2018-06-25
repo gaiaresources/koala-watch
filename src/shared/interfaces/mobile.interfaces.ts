@@ -7,6 +7,7 @@ export interface ClientRecord extends Record {
     datetime: string;
     count: number;
     photoIds: string[];
+    serverId?: number;
 }
 
 export interface ClientPhoto {
@@ -15,6 +16,8 @@ export interface ClientPhoto {
     fileName: string;
     base64: string;
     datetime: string;
+    recordServerId?: number;
+    mediaId?: number;
 }
 
 export interface ApiResponse {

@@ -45,6 +45,18 @@ export class StorageService {
         return fromPromise(this.storage.get(`${StorageService.RECORD_PREFIX}${key}`));
     }
 
+    public updateRecordServerId(record: ClientRecord, serverId: number): Observable<boolean> {
+        for (const photoId of record.photoIds) {
+            this.getPhoto(photoId).subscribe(clientPhoto => {
+                clientPhoto.recordServerId = serverId;
+                this.putPhoto(clientPhoto.id, clientPhoto).subscribe();
+            });
+        }
+
+        record.serverId = serverId;
+        return this.putRecord(record);
+    }
+
     public getParentRecords(): Observable<ClientRecord> {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
@@ -62,7 +74,7 @@ export class StorageService {
     public getAllValidRecords(): Observable<ClientRecord> {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
-                if (key.startsWith(StorageService.RECORD_PREFIX) && value.valid) {
+                if (key.startsWith(StorageService.RECORD_PREFIX) && value.valid && !value.serverId) {
                     observer.next(value);
                 }
             }).then(value => {
@@ -105,6 +117,30 @@ export class StorageService {
 
     public deletePhoto(key: string): Observable<boolean> {
         return fromPromise(this.storage.remove(`${StorageService.PHOTO_PREFIX}${key}`));
+    }
+
+    public getAllPendingPhotos(): Observable<ClientPhoto> {
+        return new Observable(observer => {
+            this.storage.forEach((value, key) => {
+                if (key.startsWith(StorageService.PHOTO_PREFIX) && value.recordServerId && !value.serverId) {
+                    observer.next(value);
+                }
+            }).then(value => {
+                observer.complete();
+            }, reason => {
+                observer.error(reason);
+            });
+        });
+    }
+
+    public updatePhotoRecordServerId(clientPhoto: ClientPhoto, recordServerId: number): Observable<boolean> {
+        clientPhoto.recordServerId = recordServerId;
+        return this.putPhoto(clientPhoto.id, clientPhoto);
+    }
+
+    public updatePhotoMediaId(clientPhoto: ClientPhoto, mediaId: number): Observable<boolean> {
+        clientPhoto.mediaId = mediaId;
+        return this.putPhoto(clientPhoto.id, clientPhoto);
     }
 
 }
