@@ -3,14 +3,16 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>Home</ion-title>
+        <ion-title>Observation / Census Records</ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content>
     <ion-tabs tabsPlacement="top">
-        <ion-tab tabTitle="List" title="List" [rootParams]="{showLegend: true, data: records, navCtrl: navCtrl, haveTree: false}" [root]="recordsList"></ion-tab>
-        <ion-tab tabTitle="Map" title="Map"  [rootParams]="{data:records}" [root]="recordsMap"></ion-tab>
+        <ion-tab tabTitle="List" title="List"
+                 [rootParams]="{showLegend: true, data: records, navCtrl: navCtrl, haveTree: false}"
+                 [root]="recordsList"></ion-tab>
+        <ion-tab tabTitle="Map" title="Map" [rootParams]="{data:records}" [root]="recordsMap"></ion-tab>
     </ion-tabs>
 
     <ion-fab bottom left>
@@ -18,13 +20,14 @@
             <ion-icon name="cloud-upload"></ion-icon>
         </button>
     </ion-fab>
-    <ion-fab bottom right>
-        <button ion-fab (click)="onClickedNewRecord('KLM-SAT Census')">
-            <img alt="KLM-SAT Census" class="home-fab-icon" src="assets/imgs/white_poop.png">
-        </button>
+    <ion-fab bottom right style="right: 80px">
         <button ion-fab (click)="onClickedNewRecord('Koala Opportunistic Observation')">
             <img alt="Koala Opportunistic Observation" class="home-fab-icon" src="assets/imgs/white_eye.png">
         </button>
     </ion-fab>
-
+    <ion-fab bottom right>
+        <button ion-fab (click)="onClickedNewRecord('KLM-SAT Census')">
+            <img alt="KLM-SAT Census" class="home-fab-icon" src="assets/imgs/white_poop.png">
+        </button>
+    </ion-fab>
 </ion-content>
