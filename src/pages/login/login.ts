@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../biosys-core/services/auth.service';
-import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
-import { APIService } from '../../biosys-core/services/api.service';
-import { StorageService } from '../../shared/services/storage.service';
+
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
+
+import { AuthService } from '../../biosys-core/services/auth.service';
+import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
+import { APIService } from '../../biosys-core/services/api.service';
+import { StorageService } from '../../shared/services/storage.service';
 import { formatAPIError } from '../../biosys-core/utils/functions';
 import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
+import { PROJECT_NAME } from '../../shared/utils/consts';
 
 /**
  * Generated class for the LoginPage page.
@@ -43,6 +46,15 @@ export class LoginPage {
                         mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
                     ))
                 ).subscribe();
+
+                this.apiService.whoAmI().pipe(
+                    mergeMap((user: User) => this.storageService.putCurrentUser(user))
+                ).subscribe();
+
+                this.apiService.getUsers({project__name: PROJECT_NAME}).pipe(
+                    mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
+                ).subscribe();
+
                 this.showSpinner = false;
                 this.navCtrl.setRoot('HomePage');
             },

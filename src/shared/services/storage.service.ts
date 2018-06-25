@@ -2,7 +2,7 @@ import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
+import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
 
 @Injectable()
@@ -13,6 +13,22 @@ export class StorageService {
 
     constructor(private storage: Storage) {
 
+    }
+
+    public putCurrentUser(user: User): Observable<boolean> {
+        return fromPromise(this.storage.set('Current User', user));
+    }
+
+    public getCurrentUser(): Observable<User> {
+        return fromPromise(this.storage.get('Current User'));
+    }
+
+    public putTeamMembers(users: User[]): Observable<boolean> {
+        return fromPromise(this.storage.set('Team Members', users));
+    }
+
+    public getTeamMembers(): Observable<User[]> {
+        return fromPromise(this.storage.get('Team Members'));
     }
 
     public putDataset(dataset: Dataset): Observable<boolean> {
