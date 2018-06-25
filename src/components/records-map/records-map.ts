@@ -1,14 +1,8 @@
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-<<<<<<< HEAD
 import { Events, NavParams } from 'ionic-angular';
-import { TimerObservable } from "rxjs/observable/TimerObservable";
-import { Observable } from "rxjs/Observable";
-import { timer } from "rxjs/observable/timer";
-=======
-import { Events, NavParams } from "ionic-angular";
->>>>>>> 875f430262348d541782adb5ca1753d61a23cd58
+import { timer } from 'rxjs/observable/timer';
 
 @Component({
     selector: 'records-map',
@@ -53,10 +47,7 @@ export class RecordsMapComponent implements OnInit {
         if (this.navParams.data.hasOwnProperty('data')) {
             this.records = this.navParams.get('data');
         }
-<<<<<<< HEAD
         this.events.subscribe('home-willenter', () => timer(500).subscribe((foo) => this.ionViewWillEnter()));
-=======
->>>>>>> 875f430262348d541782adb5ca1753d61a23cd58
     }
 
     public ionViewWillEnter() {
