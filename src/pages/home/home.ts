@@ -57,7 +57,7 @@ export class HomePage {
                     cssClass: 'toast-message'
                 }).present();
 
-                this.uploadService.uploadPendingRecordPhotos();
+                this.uploadService.uploadPendingRecordPhotos().subscribe();
                 this.loadRecords();
             },
             complete: () => {
@@ -68,7 +68,7 @@ export class HomePage {
                     cssClass: 'toast-message'
                 }).present();
 
-                this.uploadService.uploadPendingRecordPhotos();
+                this.uploadService.uploadPendingRecordPhotos().subscribe();
                 this.loadRecords();
             }
         });

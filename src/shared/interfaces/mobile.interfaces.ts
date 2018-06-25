@@ -11,7 +11,7 @@ export interface ClientRecord extends Record {
 
 export interface ClientPhoto extends Media {
     client_id: string;
-    record_client_id;
+    recordClientId: string;
     fileName: string;
     base64: string;
     datetime: string;

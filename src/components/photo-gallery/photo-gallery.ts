@@ -147,7 +147,7 @@ export class PhotoGalleryComponent {
             this.storageService.putPhoto(photoId, {
                 client_id: photoId,
                 fileName: photoId + '.jpg',
-                record_client_id: this._recordId,
+                recordClientId: this._recordId,
                 base64: base64,
                 datetime: moment().format()
             }).subscribe(put => {
