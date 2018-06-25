@@ -45,15 +45,15 @@ export class StorageService {
         return fromPromise(this.storage.get(`${StorageService.RECORD_PREFIX}${key}`));
     }
 
-    public updateRecordServerId(record: ClientRecord, serverId: number): Observable<boolean> {
+    public updateRecordId(record: ClientRecord, id: number): Observable<boolean> {
         for (const photoId of record.photoIds) {
             this.getPhoto(photoId).subscribe(clientPhoto => {
-                clientPhoto.recordServerId = serverId;
-                this.putPhoto(clientPhoto.id, clientPhoto).subscribe();
+                clientPhoto.id = id;
+                this.putPhoto(clientPhoto.client_id, clientPhoto).subscribe();
             });
         }
 
-        record.serverId = serverId;
+        record.id = id;
         return this.putRecord(record);
     }
 
@@ -133,14 +133,14 @@ export class StorageService {
         });
     }
 
-    public updatePhotoRecordServerId(clientPhoto: ClientPhoto, recordServerId: number): Observable<boolean> {
-        clientPhoto.recordServerId = recordServerId;
-        return this.putPhoto(clientPhoto.id, clientPhoto);
+    public updatePhotoRecordServerId(clientPhoto: ClientPhoto, id: number): Observable<boolean> {
+        clientPhoto.id = id;
+        return this.putPhoto(clientPhoto.client_id, clientPhoto);
     }
 
-    public updatePhotoMediaId(clientPhoto: ClientPhoto, mediaId: number): Observable<boolean> {
-        clientPhoto.mediaId = mediaId;
-        return this.putPhoto(clientPhoto.id, clientPhoto);
+    public updatePhotoMediaId(clientPhoto: ClientPhoto, id: number): Observable<boolean> {
+        clientPhoto.id = id;
+        return this.putPhoto(clientPhoto.client_id, clientPhoto);
     }
 
 }

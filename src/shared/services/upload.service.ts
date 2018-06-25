@@ -19,7 +19,7 @@ export class UploadService {
         return this.storageService.getAllValidRecords().pipe(
             mergeMap((clientRecord: ClientRecord) =>
                     this.apiService.createRecord(clientRecord).pipe(
-                        mergeMap((record: Record) => this.storageService.updateRecordServerId(clientRecord, record.id),
+                        mergeMap((record: Record) => this.storageService.updateRecordId(clientRecord, record.id),
                             (record: Record, updateRecordServerIdSuccess: boolean) => record)
                     ),
                 (clientRecord: ClientRecord, record: Record) =>
@@ -30,9 +30,9 @@ export class UploadService {
 
     public uploadPendingRecordPhotos() {
         this.storageService.getAllPendingPhotos().subscribe(clientPhoto => {
-            this.storageService.getRecord(clientPhoto.recordId).subscribe( record => {
-                this.storageService.updatePhotoRecordServerId(clientPhoto, record.serverId).subscribe(success => {
-                    this.apiService.uploadRecordMediaBase64(clientPhoto.recordServerId, clientPhoto.base64).subscribe(media => {
+            this.storageService.getRecord(clientPhoto.record_client_id).subscribe( record => {
+                this.storageService.updatePhotoRecordServerId(clientPhoto, record.id).subscribe(success => {
+                    this.apiService.uploadRecordMediaBase64(clientPhoto.record, clientPhoto.base64).subscribe(media => {
                         this.storageService.updatePhotoMediaId(clientPhoto, media.id).subscribe();
                     });
                 });

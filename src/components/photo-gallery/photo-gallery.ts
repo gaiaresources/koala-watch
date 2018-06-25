@@ -145,9 +145,9 @@ export class PhotoGalleryComponent {
         this.camera.getPicture(options).then((base64) => {
             const photoId = UUID.UUID();
             this.storageService.putPhoto(photoId, {
-                id: photoId,
+                client_id: photoId,
                 fileName: photoId + '.jpg',
-                recordId: this._recordId,
+                record_client_id: this._recordId,
                 base64: base64,
                 datetime: moment().format()
             }).subscribe(put => {
