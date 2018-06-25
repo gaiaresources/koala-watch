@@ -54,6 +54,10 @@ export class RecordsListComponent {
     }
 
     public getStatusColor(record: ClientRecord) {
+        if (record.id) {
+            return '#ebf0df';
+        }
+
         return record.valid ? '#ebffef' : '#ebf6ff';
     }
 
