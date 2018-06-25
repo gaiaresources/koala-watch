@@ -29,6 +29,10 @@ div#category-legend-div {
     background-color: #ebf6ff;
 }
 
+#category-uploaded {
+    background-color: #ebf0df;
+}
+
 img.data-row {
     height: 40px;
     width: 40px;
@@ -51,4 +55,8 @@ img.data-row {
 
 .row {
     align-items: center;
+}
+
+.vertical-align-middle {
+    vertical-align: middle
 }

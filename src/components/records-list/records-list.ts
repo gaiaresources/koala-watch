@@ -13,18 +13,25 @@ export class RecordsListComponent {
 
     @Input()
     public records: ClientRecord[];
+
     @Input()
     public showLegend = true;
+
     @Input()
     public baseNavController: NavController;
+
     @Input()
     public parentId: string;
+
     @Input()
     public haveObservation = true;
+
     @Input()
     public haveCensus = true;
+
     @Input()
     public haveTree = true;
+
     @Input()
     public haveWelcome = true;
 
@@ -47,6 +54,10 @@ export class RecordsListComponent {
     }
 
     public getStatusColor(record: ClientRecord) {
+        if (record.id) {
+            return '#ebf0df';
+        }
+
         return record.valid ? '#ebffef' : '#ebf6ff';
     }
 
@@ -73,7 +84,7 @@ export class RecordsListComponent {
     }
 
     private navPush(page, params) {
-        if (this.baseNavController === undefined) {
+        if (!this.baseNavController) {
             this.navCtrl.push(page, params);
         } else {
             this.baseNavController.push(page, params);

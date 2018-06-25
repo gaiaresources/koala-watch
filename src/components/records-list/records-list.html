@@ -5,6 +5,8 @@
             <td class="category-legend-label">Complete</td>
             <td class="category-legend-colour" id="category-incomplete"></td>
             <td class="category-legend-label">Incomplete</td>
+            <td class="category-legend-colour" id="category-uploaded"></td>
+            <td class="category-legend-label">Uploaded</td>
         </table>
     </div>
 
@@ -14,8 +16,10 @@
                     (click)="itemTapped($event, record)">
                 <img item-start class="data-row" [src]="getDatasetIcon(record)"/>
                 <ion-label>{{ record.datetime | date: angularDateFormat }}</ion-label>
-                <img *ngIf="record.count" item-end class="data-row" [src]="getCountIcon(record)"/>
-                <span item-end>{{ record.count }}</span>
+                <img item-end class="data-row" [src]="getCountIcon(record)"/>
+                <span item-end>{{ record.count || 0 }}</span>
+                <img item-end class="data-row" src="assets/imgs/camera.png"/>
+                <span item-end>{{ record.photoIds?.length || 0 }}</span>
             </button>
         </ion-list>
     </div>
@@ -40,7 +44,7 @@
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveObservation">
-                    <ion-col>
+                    <ion-col col-2>
                         <button ion-fab class="local-fab"
                                 (click)="onClickedNewRecord('Koala Opportunistic Observation')">
                             <img alt="Koala Opportunistic Observation"
@@ -48,29 +52,29 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-data" style="vertical-align: middle">Create an Opportunistic Observation</h1>
+                        <h1 class="no-data vertical-align-middle">Create an Opportunistic Observation</h1>
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveCensus">
-                    <ion-col>
+                    <ion-col col-2>
                         <button ion-fab class="local-fab" (click)="onClickedNewRecord('KLM-SAT Census')">
                             <img alt="Koala Census"
                                  src="assets/imgs/white_poop.png">
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-data" style="vertical-align: middle">Start a Census</h1>
+                        <h1 class="no-data vertical-align-middle">Start a Census</h1>
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveTree">
-                    <ion-col>
+                    <ion-col col-2>
                         <button ion-fab class="local-fab" (click)="onClickedNewRecord('KLM-SAT Tree Sighting')">
                             <img alt="Koala Tree Survey"
                                  src="assets/imgs/white_tree.png">
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-data" style="vertical-align: middle">Start a Tree Survey</h1>
+                        <h1 class="no-data vertical-align-middle">Create a Tree Sighting</h1>
                     </ion-col>
                 </ion-row>
             </ion-grid>

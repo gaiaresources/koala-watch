@@ -137,13 +137,13 @@ export class RecordFormComponent {
         ).subscribe(position => {
             const valuesToPatch = {};
 
-            if (this.form.contains('Latitude')) {
-                valuesToPatch['Latitude'] = position.coords.latitude;
-            }
+                    if (this.form.contains('Latitude')) {
+                        valuesToPatch['Latitude'] = position.coords.latitude.toFixed(6);
+                    }
 
-            if (this.form.contains('Longitude')) {
-                valuesToPatch['Longitude'] = position.coords.longitude;
-            }
+                    if (this.form.contains('Longitude')) {
+                        valuesToPatch['Longitude'] = position.coords.longitude.toFixed(6);
+                    }
 
             if (this.form.contains('Accuracy')) {
                 valuesToPatch['Accuracy'] = position.coords.accuracy;

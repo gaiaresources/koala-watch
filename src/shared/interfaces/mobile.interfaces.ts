@@ -1,4 +1,4 @@
-import { Record } from '../../biosys-core/interfaces/api.interfaces';
+import { Media, Record } from '../../biosys-core/interfaces/api.interfaces';
 
 export interface ClientRecord extends Record {
     valid: boolean;
@@ -9,9 +9,9 @@ export interface ClientRecord extends Record {
     photoIds: string[];
 }
 
-export interface ClientPhoto {
-    id: string;
-    recordId: string;
+export interface ClientPhoto extends Media {
+    clientId: string;
+    recordClientId: string;
     fileName: string;
     base64: string;
     datetime: string;
