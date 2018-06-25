@@ -83,13 +83,12 @@ export class RecordFormComponent {
                     filter(position => !!position['coords']) // filter out errors
                 ).subscribe(position => {
                     const valuesToPatch = {};
-
                     if (this.form.contains('Latitude')) {
-                        valuesToPatch['Latitude'] = position.coords.latitude;
+                        valuesToPatch['Latitude'] = position.coords.latitude.toPrecision(5);
                     }
 
                     if (this.form.contains('Longitude')) {
-                        valuesToPatch['Longitude'] = position.coords.longitude;
+                        valuesToPatch['Longitude'] = position.coords.longitude.toPrecision(5);
                     }
 
                     if (this.form.contains('Accuracy')) {
