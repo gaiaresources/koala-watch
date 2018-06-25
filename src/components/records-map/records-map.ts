@@ -1,6 +1,7 @@
 import { GoogleMap, GoogleMaps, LatLng, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
+import { NavParams } from "ionic-angular";
 
 @Component({
     selector: 'records-map',
@@ -18,7 +19,7 @@ export class RecordsMapComponent implements OnInit {
     private map: GoogleMap;
     private _records: ClientRecord[];
 
-    constructor() {
+    constructor(private navParams: NavParams) {
     }
 
     ngOnInit(): void {
@@ -44,10 +45,9 @@ export class RecordsMapComponent implements OnInit {
                 'zoom': 3.5,
             }
         });
-        this.loadMarkers();
-    }
-
-    public ionViewWillEnter() {
+        if (this.navParams.data.hasOwnProperty('data')) {
+            this.records = this.navParams.get('data');
+        }
         this.loadMarkers();
     }
 
@@ -59,8 +59,9 @@ export class RecordsMapComponent implements OnInit {
                     if (record.hasOwnProperty('data') &&
                         record.data.hasOwnProperty('Latitude') &&
                         record.data.hasOwnProperty('Longitude')) {
+                        alert(record.data.Latitude);
                         this.map.addMarkerSync({
-                            title: record.data['First Date'],
+                            title: record.data['First Date'] || '',
                             icon: record.valid ? 'green' : 'blue',
                             animation: 'DROP',
                             position: {
