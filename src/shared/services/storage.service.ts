@@ -49,7 +49,7 @@ export class StorageService {
         for (const photoId of record.photoIds) {
             this.getPhoto(photoId).subscribe(clientPhoto => {
                 clientPhoto.id = id;
-                this.putPhoto(clientPhoto.client_id, clientPhoto).subscribe();
+                this.putPhoto(clientPhoto.clientId, clientPhoto).subscribe();
             });
         }
 
@@ -135,12 +135,12 @@ export class StorageService {
 
     public updatePhotoRecordServerId(clientPhoto: ClientPhoto, id: number): Observable<boolean> {
         clientPhoto.id = id;
-        return this.putPhoto(clientPhoto.client_id, clientPhoto);
+        return this.putPhoto(clientPhoto.clientId, clientPhoto);
     }
 
     public updatePhotoMediaId(clientPhoto: ClientPhoto, id: number): Observable<boolean> {
         clientPhoto.id = id;
-        return this.putPhoto(clientPhoto.client_id, clientPhoto);
+        return this.putPhoto(clientPhoto.clientId, clientPhoto);
     }
 
 }
