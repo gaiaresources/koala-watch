@@ -32,7 +32,6 @@ export class RecordsMapComponent implements OnInit {
                 'compass': false,
                 'zoom': false,
                 'indoorPicker': false,
-                'myLocationButton': true,
             },
             'gestures': {
                 'scroll': true,
@@ -45,6 +44,8 @@ export class RecordsMapComponent implements OnInit {
                 'zoom': 3.5,
             }
         });
+        this.map.setMyLocationEnabled(true);
+        this.map.setMyLocationButtonEnabled(true);
         if (this.navParams.data.hasOwnProperty('data')) {
             this.records = this.navParams.get('data');
         }
