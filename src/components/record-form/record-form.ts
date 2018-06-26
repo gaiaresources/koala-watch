@@ -42,6 +42,9 @@ export class RecordFormComponent {
     @Input()
     public key: string;
 
+    @Input()
+    public readonly: boolean;
+
     public get invalid(): boolean {
         return !!this.form && this.form.invalid;
     }

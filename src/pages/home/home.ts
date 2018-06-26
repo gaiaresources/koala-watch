@@ -29,7 +29,7 @@ export class HomePage {
 
     public records: ClientRecord[];
 
-    private loading: Loading;
+    private loading?: Loading;
 
     public recordsList = RecordsListComponent;
     public recordsMap = RecordsMapComponent;
@@ -40,9 +40,6 @@ export class HomePage {
                 private toastCtrl: ToastController, private storageService: StorageService,
                 private uploadService: UploadService, private event: Events) {
         this.records = [];
-        this.loading = this.loadingCtrl.create({
-            content: 'Uploading records'
-        });
     }
 
     ionViewWillEnter() {
@@ -51,6 +48,9 @@ export class HomePage {
     }
 
     public clickedUpload() {
+        this.loading = this.loadingCtrl.create({
+            content: 'Uploading records'
+        });
         this.loading.present();
         this.uploadService.uploadValidRecords().subscribe({
             error: (error: APIError) => {
