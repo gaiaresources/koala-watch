@@ -70,10 +70,6 @@ export class RecordFormComponent {
         }
     }
 
-    public isReadonly() {
-        return this.readonly;
-    }
-
     constructor(private schemaService: SchemaService, private geolocation: Geolocation) {}
 
     public updateLocationClick() {
