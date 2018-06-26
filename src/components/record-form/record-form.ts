@@ -6,7 +6,7 @@ import { FieldDescriptor, FormDescriptor } from '../../biosys-core/interfaces/fo
 import { filter } from 'rxjs/operators';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
-import { Geolocation } from '@ionic-native/geolocation';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 
 /**
@@ -25,6 +25,8 @@ export class RecordFormComponent {
     public formDescriptor: FormDescriptor;
 
     private _dateFieldKey: string;
+
+    private lastLocation: Geoposition;
 
     @Input()
     public initializeDefaultValues = false;
@@ -67,6 +69,28 @@ export class RecordFormComponent {
 
     constructor(private schemaService: SchemaService, private geolocation: Geolocation) {}
 
+    public updateLocationClick() {
+        if (!this.lastLocation) {
+            return;
+        }
+
+        const valuesToPatch = {};
+
+        if (this.form.contains('Latitude')) {
+            valuesToPatch['Latitude'] = this.lastLocation.coords.latitude.toFixed(6);
+        }
+
+        if (this.form.contains('Longitude')) {
+            valuesToPatch['Longitude'] = this.lastLocation.coords.longitude.toFixed(6);
+        }
+
+        if (this.form.contains('Accuracy')) {
+            valuesToPatch['Accuracy'] = this.lastLocation.coords.accuracy;
+        }
+
+        this.form.patchValue(valuesToPatch);
+    }
+
     private setupForm(dataset: Dataset) {
         this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
             this.formDescriptor = results[0];
@@ -82,21 +106,11 @@ export class RecordFormComponent {
                 this.geolocation.watchPosition().pipe(
                     filter(position => !!position['coords']) // filter out errors
                 ).subscribe(position => {
-                    const valuesToPatch = {};
-
-                    if (this.form.contains('Latitude')) {
-                        valuesToPatch['Latitude'] = position.coords.latitude.toFixed(6);
+                    const update = !this.lastLocation;
+                    this.lastLocation = position;
+                    if (update) {
+                       this.updateLocationClick();
                     }
-
-                    if (this.form.contains('Longitude')) {
-                        valuesToPatch['Longitude'] = position.coords.longitude.toFixed(6);
-                    }
-
-                    if (this.form.contains('Accuracy')) {
-                        valuesToPatch['Accuracy'] = position.coords.accuracy;
-                    }
-
-                    this.form.patchValue(valuesToPatch);
                 });
 
                 if (this._dateFieldKey) {
