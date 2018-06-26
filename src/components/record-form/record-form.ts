@@ -8,6 +8,7 @@ import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
+import { AlertController } from 'ionic-angular';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -67,10 +68,61 @@ export class RecordFormComponent {
         }
     }
 
-    constructor(private schemaService: SchemaService, private geolocation: Geolocation) {}
+    constructor(private schemaService: SchemaService, private geolocation: Geolocation, private alertCtrl: AlertController) {}
 
-    public updateLocationClick() {
+    private setupForm(dataset: Dataset) {
+        this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
+            this.formDescriptor = results[0];
+            this.form = results[1];
+
+            if (this.formDescriptor.dateFields) {
+                // use whatever is the first date field as the representative date field
+                this._dateFieldKey = this.formDescriptor.dateFields[0].key;
+            }
+
+            let performInitialLocationUpdate = this.initializeDefaultValues;
+
+            this.geolocation.watchPosition().pipe(
+                filter(position => !!position['coords']) // filter out errors
+            ).subscribe(position => {
+                this.lastLocation = position;
+
+                if (performInitialLocationUpdate) {
+                    this.updateLocationFields(true);
+                    performInitialLocationUpdate = false;
+                }
+            });
+
+            if (this.initializeDefaultValues) {
+                // if this is a new record, patch in default form values where appropriate
+                if (this._dateFieldKey) {
+                    // moment().format() will return the current date/time in local timezone
+                    this.form.controls[this._dateFieldKey].setValue(moment().format());
+                }
+
+                if (this.formDescriptor.hiddenFields) {
+                    this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
+                        this.form.controls[field.key].setValue(field.defaultValue);
+                    });
+                }
+
+                if (this.formDescriptor.keyField && this.key) {
+                    this.form.controls[this.formDescriptor.keyField].setValue(this.key);
+                }
+            }
+        });
+    }
+
+    public updateLocationFields(initialUpdate = false) {
         if (!this.lastLocation) {
+            // don't want to show a popup immediately upon showing form the first time
+            if (!initialUpdate) {
+                this.alertCtrl.create({
+                    title: 'Location unavailable',
+                    buttons: ['OK']
+                }).present();
+            }
+
             return;
         }
 
@@ -89,46 +141,6 @@ export class RecordFormComponent {
         }
 
         this.form.patchValue(valuesToPatch);
-    }
-
-    private setupForm(dataset: Dataset) {
-        this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
-            this.formDescriptor = results[0];
-            this.form = results[1];
-
-            if (this.formDescriptor.dateFields) {
-                // use whatever is the first date field as the representative date field
-                this._dateFieldKey = this.formDescriptor.dateFields[0].key;
-            }
-
-            if (this.initializeDefaultValues) {
-                // if this is a new record, patch in default form values where appropriate
-                this.geolocation.watchPosition().pipe(
-                    filter(position => !!position['coords']) // filter out errors
-                ).subscribe(position => {
-                    const update = !this.lastLocation;
-                    this.lastLocation = position;
-                    if (update) {
-                       this.updateLocationClick();
-                    }
-                });
-
-                if (this._dateFieldKey) {
-                    // moment().format() will return the current date/time in local timezone
-                    this.form.controls[this._dateFieldKey].setValue(moment().format());
-                }
-
-                if (this.formDescriptor.hiddenFields) {
-                    this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
-                        this.form.controls[field.key].setValue(field.defaultValue);
-                    });
-                }
-
-                if (this.formDescriptor.keyField && this.key) {
-                    this.form.controls[this.formDescriptor.keyField].setValue(this.key);
-                }
-            }
-        });
     }
 
     public getFieldError(fieldDescriptor: FieldDescriptor): string {
