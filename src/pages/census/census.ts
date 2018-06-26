@@ -14,7 +14,6 @@ import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gall
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
 
-
 /**
  * Generated class for the CensusPage page.
  *
@@ -30,6 +29,7 @@ import { mergeMap } from 'rxjs/operators';
 export class CensusPage {
     public observationRecords: ClientRecord[] = [];
     public isNewRecord = true;
+    public readonly = false;
 
     public segmentContent = 'form';
     public dataset: Dataset;
@@ -78,6 +78,7 @@ export class CensusPage {
                             this.record = record;
                             this.recordForm.value = record.data;
                             this.photoGallery.PhotoIds = record.photoIds;
+                            this.readonly = !!record.id;
                         }
                     }
                 );
@@ -85,8 +86,9 @@ export class CensusPage {
         });
 
         if (this.recordClientId) {
-            this.observationRecords.length = 0;
-            // this.observationRecords = [];
+            while (this.observationRecords.length) {
+                this.observationRecords.pop();
+            }
             this.storageService.getChildRecords(this.recordClientId).subscribe(
                 (record: ClientRecord) => this.observationRecords.push(record)
             );
