@@ -1,19 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
 import {
     Events,
-    FabContainer,
     IonicPage,
     Loading,
     LoadingController,
     NavController,
-    NavParams, Tabs,
+    NavParams,
+    Tabs,
     ToastController
 } from 'ionic-angular';
 
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { APIError, Record } from '../../biosys-core/interfaces/api.interfaces';
+import { APIError } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
-import { mergeMap } from 'rxjs/operators';
 import { RecordsListComponent } from '../../components/records-list/records-list';
 import { RecordsMapComponent } from '../../components/records-map/records-map';
 import { UploadService } from '../../shared/services/upload.service';
@@ -53,10 +52,7 @@ export class HomePage {
 
     public clickedUpload() {
         this.loading.present();
-        this.uploadService.uploadValidRecords().pipe(
-            mergeMap(([clientRecord, record]: [ClientRecord, Record]) =>
-                this.uploadService.uploadRecordPhotos(record, clientRecord.photoIds))
-        ).subscribe({
+        this.uploadService.uploadValidRecords().subscribe({
             error: (error: APIError) => {
                 this.loading.dismiss();
 
@@ -66,6 +62,7 @@ export class HomePage {
                     cssClass: 'toast-message'
                 }).present();
 
+                this.uploadService.uploadPendingRecordPhotos().subscribe();
                 this.loadRecords();
             },
             complete: () => {
@@ -76,6 +73,7 @@ export class HomePage {
                     cssClass: 'toast-message'
                 }).present();
 
+                this.uploadService.uploadPendingRecordPhotos().subscribe();
                 this.loadRecords();
             }
         });

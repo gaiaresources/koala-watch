@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
-import { RECORD_BLUE, RECORD_GREEN } from "../../shared/utils/consts";
+import { RECORD_BLUE, RECORD_GREEN, RECORD_RED } from "../../shared/utils/consts";
 
 @Component({
     selector: 'records-list',
@@ -14,18 +14,25 @@ export class RecordsListComponent {
 
     @Input()
     public records: ClientRecord[];
+
     @Input()
     public showLegend = true;
+
     @Input()
     public baseNavController: NavController;
+
     @Input()
     public parentId: string;
+
     @Input()
     public haveObservation = true;
+
     @Input()
     public haveCensus = true;
+
     @Input()
     public haveTree = true;
+
     @Input()
     public haveWelcome = true;
 
@@ -48,6 +55,9 @@ export class RecordsListComponent {
     }
 
     public getStatusColor(record: ClientRecord) {
+        if (record.id) {
+            return RECORD_RED;
+        }
         return record.valid ? RECORD_GREEN : RECORD_BLUE;
     }
 
@@ -74,7 +84,7 @@ export class RecordsListComponent {
     }
 
     private navPush(page, params) {
-        if (this.baseNavController === undefined) {
+        if (!this.baseNavController) {
             this.navCtrl.push(page, params);
         } else {
             this.baseNavController.push(page, params);

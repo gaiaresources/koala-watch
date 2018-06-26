@@ -3,12 +3,11 @@ import { Injectable } from '@angular/core';
 
 import { mergeMap } from 'rxjs/operators';
 import { StorageService } from './storage.service';
-import { from } from 'rxjs/observable/from';
 
 import { Media, Record } from '../../biosys-core/interfaces/api.interfaces';
 import { APIService } from '../../biosys-core/services/api.service';
 
-import { ClientRecord, ClientPhoto } from '../interfaces/mobile.interfaces';
+import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
 
 
 @Injectable()
@@ -19,23 +18,27 @@ export class UploadService {
     public uploadValidRecords(): Observable<[ClientRecord, Record]> {
         return this.storageService.getAllValidRecords().pipe(
             mergeMap((clientRecord: ClientRecord) =>
-                this.apiService.createRecord(clientRecord).pipe(
-                    mergeMap((record: Record) => this.storageService.deleteRecord(record.client_id),
-                             (record: Record, deleteRecordSuccess: boolean) => record)
-                ),
+                    this.apiService.createRecord(clientRecord).pipe(
+                        mergeMap((record: Record) => this.storageService.updateRecordId(clientRecord, record.id),
+                            (record: Record, updateRecordServerIdSuccess: boolean) => record)
+                    ),
                 (clientRecord: ClientRecord, record: Record) =>
                     [clientRecord, record] as [ClientRecord, Record]
             )
         );
     }
 
-    public uploadRecordPhotos(record: Record, photoIds): Observable<boolean> {
-        return from(photoIds).pipe(
-            mergeMap((photoId: string) => this.storageService.getPhoto(photoId).pipe(
-                mergeMap((photo: ClientPhoto) => this.apiService.uploadRecordMediaBase64(record.id, photo.base64))),
-                (photoId: string, media: Media) => photoId
-                ),
-            mergeMap((photoId: string) => this.storageService.deletePhoto(photoId))
+    public uploadPendingRecordPhotos(): Observable<[ClientPhoto, Media]> {
+        return this.storageService.getAllPendingPhotos().pipe(
+            mergeMap((clientPhoto: ClientPhoto) =>
+                    this.apiService.uploadRecordMediaBase64(clientPhoto.record, clientPhoto.base64).pipe(
+                        mergeMap((media: Media) => this.storageService.updatePhotoMediaId(clientPhoto, media.id),
+                            (media: Media, photoUpdated: boolean) => media)
+                    ),
+                (clientPhoto: ClientPhoto, media: Media) =>
+                    [clientPhoto, media] as [ClientPhoto, Media]
+
+            )
         );
     }
 }
