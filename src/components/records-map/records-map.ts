@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavParams } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
+import { RECORD_BLUE, RECORD_GREEN } from '../../shared/utils/consts';
 
 @Component({
     selector: 'records-map',
@@ -47,11 +48,11 @@ export class RecordsMapComponent implements OnInit {
         if (this.navParams.data.hasOwnProperty('data')) {
             this.records = this.navParams.get('data');
         }
-        this.events.subscribe('home-willenter', () => timer(500).subscribe((foo) => this.ionViewWillEnter()));
+        this.events.subscribe('home-willenter', () => this.ionViewWillEnter());
     }
 
     public ionViewWillEnter() {
-        this.loadMarkers();
+        timer(500).subscribe(() => this.loadMarkers());
     }
 
     private loadMarkers() {
@@ -62,15 +63,12 @@ export class RecordsMapComponent implements OnInit {
                     if (record.hasOwnProperty('data') &&
                         record.data.hasOwnProperty('Latitude') &&
                         record.data.hasOwnProperty('Longitude')) {
-                        let title = record.data['Site ID'];
-                        if (record.data['First Date']) {
-                            title += ` ${record.data['First Date']}`;
-                        }
+                        const title = `${record.data['Site ID']}${record.data['First Date'] ? record.data['First Date'] : ''}`;
                         const snippet = record.client_id || '';
                         const marker = this.map.addMarkerSync({
                             snippet: snippet,
                             title: title,
-                            icon: record.valid ? '#ebffef' : '#ebf6ff',
+                            icon: record.valid ? RECORD_GREEN : RECORD_BLUE,
                             animation: 'DROP',
                             position: {
                                 lat: record.data.Latitude,
