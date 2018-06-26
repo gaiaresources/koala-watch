@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { AlertController } from 'ionic-angular';
 
 import * as moment from 'moment/moment';
 
@@ -6,7 +8,6 @@ import { FieldDescriptor, FormDescriptor } from '../../biosys-core/interfaces/fo
 import { filter } from 'rxjs/operators';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
-import { Geolocation } from '@ionic-native/geolocation';
 import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 
@@ -27,6 +28,8 @@ export class RecordFormComponent {
 
     private _dateFieldKey: string;
 
+    private lastLocation: Geoposition;
+
     @Input()
     public initializeDefaultValues = false;
 
@@ -39,6 +42,9 @@ export class RecordFormComponent {
 
     @Input()
     public key: string;
+
+    @Input()
+    public readonly: boolean;
 
     public get invalid(): boolean {
         return !!this.form && this.form.invalid;
@@ -66,7 +72,8 @@ export class RecordFormComponent {
         }
     }
 
-    constructor(private schemaService: SchemaService, private storageService: StorageService, private geolocation: Geolocation) {
+    constructor(private schemaService: SchemaService, private storageService: StorageService, private geolocation: Geolocation,
+                private alertCtrl: AlertController) {
     }
 
     private setupForm(dataset: Dataset) {
@@ -79,9 +86,21 @@ export class RecordFormComponent {
                 this._dateFieldKey = this.formDescriptor.dateFields[0].key;
             }
 
+            let performInitialLocationUpdate = this.initializeDefaultValues;
+
+            this.geolocation.watchPosition().pipe(
+                filter(position => !!position['coords']) // filter out errors
+            ).subscribe(position => {
+                this.lastLocation = position;
+
+                if (performInitialLocationUpdate) {
+                    this.updateLocationFields(true);
+                    performInitialLocationUpdate = false;
+                }
+            });
+
             if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
                 const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
-                console.log(this.formDescriptor);
                 const fieldDescriptor: FieldDescriptor = this.getFieldDescriptor(fieldName);
 
                 fieldDescriptor.type = 'select';
@@ -103,6 +122,36 @@ export class RecordFormComponent {
                 this.initialiseValues();
             }
         });
+    }
+
+    public updateLocationFields(initialUpdate = false) {
+        if (!this.lastLocation) {
+            // don't want to show a popup immediately upon showing form the first time
+            if (!initialUpdate) {
+                this.alertCtrl.create({
+                    title: 'Location unavailable',
+                    buttons: ['OK']
+                }).present();
+            }
+
+            return;
+        }
+
+        const valuesToPatch = {};
+
+        if (this.form.contains('Latitude')) {
+            valuesToPatch['Latitude'] = this.lastLocation.coords.latitude.toFixed(6);
+        }
+
+        if (this.form.contains('Longitude')) {
+            valuesToPatch['Longitude'] = this.lastLocation.coords.longitude.toFixed(6);
+        }
+
+        if (this.form.contains('Accuracy')) {
+            valuesToPatch['Accuracy'] = this.lastLocation.coords.accuracy;
+        }
+
+        this.form.patchValue(valuesToPatch);
     }
 
     public getFieldError(fieldDescriptor: FieldDescriptor): string {
@@ -131,27 +180,6 @@ export class RecordFormComponent {
     }
 
     private initialiseValues() {
-        // if this is a new record, patch in default form values where appropriate
-        this.geolocation.watchPosition().pipe(
-            filter(position => !!position['coords']) // filter out errors
-        ).subscribe(position => {
-            const valuesToPatch = {};
-
-            if (this.form.contains('Latitude')) {
-                valuesToPatch['Latitude'] = position.coords.latitude.toFixed(6);
-            }
-
-            if (this.form.contains('Longitude')) {
-                valuesToPatch['Longitude'] = position.coords.longitude.toFixed(6);
-            }
-
-            if (this.form.contains('Accuracy')) {
-                valuesToPatch['Accuracy'] = position.coords.accuracy;
-            }
-
-            this.form.patchValue(valuesToPatch);
-        });
-
         if (this._dateFieldKey) {
             // moment().format() will return the current date/time in local timezone
             this.form.controls[this._dateFieldKey].setValue(moment().format());
@@ -179,8 +207,6 @@ export class RecordFormComponent {
     private getFieldDescriptor(fieldName: string): FieldDescriptor {
         let fields: FieldDescriptor[] =
             this.formDescriptor.requiredFields.filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
-
-        console.log(this.formDescriptor.requiredFields);
 
         if (fields.length) {
             return fields[0];

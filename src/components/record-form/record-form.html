@@ -11,8 +11,8 @@
                     stacked>
                     {{ field.label }}
                     <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                            ({{ getFieldError(field) }})
-                        </span>
+                        ({{ getFieldError(field) }})
+                    </span>
                 </ion-label>
                 <ion-datetime [formControlName]="field.key"
                               [displayFormat]="field.format | pyDateFormatToIonicDateFormat" [disabled]="readonly"></ion-datetime>
@@ -22,7 +22,7 @@
             <ion-item-divider color="secondary">
                 <ion-icon name="locate"></ion-icon>
                 Location
-                <button ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
+                <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
                     Update
                 </button>
             </ion-item-divider>
@@ -32,8 +32,8 @@
                     stacked>
                     {{ field.label }}
                     <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                            ({{ getFieldError(field) }})
-                        </span>
+                        ({{ getFieldError(field) }})
+                    </span>
                 </ion-label>
                 <ion-select *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
                     <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
@@ -52,8 +52,8 @@
                     stacked>
                     {{ field.label }}
                     <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                            ({{ getFieldError(field) }})
-                        </span>
+                        ({{ getFieldError(field) }})
+                    </span>
                 </ion-label>
 
                 <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
@@ -77,8 +77,8 @@
                     stacked>
                     {{ field.label }}
                     <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                            ({{ getFieldError(field) }})
-                        </span>
+                        ({{ getFieldError(field) }})
+                    </span>
                 </ion-label>
 
                 <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
