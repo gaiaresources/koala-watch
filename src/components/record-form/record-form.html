@@ -22,6 +22,9 @@
             <ion-item-divider color="secondary">
                 <ion-icon name="locate"></ion-icon>
                 Location
+                <button ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
+                    Update
+                </button>
             </ion-item-divider>
             <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
                 <ion-label
@@ -38,11 +41,6 @@
                 <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key"></ion-input>
             </ion-item>
         </ion-item-group>
-        <ion-row>
-            <ion-col col-6 col-lg-4 col-md-4>
-                <button ion-button (click)="updateLocationClick()" full>Update</button>
-            </ion-col>
-        </ion-row>
         <ion-item-group *ngIf="formDescriptor.requiredFields && formDescriptor.requiredFields.length">
             <ion-item-divider color="secondary">
                 <ion-icon name="star"></ion-icon>
