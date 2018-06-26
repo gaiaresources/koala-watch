@@ -28,7 +28,6 @@ export class HomePage {
     public records: ClientRecord[];
 
     private loading: Loading;
-    private uploadInProgress = false;
 
     public recordsList = RecordsListComponent;
     public recordsMap = RecordsMapComponent;
@@ -47,10 +46,6 @@ export class HomePage {
     }
 
     public clickedUpload() {
-        if (this.uploadInProgress) {
-            return;
-        }
-        this.uploadInProgress = true;
         this.loading.present();
         this.uploadService.uploadValidRecords().subscribe({
             error: (error: APIError) => {
@@ -87,6 +82,5 @@ export class HomePage {
     private loadRecords() {
         this.records.length = 0;
         this.storageService.getParentRecords().subscribe((record: ClientRecord) => this.records.push(record));
-        this.uploadInProgress = false;
     }
 }
