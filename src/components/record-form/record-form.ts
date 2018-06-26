@@ -41,6 +41,9 @@ export class RecordFormComponent {
     @Input()
     public key: string;
 
+    @Input()
+    public readonly: boolean;
+
     public get invalid(): boolean {
         return !!this.form && this.form.invalid;
     }
@@ -65,6 +68,10 @@ export class RecordFormComponent {
             Object.keys(this.form.controls).forEach((fieldName: string) =>
                 this.form.get(fieldName).markAsDirty());
         }
+    }
+
+    public isReadonly() {
+        return this.readonly;
     }
 
     constructor(private schemaService: SchemaService, private geolocation: Geolocation) {}

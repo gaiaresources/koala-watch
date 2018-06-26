@@ -22,6 +22,7 @@ export class ObservationPage {
     public showForm = true;
     public isNewRecord = true;
     public parentId: string;
+    public readonly = false;
 
     @ViewChild(RecordFormComponent)
     private recordForm: RecordFormComponent;
@@ -67,6 +68,7 @@ export class ObservationPage {
                                 this.record = record;
                                 this.recordForm.value = record.data;
                                 this.photoGallery.PhotoIds = record.photoIds;
+                                this.readonly = !!record.id;
                             }
                         }
                     );

@@ -30,6 +30,7 @@ import { mergeMap } from 'rxjs/operators';
 export class CensusPage {
     public observationRecords: ClientRecord[] = [];
     public isNewRecord = true;
+    public readonly = false;
 
     public segmentContent = 'form';
     public dataset: Dataset;
@@ -78,6 +79,7 @@ export class CensusPage {
                             this.record = record;
                             this.recordForm.value = record.data;
                             this.photoGallery.PhotoIds = record.photoIds;
+                            this.readonly = !!record.id;
                         }
                     }
                 );
