@@ -29,7 +29,7 @@
             <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord" [key]="parentId" [readonly]="readonly"></record-form>
         </div>
         <div [hidden]="showForm">
-            <photo-gallery></photo-gallery>
+            <photo-gallery [readonly]="readonly"></photo-gallery>
         </div>
     </div>
 </ion-content>

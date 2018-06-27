@@ -65,7 +65,7 @@
                     [records]="observationRecords"></records-list>
         </div>
         <div [hidden]="segmentContent != 'photos'">
-            <photo-gallery></photo-gallery>
+            <photo-gallery [readonly]="readonly"></photo-gallery>
         </div>
     </div>
 
