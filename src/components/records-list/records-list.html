@@ -1,13 +1,12 @@
 <ion-content style="min-height: 500px">
     <div [hidden]="!records.length || !showLegend" id="category-legend-div">
-        <table id="category-legend">
-            <td class="category-legend-colour" id="category-completed"></td>
-            <td class="category-legend-label">Complete</td>
-            <td class="category-legend-colour" id="category-incomplete"></td>
-            <td class="category-legend-label">Incomplete</td>
-            <td class="category-legend-colour" id="category-uploaded"></td>
-            <td class="category-legend-label">Uploaded</td>
-        </table>
+        <ion-grid id="category-legend">
+            <ion-row>
+                <ion-col class="category-legend-label" id="category-completed">Complete</ion-col>
+                <ion-col class="category-legend-label" id="category-incomplete">Incomplete</ion-col>
+                <ion-col class="category-legend-label" id="category-uploaded">Uploaded</ion-col>
+            </ion-row>
+        </ion-grid>
     </div>
 
     <div [hidden]="!records.length">
