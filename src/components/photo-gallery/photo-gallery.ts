@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { StorageService } from '../../shared/services/storage.service';
 import { UUID } from 'angular2-uuid';
@@ -13,6 +13,9 @@ import {AlertController} from 'ionic-angular';
     templateUrl: 'photo-gallery.html'
 })
 export class PhotoGalleryComponent {
+
+    @Input()
+    public readonly: boolean;
 
     // Template variables
 
