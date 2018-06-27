@@ -12,7 +12,7 @@
         <ion-tab tabTitle="List" title="List"
                  [rootParams]="{showLegend: true, data: records, navCtrl: navCtrl, haveTree: false}"
                  [root]="recordsList"></ion-tab>
-        <ion-tab tabTitle="Map" title="Map" [rootParams]="{data:records}" [root]="recordsMap"></ion-tab>
+        <ion-tab tabTitle="Map" title="Map" [rootParams]="{data:records, navCtrl: navCtrl}" [root]="recordsMap"></ion-tab>
     </ion-tabs>
 
     <ion-fab bottom left>
