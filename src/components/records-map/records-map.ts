@@ -1,7 +1,7 @@
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { Events, NavParams } from 'ionic-angular';
+import { Events, NavController, NavParams } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
 import { RECORD_BLUE, RECORD_GREEN } from '../../shared/utils/consts';
 
