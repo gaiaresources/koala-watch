@@ -23,7 +23,7 @@
                 <ion-icon name="locate"></ion-icon>
                 Location
                 <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
-                    Update
+                    Update Location
                 </button>
             </ion-item-divider>
             <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
