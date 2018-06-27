@@ -29,8 +29,6 @@ import { PROJECT_NAME } from '../../shared/utils/consts';
 export class LoginPage {
     public form: FormGroup;
 
-    private loading?: Loading;
-
     constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
                 private authService: AuthService, private storageService: StorageService,
                 private formBuilder: FormBuilder, private alertController: AlertController, private loadingCtrl: LoadingController) {
@@ -41,10 +39,11 @@ export class LoginPage {
     }
 
     public login() {
-        this.loading = this.loadingCtrl.create({
+        const loading = this.loadingCtrl.create({
             content: 'Logging in'
         });
-        this.loading.present();
+        loading.present();
+
         this.authService.login(this.form.value['username'], this.form.value['password']).subscribe(() => {
                 this.apiService.getDatasets({project__name: 'NSW Koala Data Capture'}).pipe(
                     mergeMap((datasets: Dataset[]) => from(datasets).pipe(
@@ -60,11 +59,11 @@ export class LoginPage {
                     mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
                 ).subscribe();
 
-                this.loading.dismiss();
+                loading.dismiss();
                 this.navCtrl.setRoot('HomePage');
             },
             (error) => {
-                this.loading.dismiss();
+                loading.dismiss();
                 const apiResponse = formatAPIError(error) as ApiResponse;
                 this.alertController.create({
                     title: 'Login Problem',
