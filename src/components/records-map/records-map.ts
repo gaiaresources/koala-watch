@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
-import { RECORD_BLUE, RECORD_GREEN } from '../../shared/utils/consts';
+import { RECORD_INCOMPLETE, RECORD_COMPLETE } from '../../shared/utils/consts';
 
 @Component({
     selector: 'records-map',
@@ -32,7 +32,6 @@ export class RecordsMapComponent implements OnInit {
                 'compass': false,
                 'zoom': false,
                 'indoorPicker': false,
-                'myLocationButton': true,
             },
             'gestures': {
                 'scroll': true,
@@ -45,6 +44,8 @@ export class RecordsMapComponent implements OnInit {
                 'zoom': 3.5,
             }
         });
+        this.map.setMyLocationEnabled(true);
+        this.map.setMyLocationButtonEnabled(true);
         if (this.navParams.data.hasOwnProperty('data')) {
             this.records = this.navParams.get('data');
         }
@@ -68,7 +69,7 @@ export class RecordsMapComponent implements OnInit {
                         const marker = this.map.addMarkerSync({
                             snippet: snippet,
                             title: title,
-                            icon: record.valid ? RECORD_GREEN : RECORD_BLUE,
+                            icon: record.valid ? RECORD_COMPLETE : RECORD_INCOMPLETE,
                             animation: 'DROP',
                             position: {
                                 lat: record.data.Latitude,
