@@ -12,7 +12,7 @@
         <div *ngIf="showPhotos()">
             <div class="photo-container">
                 <img class="photo-img" [src]="domSanitizer.bypassSecurityTrustUrl(photoSrc)">
-                <div class="bottom-right">
+                <div class="top-right">
                     <img *ngIf="!readonly" src="assets/imgs/white_trash.png" (click)="deleteClick()">
                 </div>
                 <div class="center-left" *ngIf="showLeftChevron()">
