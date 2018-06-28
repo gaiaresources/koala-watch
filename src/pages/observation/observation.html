@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-title>{{ dataset?.name }}</ion-title>
-        <ion-buttons end>
+        <ion-buttons *ngIf="!readonly" end>
             <button ion-button icon-end solid color="primary" (click)="delete()">
                 Delete
                 <ion-icon name="trash"></ion-icon>
@@ -26,10 +26,10 @@
 
     <div>
         <div [hidden]="!showForm">
-            <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord" [key]="parentId"></record-form>
+            <record-form [dataset]="dataset" [initializeDefaultValues]="isNewRecord" [key]="parentId" [readonly]="readonly"></record-form>
         </div>
         <div [hidden]="showForm">
-            <photo-gallery></photo-gallery>
+            <photo-gallery [readonly]="readonly"></photo-gallery>
         </div>
     </div>
 </ion-content>
