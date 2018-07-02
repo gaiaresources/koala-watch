@@ -65,11 +65,11 @@
                     [records]="observationRecords"></records-list>
         </div>
         <div [hidden]="segmentContent != 'photos'">
-            <photo-gallery></photo-gallery>
+            <photo-gallery [readonly]="readonly"></photo-gallery>
         </div>
     </div>
 
-    <ion-fab bottom right>
+    <ion-fab [hidden]="readonly || segmentContent != 'observations'" bottom right>
         <button ion-fab (click)="onClickedNewRecord('KLM-SAT Tree Sighting')">
             <img alt="KLM-SAT Tree Sighting" class="home-fab-icon" src="assets/imgs/white_tree.png">
         </button>

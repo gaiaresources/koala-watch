@@ -1,7 +1,7 @@
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { Events, NavParams } from 'ionic-angular';
+import { Events, NavController, NavParams } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
 import { RECORD_INCOMPLETE, RECORD_COMPLETE } from '../../shared/utils/consts';
 
@@ -32,7 +32,6 @@ export class RecordsMapComponent implements OnInit {
                 'compass': false,
                 'zoom': false,
                 'indoorPicker': false,
-                'myLocationButton': true,
             },
             'gestures': {
                 'scroll': true,
@@ -45,6 +44,8 @@ export class RecordsMapComponent implements OnInit {
                 'zoom': 3.5,
             }
         });
+        this.map.setMyLocationEnabled(true);
+        this.map.setMyLocationButtonEnabled(true);
         if (this.navParams.data.hasOwnProperty('data')) {
             this.records = this.navParams.get('data');
         }

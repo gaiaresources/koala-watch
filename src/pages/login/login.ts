@@ -67,7 +67,8 @@ export class LoginPage {
                 const apiResponse = formatAPIError(error) as ApiResponse;
                 this.alertController.create({
                     title: 'Login Problem',
-                    subTitle: apiResponse.non_field_errors[0],
+                    subTitle: !!apiResponse.non_field_errors ? apiResponse.non_field_errors[0] :
+                        'There was a problem contacting the server, try again later',
                     buttons: ['Ok']
                 }).present();
             }

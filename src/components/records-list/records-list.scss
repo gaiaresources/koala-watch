@@ -4,15 +4,17 @@ table#category-legend {
     margin-right: auto;
 }
 
-td.category-legend-colour {
+.category-legend-colour {
     height: 2em;
     width: 2em;
 }
 
-td.category-legend-label {
+.category-legend-label {
     vertical-align: middle;
-    padding-left: 2em;
-    padding-right: 4em;
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
     text-align: center;
 }
 
