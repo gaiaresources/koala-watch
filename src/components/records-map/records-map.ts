@@ -1,4 +1,4 @@
-import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, Marker, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavController, NavParams } from 'ionic-angular';
@@ -76,16 +76,18 @@ export class RecordsMapComponent implements OnInit {
                                 lng: record.data.Longitude,
                             }
                         });
-                        marker.on(GoogleMapsEvent.INFO_CLICK).subscribe(() => {
-                            const page = record.datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
-                            const params = {
-                                datasetName: record.datasetName,
-                                recordClientId: record.client_id,
-                                parentId: record.parentId
-                            };
-                            this.navParams.get('navCtrl').push(page, params);
-                            return;
-                        });
+                        // FIXME: work out why selector toggles slow to a crawl
+                        // marker.addEventListener(GoogleMapsEvent.MARKER_CLICK).subscribe(
+                        //     (value) => {
+                        //         const page = record.datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
+                        //         const params = {
+                        //             datasetName: record.datasetName,
+                        //             recordClientId: record.client_id,
+                        //             parentId: record.parentId
+                        //         };
+                        //         this.navParams.get('navCtrl').push(page, params);
+                        //         return;
+                        //     });
                     }
                 }
             }
