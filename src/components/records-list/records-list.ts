@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
-import { RECORD_BLUE, RECORD_GREEN, RECORD_RED } from '../../shared/utils/consts'
+import { RECORD_BLUE, RECORD_GREEN, RECORD_RED } from '../../shared/utils/consts';
 
 @Component({
     selector: 'records-list',

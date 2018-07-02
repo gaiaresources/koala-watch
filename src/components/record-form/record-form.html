@@ -35,9 +35,11 @@
                             ({{ getFieldError(field) }})
                         </span>
                 </ion-label>
-                <ion-select *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
-                    <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
-                </ion-select>
+                <ion-input *ngSwitchCase="'select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
+                           [mbsc-options]="{filter: field.options.length > 10}" [disabled]="readonly"></ion-input>
+                <!--<ion-select *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">-->
+                    <!--<ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>-->
+                <!--</ion-select>-->
                 <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key" [disabled]="readonly"></ion-input>
             </ion-item>
         </ion-item-group>
@@ -56,11 +58,12 @@
                         </span>
                 </ion-label>
 
-                <ion-input *ngSwitchCase="'long-select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"></ion-input>
+                <ion-input *ngSwitchCase="'select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
+                           [mbsc-options]="{filter: field.options.length > 10}" [disabled]="readonly"></ion-input>
 
-                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
-                    <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
-                </ion-select>
+                <!--<ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">-->
+                    <!--<ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>-->
+                <!--</ion-select>-->
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
@@ -83,12 +86,12 @@
                         </span>
                 </ion-label>
 
-                <ion-input *ngSwitchCase="'long-select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
-                    [mbsc-options]="{filter: true, theme: 'material'}"></ion-input>
+                <ion-input *ngSwitchCase="'select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
+                    [mbsc-options]="{filter: field.options.length > 10}" [disabled]="readonly"></ion-input>
 
-                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
-                    <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
-                </ion-select>
+                <!--<ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key"">-->
+                    <!--<ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>-->
+                <!--</ion-select>-->
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key" [disabled]="readonly"></ion-datetime>
 
