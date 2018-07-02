@@ -9,7 +9,6 @@ import { APIService } from '../../biosys-core/services/api.service';
 
 import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
 
-
 @Injectable()
 export class UploadService {
     constructor(private storageService: StorageService, private apiService: APIService) {
@@ -29,16 +28,16 @@ export class UploadService {
     }
 
     public uploadPendingRecordPhotos(): Observable<[ClientPhoto, Media]> {
-        return this.storageService.getAllPendingPhotos().pipe(
-            mergeMap((clientPhoto: ClientPhoto) =>
-                    this.apiService.uploadRecordMediaBase64(clientPhoto.record, clientPhoto.base64).pipe(
-                        mergeMap((media: Media) => this.storageService.updatePhotoMediaId(clientPhoto, media.id),
-                            (media: Media, photoUpdated: boolean) => media)
-                    ),
-                (clientPhoto: ClientPhoto, media: Media) =>
-                    [clientPhoto, media] as [ClientPhoto, Media]
+            return this.storageService.getAllPendingPhotos().pipe(
+                mergeMap((clientPhoto: ClientPhoto) =>
+                        this.apiService.uploadRecordMediaBase64(clientPhoto.record, clientPhoto.base64).pipe(
+                            mergeMap((media: Media) => this.storageService.updatePhotoMediaId(clientPhoto, media.id),
+                                (media: Media) => media)
+                        ),
+                    (clientPhoto: ClientPhoto, media: Media) =>
+                        [clientPhoto, media] as [ClientPhoto, Media]
 
-            )
-        );
+                )
+            );
     }
 }
