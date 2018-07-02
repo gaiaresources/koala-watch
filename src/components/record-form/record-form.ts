@@ -22,6 +22,8 @@ import { AlertController } from 'ionic-angular';
     providers: [SchemaService]
 })
 export class RecordFormComponent {
+    private static readonly SELECT_THEME = 'auto';
+
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
 
@@ -169,5 +171,13 @@ export class RecordFormComponent {
             case 'pattern':
                 return `Must match pattern: ${error['pattern']}`;
         }
+    }
+
+    public getSelectOptions(fieldDescriptor: FieldDescriptor): object {
+        return {
+            filter: fieldDescriptor.options.length > 10,
+            buttons: fieldDescriptor ? ['set', 'clear', 'cancel'] : ['set', 'cancel'],
+            theme: RecordFormComponent.SELECT_THEME
+        };
     }
 }
