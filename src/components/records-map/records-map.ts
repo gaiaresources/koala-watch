@@ -48,7 +48,7 @@ export class RecordsMapComponent implements OnInit {
         if (this.navParams.data.hasOwnProperty('data')) {
             this.records = this.navParams.get('data');
         }
-        this.events.subscribe('home-willenter', () => this.ionViewWillEnter());
+        this.events.subscribe('home-willenter', this.ionViewWillEnter);
     }
 
     public ionViewWillEnter() {
@@ -82,6 +82,7 @@ export class RecordsMapComponent implements OnInit {
                                 recordClientId: record.client_id,
                                 parentId: record.parentId
                             };
+                            console.log(params);
                             this.navParams.get('navCtrl').push(page, params);
                             return;
                         });

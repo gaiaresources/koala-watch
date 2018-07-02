@@ -110,4 +110,5 @@
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="26.1.0" />
     </plugin>
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
+    <allow-navigation href="http://192.168.6.52:8101" />
 </widget>

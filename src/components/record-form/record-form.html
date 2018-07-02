@@ -56,6 +56,8 @@
                         </span>
                 </ion-label>
 
+                <ion-input *ngSwitchCase="'long-select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"></ion-input>
+
                 <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
                     <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
                 </ion-select>
@@ -80,6 +82,9 @@
                             ({{ getFieldError(field) }})
                         </span>
                 </ion-label>
+
+                <ion-input *ngSwitchCase="'long-select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
+                    [mbsc-options]="{filter: true, theme: 'material'}"></ion-input>
 
                 <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
                     <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
