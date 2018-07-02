@@ -176,8 +176,13 @@ export class RecordFormComponent {
     public getSelectOptions(fieldDescriptor: FieldDescriptor): object {
         return {
             filter: fieldDescriptor.options.length > 10,
-            buttons: fieldDescriptor ? ['set', 'clear', 'cancel'] : ['set', 'cancel'],
+            buttons: ['clear', 'cancel'],
             theme: RecordFormComponent.SELECT_THEME
         };
+    }
+
+    public onItemSelected(event: any) {
+        event.inst.setVal(event.value);
+        event.inst.select();
     }
 }
