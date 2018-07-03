@@ -1,9 +1,9 @@
 import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, Marker, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { Events, NavController, NavParams } from 'ionic-angular';
+import { Events, NavParams } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
-import { RECORD_INCOMPLETE, RECORD_COMPLETE, isDatasetCensus } from '../../shared/utils/consts';
+import { isDatasetCensus } from '../../shared/utils/functions';
 
 @Component({
     selector: 'records-map',

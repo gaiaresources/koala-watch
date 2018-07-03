@@ -2,15 +2,9 @@ import { Component, Input } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
-import {
-    RECORD_INCOMPLETE,
-    RECORD_COMPLETE,
-    RECORD_UPLOADED,
-    DATASET_NAME_OBSERVATION,
-    DATASET_NAME_CENSUS,
-    DATASET_NAME_TREESIGHTING,
-    isDatasetCensus
-} from '../../shared/utils/consts';
+import { RECORD_INCOMPLETE, RECORD_COMPLETE, RECORD_UPLOADED, DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS,
+    DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
+import { isDatasetCensus } from '../../shared/utils/functions';
 
 @Component({
     selector: 'records-list',
@@ -19,6 +13,11 @@ import {
 export class RecordsListComponent {
     public angularDateFormat: string = ANY_ANGULAR_DATETIME_FORMAT;
     public items: Array<{ title: string, note: string, icon: string }>;
+
+    // consts used in template
+    public DATASETNAME_TREESIGHTING = DATASET_NAME_TREESIGHTING;
+    public DATASETNAME_CENSUS = DATASET_NAME_CENSUS;
+    public DATASETNAME_OBSERVATION = DATASET_NAME_OBSERVATION;
 
     @Input()
     public records: ClientRecord[];
