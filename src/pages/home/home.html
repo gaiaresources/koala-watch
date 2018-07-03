@@ -18,18 +18,18 @@
     <ion-fab bottom left>
         <ion-row>
             <ion-col>
-                <button ion-fab (click)="clickedUpload()">
-                    <ion-icon name="cloud-upload"></ion-icon>
+                <button (click)="clickedUpload()" class="home-fab-button">
+                    <img alt="Koala Opportunistic Observation" class="home-fab-icon" src="assets/imgs/fab-upload.png" style="">
                 </button>
             </ion-col>
             <ion-col>
-                <button ion-fab (click)="onClickedNewRecord('Koala Opportunistic Observation')">
-                    <img alt="Koala Opportunistic Observation" class="home-fab-icon" src="assets/imgs/white_eye.png">
+                <button (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)" class="home-fab-button">
+                    <img alt="Koala Opportunistic Observation" class="home-fab-icon" src="assets/imgs/fab-eye.png">
                 </button>
             </ion-col>
             <ion-col>
-                <button ion-fab (click)="onClickedNewRecord('KLM-SAT Census')">
-                    <img alt="KLM-SAT Census" class="home-fab-icon" src="assets/imgs/white_poop.png">
+                <button (click)="onClickedNewRecord(DATASETNAME_CENSUS)" class="home-fab-button">
+                    <img alt="KLM-SAT Census" class="home-fab-icon" src="assets/imgs/fab-trees.png">
                 </button>
             </ion-col>
         </ion-row>

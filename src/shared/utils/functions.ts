@@ -24,3 +24,7 @@ export function pyDateFormatToIonicDateFormat(pythonDateFormat: string): string 
 
     return ionicDateFormat;
 }
+
+export function isDatasetCensus(dsName: string) {
+    return dsName.toLowerCase().indexOf('census') > -1;
+}
