@@ -19,9 +19,9 @@ import { UploadService } from '../../shared/services/upload.service';
 import {
     DATASET_NAME_CENSUS,
     DATASET_NAME_OBSERVATION,
-    DATASET_NAME_TREESIGHTING,
-    isDatasetCensus
+    DATASET_NAME_TREESIGHTING
 } from '../../shared/utils/consts';
+import { isDatasetCensus } from '../../shared/utils/functions';
 
 @IonicPage()
 @Component({
