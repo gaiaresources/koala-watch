@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
-import { RECORD_INCOMPLETE, RECORD_COMPLETE } from '../../shared/utils/consts';
+import { RECORD_INCOMPLETE, RECORD_COMPLETE, isDatasetCensus } from '../../shared/utils/consts';
 
 @Component({
     selector: 'records-map',
@@ -66,10 +66,20 @@ export class RecordsMapComponent implements OnInit {
                         record.data.hasOwnProperty('Longitude')) {
                         const title = `${record.data['Site ID']}${record.data['First Date'] ? record.data['First Date'] : ''}`;
                         const snippet = record.client_id || '';
+                        let url = 'assets/imgs/';
+                        url += `${isDatasetCensus(record.datasetName) ? 'tree' : 'eye'}-pin-`;
+                        url += `${record.valid ? 'complete' : 'incomplete'}.png`;
+
                         const marker = this.map.addMarkerSync({
                             snippet: snippet,
                             title: title,
-                            icon: record.valid ? RECORD_COMPLETE : RECORD_INCOMPLETE,
+                            icon: {
+                                url: url,
+                                size: {
+                                    width: 45,
+                                    height: 45
+                                }
+                            },
                             animation: 'DROP',
                             position: {
                                 lat: record.data.Latitude,
