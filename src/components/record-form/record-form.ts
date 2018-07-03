@@ -23,6 +23,9 @@ import { Subscription } from 'rxjs/Subscription';
     providers: [SchemaService]
 })
 export class RecordFormComponent implements OnDestroy {
+    private static readonly GEOLOCATION_TIMEOUT = 10000;
+    private static readonly GEOLOCATION_MAX_AGE = 2000;
+
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
     private _dateFieldKey: string;
@@ -38,9 +41,6 @@ export class RecordFormComponent implements OnDestroy {
             this.setupForm(dataset);
         }
     }
-
-    @Input()
-    public key: string;
 
     @Input()
     public readonly: boolean;
@@ -62,13 +62,8 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     public set value(value: object) {
-        this.form.setValue(value);
-
-        // need to show validation errors where appropriate for incomplete record
-        if (this.form.invalid) {
-            Object.keys(this.form.controls).forEach((fieldName: string) =>
-                this.form.get(fieldName).markAsDirty());
-        }
+        // use patch rather than set because the dataset may have changed and have new fields not set in the previously saved record
+        this.form.patchValue(value);
     }
 
     constructor(private schemaService: SchemaService,
@@ -93,8 +88,8 @@ export class RecordFormComponent implements OnDestroy {
 
             this.locationSubscription = this.geolocation.watchPosition({
                 enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 2000
+                timeout: RecordFormComponent.GEOLOCATION_TIMEOUT,
+                maximumAge: RecordFormComponent.GEOLOCATION_MAX_AGE
             }).pipe(
                 filter(position => !!position['coords']) // filter out errors
             ).subscribe(position => {
@@ -116,10 +111,6 @@ export class RecordFormComponent implements OnDestroy {
                     this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
                         this.form.controls[field.key].setValue(field.defaultValue);
                     });
-                }
-
-                if (this.formDescriptor.keyField && this.key) {
-                    this.form.controls[this.formDescriptor.keyField].setValue(this.key);
                 }
             }
         });
@@ -152,6 +143,14 @@ export class RecordFormComponent implements OnDestroy {
         }
 
         this.form.patchValue(valuesToPatch);
+    }
+
+    public validate() {
+        // need to show validation errors where appropriate for incomplete record
+        if (this.form.invalid) {
+            Object.keys(this.form.controls).forEach((fieldName: string) =>
+                this.form.get(fieldName).markAsDirty());
+        }
     }
 
     public getFieldError(fieldDescriptor: FieldDescriptor): string {

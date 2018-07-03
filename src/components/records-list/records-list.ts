@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
@@ -35,6 +35,9 @@ export class RecordsListComponent {
 
     @Input()
     public haveWelcome = true;
+
+    @Output()
+    public enteringRecord = new EventEmitter();
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams) {
@@ -84,6 +87,8 @@ export class RecordsListComponent {
     }
 
     private navPush(page, params) {
+        this.enteringRecord.emit();
+
         if (!this.baseNavController) {
             this.navCtrl.push(page, params);
         } else {
@@ -102,6 +107,8 @@ export class RecordsListComponent {
     }
 
     public onClickedNewRecord(datasetName: string) {
+        this.enteringRecord.emit();
+
         let page;
         const params = {
             datasetName: datasetName,

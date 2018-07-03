@@ -12,7 +12,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 import { from } from 'rxjs/observable/from';
-import { mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 
 /**
  * Generated class for the CensusPage page.
@@ -34,6 +34,7 @@ export class CensusPage {
     public segmentContent = 'form';
     public dataset: Dataset;
 
+    private showLeavingAlertMessage = true;
     private record: ClientRecord;
     private recordClientId: string;
 
@@ -50,6 +51,8 @@ export class CensusPage {
     }
 
     public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
+        this.willEnterChildRecord();
+
         this.censusNavCtrl.push('ObservationPage', {
             datasetName: datasetName,
             parentId: this.recordClientId
@@ -71,31 +74,48 @@ export class CensusPage {
             this.dataset = dataset;
 
             if (!this.isNewRecord) {
-                // if this is an existing record, set form values from data
-                this.storageService.getRecord(this.recordClientId).subscribe(
-                    record => {
-                        if (record) {
-                            this.record = record;
-                            this.recordForm.value = record.data;
-                            this.photoGallery.PhotoIds = record.photoIds;
-                            this.readonly = !!record.id;
-                        }
-                    }
-                );
+                this.loadRecordAndChildRecords();
             }
         });
+    }
 
-        if (this.recordClientId) {
-            while (this.observationRecords.length) {
-                this.observationRecords.pop();
-            }
-            this.storageService.getChildRecords(this.recordClientId).subscribe(
-                (record: ClientRecord) => this.observationRecords.push(record)
-            );
+    public ionViewDidEnter() {
+        this.showLeavingAlertMessage = true;
+    }
+
+    public ionViewCanLeave() {
+        if (this.showLeavingAlertMessage) {
+            this.alertController.create({
+                title: 'Leaving census unsaved',
+                message: 'You are leaving the census unsaved, are you sure?',
+                enableBackdropDismiss: true,
+                buttons: [
+                    {
+                        text: 'Yes',
+                        handler: () => {
+                            this.photoGallery.rollback();
+                            this.showLeavingAlertMessage = false;
+                            this.censusNavCtrl.pop();
+                        }
+                    },
+                    {
+                        text: 'No'
+                    }]
+            }).present();
+
+            return false;
+        } else {
+            return true;
         }
     }
 
-    public save() {
+    public willEnterChildRecord() {
+        this.showLeavingAlertMessage = false;
+
+        this.save();
+    }
+
+    public save(popForm = false) {
         const formValues: object = this.recordForm.value;
 
         this.storageService.putRecord({
@@ -108,7 +128,8 @@ export class CensusPage {
             count: this.observationRecords.length,
             photoIds: this.photoGallery.PhotoIds
         }).subscribe((result: boolean) => {
-            if (result) {
+            if (result && popForm) {
+                this.showLeavingAlertMessage = false;
                 this.censusNavCtrl.pop();
             }
         });
@@ -131,6 +152,7 @@ export class CensusPage {
                                         mergeMap(photoId => this.storageService.deletePhoto(photoId))
                                     ).subscribe();
                                 }
+                                // TODO: Delete any child records
                                 this.censusNavCtrl.pop();
                             }, (error) => {
                                 this.alertController.create({
@@ -147,6 +169,7 @@ export class CensusPage {
 
                             });
                         } else {
+                            this.showLeavingAlertMessage = false;
                             this.censusNavCtrl.pop();
                         }
                     }
@@ -155,5 +178,43 @@ export class CensusPage {
                     text: 'No'
                 }]
         }).present();
+    }
+
+    private loadRecordAndChildRecords() {
+        while (this.observationRecords.length) {
+            this.observationRecords.pop();
+        }
+
+        this.storageService.getRecord(this.recordClientId).pipe(
+            map((record: ClientRecord) => {
+                if (record) {
+                    this.record = record;
+                    this.photoGallery.PhotoIds = record.photoIds;
+                    this.readonly = !!record.id;
+                }
+            }),
+            mergeMap(() => this.storageService.getChildRecords(this.recordClientId)),
+            map((childRecord: ClientRecord) => this.observationRecords.push(childRecord))
+        )
+        .subscribe({
+            complete: () => {
+                // sort records by datetime
+                this.observationRecords.sort((a: ClientRecord, b: ClientRecord) => {
+                    const aDate = new Date(a.datetime);
+                    const bDate = new Date(b.datetime);
+
+                    return aDate > bDate ? 1 : aDate < bDate ? -1 : 0;
+                });
+
+                // patch in end datetime as the datetime of the last child element
+                if (this.record.data.hasOwnProperty('End Date and time') && this.observationRecords.length) {
+                    this.record.data['End Date and time'] = this.observationRecords.slice(-1)[0].datetime;
+                }
+
+                this.recordForm.value = this.record.data;
+
+                this.recordForm.validate();
+            }
+        });
     }
 }
