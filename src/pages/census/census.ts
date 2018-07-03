@@ -13,7 +13,7 @@ import { RecordFormComponent } from '../../components/record-form/record-form';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
-import { DATASETNAME_CENSUS, DATASETNAME_OBSERVATION, DATASETNAME_TREESIGHTING } from '../../shared/utils/consts';
+import { DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
 
 /**
  * Generated class for the CensusPage page.
@@ -44,9 +44,9 @@ export class CensusPage {
     @ViewChild(PhotoGalleryComponent)
     private photoGallery: PhotoGalleryComponent;
 
-    public DATASETNAME_CENSUS = DATASETNAME_CENSUS;
-    public DATASETNAME_TREESIGHTING = DATASETNAME_TREESIGHTING;
-    public DATASETNAME_OBSERVATION = DATASETNAME_OBSERVATION;
+    public DATASETNAME_CENSUS = DATASET_NAME_CENSUS;
+    public DATASETNAME_TREESIGHTING = DATASET_NAME_TREESIGHTING;
+    public DATASETNAME_OBSERVATION = DATASET_NAME_OBSERVATION;
 
     constructor(public censusNavCtrl: NavController,
                 public navParams: NavParams,
@@ -70,7 +70,7 @@ export class CensusPage {
         this.photoGallery.RecordId = this.recordClientId;
 
         // just during dev
-        const datasetName = this.navParams.get('datasetName') || DATASETNAME_CENSUS;
+        const datasetName = this.navParams.get('datasetName') || DATASET_NAME_CENSUS;
 
         this.storageService.getDataset(datasetName).subscribe((dataset: Dataset) => {
             this.dataset = dataset;

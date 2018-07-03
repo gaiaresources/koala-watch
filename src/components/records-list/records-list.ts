@@ -6,9 +6,9 @@ import {
     RECORD_INCOMPLETE,
     RECORD_COMPLETE,
     RECORD_UPLOADED,
-    DATASETNAME_OBSERVATION,
-    DATASETNAME_CENSUS,
-    DATASETNAME_TREESIGHTING,
+    DATASET_NAME_OBSERVATION,
+    DATASET_NAME_CENSUS,
+    DATASET_NAME_TREESIGHTING,
     isDatasetCensus
 } from '../../shared/utils/consts';
 
@@ -71,22 +71,22 @@ export class RecordsListComponent {
 
     public getDatasetIcon(record: ClientRecord): string {
         switch (record.datasetName) {
-            case DATASETNAME_OBSERVATION:
+            case DATASET_NAME_OBSERVATION:
                 return 'assets/imgs/eye.png';
-            case DATASETNAME_CENSUS:
+            case DATASET_NAME_CENSUS:
                 return 'assets/imgs/poop.png';
-            case DATASETNAME_TREESIGHTING:
+            case DATASET_NAME_TREESIGHTING:
                 return 'assets/imgs/tree.png';
         }
     }
 
     public getCountIcon(record: ClientRecord): string {
         switch (record.datasetName) {
-            case DATASETNAME_OBSERVATION:
+            case DATASET_NAME_OBSERVATION:
                 return 'assets/imgs/koala.png';
-            case DATASETNAME_CENSUS:
+            case DATASET_NAME_CENSUS:
                 return 'assets/imgs/tree.png';
-            case DATASETNAME_TREESIGHTING:
+            case DATASET_NAME_TREESIGHTING:
                 return 'assets/imgs/koala.png';
         }
     }

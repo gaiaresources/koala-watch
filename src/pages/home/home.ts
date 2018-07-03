@@ -17,9 +17,9 @@ import { RecordsListComponent } from '../../components/records-list/records-list
 import { RecordsMapComponent } from '../../components/records-map/records-map';
 import { UploadService } from '../../shared/services/upload.service';
 import {
-    DATASETNAME_CENSUS,
-    DATASETNAME_OBSERVATION,
-    DATASETNAME_TREESIGHTING,
+    DATASET_NAME_CENSUS,
+    DATASET_NAME_OBSERVATION,
+    DATASET_NAME_TREESIGHTING,
     isDatasetCensus
 } from '../../shared/utils/consts';
 
@@ -40,9 +40,9 @@ export class HomePage {
     public recordsList = RecordsListComponent;
     public recordsMap = RecordsMapComponent;
 
-    public DATASETNAME_TREESIGHTING = DATASETNAME_TREESIGHTING;
-    public DATASETNAME_CENSUS = DATASETNAME_CENSUS;
-    public DATASETNAME_OBSERVATION = DATASETNAME_OBSERVATION;
+    public DATASETNAME_TREESIGHTING = DATASET_NAME_TREESIGHTING;
+    public DATASETNAME_CENSUS = DATASET_NAME_CENSUS;
+    public DATASETNAME_OBSERVATION = DATASET_NAME_OBSERVATION;
 
     @ViewChild('homeTabs') tabRef: Tabs;
 
