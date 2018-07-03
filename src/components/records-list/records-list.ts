@@ -9,8 +9,8 @@ import {
     DATASET_NAME_OBSERVATION,
     DATASET_NAME_CENSUS,
     DATASET_NAME_TREESIGHTING,
-    isDatasetCensus
 } from '../../shared/utils/consts';
+import { isDatasetCensus } from '../../shared/utils/functions';
 
 @Component({
     selector: 'records-list',
