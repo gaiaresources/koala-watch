@@ -36,10 +36,10 @@
                 </ion-row>
                 <ion-row *ngIf="!haveWelcome" style="padding-bottom: 1em;">
                     <ion-col>
-                        <h1 class="no-data">No Tree Sightings Are Available</h1>
+                        <h1 class="no-data">This Census does not have any Tree Sightings</h1>
                         <p class="no-data">On this screen you can view the tree
                         surveys related to this census. You can also create a new
-                        tree survey.</p>
+                        tree survey.  Each Census can have many Tree Sightings.</p>
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveObservation">
@@ -73,7 +73,7 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-data vertical-align-middle">Create a Tree Sighting</h1>
+                        <h1 class="no-data vertical-align-middle">Create a Tree Sighting for this Census</h1>
                     </ion-col>
                 </ion-row>
             </ion-grid>
