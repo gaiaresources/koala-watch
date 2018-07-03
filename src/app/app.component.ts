@@ -8,6 +8,7 @@ import { StorageService } from '../shared/services/storage.service';
 import { Dataset } from '../biosys-core/interfaces/api.interfaces';
 import { mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs/observable/from';
+import { PROJECTNAME } from '../shared/utils/consts';
 
 @Component({
     templateUrl: 'app.html'
@@ -37,7 +38,7 @@ export class AppComponent implements OnInit {
             if (!this.authService.isLoggedIn()) {
                 this.nav.setRoot('LoginPage');
             } else {
-                this.apiService.getDatasets({project__name: 'NSW Koala Data Capture'}).pipe(
+                this.apiService.getDatasets({project__name: PROJECTNAME}).pipe(
                     mergeMap((datasets: Dataset[]) => from(datasets).pipe(
                         mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
                     ))
