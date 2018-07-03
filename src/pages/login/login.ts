@@ -45,7 +45,7 @@ export class LoginPage {
         loading.present();
 
         this.authService.login(this.form.value['username'], this.form.value['password']).subscribe(() => {
-                this.apiService.getDatasets({project__name: 'NSW Koala Data Capture'}).pipe(
+                this.apiService.getDatasets({project__name: PROJECT_NAME }).pipe(
                     mergeMap((datasets: Dataset[]) => from(datasets).pipe(
                         mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
                     ))
