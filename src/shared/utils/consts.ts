@@ -9,3 +9,8 @@ export let RECORD_INCOMPLETE = '#ebf6ff';
 export let RECORD_UPLOADED = '#ebf0df';
 
 export let APP_NAME = 'KoalaApp';
+
+export let PROJECT_NAME = 'Koala Pilot Project';
+export let DATASET_NAME_CENSUS = 'Koala Scat Census';
+export let DATASET_NAME_OBSERVATION = 'Koala Opportunistic Observation';
+export let DATASET_NAME_TREESIGHTING = 'Trees Surveyed';

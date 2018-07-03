@@ -1,11 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { AlertController } from 'ionic-angular';
 
 import * as moment from 'moment/moment';
+import { Subscription } from 'rxjs/Subscription';
+import { filter } from 'rxjs/operators';
 
 import { FieldDescriptor, FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
-import { filter } from 'rxjs/operators';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
 import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
@@ -22,13 +23,14 @@ import { StorageService } from '../../shared/services/storage.service';
     templateUrl: 'record-form.html',
     providers: [SchemaService]
 })
-export class RecordFormComponent {
+export class RecordFormComponent implements OnDestroy {
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
 
     private _dateFieldKey: string;
 
     private lastLocation: Geoposition;
+    private locationSubscription: Subscription;
 
     @Input()
     public initializeDefaultValues = false;
@@ -76,6 +78,10 @@ export class RecordFormComponent {
                 private alertCtrl: AlertController) {
     }
 
+    ngOnDestroy() {
+        this.locationSubscription.unsubscribe();
+    }
+
     private setupForm(dataset: Dataset) {
         this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
             this.formDescriptor = results[0];
@@ -88,7 +94,11 @@ export class RecordFormComponent {
 
             let performInitialLocationUpdate = this.initializeDefaultValues;
 
-            this.geolocation.watchPosition().pipe(
+            this.locationSubscription = this.geolocation.watchPosition({
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 2000
+            }).pipe(
                 filter(position => !!position['coords']) // filter out errors
             ).subscribe(position => {
                 this.lastLocation = position;

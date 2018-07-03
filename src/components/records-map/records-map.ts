@@ -1,9 +1,9 @@
-import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, Marker, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
-import { RECORD_INCOMPLETE, RECORD_COMPLETE } from '../../shared/utils/consts';
+import { RECORD_INCOMPLETE, RECORD_COMPLETE, isDatasetCensus } from '../../shared/utils/consts';
 
 @Component({
     selector: 'records-map',
@@ -66,26 +66,38 @@ export class RecordsMapComponent implements OnInit {
                         record.data.hasOwnProperty('Longitude')) {
                         const title = `${record.data['Site ID']}${record.data['First Date'] ? record.data['First Date'] : ''}`;
                         const snippet = record.client_id || '';
+                        let url = 'assets/imgs/';
+                        url += `${isDatasetCensus(record.datasetName) ? 'tree' : 'eye'}-pin-`;
+                        url += `${record.valid ? 'complete' : 'incomplete'}.png`;
+
                         const marker = this.map.addMarkerSync({
                             snippet: snippet,
                             title: title,
-                            icon: record.valid ? RECORD_COMPLETE : RECORD_INCOMPLETE,
+                            icon: {
+                                url: url,
+                                size: {
+                                    width: 45,
+                                    height: 45
+                                }
+                            },
                             animation: 'DROP',
                             position: {
                                 lat: record.data.Latitude,
                                 lng: record.data.Longitude,
                             }
                         });
-                        marker.on(GoogleMapsEvent.INFO_CLICK).subscribe(() => {
-                            const page = record.datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
-                            const params = {
-                                datasetName: record.datasetName,
-                                recordClientId: record.client_id,
-                                parentId: record.parentId
-                            };
-                            this.navParams.get('navCtrl').push(page, params);
-                            return;
-                        });
+                        // FIXME: work out why selector toggles slow to a crawl
+                        // marker.addEventListener(GoogleMapsEvent.MARKER_CLICK).subscribe(
+                        //     (value) => {
+                        //         const page = record.datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
+                        //         const params = {
+                        //             datasetName: record.datasetName,
+                        //             recordClientId: record.client_id,
+                        //             parentId: record.parentId
+                        //         };
+                        //         this.navParams.get('navCtrl').push(page, params);
+                        //         return;
+                        //     });
                     }
                 }
             }
