@@ -1,14 +1,17 @@
 import { Component, Input } from '@angular/core';
-import { Events, NavController, NavParams, ToastController } from 'ionic-angular';
+import { Events, NavController, NavParams } from 'ionic-angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
 import {
-    RECORD_INCOMPLETE, RECORD_COMPLETE, RECORD_UPLOADED, DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS,
-    DATASET_NAME_TREESIGHTING, TOAST_DURATION
+    DATASET_NAME_CENSUS,
+    DATASET_NAME_OBSERVATION,
+    DATASET_NAME_TREESIGHTING,
+    RECORD_COMPLETE,
+    RECORD_INCOMPLETE,
+    RECORD_UPLOADED
 } from '../../shared/utils/consts';
 import { isDatasetCensus } from '../../shared/utils/functions';
 import { StorageService } from '../../shared/services/storage.service';
-import { APIError } from '../../biosys-core/interfaces/api.interfaces';
 
 @Component({
     selector: 'records-list',
@@ -49,7 +52,6 @@ export class RecordsListComponent {
 
     @Input()
     public haveWelcome = true;
-    private countMap = {};
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -136,7 +138,7 @@ export class RecordsListComponent {
         }
         this.navPush(page, params);
     }
-    
+
     public uploadClicked() {
         this.events.publish('upload-clicked');
     }
