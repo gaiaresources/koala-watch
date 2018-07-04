@@ -1,10 +1,14 @@
 import { Component, Input } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Events, NavController, NavParams, ToastController } from 'ionic-angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
-import { RECORD_INCOMPLETE, RECORD_COMPLETE, RECORD_UPLOADED, DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS,
-    DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
+import {
+    RECORD_INCOMPLETE, RECORD_COMPLETE, RECORD_UPLOADED, DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS,
+    DATASET_NAME_TREESIGHTING, TOAST_DURATION
+} from '../../shared/utils/consts';
 import { isDatasetCensus } from '../../shared/utils/functions';
+import { StorageService } from '../../shared/services/storage.service';
+import { APIError } from '../../biosys-core/interfaces/api.interfaces';
 
 @Component({
     selector: 'records-list',
@@ -41,10 +45,16 @@ export class RecordsListComponent {
     public haveTree = true;
 
     @Input()
+    public haveUpload = false;
+
+    @Input()
     public haveWelcome = true;
+    private countMap = {};
 
     constructor(public navCtrl: NavController,
-                public navParams: NavParams) {
+                public navParams: NavParams,
+                private storage: StorageService,
+                private events: Events) {
         this.baseNavController = (this.navParams.data.hasOwnProperty('navCtrl') ? this.navParams.get('navCtrl') : undefined);
         this.records = (this.navParams.data.hasOwnProperty('data') ? this.navParams.get('data') : []);
         if (this.navParams.data.hasOwnProperty('haveTree')) {
@@ -55,6 +65,9 @@ export class RecordsListComponent {
         }
         if (this.navParams.data.hasOwnProperty('haveObservation')) {
             this.haveObservation = this.navParams.get('haveObservation');
+        }
+        if (this.navParams.data.hasOwnProperty('haveUpload')) {
+            this.haveUpload = this.navParams.get('haveUpload');
         }
         if (this.navParams.data.hasOwnProperty('showLegend')) {
             this.showLegend = this.navParams.get('showLegend');
@@ -122,5 +135,9 @@ export class RecordsListComponent {
             page = 'ObservationPage';
         }
         this.navPush(page, params);
+    }
+    
+    public uploadClicked() {
+        this.events.publish('upload-clicked');
     }
 }
