@@ -15,14 +15,6 @@ export class StorageService {
 
     }
 
-    public putCurrentUser(user: User): Observable<boolean> {
-        return fromPromise(this.storage.set('Current User', user));
-    }
-
-    public getCurrentUser(): Observable<User> {
-        return fromPromise(this.storage.get('Current User'));
-    }
-
     public putTeamMembers(users: User[]): Observable<boolean> {
         return fromPromise(this.storage.set('Team Members', users));
     }

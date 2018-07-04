@@ -44,6 +44,7 @@ img.data-row {
 .local-fab {
     background-color: rgba(0,0,0,0);
     width: 80px;
+    height: 80px;
 }
 
 #no-data-div {
@@ -66,4 +67,8 @@ img.data-row {
 
 .fab-img {
     width: 80px;
+}
+.fabbed-img {
+    width: 60px;
+    height: 60px;
 }
