@@ -11,6 +11,8 @@ import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
 import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
+import { AuthService } from '../../biosys-core/services/auth.service';
+import { formatUserFullName } from '../../biosys-core/utils/functions';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -74,8 +76,8 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    constructor(private schemaService: SchemaService, private storageService: StorageService, private geolocation: Geolocation,
-                private alertCtrl: AlertController) {
+    constructor(private schemaService: SchemaService, private storageService: StorageService, private authService: AuthService,
+                private geolocation: Geolocation, private alertCtrl: AlertController) {
     }
 
     ngOnDestroy() {
@@ -117,7 +119,7 @@ export class RecordFormComponent implements OnDestroy {
 
                 this.storageService.getTeamMembers().subscribe((users: User[]) => {
                         fieldDescriptor.options = users.map((user: User) => {
-                            const userTitle = `${user.first_name} ${user.last_name}`.trim() || `${user.username}`.trim();
+                            const userTitle = formatUserFullName(user);
 
                             return {
                                 name: userTitle,
@@ -208,8 +210,8 @@ export class RecordFormComponent implements OnDestroy {
         if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
             const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
 
-            this.storageService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[fieldName].
-                setValue(`${currentUser.first_name} ${currentUser.last_name}`.trim() || `${currentUser.username}`.trim())
+            this.authService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[fieldName].
+                setValue(formatUserFullName(currentUser))
             );
         }
     }
