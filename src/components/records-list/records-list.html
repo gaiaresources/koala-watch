@@ -43,11 +43,11 @@
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveObservation">
-                    <ion-col col-2>
-                        <button ion-fab class="local-fab"
-                                (click)="onClickedNewRecord(DATASET_NAME_OBSERVATION)">
-                            <img alt="Koala Opportunistic Observation"
-                                 src="assets/imgs/white_eye.png">
+                    <ion-col>
+                        <button class="local-fab"
+                                (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
+                            <img alt="Koala Opportunistic Observation" class="fab-img"
+                                 src="assets/imgs/fab-eye.png">
                         </button>
                     </ion-col>
                     <ion-col>
@@ -55,10 +55,11 @@
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveCensus">
-                    <ion-col col-2>
-                        <button ion-fab class="local-fab" (click)="onClickedNewRecord(DATASET_NAME_CENSUS)">
-                            <img alt="Koala Census"
-                                 src="assets/imgs/white_poop.png">
+                    <ion-col>
+                        <button class="local-fab"
+                                (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
+                            <img alt="Koala Census" class="fab-img"
+                                 src="assets/imgs/fab-trees.png">
                         </button>
                     </ion-col>
                     <ion-col>
@@ -66,8 +67,8 @@
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveTree">
-                    <ion-col col-2>
-                        <button ion-fab class="local-fab" (click)="onClickedNewRecord(DATASET_NAME_TREESIGHTING)">
+                    <ion-col>
+                        <button ion-fab class="local-fab" (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)">
                             <img alt="Koala Tree Survey"
                                  src="assets/imgs/white_tree.png">
                         </button>
