@@ -37,7 +37,7 @@ export class RecordFormComponent implements OnDestroy {
 
     private lastLocation: Geoposition;
     private locationSubscription: Subscription;
-    private delayedSetValues;
+    private delayedSetValues: object;
 
     @Input()
     public initialiseDefaultValues = false;
@@ -73,7 +73,7 @@ export class RecordFormComponent implements OnDestroy {
             // use patch rather than set because the dataset may have changed and have new fields not set in the previously saved record
             this.form.patchValue(value);
         } else {
-            this.delayedSetValues = !this.delayedSetValues ? value : this.delayedSetValues.merge(value);
+            this.delayedSetValues = !this.delayedSetValues ? value : Object.assign(this.delayedSetValues, value);
         }
     }
 
