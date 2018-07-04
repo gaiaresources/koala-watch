@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { AlertController } from 'ionic-angular';
 
+import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
 import { filter } from 'rxjs/operators';
@@ -36,7 +37,7 @@ export class RecordFormComponent implements OnDestroy {
     private locationSubscription: Subscription;
 
     @Input()
-    public initializeDefaultValues = false;
+    public initialiseDefaultValues = false;
 
     @Input()
     public set dataset(dataset: Dataset) {
@@ -69,12 +70,13 @@ export class RecordFormComponent implements OnDestroy {
         this.form.patchValue(value);
     }
 
-    constructor(private schemaService: SchemaService,
-                private geolocation: Geolocation,
+    constructor(private schemaService: SchemaService, private storageService: StorageService, private geolocation: Geolocation,
                 private alertCtrl: AlertController) {}
 
     ngOnDestroy() {
-        this.locationSubscription.unsubscribe();
+        if (this.locationSubscription) {
+            this.locationSubscription.unsubscribe();
+        }
     }
 
     private setupForm(dataset: Dataset) {
@@ -87,7 +89,7 @@ export class RecordFormComponent implements OnDestroy {
                 this._dateFieldKey = this.formDescriptor.dateFields[0].key;
             }
 
-            let performInitialLocationUpdate = this.initializeDefaultValues;
+            let performInitialLocationUpdate = this.initialiseDefaultValues;
 
             this.locationSubscription = this.geolocation.watchPosition({
                 enableHighAccuracy: true,
@@ -123,8 +125,8 @@ export class RecordFormComponent implements OnDestroy {
                 );
             }
 
-            if (this.initializeDefaultValues) {
-                this.initialiseValues();
+            if (this.initialiseDefaultValues) {
+                this.initialiseDefaults();
             }
         });
     }
@@ -192,7 +194,7 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    private initialiseValues() {
+    private initialiseDefaults() {
         if (this._dateFieldKey) {
             // moment().format() will return the current date/time in local timezone
             this.form.controls[this._dateFieldKey].setValue(moment().format());
@@ -204,8 +206,8 @@ export class RecordFormComponent implements OnDestroy {
             });
         }
 
-        if (this.formDescriptor.keyField && this.key) {
-            this.form.controls[this.formDescriptor.keyField].setValue(this.key);
+        if (this.form.contains('Census ID')) {
+            this.form.controls['Census ID'].setValue(UUID.UUID());
         }
 
         if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
