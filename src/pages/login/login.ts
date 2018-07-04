@@ -12,7 +12,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { formatAPIError } from '../../biosys-core/utils/functions';
 import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
 
-import { PROJECT_NAME } from '../../shared/utils/consts';
+import { REGO_URL, PROJECT_NAME } from '../../shared/utils/consts';
 
 /**
  * Generated class for the LoginPage page.
@@ -28,6 +28,8 @@ import { PROJECT_NAME } from '../../shared/utils/consts';
 })
 export class LoginPage {
     public form: FormGroup;
+
+    public REGO_URL = REGO_URL;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
                 private authService: AuthService, private storageService: StorageService,
