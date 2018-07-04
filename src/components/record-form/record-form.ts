@@ -11,6 +11,7 @@ import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
 import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
+import { AuthService } from '../../biosys-core/services/auth.service';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -74,8 +75,8 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    constructor(private schemaService: SchemaService, private storageService: StorageService, private geolocation: Geolocation,
-                private alertCtrl: AlertController) {
+    constructor(private schemaService: SchemaService, private storageService: StorageService, private authService: AuthService,
+                private geolocation: Geolocation, private alertCtrl: AlertController) {
     }
 
     ngOnDestroy() {
@@ -208,7 +209,7 @@ export class RecordFormComponent implements OnDestroy {
         if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
             const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
 
-            this.storageService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[fieldName].
+            this.authService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[fieldName].
                 setValue(`${currentUser.first_name} ${currentUser.last_name}`.trim() || `${currentUser.username}`.trim())
             );
         }

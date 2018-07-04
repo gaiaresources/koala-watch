@@ -47,10 +47,6 @@ export class AppComponent implements OnInit {
                     ))
                 ).subscribe();
 
-                this.apiService.whoAmI().pipe(
-                    mergeMap((user: User) => this.storageService.putCurrentUser(user))
-                ).subscribe();
-
                 this.apiService.getUsers({project__name: PROJECT_NAME}).pipe(
                     mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
                 ).subscribe();
