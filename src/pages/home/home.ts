@@ -16,6 +16,8 @@ import { StorageService } from '../../shared/services/storage.service';
 import { RecordsListComponent } from '../../components/records-list/records-list';
 import { RecordsMapComponent } from '../../components/records-map/records-map';
 import { UploadService } from '../../shared/services/upload.service';
+import { DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
+import { isDatasetCensus } from '../../shared/utils/functions';
 
 @IonicPage()
 @Component({
@@ -33,6 +35,10 @@ export class HomePage {
 
     public recordsList = RecordsListComponent;
     public recordsMap = RecordsMapComponent;
+
+    // consts used in template
+    public DATASETNAME_CENSUS = DATASET_NAME_CENSUS;
+    public DATASETNAME_OBSERVATION = DATASET_NAME_OBSERVATION;
 
     @ViewChild('homeTabs') tabRef: Tabs;
 
@@ -80,7 +86,7 @@ export class HomePage {
     }
 
     public onClickedNewRecord(datasetName: string) {
-        const page = datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
+        const page = isDatasetCensus(datasetName) ? 'CensusPage' : 'ObservationPage';
         this.navCtrl.push(page, {datasetName: datasetName});
     }
 

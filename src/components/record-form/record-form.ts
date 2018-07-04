@@ -1,15 +1,16 @@
 import { Component, Input, OnDestroy } from '@angular/core';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { AlertController } from 'ionic-angular';
 
 import * as moment from 'moment/moment';
+import { Subscription } from 'rxjs/Subscription';
+import { filter } from 'rxjs/operators';
 
 import { FieldDescriptor, FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
-import { filter } from 'rxjs/operators';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
-import { AlertController } from 'ionic-angular';
-import { Subscription } from 'rxjs/Subscription';
+import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
+import { StorageService } from '../../shared/services/storage.service';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -28,7 +29,9 @@ export class RecordFormComponent implements OnDestroy {
 
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
+
     private _dateFieldKey: string;
+
     private lastLocation: Geoposition;
     private locationSubscription: Subscription;
 
@@ -94,24 +97,34 @@ export class RecordFormComponent implements OnDestroy {
                 filter(position => !!position['coords']) // filter out errors
             ).subscribe(position => {
                 this.lastLocation = position;
+
                 if (performInitialLocationUpdate) {
                     this.updateLocationFields(true);
                     performInitialLocationUpdate = false;
                 }
             });
 
-            if (this.initializeDefaultValues) {
-                // if this is a new record, patch in default form values where appropriate
-                if (this._dateFieldKey) {
-                    // moment().format() will return the current date/time in local timezone
-                    this.form.controls[this._dateFieldKey].setValue(moment().format());
-                }
+            if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
+                const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
+                const fieldDescriptor: FieldDescriptor = this.getFieldDescriptor(fieldName);
 
-                if (this.formDescriptor.hiddenFields) {
-                    this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
-                        this.form.controls[field.key].setValue(field.defaultValue);
-                    });
-                }
+                fieldDescriptor.type = 'select';
+
+                this.storageService.getTeamMembers().subscribe((users: User[]) => {
+                        fieldDescriptor.options = users.map((user: User) => {
+                            const userTitle = `${user.first_name} ${user.last_name}`.trim() || `${user.username}`.trim();
+
+                            return {
+                                name: userTitle,
+                                value: userTitle
+                            };
+                        });
+                    }
+                );
+            }
+
+            if (this.initializeDefaultValues) {
+                this.initialiseValues();
             }
         });
     }
@@ -125,6 +138,7 @@ export class RecordFormComponent implements OnDestroy {
                     buttons: ['OK']
                 }).present();
             }
+
             return;
         }
 
@@ -176,5 +190,48 @@ export class RecordFormComponent implements OnDestroy {
             case 'pattern':
                 return `Must match pattern: ${error['pattern']}`;
         }
+    }
+
+    private initialiseValues() {
+        if (this._dateFieldKey) {
+            // moment().format() will return the current date/time in local timezone
+            this.form.controls[this._dateFieldKey].setValue(moment().format());
+        }
+
+        if (this.formDescriptor.hiddenFields) {
+            this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
+                this.form.controls[field.key].setValue(field.defaultValue);
+            });
+        }
+
+        if (this.formDescriptor.keyField && this.key) {
+            this.form.controls[this.formDescriptor.keyField].setValue(this.key);
+        }
+
+        if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
+            const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
+
+            this.storageService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[fieldName].
+                setValue(`${currentUser.first_name} ${currentUser.last_name}`.trim() || `${currentUser.username}`.trim())
+            );
+        }
+    }
+
+    private getFieldDescriptor(fieldName: string): FieldDescriptor {
+        let fields: FieldDescriptor[] =
+            this.formDescriptor.requiredFields.filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
+
+        if (fields.length) {
+            return fields[0];
+        }
+
+        fields =
+            this.formDescriptor.optionalFields.filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
+
+        if (fields.length) {
+            return fields[0];
+        }
+
+        throw new Error(`Cannot find ${fieldName} field in form descriptor`);
     }
 }
