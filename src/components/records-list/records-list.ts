@@ -114,8 +114,6 @@ export class RecordsListComponent {
     }
 
     public onClickedNewRecord(datasetName: string) {
-        this.enteringRecord.emit();
-
         let page;
         const params = {
             datasetName: datasetName,

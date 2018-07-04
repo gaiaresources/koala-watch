@@ -64,25 +64,32 @@ export class CensusPage {
     }
 
     public ionViewWillEnter() {
-        this.recordClientId = this.navParams.get('recordClientId');
+        if (!this.recordClientId) {
+            this.recordClientId = this.navParams.get('recordClientId');
+        }
+
         this.isNewRecord = !this.recordClientId;
         if (this.isNewRecord) {
             this.recordClientId = UUID.UUID();
         }
         this.photoGallery.RecordId = this.recordClientId;
 
-        const datasetName = this.navParams.get('datasetName');
+        if (!this.dataset) {
+            const datasetName = this.navParams.get('datasetName');
 
-        this.storageService.getDataset(datasetName).subscribe((dataset: Dataset) => {
-            this.dataset = dataset;
+            this.storageService.getDataset(datasetName).subscribe((dataset: Dataset) => {
+                this.dataset = dataset;
 
-            if (!this.isNewRecord) {
-                this.loadRecordAndChildRecords();
-            }
-        });
-    }
+                if (this.isNewRecord) {
+                    this.recordForm.value = {'Census ID': this.recordClientId};
+                } else {
+                    this.loadRecordAndChildRecords();
+                }
+            });
+        } else {
+            this.loadRecordAndChildRecords();
+        }
 
-    public ionViewDidEnter() {
         this.showLeavingAlertMessage = true;
     }
 
@@ -90,7 +97,7 @@ export class CensusPage {
         if (this.showLeavingAlertMessage) {
             this.alertController.create({
                 title: 'Leaving census unsaved',
-                message: 'You are leaving the census unsaved, are you sure?',
+                message: 'You are leaving the census form data unsaved, are you sure?',
                 enableBackdropDismiss: true,
                 buttons: [
                     {

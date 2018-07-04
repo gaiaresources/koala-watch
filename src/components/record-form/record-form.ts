@@ -37,6 +37,7 @@ export class RecordFormComponent implements OnDestroy {
 
     private lastLocation: Geoposition;
     private locationSubscription: Subscription;
+    private delayedSetValues;
 
     @Input()
     public initialiseDefaultValues = false;
@@ -68,12 +69,14 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     public set value(value: object) {
-        // use patch rather than set because the dataset may have changed and have new fields not set in the previously saved record
-        this.form.patchValue(value);
+        if (this.form) {
+            // use patch rather than set because the dataset may have changed and have new fields not set in the previously saved record
+            this.form.patchValue(value);
+        } else {
+            this.delayedSetValues = !this.delayedSetValues ? value : this.delayedSetValues.merge(value);
+        }
     }
 
-    constructor(private schemaService: SchemaService, private storageService: StorageService, private geolocation: Geolocation,
-                private alertCtrl: AlertController) {}
     constructor(private schemaService: SchemaService, private storageService: StorageService, private authService: AuthService,
                 private geolocation: Geolocation, private alertCtrl: AlertController) {
     }
@@ -88,6 +91,11 @@ export class RecordFormComponent implements OnDestroy {
         this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
             this.formDescriptor = results[0];
             this.form = results[1];
+
+            if (this.delayedSetValues) {
+                this.form.patchValue(this.delayedSetValues);
+                this.delayedSetValues = null;
+            }
 
             if (this.formDescriptor.dateFields) {
                 // use whatever is the first date field as the representative date field
@@ -138,7 +146,7 @@ export class RecordFormComponent implements OnDestroy {
 
     public updateLocationFields(initialUpdate = false) {
         if (!this.lastLocation) {
-            // don't want to show a popup immediately upon showing form the first time
+            // prevent showing this popup immediately upon showing form the first time
             if (!initialUpdate) {
                 this.alertCtrl.create({
                     title: 'Location unavailable',
@@ -211,10 +219,6 @@ export class RecordFormComponent implements OnDestroy {
             });
         }
 
-        if (this.form.contains('Census ID')) {
-            this.form.controls['Census ID'].setValue(UUID.UUID());
-        }
-
         if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
             const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
 
@@ -232,8 +236,8 @@ export class RecordFormComponent implements OnDestroy {
             return fields[0];
         }
 
-        fields =
-            this.formDescriptor.optionalFields.filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
+        fields = this.formDescriptor.optionalFields
+            .filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
 
         if (fields.length) {
             return fields[0];
