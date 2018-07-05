@@ -13,6 +13,7 @@ import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
+import { UPDATE_BUTTON_NAME } from '../../shared/utils/consts';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -49,6 +50,8 @@ export class RecordFormComponent implements OnDestroy {
 
     @Input()
     public readonly: boolean;
+
+    public UPDATE_BUTTON_NAME = UPDATE_BUTTON_NAME;
 
     public get invalid(): boolean {
         return !!this.form && this.form.invalid;
