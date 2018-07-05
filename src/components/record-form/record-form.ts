@@ -12,6 +12,8 @@ import { SchemaService } from '../../biosys-core/services/schema.service';
 import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
+import { timer } from 'rxjs/observable/timer';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
 
 /**
@@ -98,13 +100,12 @@ export class RecordFormComponent implements OnDestroy {
 
             this.locationSubscription = this.geolocation.watchPosition({
                 enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 2000
+                timeout: 5000,
+                maximumAge: 1000
             }).pipe(
                 filter(position => !!position['coords']) // filter out errors
             ).subscribe(position => {
                 this.lastLocation = position;
-
                 if (performInitialLocationUpdate) {
                     this.updateLocationFields(true);
                     performInitialLocationUpdate = false;
