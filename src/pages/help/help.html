@@ -1,0 +1,89 @@
+<!--
+  Generated template for the HelpPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Help</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <h1>Welcome to Koala Watch</h1>
+    <p class="no-data">
+        On the Home Screen you can:
+    </p>
+    <ion-grid>
+
+        <ion-row>
+            <ion-col col-1></ion-col>
+            <ion-col>View records you are currently working with</ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col col-1>
+                <button class="local-fab"
+                        (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
+                    <img alt="Koala Opportunistic Observation" class="fab-img"
+                         src="assets/imgs/fab-eye.png">
+                </button>
+            </ion-col>
+            <ion-col>
+                <h1 class="no-data vertical-align-middle">Start a new Opportunistic Observation</h1>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col col-1>
+                <button class="local-fab"
+                        (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
+                    <img alt="Koala Census" class="fab-img"
+                         src="assets/imgs/fab-trees.png">
+                </button>
+            </ion-col>
+            <ion-col>
+                <h1 class="no-data vertical-align-middle">Start a Census</h1>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col  col-1>
+                <button class="local-fab"
+                        (click)="uploadClicked()">
+                    <img class="fab-img"
+                         src="assets/imgs/fab-upload.png">
+                </button>
+            </ion-col>
+            <ion-col>
+                <h1 class="no-data vertical-align-middle">Upload Data</h1>
+            </ion-col>
+        </ion-row>
+
+
+        <ion-row>
+            <ion-col>
+                <h1>This Census does not have any Tree Sightings</h1>
+                <p class="no-data">On this screen you can view the tree
+                    surveys related to this census. You can also create a new
+                    tree survey. Each Census can have many Tree Sightings.</p>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <button ion-fab class="local-fab" (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)">
+                    <img style="max-width: 50px" alt="Koala Tree Survey" class="fabbed-img"
+                         src="assets/imgs/white_tree.png">
+                </button>
+            </ion-col>
+            <ion-col>
+                <h1 class="no-data vertical-align-middle">Create a Tree Sighting for this Census</h1>
+            </ion-col>
+        </ion-row>
+
+    </ion-grid>
+</ion-content>
