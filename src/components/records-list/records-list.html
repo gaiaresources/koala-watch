@@ -26,7 +26,7 @@
     <div [hidden]="records.length > 0" class="no-data-div">
         <div id="no-data-div">
             <ion-grid>
-                <ion-row *ngIf="haveWelcome" style="padding-bottom: 1em;">
+                <ion-row *ngIf="haveWelcome">
                     <ion-col>
                         <h1 class="no-data">Welcome to Koala Watch</h1>
                         <p class="no-data">On this screen you can view records you are currently
@@ -39,7 +39,7 @@
                         <h1 class="no-data">This Census does not have any Tree Sightings</h1>
                         <p class="no-data">On this screen you can view the tree
                         surveys related to this census. You can also create a new
-                        tree survey.  Each Census can have many Tree Sightings.</p>
+                        tree survey. Each Census can have many Tree Sightings.</p>
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveObservation">
@@ -75,6 +75,19 @@
                     </ion-col>
                     <ion-col>
                         <h1 class="no-data vertical-align-middle">Create a Tree Sighting for this Census</h1>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="haveUpload">
+                    <ion-col>
+                        <button class="local-fab"
+                                (click)="uploadClicked()">
+                            <img class="fab-img"
+                                 src="assets/imgs/fab-upload.png">
+                        </button>
+                    </ion-col>
+                    <ion-col>
+                        <h1 class="no-data vertical-align-middle">Upload Data</h1>
                     </ion-col>
                 </ion-row>
             </ion-grid>
