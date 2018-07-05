@@ -10,11 +10,11 @@
 <ion-content>
     <ion-tabs tabsPlacement="top">
         <ion-tab tabTitle="List" title="List"
-                 (ionSelect)="tabIsMap = false"
+                 (ionSelect)="tabIsMap=false"
                  [rootParams]="{showLegend: true, data: records, navCtrl: navCtrl, haveTree: false, haveUpload: true}"
                  [root]="recordsList"></ion-tab>
         <ion-tab tabTitle="Map" title="Map"
-                 (ionSelect)="tabIsMap = true"
+                 (ionSelect)="tabIsMap=true"
                  [rootParams]="{data:records, navCtrl: navCtrl}"
                  [root]="recordsMap"></ion-tab>
     </ion-tabs>

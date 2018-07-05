@@ -70,8 +70,8 @@
     </div>
 
     <ion-fab [hidden]="readonly || segmentContent != 'observations'" bottom right>
-        <button ion-fab (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)">
-            <img alt="KLM-SAT Tree Sighting" class="home-fab-icon" src="assets/imgs/white_tree.png">
+        <button (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)" class="fab-fab">
+            <img alt="KLM-SAT Tree Sighting" class="fab-img" src="assets/imgs/fab-tree.png">
         </button>
     </ion-fab>
 </ion-content>

@@ -17,6 +17,7 @@ import { StorageService } from '../../shared/services/storage.service';
     selector: 'records-list',
     templateUrl: 'records-list.html'
 })
+
 export class RecordsListComponent {
     public angularDateFormat: string = ANY_ANGULAR_DATETIME_FORMAT;
     public items: Array<{ title: string, note: string, icon: string }>;

@@ -16,19 +16,12 @@
 <ion-content padding>
     <h1>Welcome to Koala Watch</h1>
     <p class="no-data">
-        On the Home Screen you can:
+        On the Home Screen you can view records you are currently working with as well as:
     </p>
     <ion-grid>
-
-        <ion-row>
-            <ion-col col-1></ion-col>
-            <ion-col>View records you are currently working with</ion-col>
-        </ion-row>
-
         <ion-row>
             <ion-col col-1>
-                <button class="local-fab"
-                        (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
+                <button class="local-fab">
                     <img alt="Koala Opportunistic Observation" class="fab-img"
                          src="assets/imgs/fab-eye.png">
                 </button>
@@ -40,8 +33,7 @@
 
         <ion-row>
             <ion-col col-1>
-                <button class="local-fab"
-                        (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
+                <button class="local-fab">
                     <img alt="Koala Census" class="fab-img"
                          src="assets/imgs/fab-trees.png">
                 </button>
@@ -52,9 +44,8 @@
         </ion-row>
 
         <ion-row>
-            <ion-col  col-1>
-                <button class="local-fab"
-                        (click)="uploadClicked()">
+            <ion-col col-1>
+                <button class="local-fab">
                     <img class="fab-img"
                          src="assets/imgs/fab-upload.png">
                 </button>
@@ -67,23 +58,29 @@
 
         <ion-row>
             <ion-col>
-                <h1>This Census does not have any Tree Sightings</h1>
-                <p class="no-data">On this screen you can view the tree
-                    surveys related to this census. You can also create a new
-                    tree survey. Each Census can have many Tree Sightings.</p>
+                <h1>Tree Sightings</h1>
+                <p class="no-data">When you are working on a census, you can also</p>
             </ion-col>
         </ion-row>
         <ion-row>
-            <ion-col>
-                <button ion-fab class="local-fab" (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)">
-                    <img style="max-width: 50px" alt="Koala Tree Survey" class="fabbed-img"
-                         src="assets/imgs/white_tree.png">
+            <ion-col col-1>
+                <button class="local-fab">
+                    <img alt="Koala Tree Survey" class="fab-img"
+                         src="assets/imgs/fab-tree.png">
                 </button>
             </ion-col>
             <ion-col>
                 <h1 class="no-data vertical-align-middle">Create a Tree Sighting for this Census</h1>
             </ion-col>
         </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <h1>A Note On GPS Accuracy</h1>
+                <p class="no-data">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            </ion-col>
+        </ion-row>
+
 
     </ion-grid>
 </ion-content>

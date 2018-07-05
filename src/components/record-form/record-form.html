@@ -21,7 +21,7 @@
         <ion-item-group *ngIf="formDescriptor.locationFields && formDescriptor.locationFields.length">
             <ion-item-divider color="secondary">
                 <ion-icon name="locate"></ion-icon>
-                Location
+                Location (Current Accuracy: {{lastLocation && lastLocation.coords ? (lastLocation.coords.accuracy || 'Waiting for Reading...') : 'Waiting for Reading...'}})
                 <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
                     Update Location
                 </button>
