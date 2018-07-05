@@ -1,0 +1,88 @@
+<!--
+  Generated template for the HelpPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>{{APP_NAME}} Help</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <h1>Welcome to Koala Watch</h1>
+    <p class="no-data">
+        On the Home Screen you can view records you are currently working with as well as:
+    </p>
+    <ion-grid>
+        <ion-row>
+            <ion-col col-2>
+                <button class="local-fab">
+                    <img alt="Koala Opportunistic Observation" class="fab-img"
+                         src="assets/imgs/fab-eye.png">
+                </button>
+            </ion-col>
+            <ion-col>
+                <h1 class="no-data vertical-align-middle">Start a new Opportunistic Observation</h1>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col col-2>
+                <button class="local-fab">
+                    <img alt="Koala Census" class="fab-img"
+                         src="assets/imgs/fab-trees.png">
+                </button>
+            </ion-col>
+            <ion-col>
+                <h1 class="no-data vertical-align-middle">Start a Census</h1>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col col-2>
+                <button class="local-fab">
+                    <img class="fab-img"
+                         src="assets/imgs/fab-upload.png">
+                </button>
+            </ion-col>
+            <ion-col>
+                <h1 class="no-data vertical-align-middle">Upload Data</h1>
+            </ion-col>
+        </ion-row>
+
+
+        <ion-row>
+            <ion-col>
+                <h1>Tree Sightings</h1>
+                <p class="no-data">When you are working on a census, you can also</p>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-2>
+                <button class="local-fab">
+                    <img alt="Koala Tree Survey" class="fab-img"
+                         src="assets/imgs/fab-tree.png">
+                </button>
+            </ion-col>
+            <ion-col>
+                <h1 class="no-data vertical-align-middle">Create a Tree Sighting for this Census</h1>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <h1>A Note On GPS Accuracy</h1>
+                <p class="no-data">The accuracy of the GPS in your device will improve over
+                    time after it has been started. You may wish to update the location
+                    information in your observation or
+                    census periodically if the current accuracy is insufficient. This can
+                    be done by pressing the "{{UPDATE_BUTTON_NAME}}" button.</p>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

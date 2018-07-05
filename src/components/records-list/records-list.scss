@@ -67,7 +67,8 @@ img.data-row {
 }
 
 .fab-img {
-    width: 80px;
+    min-width: 80px;
+    min-height: 80px;
 }
 .fabbed-img {
     width: 60px;

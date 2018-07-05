@@ -17,3 +17,5 @@ export let DATASET_NAME_TREESIGHTING = 'Trees Surveyed';
 export let REGO_URL = 'http://www.environment.nsw.gov.au/atlaspublicapp/Registration.aspx';
 
 export let TOAST_DURATION = 3000;
+
+export let UPDATE_BUTTON_NAME = 'Use Current Location';

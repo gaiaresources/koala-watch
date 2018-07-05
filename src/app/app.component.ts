@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
         {title: 'Home', page: 'HomePage', img: 'assets/imgs/home.png'},
         {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/settings.png'},
         {title: 'About', page: 'AboutPage', img: 'assets/imgs/about.png'},
+        {title: 'Help', page: 'HelpPage', img: 'assets/imgs/about.png'},
         {title: 'Logout', img: 'assets/imgs/logout.png'},
     ];
 

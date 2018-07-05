@@ -14,6 +14,7 @@ import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
+import { UPDATE_BUTTON_NAME } from '../../shared/utils/consts';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -27,8 +28,8 @@ import { formatUserFullName } from '../../biosys-core/utils/functions';
     providers: [SchemaService]
 })
 export class RecordFormComponent implements OnDestroy {
-    private static readonly GEOLOCATION_TIMEOUT = 10000;
-    private static readonly GEOLOCATION_MAX_AGE = 2000;
+    private static readonly GEOLOCATION_TIMEOUT = 5000;
+    private static readonly GEOLOCATION_MAX_AGE = 1000;
 
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
@@ -51,6 +52,8 @@ export class RecordFormComponent implements OnDestroy {
 
     @Input()
     public readonly: boolean;
+
+    public UPDATE_BUTTON_NAME = UPDATE_BUTTON_NAME;
 
     public get invalid(): boolean {
         return !!this.form && this.form.invalid;
@@ -112,7 +115,6 @@ export class RecordFormComponent implements OnDestroy {
                 filter(position => !!position['coords']) // filter out errors
             ).subscribe(position => {
                 this.lastLocation = position;
-
                 if (performInitialLocationUpdate) {
                     this.updateLocationFields(true);
                     performInitialLocationUpdate = false;
