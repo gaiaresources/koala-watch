@@ -12,8 +12,6 @@ import { SchemaService } from '../../biosys-core/services/schema.service';
 import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
-import { TimerObservable } from 'rxjs/observable/TimerObservable';
-import { timer } from 'rxjs/observable/timer';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
 
 /**
