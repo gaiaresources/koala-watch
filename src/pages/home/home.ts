@@ -16,7 +16,12 @@ import { StorageService } from '../../shared/services/storage.service';
 import { RecordsListComponent } from '../../components/records-list/records-list';
 import { RecordsMapComponent } from '../../components/records-map/records-map';
 import { UploadService } from '../../shared/services/upload.service';
-import { DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
+import {
+    DATASET_NAME_CENSUS,
+    DATASET_NAME_OBSERVATION,
+    DATASET_NAME_TREESIGHTING,
+    TOAST_DURATION
+} from '../../shared/utils/consts';
 import { isDatasetCensus } from '../../shared/utils/functions';
 
 @IonicPage()
@@ -25,8 +30,6 @@ import { isDatasetCensus } from '../../shared/utils/functions';
     templateUrl: 'home.html'
 })
 export class HomePage {
-    public static readonly MESSAGE_DURATION = 3000;
-
     public showList = true;
 
     public records: ClientRecord[];
@@ -42,6 +45,8 @@ export class HomePage {
 
     @ViewChild('homeTabs') tabRef: Tabs;
 
+    public tabIsMap = false;
+
     constructor(public navCtrl: NavController, public navParams: NavParams, private loadingCtrl: LoadingController,
                 private toastCtrl: ToastController, private storageService: StorageService,
                 private uploadService: UploadService, private event: Events) {
@@ -51,6 +56,7 @@ export class HomePage {
     ionViewWillEnter() {
         this.loadRecords();
         this.event.publish('home-willenter');
+        this.event.subscribe('upload-clicked', () => this.clickedUpload());
     }
 
     public clickedUpload() {
@@ -64,7 +70,7 @@ export class HomePage {
 
                 this.toastCtrl.create({
                     message: `Some records failed to upload: ${error.msg}`,
-                    duration: HomePage.MESSAGE_DURATION,
+                    duration: TOAST_DURATION,
                     cssClass: 'toast-message'
                 }).present();
 
@@ -75,7 +81,7 @@ export class HomePage {
                 this.loading.dismiss();
                 this.toastCtrl.create({
                     message: 'Records uploaded successfully',
-                    duration: HomePage.MESSAGE_DURATION,
+                    duration: TOAST_DURATION,
                     cssClass: 'toast-message'
                 }).present();
 
