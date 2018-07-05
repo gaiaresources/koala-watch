@@ -45,6 +45,8 @@ export class HomePage {
 
     @ViewChild('homeTabs') tabRef: Tabs;
 
+    public tabIsMap = false;
+
     constructor(public navCtrl: NavController, public navParams: NavParams, private loadingCtrl: LoadingController,
                 private toastCtrl: ToastController, private storageService: StorageService,
                 private uploadService: UploadService, private event: Events) {

@@ -10,12 +10,16 @@
 <ion-content>
     <ion-tabs tabsPlacement="top">
         <ion-tab tabTitle="List" title="List"
+                 (ionSelect)="tabIsMap = false"
                  [rootParams]="{showLegend: true, data: records, navCtrl: navCtrl, haveTree: false, haveUpload: true}"
                  [root]="recordsList"></ion-tab>
-        <ion-tab tabTitle="Map" title="Map" [rootParams]="{data:records, navCtrl: navCtrl}" [root]="recordsMap"></ion-tab>
+        <ion-tab tabTitle="Map" title="Map"
+                 (ionSelect)="tabIsMap = true"
+                 [rootParams]="{data:records, navCtrl: navCtrl}"
+                 [root]="recordsMap"></ion-tab>
     </ion-tabs>
 
-    <ion-fab bottom left *ngIf="records && records.length">
+    <ion-fab bottom left *ngIf="records && records.length || tabIsMap">
         <ion-row>
             <ion-col>
                 <button (click)="clickedUpload()" class="home-fab-button">
