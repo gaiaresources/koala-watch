@@ -126,19 +126,20 @@ export class RecordFormComponent implements OnDestroy {
                 const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
                 const fieldDescriptor: FieldDescriptor = this.getFieldDescriptor(fieldName);
 
-                fieldDescriptor.type = 'select';
 
-                this.storageService.getTeamMembers().subscribe((users: User[]) => {
+                this.storageService.getTeamMembers().subscribe({
+                    next: (users: User[]) => {
                         fieldDescriptor.options = users.map((user: User) => {
                             const userTitle = formatUserFullName(user);
 
                             return {
-                                name: userTitle,
+                                text: userTitle,
                                 value: userTitle
                             };
                         });
-                    }
-                );
+                    },
+                    complete: () => fieldDescriptor.type = 'select'
+                });
             }
 
             if (this.initialiseDefaultValues) {
@@ -250,8 +251,12 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     public getSelectOptions(fieldDescriptor: FieldDescriptor): object {
+        if (fieldDescriptor.options === null) {
+            console.log(fieldDescriptor);
+        }
+
         return {
-            filter: fieldDescriptor.options.length > 10,
+            filter: fieldDescriptor.options && fieldDescriptor.options.length > 10,
             buttons: ['clear', 'cancel'],
             theme: RecordFormComponent.SELECT_THEME
         };

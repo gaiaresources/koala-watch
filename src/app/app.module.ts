@@ -1,4 +1,3 @@
-import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
