@@ -15,15 +15,17 @@
                     </span>
                 </ion-label>
                 <ion-datetime [formControlName]="field.key"
-                              [displayFormat]="field.format | pyDateFormatToIonicDateFormat" [disabled]="readonly"></ion-datetime>
+                              [displayFormat]="field.format | pyDateFormatToIonicDateFormat" [disabled]="readonly">
+                </ion-datetime>
             </ion-item>
         </ion-item-group>
         <ion-item-group *ngIf="formDescriptor.locationFields && formDescriptor.locationFields.length">
             <ion-item-divider color="secondary">
                 <ion-icon name="locate"></ion-icon>
                 Location
-                <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
-                    Update Location
+                <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()"
+                        class="item-divider-button">
+                    Update Location from GPS
                 </button>
             </ion-item-divider>
             <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
@@ -38,7 +40,8 @@
                 <ion-select *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
                     <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
                 </ion-select>
-                <ion-input *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type" [formControlName]="field.key" [disabled]="readonly"></ion-input>
+                <ion-input *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type"
+                           [formControlName]="field.key" [disabled]="readonly"></ion-input>
             </ion-item>
         </ion-item-group>
         <ion-item-group *ngIf="formDescriptor.requiredFields && formDescriptor.requiredFields.length">
@@ -56,14 +59,16 @@
                     </span>
                 </ion-label>
 
-                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
+                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'"
+                            [formControlName]="field.key" [disabled]="readonly">
                     <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
                 </ion-select>
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
-                <ion-input [placeholder]="field.description || ''"  *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type" [formControlName]="field.key" [disabled]="readonly"></ion-input>
-
+                <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="readonly"
+                    *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type">
+                </ion-input>
             </ion-item>
         </ion-item-group>
         <ion-item-group *ngIf="formDescriptor.optionalFields && formDescriptor.optionalFields.length">
@@ -81,18 +86,22 @@
                     </span>
                 </ion-label>
 
-                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
+                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'"
+                            [formControlName]="field.key" [disabled]="readonly">
                     <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
                 </ion-select>
 
-                <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key" [disabled]="readonly"></ion-datetime>
+                <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key" [disabled]="readonly">
+                </ion-datetime>
 
                 <!--This is for the hypothetical "tool tip required" scenario:-->
                 <!--npm i &#45;&#45;save ionic-tooltips-->
                 <!--<button icon-only ion-button clear type="button" [tooltip]="field.description || field.label" item-right>-->
                 <!--<ion-icon name="help-circle"></ion-icon>-->
                 <!--</button>-->
-                <ion-input [placeholder]="field.description || ''" *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type" [formControlName]="field.key" [disabled]="readonly"></ion-input>
+                <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="readonly"
+                           *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type">
+                </ion-input>
             </ion-item>
         </ion-item-group>
         <ion-input *ngFor="let field of formDescriptor.hiddenFields" [type]="field.type"

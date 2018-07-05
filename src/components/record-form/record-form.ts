@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { AlertController } from 'ionic-angular';
 
+import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
 import { filter } from 'rxjs/operators';
@@ -26,6 +27,9 @@ import { formatUserFullName } from '../../biosys-core/utils/functions';
     providers: [SchemaService]
 })
 export class RecordFormComponent implements OnDestroy {
+    private static readonly GEOLOCATION_TIMEOUT = 10000;
+    private static readonly GEOLOCATION_MAX_AGE = 2000;
+
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
 
@@ -33,9 +37,10 @@ export class RecordFormComponent implements OnDestroy {
 
     private lastLocation: Geoposition;
     private locationSubscription: Subscription;
+    private delayedSetValues: object;
 
     @Input()
-    public initializeDefaultValues = false;
+    public initialiseDefaultValues = false;
 
     @Input()
     public set dataset(dataset: Dataset) {
@@ -43,9 +48,6 @@ export class RecordFormComponent implements OnDestroy {
             this.setupForm(dataset);
         }
     }
-
-    @Input()
-    public key: string;
 
     @Input()
     public readonly: boolean;
@@ -67,12 +69,11 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     public set value(value: object) {
-        this.form.setValue(value);
-
-        // need to show validation errors where appropriate for incomplete record
-        if (this.form.invalid) {
-            Object.keys(this.form.controls).forEach((fieldName: string) =>
-                this.form.get(fieldName).markAsDirty());
+        if (this.form) {
+            // use patch rather than set because the dataset may have changed and have new fields not set in the previously saved record
+            this.form.patchValue(value);
+        } else {
+            this.delayedSetValues = !this.delayedSetValues ? value : Object.assign(this.delayedSetValues, value);
         }
     }
 
@@ -81,7 +82,9 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     ngOnDestroy() {
-        this.locationSubscription.unsubscribe();
+        if (this.locationSubscription) {
+            this.locationSubscription.unsubscribe();
+        }
     }
 
     private setupForm(dataset: Dataset) {
@@ -89,17 +92,22 @@ export class RecordFormComponent implements OnDestroy {
             this.formDescriptor = results[0];
             this.form = results[1];
 
+            if (this.delayedSetValues) {
+                this.form.patchValue(this.delayedSetValues);
+                this.delayedSetValues = null;
+            }
+
             if (this.formDescriptor.dateFields) {
                 // use whatever is the first date field as the representative date field
                 this._dateFieldKey = this.formDescriptor.dateFields[0].key;
             }
 
-            let performInitialLocationUpdate = this.initializeDefaultValues;
+            let performInitialLocationUpdate = this.initialiseDefaultValues;
 
             this.locationSubscription = this.geolocation.watchPosition({
                 enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 2000
+                timeout: RecordFormComponent.GEOLOCATION_TIMEOUT,
+                maximumAge: RecordFormComponent.GEOLOCATION_MAX_AGE
             }).pipe(
                 filter(position => !!position['coords']) // filter out errors
             ).subscribe(position => {
@@ -130,15 +138,15 @@ export class RecordFormComponent implements OnDestroy {
                 );
             }
 
-            if (this.initializeDefaultValues) {
-                this.initialiseValues();
+            if (this.initialiseDefaultValues) {
+                this.initialiseDefaults();
             }
         });
     }
 
     public updateLocationFields(initialUpdate = false) {
         if (!this.lastLocation) {
-            // don't want to show a popup immediately upon showing form the first time
+            // prevent showing this popup immediately upon showing form the first time
             if (!initialUpdate) {
                 this.alertCtrl.create({
                     title: 'Location unavailable',
@@ -166,6 +174,14 @@ export class RecordFormComponent implements OnDestroy {
         this.form.patchValue(valuesToPatch);
     }
 
+    public validate() {
+        // need to show validation errors where appropriate for incomplete record
+        if (this.form.invalid) {
+            Object.keys(this.form.controls).forEach((fieldName: string) =>
+                this.form.get(fieldName).markAsDirty());
+        }
+    }
+
     public getFieldError(fieldDescriptor: FieldDescriptor): string {
         if (!this.form.controls[fieldDescriptor.key].errors) {
             return '';
@@ -191,7 +207,7 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    private initialiseValues() {
+    private initialiseDefaults() {
         if (this._dateFieldKey) {
             // moment().format() will return the current date/time in local timezone
             this.form.controls[this._dateFieldKey].setValue(moment().format());
@@ -201,10 +217,6 @@ export class RecordFormComponent implements OnDestroy {
             this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
                 this.form.controls[field.key].setValue(field.defaultValue);
             });
-        }
-
-        if (this.formDescriptor.keyField && this.key) {
-            this.form.controls[this.formDescriptor.keyField].setValue(this.key);
         }
 
         if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
@@ -224,8 +236,8 @@ export class RecordFormComponent implements OnDestroy {
             return fields[0];
         }
 
-        fields =
-            this.formDescriptor.optionalFields.filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
+        fields = this.formDescriptor.optionalFields
+            .filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
 
         if (fields.length) {
             return fields[0];
