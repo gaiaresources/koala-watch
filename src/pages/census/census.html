@@ -12,7 +12,7 @@
                 Delete
                 <ion-icon name="trash"></ion-icon>
             </button>
-            <button ion-button icon-end solid color="primary" (click)="save()">
+            <button ion-button icon-end solid color="primary" (click)="save(true)">
                 Save
                 <ion-icon name="checkmark-circle-outline"></ion-icon>
             </button>
@@ -49,29 +49,22 @@
 
     <div>
         <div [hidden]="segmentContent != 'form'">
-            <record-form [dataset]="dataset"
-                         [initializeDefaultValues]="isNewRecord"
-                         [key]="recordClientId"
-                         [readonly]="readonly">
+            <record-form [dataset]="dataset" [initialiseDefaultValues]="isNewRecord" [readonly]="readonly">
             </record-form>
         </div>
         <div [hidden]="segmentContent != 'observations'">
-            <records-list
-                    [haveWelcome]="false"
-                    [showLegend]="false"
-                    [haveCensus]="false" [haveObservation]="false" [haveTree]="true"
-                    [baseNavController]="censusNavCtrl"
-                    [parentId]="recordClientId"
-                    [records]="observationRecords"></records-list>
+            <records-list [haveWelcome]="false" [showLegend]="false" [haveCensus]="false" [haveObservation]="false"
+                          [haveTree]="true" [baseNavController]="censusNavCtrl" [parentId]="recordClientId"
+                          [records]="observationRecords" (enteringRecord)="willEnterChildRecord()"></records-list>
         </div>
         <div [hidden]="segmentContent != 'photos'">
-            <photo-gallery></photo-gallery>
+            <photo-gallery [readonly]="readonly"></photo-gallery>
         </div>
     </div>
 
-    <ion-fab bottom right>
-        <button ion-fab (click)="onClickedNewRecord('KLM-SAT Tree Sighting')">
-            <img alt="KLM-SAT Tree Sighting" class="home-fab-icon" src="assets/imgs/white_tree.png">
+    <ion-fab [hidden]="readonly || segmentContent != 'observations'" bottom right>
+        <button (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)" class="fab-census-tree">
+            <img alt="KLM-SAT Tree Sighting" class="fab-img" src="assets/imgs/fab-tree.png">
         </button>
     </ion-fab>
 </ion-content>

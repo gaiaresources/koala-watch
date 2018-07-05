@@ -2,7 +2,7 @@ import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
+import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
 
 @Injectable()
@@ -13,6 +13,14 @@ export class StorageService {
 
     constructor(private storage: Storage) {
 
+    }
+
+    public putTeamMembers(users: User[]): Observable<boolean> {
+        return fromPromise(this.storage.set('Team Members', users));
+    }
+
+    public getTeamMembers(): Observable<User[]> {
+        return fromPromise(this.storage.get('Team Members'));
     }
 
     public putDataset(dataset: Dataset): Observable<boolean> {
@@ -48,8 +56,8 @@ export class StorageService {
     public updateRecordId(record: ClientRecord, id: number): Observable<boolean> {
         for (const photoId of record.photoIds) {
             this.getPhoto(photoId).subscribe(clientPhoto => {
-                clientPhoto.id = id;
-                this.putPhoto(clientPhoto.clientId, clientPhoto).subscribe();
+                clientPhoto.record = id;
+                this.putPhoto(clientPhoto).subscribe();
             });
         }
 
@@ -74,7 +82,7 @@ export class StorageService {
     public getAllValidRecords(): Observable<ClientRecord> {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
-                if (key.startsWith(StorageService.RECORD_PREFIX) && value.valid && !value.serverId) {
+                if (key.startsWith(StorageService.RECORD_PREFIX) && value.valid && !value.id) {
                     observer.next(value);
                 }
             }).then(value => {
@@ -107,8 +115,8 @@ export class StorageService {
         return fromPromise(this.storage.clear());
     }
 
-    public putPhoto(key: string, clientPhoto: ClientPhoto): Observable<boolean> {
-        return fromPromise(this.storage.set(`${StorageService.PHOTO_PREFIX}${key}`, clientPhoto));
+    public putPhoto(clientPhoto: ClientPhoto): Observable<boolean> {
+        return fromPromise(this.storage.set(`${StorageService.PHOTO_PREFIX}${clientPhoto.clientId}`, clientPhoto));
     }
 
     public getPhoto(key: string): Observable<ClientPhoto> {
@@ -122,7 +130,7 @@ export class StorageService {
     public getAllPendingPhotos(): Observable<ClientPhoto> {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
-                if (key.startsWith(StorageService.PHOTO_PREFIX) && value.recordServerId && !value.serverId) {
+                if (key.startsWith(StorageService.PHOTO_PREFIX) && !value.id) {
                     observer.next(value);
                 }
             }).then(value => {
@@ -133,14 +141,9 @@ export class StorageService {
         });
     }
 
-    public updatePhotoRecordServerId(clientPhoto: ClientPhoto, id: number): Observable<boolean> {
-        clientPhoto.id = id;
-        return this.putPhoto(clientPhoto.clientId, clientPhoto);
-    }
-
     public updatePhotoMediaId(clientPhoto: ClientPhoto, id: number): Observable<boolean> {
         clientPhoto.id = id;
-        return this.putPhoto(clientPhoto.clientId, clientPhoto);
+        return this.putPhoto(clientPhoto);
     }
 
 }

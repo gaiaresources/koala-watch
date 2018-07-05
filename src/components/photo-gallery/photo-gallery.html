@@ -1,4 +1,4 @@
-<ion-card>
+<ion-card *ngIf="!readonly">
     <ion-card-content>
         <ion-row>
             <ion-col col-6 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-3>
@@ -12,8 +12,8 @@
         <div *ngIf="showPhotos()">
             <div class="photo-container">
                 <img class="photo-img" [src]="domSanitizer.bypassSecurityTrustUrl(photoSrc)">
-                <div class="bottom-right">
-                    <img src="assets/imgs/white_trash.png" (click)="deleteClick()">
+                <div class="top-right">
+                    <img *ngIf="!readonly" src="assets/imgs/white_trash.png" (click)="deleteClick()">
                 </div>
                 <div class="center-left" *ngIf="showLeftChevron()">
                     <img src="assets/imgs/white_left_chevron.png" (click)="pageLeftClick()">
@@ -23,8 +23,11 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="!showPhotos()">
+        <div *ngIf="!showPhotos() && !readonly">
             Add photos using the Take Photo button
+        </div>
+        <div *ngIf="!showPhotos() && readonly">
+            This record has been uploaded, photos cannot be added
         </div>
     </ion-card-content>
 </ion-card>

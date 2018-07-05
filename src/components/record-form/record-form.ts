@@ -1,14 +1,20 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { AlertController } from 'ionic-angular';
 
+import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
+import { Subscription } from 'rxjs/Subscription';
+import { filter } from 'rxjs/operators';
 
 import { FieldDescriptor, FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
-import { filter } from 'rxjs/operators';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { SchemaService } from '../../biosys-core/services/schema.service';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
-import { AlertController } from 'ionic-angular';
+import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
+import { StorageService } from '../../shared/services/storage.service';
+import { AuthService } from '../../biosys-core/services/auth.service';
+import { formatUserFullName } from '../../biosys-core/utils/functions';
+import { UPDATE_BUTTON_NAME } from '../../shared/utils/consts';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -21,7 +27,9 @@ import { AlertController } from 'ionic-angular';
     templateUrl: 'record-form.html',
     providers: [SchemaService]
 })
-export class RecordFormComponent {
+export class RecordFormComponent implements OnDestroy {
+    private static readonly GEOLOCATION_TIMEOUT = 5000;
+    private static readonly GEOLOCATION_MAX_AGE = 1000;
     private static readonly SELECT_THEME = 'auto';
 
     public form: FormGroup;
@@ -30,9 +38,11 @@ export class RecordFormComponent {
     private _dateFieldKey: string;
 
     private lastLocation: Geoposition;
+    private locationSubscription: Subscription;
+    private delayedSetValues: object;
 
     @Input()
-    public initializeDefaultValues = false;
+    public initialiseDefaultValues = false;
 
     @Input()
     public set dataset(dataset: Dataset) {
@@ -42,10 +52,9 @@ export class RecordFormComponent {
     }
 
     @Input()
-    public key: string;
-
-    @Input()
     public readonly: boolean;
+
+    public UPDATE_BUTTON_NAME = UPDATE_BUTTON_NAME;
 
     public get invalid(): boolean {
         return !!this.form && this.form.invalid;
@@ -64,63 +73,83 @@ export class RecordFormComponent {
     }
 
     public set value(value: object) {
-        this.form.setValue(value);
-
-        // need to show validation errors where appropriate for incomplete record
-        if (this.form.invalid) {
-            Object.keys(this.form.controls).forEach((fieldName: string) =>
-                this.form.get(fieldName).markAsDirty());
+        if (this.form) {
+            // use patch rather than set because the dataset may have changed and have new fields not set in the previously saved record
+            this.form.patchValue(value);
+        } else {
+            this.delayedSetValues = !this.delayedSetValues ? value : Object.assign(this.delayedSetValues, value);
         }
     }
 
-    constructor(private schemaService: SchemaService, private geolocation: Geolocation, private alertCtrl: AlertController) {}
+    constructor(private schemaService: SchemaService, private storageService: StorageService, private authService: AuthService,
+                private geolocation: Geolocation, private alertCtrl: AlertController) {
+    }
+
+    ngOnDestroy() {
+        if (this.locationSubscription) {
+            this.locationSubscription.unsubscribe();
+        }
+    }
 
     private setupForm(dataset: Dataset) {
         this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
             this.formDescriptor = results[0];
             this.form = results[1];
 
+            if (this.delayedSetValues) {
+                this.form.patchValue(this.delayedSetValues);
+                this.delayedSetValues = null;
+            }
+
             if (this.formDescriptor.dateFields) {
                 // use whatever is the first date field as the representative date field
                 this._dateFieldKey = this.formDescriptor.dateFields[0].key;
             }
 
-            let performInitialLocationUpdate = this.initializeDefaultValues;
+            let performInitialLocationUpdate = this.initialiseDefaultValues;
 
-            this.geolocation.watchPosition().pipe(
+            this.locationSubscription = this.geolocation.watchPosition({
+                enableHighAccuracy: true,
+                timeout: RecordFormComponent.GEOLOCATION_TIMEOUT,
+                maximumAge: RecordFormComponent.GEOLOCATION_MAX_AGE
+            }).pipe(
                 filter(position => !!position['coords']) // filter out errors
             ).subscribe(position => {
                 this.lastLocation = position;
-
                 if (performInitialLocationUpdate) {
                     this.updateLocationFields(true);
                     performInitialLocationUpdate = false;
                 }
             });
 
-            if (this.initializeDefaultValues) {
-                // if this is a new record, patch in default form values where appropriate
-                if (this._dateFieldKey) {
-                    // moment().format() will return the current date/time in local timezone
-                    this.form.controls[this._dateFieldKey].setValue(moment().format());
-                }
+            if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
+                const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
+                const fieldDescriptor: FieldDescriptor = this.getFieldDescriptor(fieldName);
 
-                if (this.formDescriptor.hiddenFields) {
-                    this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
-                        this.form.controls[field.key].setValue(field.defaultValue);
-                    });
-                }
+                fieldDescriptor.type = 'select';
 
-                if (this.formDescriptor.keyField && this.key) {
-                    this.form.controls[this.formDescriptor.keyField].setValue(this.key);
-                }
+                this.storageService.getTeamMembers().subscribe((users: User[]) => {
+                        fieldDescriptor.options = users.map((user: User) => {
+                            const userTitle = formatUserFullName(user);
+
+                            return {
+                                name: userTitle,
+                                value: userTitle
+                            };
+                        });
+                    }
+                );
+            }
+
+            if (this.initialiseDefaultValues) {
+                this.initialiseDefaults();
             }
         });
     }
 
     public updateLocationFields(initialUpdate = false) {
         if (!this.lastLocation) {
-            // don't want to show a popup immediately upon showing form the first time
+            // prevent showing this popup immediately upon showing form the first time
             if (!initialUpdate) {
                 this.alertCtrl.create({
                     title: 'Location unavailable',
@@ -148,6 +177,14 @@ export class RecordFormComponent {
         this.form.patchValue(valuesToPatch);
     }
 
+    public validate() {
+        // need to show validation errors where appropriate for incomplete record
+        if (this.form.invalid) {
+            Object.keys(this.form.controls).forEach((fieldName: string) =>
+                this.form.get(fieldName).markAsDirty());
+        }
+    }
+
     public getFieldError(fieldDescriptor: FieldDescriptor): string {
         if (!this.form.controls[fieldDescriptor.key].errors) {
             return '';
@@ -171,6 +208,45 @@ export class RecordFormComponent {
             case 'pattern':
                 return `Must match pattern: ${error['pattern']}`;
         }
+    }
+
+    private initialiseDefaults() {
+        if (this._dateFieldKey) {
+            // moment().format() will return the current date/time in local timezone
+            this.form.controls[this._dateFieldKey].setValue(moment().format());
+        }
+
+        if (this.formDescriptor.hiddenFields) {
+            this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
+                this.form.controls[field.key].setValue(field.defaultValue);
+            });
+        }
+
+        if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
+            const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
+
+            this.authService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[fieldName].
+                setValue(formatUserFullName(currentUser))
+            );
+        }
+    }
+
+    private getFieldDescriptor(fieldName: string): FieldDescriptor {
+        let fields: FieldDescriptor[] =
+            this.formDescriptor.requiredFields.filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
+
+        if (fields.length) {
+            return fields[0];
+        }
+
+        fields = this.formDescriptor.optionalFields
+            .filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
+
+        if (fields.length) {
+            return fields[0];
+        }
+
+        throw new Error(`Cannot find ${fieldName} field in form descriptor`);
     }
 
     public getSelectOptions(fieldDescriptor: FieldDescriptor): object {

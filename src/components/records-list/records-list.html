@@ -1,13 +1,12 @@
 <ion-content style="min-height: 500px">
     <div [hidden]="!records.length || !showLegend" id="category-legend-div">
-        <table id="category-legend">
-            <td class="category-legend-colour" id="category-completed"></td>
-            <td class="category-legend-label">Complete</td>
-            <td class="category-legend-colour" id="category-incomplete"></td>
-            <td class="category-legend-label">Incomplete</td>
-            <td class="category-legend-colour" id="category-uploaded"></td>
-            <td class="category-legend-label">Uploaded</td>
-        </table>
+        <ion-grid id="category-legend">
+            <ion-row>
+                <ion-col class="category-legend-label" id="category-completed">Complete</ion-col>
+                <ion-col class="category-legend-label" id="category-incomplete">Incomplete</ion-col>
+                <ion-col class="category-legend-label" id="category-uploaded">Uploaded</ion-col>
+            </ion-row>
+        </ion-grid>
     </div>
 
     <div [hidden]="!records.length">
@@ -27,7 +26,7 @@
     <div [hidden]="records.length > 0" class="no-data-div">
         <div id="no-data-div">
             <ion-grid>
-                <ion-row *ngIf="haveWelcome" style="padding-bottom: 1em;">
+                <ion-row *ngIf="haveWelcome">
                     <ion-col>
                         <h1 class="no-data">Welcome to Koala Watch</h1>
                         <p class="no-data">On this screen you can view records you are currently
@@ -37,18 +36,18 @@
                 </ion-row>
                 <ion-row *ngIf="!haveWelcome" style="padding-bottom: 1em;">
                     <ion-col>
-                        <h1 class="no-data">No Tree Sightings Are Available</h1>
+                        <h1 class="no-data">This Census does not have any Tree Sightings</h1>
                         <p class="no-data">On this screen you can view the tree
                         surveys related to this census. You can also create a new
-                        tree survey.</p>
+                        tree survey. Each Census can have many Tree Sightings.</p>
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveObservation">
-                    <ion-col col-2>
-                        <button ion-fab class="local-fab"
-                                (click)="onClickedNewRecord('Koala Opportunistic Observation')">
-                            <img alt="Koala Opportunistic Observation"
-                                 src="assets/imgs/white_eye.png">
+                    <ion-col>
+                        <button class="local-fab"
+                                (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
+                            <img alt="Koala Opportunistic Observation" class="fab-img"
+                                 src="assets/imgs/fab-eye.png">
                         </button>
                     </ion-col>
                     <ion-col>
@@ -56,10 +55,11 @@
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveCensus">
-                    <ion-col col-2>
-                        <button ion-fab class="local-fab" (click)="onClickedNewRecord('KLM-SAT Census')">
-                            <img alt="Koala Census"
-                                 src="assets/imgs/white_poop.png">
+                    <ion-col>
+                        <button class="local-fab"
+                                (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
+                            <img alt="Koala Census" class="fab-img"
+                                 src="assets/imgs/fab-trees.png">
                         </button>
                     </ion-col>
                     <ion-col>
@@ -67,14 +67,28 @@
                     </ion-col>
                 </ion-row>
                 <ion-row *ngIf="haveTree">
-                    <ion-col col-2>
-                        <button ion-fab class="local-fab" (click)="onClickedNewRecord('KLM-SAT Tree Sighting')">
-                            <img alt="Koala Tree Survey"
-                                 src="assets/imgs/white_tree.png">
+                    <ion-col>
+                        <button class="local-fab"
+                                (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)">
+                            <img alt="Koala Tree Survey" class="fab-img"
+                                 src="assets/imgs/fab-tree.png">
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-data vertical-align-middle">Create a Tree Sighting</h1>
+                        <h1 class="no-data vertical-align-middle">Create a Tree Sighting for this Census</h1>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row *ngIf="haveUpload">
+                    <ion-col>
+                        <button class="local-fab"
+                                (click)="uploadClicked()">
+                            <img class="fab-img"
+                                 src="assets/imgs/fab-upload.png">
+                        </button>
+                    </ion-col>
+                    <ion-col>
+                        <h1 class="no-data vertical-align-middle">Upload Data</h1>
                     </ion-col>
                 </ion-row>
             </ion-grid>

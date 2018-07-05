@@ -2,12 +2,16 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
+import { mergeMap } from 'rxjs/operators';
+import { from } from 'rxjs/observable/from';
+
 import { AuthService } from '../biosys-core/services/auth.service';
 import { APIService } from '../biosys-core/services/api.service';
 import { StorageService } from '../shared/services/storage.service';
-import { Dataset } from '../biosys-core/interfaces/api.interfaces';
-import { mergeMap } from 'rxjs/operators';
-import { from } from 'rxjs/observable/from';
+import { Dataset, User } from '../biosys-core/interfaces/api.interfaces';
+
+import { PROJECT_NAME } from '../shared/utils/consts';
 
 @Component({
     templateUrl: 'app.html'
@@ -19,6 +23,7 @@ export class AppComponent implements OnInit {
         {title: 'Home', page: 'HomePage', img: 'assets/imgs/home.png'},
         {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/settings.png'},
         {title: 'About', page: 'AboutPage', img: 'assets/imgs/about.png'},
+        {title: 'Help', page: 'HelpPage', img: 'assets/imgs/about.png'},
         {title: 'Logout', img: 'assets/imgs/logout.png'},
     ];
 
@@ -37,10 +42,14 @@ export class AppComponent implements OnInit {
             if (!this.authService.isLoggedIn()) {
                 this.nav.setRoot('LoginPage');
             } else {
-                this.apiService.getDatasets({project__name: 'NSW Koala Data Capture'}).pipe(
+                this.apiService.getDatasets({project__name: PROJECT_NAME}).pipe(
                     mergeMap((datasets: Dataset[]) => from(datasets).pipe(
                         mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
                     ))
+                ).subscribe();
+
+                this.apiService.getUsers({project__name: PROJECT_NAME}).pipe(
+                    mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
                 ).subscribe();
 
                 this.nav.setRoot('HomePage');

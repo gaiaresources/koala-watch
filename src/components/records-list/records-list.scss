@@ -4,15 +4,17 @@ table#category-legend {
     margin-right: auto;
 }
 
-td.category-legend-colour {
+.category-legend-colour {
     height: 2em;
     width: 2em;
 }
 
-td.category-legend-label {
+.category-legend-label {
     vertical-align: middle;
-    padding-left: 2em;
-    padding-right: 4em;
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
     text-align: center;
 }
 
@@ -40,7 +42,9 @@ img.data-row {
 }
 
 .local-fab {
-    background-color: green;
+    background-color: rgba(0,0,0,0);
+    width: 80px;
+    height: 80px;
 }
 
 #no-data-div {
@@ -51,6 +55,7 @@ img.data-row {
 
 .no-data {
     color: grey;
+    font-size: 12pt;
 }
 
 .row {
@@ -59,4 +64,13 @@ img.data-row {
 
 .vertical-align-middle {
     vertical-align: middle
+}
+
+.fab-img {
+    min-width: 80px;
+    min-height: 80px;
+}
+.fabbed-img {
+    width: 60px;
+    height: 60px;
 }
