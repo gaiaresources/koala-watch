@@ -163,6 +163,7 @@ export class CensusPage {
                                     ).subscribe();
                                 }
                                 // TODO: Delete any child records
+                                this.showLeavingAlertMessage = false;
                                 this.censusNavCtrl.pop();
                             }, (error) => {
                                 this.alertController.create({

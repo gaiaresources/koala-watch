@@ -53,8 +53,8 @@
             </record-form>
         </div>
         <div [hidden]="segmentContent != 'observations'">
-            <records-list [haveWelcome]="false" [showLegend]="false" [haveCensus]="false" [haveObservation]="false"
-                          [haveTree]="true" [baseNavController]="censusNavCtrl" [parentId]="recordClientId"
+            <records-list [showWelcome]="false" [showLegend]="false" [showCensus]="false" [showObservation]="false"
+                          [showTree]="true" [baseNavController]="censusNavCtrl" [parentId]="recordClientId"
                           [records]="observationRecords" (enteringRecord)="willEnterChildRecord()"></records-list>
         </div>
         <div [hidden]="segmentContent != 'photos'">
@@ -62,8 +62,8 @@
         </div>
     </div>
 
-    <ion-fab [hidden]="readonly || segmentContent != 'observations'" bottom right>
-        <button (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)" class="fab-census-tree">
+    <ion-fab [hidden]="readonly || segmentContent != 'observations' || !observationRecords.length" bottom right>
+        <button ion-fab (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)" class="fab-census-tree">
             <img alt="KLM-SAT Tree Sighting" class="fab-img" src="assets/imgs/fab-tree.png">
         </button>
     </ion-fab>

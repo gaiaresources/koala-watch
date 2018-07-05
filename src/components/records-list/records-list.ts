@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NavController, NavParams, Events } from 'ionic-angular';
-import { Component, Input } from '@angular/core';
+
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
 import { RECORD_INCOMPLETE, RECORD_COMPLETE, RECORD_UPLOADED, DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS,
@@ -35,19 +35,19 @@ export class RecordsListComponent {
     public parentId: string;
 
     @Input()
-    public haveObservation = true;
+    public showObservation = true;
 
     @Input()
-    public haveCensus = true;
+    public showCensus = true;
 
     @Input()
-    public haveTree = true;
+    public showTree = true;
 
     @Input()
-    public haveUpload = false;
+    public showUpload = false;
 
     @Input()
-    public haveWelcome = true;
+    public showWelcome = true;
 
     @Output()
     public enteringRecord = new EventEmitter();
@@ -58,17 +58,17 @@ export class RecordsListComponent {
                 private events: Events) {
         this.baseNavController = (this.navParams.data.hasOwnProperty('navCtrl') ? this.navParams.get('navCtrl') : undefined);
         this.records = (this.navParams.data.hasOwnProperty('data') ? this.navParams.get('data') : []);
-        if (this.navParams.data.hasOwnProperty('haveTree')) {
-            this.haveTree = this.navParams.get('haveTree');
+        if (this.navParams.data.hasOwnProperty('showTree')) {
+            this.showTree = this.navParams.get('showTree');
         }
-        if (this.navParams.data.hasOwnProperty('haveCensus')) {
-            this.haveCensus = this.navParams.get('haveCensus');
+        if (this.navParams.data.hasOwnProperty('showCensus')) {
+            this.showCensus = this.navParams.get('showCensus');
         }
-        if (this.navParams.data.hasOwnProperty('haveObservation')) {
-            this.haveObservation = this.navParams.get('haveObservation');
+        if (this.navParams.data.hasOwnProperty('showObservation')) {
+            this.showObservation = this.navParams.get('showObservation');
         }
-        if (this.navParams.data.hasOwnProperty('haveUpload')) {
-            this.haveUpload = this.navParams.get('haveUpload');
+        if (this.navParams.data.hasOwnProperty('showUpload')) {
+            this.showUpload = this.navParams.get('showUpload');
         }
         if (this.navParams.data.hasOwnProperty('showLegend')) {
             this.showLegend = this.navParams.get('showLegend');
