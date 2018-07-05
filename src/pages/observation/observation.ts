@@ -7,7 +7,6 @@ import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { RecordFormComponent } from '../../components/record-form/record-form';
-import { APIService } from '../../biosys-core/services/api.service';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
@@ -36,15 +35,10 @@ export class ObservationPage {
     private recordClientId: string;
 
     constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
-                private alertController: AlertController, private apiService: APIService) {
+                private alertController: AlertController) {
     }
 
     public ionViewWillEnter() {
-        if (!this.navParams.get('datasetName')) {
-            this.showLeavingAlertMessage = false;
-            this.navCtrl.pop();
-        }
-
         if (this.navParams.data.hasOwnProperty('parentId')) {
             this.parentId = this.navParams.get('parentId');
         }
@@ -60,15 +54,25 @@ export class ObservationPage {
             if (dataset) {
                 this.dataset = dataset;
 
-                if (this.recordClientId) {
+                if (this.recordClientId && !this.isNewRecord) {
                     // if this is an existing record, set form values from data
                     this.storageService.getRecord(this.recordClientId).subscribe(
                         record => {
                             if (record) {
                                 this.record = record;
                                 this.recordForm.value = record.data;
+                                this.recordForm.validate();
                                 this.photoGallery.PhotoIds = record.photoIds;
                                 this.readonly = !!record.id;
+                            }
+                        }
+                    );
+                } else if (this.parentId) {
+                    // if this is a new record and there is a parent, patch in values common with parent field
+                    this.storageService.getRecord(this.parentId).subscribe(
+                        record => {
+                            if (record) {
+                                this.recordForm.value = record.data;
                             }
                         }
                     );
@@ -98,6 +102,8 @@ export class ObservationPage {
             }).present();
 
             return false;
+        } else {
+            return true;
         }
     }
 

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { APP_NAME, UPDATE_BUTTON_NAME } from '../../shared/utils/consts';
 
 /**
  * Generated class for the HelpPage page.
@@ -10,16 +11,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-help',
-  templateUrl: 'help.html',
+    selector: 'page-help',
+    templateUrl: 'help.html',
 })
 export class HelpPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+    public APP_NAME = APP_NAME;
+    public UPDATE_BUTTON_NAME = UPDATE_BUTTON_NAME;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad HelpPage');
-  }
+    constructor(public navCtrl: NavController, public navParams: NavParams) {
+    }
 
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad HelpPage');
+    }
 }

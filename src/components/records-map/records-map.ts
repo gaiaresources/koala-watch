@@ -4,6 +4,7 @@ import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavParams } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
 import { isDatasetCensus } from '../../shared/utils/functions';
+import * as moment from 'moment/moment';
 
 @Component({
     selector: 'records-map',
@@ -64,8 +65,8 @@ export class RecordsMapComponent implements OnInit {
                     if (record.hasOwnProperty('data') &&
                         record.data.hasOwnProperty('Latitude') &&
                         record.data.hasOwnProperty('Longitude')) {
-                        const title = `${record.data['Site ID']}${record.data['First Date'] ? record.data['First Date'] : ''}`;
-                        const snippet = record.client_id || '';
+                        const title = record.datasetName;
+                        const snippet = moment(record.datetime).format('DD/MM/YYYY HH:mm');
                         let url = 'assets/imgs/';
                         url += `${isDatasetCensus(record.datasetName) ? 'tree' : 'eye'}-pin-`;
                         url += `${record.valid ? 'complete' : 'incomplete'}.png`;
