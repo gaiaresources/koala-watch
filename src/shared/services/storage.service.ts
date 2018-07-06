@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
+import { from } from 'rxjs/observable/from';
+import { mergeMap } from 'rxjs/operators';
 
 @Injectable()
 export class StorageService {
@@ -108,6 +110,21 @@ export class StorageService {
     }
 
     public deleteRecord(key: string): Observable<boolean> {
+        this.getRecord(key).subscribe(clientRecord => {
+            if (clientRecord) {
+                this.storage.forEach((storageValue, storageKey) => {
+                    if (storageValue.parentId === clientRecord.client_id) {
+                        from(storageValue.photoIds as string[]).pipe(
+                            mergeMap( photoId => this.deletePhoto(photoId) )
+                        ).subscribe();
+                        this.storage.remove(storageKey);
+                    }
+                });
+                from(clientRecord.photoIds).pipe(
+                    mergeMap( photoId => this.deletePhoto(photoId) )
+                ).subscribe();
+            }
+        });
         return fromPromise(this.storage.remove(`${StorageService.RECORD_PREFIX}${key}`));
     }
 
