@@ -36,11 +36,7 @@
                         ({{ getFieldError(field) }})
                     </span>
                 </ion-label>
-                <ion-select *ngSwitchCase="'select'" [formControlName]="field.key" [disabled]="readonly">
-                    <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
-                </ion-select>
-                <ion-input *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type"
-                           [formControlName]="field.key" [disabled]="readonly"></ion-input>
+                <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key" [disabled]="readonly"></ion-input>
             </ion-item>
         </ion-item-group>
         <ion-item-group *ngIf="formDescriptor.requiredFields && formDescriptor.requiredFields.length">
@@ -58,10 +54,10 @@
                     </span>
                 </ion-label>
 
-                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'"
-                            [formControlName]="field.key" [disabled]="readonly">
-                    <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
-                </ion-select>
+                <ion-input *ngSwitchCase="'select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
+                           [mbsc-options]="getSelectOptions(field)" [disabled]="readonly"
+                           (onItemTap)="onItemSelected($event)">
+                </ion-input>
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
@@ -85,10 +81,10 @@
                     </span>
                 </ion-label>
 
-                <ion-select [placeholder]="field.description || ''" *ngSwitchCase="'select'"
-                            [formControlName]="field.key" [disabled]="readonly">
-                    <ion-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.name }}</ion-option>
-                </ion-select>
+                <ion-input *ngSwitchCase="'select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
+                            [mbsc-options]="getSelectOptions(field)" [disabled]="readonly"
+                            (onItemTap)="onItemSelected($event)">
+                </ion-input>
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key" [disabled]="readonly">
                 </ion-datetime>

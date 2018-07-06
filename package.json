@@ -48,7 +48,8 @@
         "ionicons": "3.0.0",
         "rxjs": "5.5.10",
         "sw-toolbox": "3.6.0",
-        "zone.js": "0.8.26"
+        "zone.js": "0.8.26",
+        "@mobiscroll/angular": "file:./src/lib/mobiscroll-package/mobiscroll-angular-4.2.4.tgz"
     },
     "devDependencies": {
         "@ionic/app-scripts": "3.1.9",
@@ -76,5 +77,8 @@
             "cordova-plugin-ionic-keyboard": {},
             "cordova-plugin-statusbar": {}
         }
+    },
+    "config": {
+        "ionic_copy": "./scripts/copy-mobiscroll-css.js"
     }
 }
