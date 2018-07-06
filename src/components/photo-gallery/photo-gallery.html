@@ -1,12 +1,3 @@
-<ion-card *ngIf="!readonly">
-    <ion-card-content>
-        <ion-row>
-            <ion-col col-6 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-3>
-                <button ion-button type="submit" (click)="takePhoto()" full>Take Photo</button>
-            </ion-col>
-        </ion-row>
-    </ion-card-content>
-</ion-card>
 <ion-card>
     <ion-card-content>
         <div *ngIf="showPhotos()">

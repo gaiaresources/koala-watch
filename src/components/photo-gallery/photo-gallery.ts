@@ -130,7 +130,7 @@ export class PhotoGalleryComponent {
         }).present();
     }
 
-    public takePhoto() {
+    public onClickedNewPhoto() {
         if (this._photoIds.length >= 10) {
             alert('Maximum number of photos reached');
             return;
