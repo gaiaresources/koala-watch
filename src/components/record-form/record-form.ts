@@ -30,6 +30,7 @@ import { UPDATE_BUTTON_NAME } from '../../shared/utils/consts';
 export class RecordFormComponent implements OnDestroy {
     private static readonly GEOLOCATION_TIMEOUT = 5000;
     private static readonly GEOLOCATION_MAX_AGE = 1000;
+    private static readonly SELECT_THEME = 'auto';
 
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
@@ -125,19 +126,20 @@ export class RecordFormComponent implements OnDestroy {
                 const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
                 const fieldDescriptor: FieldDescriptor = this.getFieldDescriptor(fieldName);
 
-                fieldDescriptor.type = 'select';
 
-                this.storageService.getTeamMembers().subscribe((users: User[]) => {
+                this.storageService.getTeamMembers().subscribe({
+                    next: (users: User[]) => {
                         fieldDescriptor.options = users.map((user: User) => {
                             const userTitle = formatUserFullName(user);
 
                             return {
-                                name: userTitle,
+                                text: userTitle,
                                 value: userTitle
                             };
                         });
-                    }
-                );
+                    },
+                    complete: () => fieldDescriptor.type = 'select'
+                });
             }
 
             if (this.initialiseDefaultValues) {
@@ -246,5 +248,22 @@ export class RecordFormComponent implements OnDestroy {
         }
 
         throw new Error(`Cannot find ${fieldName} field in form descriptor`);
+    }
+
+    public getSelectOptions(fieldDescriptor: FieldDescriptor): object {
+        if (fieldDescriptor.options === null) {
+            console.log(fieldDescriptor);
+        }
+
+        return {
+            filter: fieldDescriptor.options && fieldDescriptor.options.length > 10,
+            buttons: ['clear', 'cancel'],
+            theme: RecordFormComponent.SELECT_THEME
+        };
+    }
+
+    public onItemSelected(event: any) {
+        event.inst.setVal(event.value);
+        event.inst.select();
     }
 }
