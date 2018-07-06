@@ -9,33 +9,28 @@
 
 <ion-content>
     <ion-tabs tabsPlacement="top">
-        <ion-tab tabTitle="List" title="List"
-                 (ionSelect)="tabIsMap=false"
-                 [rootParams]="{showLegend: true, data: records, navCtrl: navCtrl, showTree: false, showUpload: true}"
-                 [root]="recordsList"></ion-tab>
-        <ion-tab tabTitle="Map" title="Map"
-                 (ionSelect)="tabIsMap=true"
-                 [rootParams]="{data:records, navCtrl: navCtrl}"
-                 [root]="recordsMap"></ion-tab>
+        <ion-tab tabTitle="List" title="List" (ionSelect)="tabIsMap = false"
+                 [rootParams]="{showLegend: true, data: records, navCtrl: navCtrl }" [root]="recordsList">
+        </ion-tab>
+        <ion-tab tabTitle="Map" title="Map" (ionSelect)="tabIsMap = true"
+                 [rootParams]="{data:records, navCtrl: navCtrl}" [root]="recordsMap">
+        </ion-tab>
     </ion-tabs>
 
-    <ion-fab bottom left *ngIf="records && records.length || tabIsMap">
-        <ion-row>
-            <ion-col>
-                <button ion-fab (click)="clickedUpload()" class="home-fab-button">
-                    <img alt="Koala Opportunistic Observation" class="home-fab-icon" src="assets/imgs/fab-upload.png" style="">
-                </button>
-            </ion-col>
-            <ion-col>
-                <button ion-fab (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)" class="home-fab-button">
-                    <img alt="Koala Opportunistic Observation" class="home-fab-icon" src="assets/imgs/fab-eye.png">
-                </button>
-            </ion-col>
-            <ion-col>
-                <button ion-fab (click)="onClickedNewRecord(DATASETNAME_CENSUS)" class="home-fab-button">
-                    <img alt="KLM-SAT Census" class="home-fab-icon" src="assets/imgs/fab-trees.png">
-                </button>
-            </ion-col>
-        </ion-row>
+    <ion-fab bottom left *ngIf="records && records.length && !tabIsMap">
+        <button ion-fab (click)="clickedUpload()">
+            <img alt="Upload Records" class="home-fab-icon" src="assets/imgs/white_upload.png">
+        </button>
+    </ion-fab>
+
+    <ion-fab bottom right *ngIf="records && records.length && !tabIsMap" style="right: 120px">
+        <button ion-fab (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
+            <img alt="Koala Opportunistic Observation" class="home-fab-icon" src="assets/imgs/white_eye.png">
+        </button>
+    </ion-fab>
+    <ion-fab bottom right *ngIf="records && records.length && !tabIsMap">
+        <button ion-fab (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
+            <img alt="KLM-SAT Census" class="home-fab-icon" src="assets/imgs/white_trees.png">
+        </button>
     </ion-fab>
 </ion-content>
