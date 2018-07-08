@@ -14,7 +14,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 
-import { DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
+import { DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
 
 /**
  * Generated class for the CensusPage page.

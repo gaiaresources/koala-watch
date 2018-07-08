@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { AlertController } from 'ionic-angular';
 
-import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
 import { filter } from 'rxjs/operators';
@@ -126,7 +125,6 @@ export class RecordFormComponent implements OnDestroy {
                 const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
                 const fieldDescriptor: FieldDescriptor = this.getFieldDescriptor(fieldName);
 
-
                 this.storageService.getTeamMembers().subscribe({
                     next: (users: User[]) => {
                         fieldDescriptor.options = users.map((user: User) => {
@@ -140,6 +138,11 @@ export class RecordFormComponent implements OnDestroy {
                     },
                     complete: () => fieldDescriptor.type = 'select'
                 });
+            }
+
+            // special case for species code field which must be hidden
+            if (this.form.contains('SpeciesCode')) {
+                this.hideField('SpeciesCode');
             }
 
             if (this.initialiseDefaultValues) {
@@ -211,28 +214,7 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    private initialiseDefaults() {
-        if (this._dateFieldKey) {
-            // moment().format() will return the current date/time in local timezone
-            this.form.controls[this._dateFieldKey].setValue(moment().format());
-        }
-
-        if (this.formDescriptor.hiddenFields) {
-            this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
-                this.form.controls[field.key].setValue(field.defaultValue);
-            });
-        }
-
-        if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
-            const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
-
-            this.authService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[fieldName].
-                setValue(formatUserFullName(currentUser))
-            );
-        }
-    }
-
-    private getFieldDescriptor(fieldName: string): FieldDescriptor {
+    public getFieldDescriptor(fieldName: string): FieldDescriptor {
         let fields: FieldDescriptor[] =
             this.formDescriptor.requiredFields.filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
 
@@ -241,6 +223,13 @@ export class RecordFormComponent implements OnDestroy {
         }
 
         fields = this.formDescriptor.optionalFields
+            .filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
+
+        if (fields.length) {
+            return fields[0];
+        }
+
+        fields = this.formDescriptor.hiddenFields
             .filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
 
         if (fields.length) {
@@ -265,5 +254,43 @@ export class RecordFormComponent implements OnDestroy {
     public onItemSelected(event: any) {
         event.inst.setVal(event.value);
         event.inst.select();
+    }
+
+    private initialiseDefaults() {
+        if (this._dateFieldKey) {
+            // moment().format() will return the current date/time in local timezone
+            this.form.controls[this._dateFieldKey].setValue(moment().format());
+        }
+
+        if (this.formDescriptor.hiddenFields) {
+            this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
+                this.form.controls[field.key].setValue(field.defaultValue);
+            });
+        }
+
+        if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
+            const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
+
+            this.authService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[fieldName].
+                setValue(formatUserFullName(currentUser))
+            );
+        }
+    }
+
+    private hideField(fieldName: string) {
+        const fieldCategories = Object.keys(this.formDescriptor);
+
+        for (const category of fieldCategories) {
+            const categoryFields = this.formDescriptor[category];
+            const fieldIndex = categoryFields.map((fd: FieldDescriptor) => fd.key ).indexOf(fieldName);
+
+            if (fieldIndex > -1) {
+                const fieldDescriptor = categoryFields[fieldIndex];
+                fieldDescriptor.type = 'hidden';
+                categoryFields.splice(fieldIndex, 1);
+                this.formDescriptor.hiddenFields.push(fieldDescriptor);
+                return;
+            }
+        }
     }
 }

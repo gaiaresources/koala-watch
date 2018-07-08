@@ -5,7 +5,8 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
 import { from } from 'rxjs/observable/from';
-import { mergeMap } from 'rxjs/operators';
+import { filter, mergeMap } from 'rxjs/operators';
+import { concat } from 'rxjs/observable/concat';
 
 @Injectable()
 export class StorageService {
@@ -14,7 +15,6 @@ export class StorageService {
     private static readonly PHOTO_PREFIX = 'Photo_';
 
     constructor(private storage: Storage) {
-
     }
 
     public putTeamMembers(users: User[]): Observable<boolean> {
@@ -81,20 +81,6 @@ export class StorageService {
         });
     }
 
-    public getAllValidRecords(): Observable<ClientRecord> {
-        return new Observable(observer => {
-            this.storage.forEach((value, key) => {
-                if (key.startsWith(StorageService.RECORD_PREFIX) && value.valid && !value.id) {
-                    observer.next(value);
-                }
-            }).then(value => {
-                observer.complete();
-            }, reason => {
-                observer.error(reason);
-            });
-        });
-    }
-
     public getChildRecords(parentId: string): Observable<ClientRecord> {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
@@ -107,6 +93,18 @@ export class StorageService {
                 observer.error(reason);
             });
         });
+    }
+
+    public getUploadableRecords(): Observable<ClientRecord> {
+        const validParentsObservable: Observable<ClientRecord> = this.getParentRecords().pipe(
+            filter((record: ClientRecord) => record.valid && !record.id),
+        );
+
+        const validChildrenObservable: Observable<ClientRecord> = validParentsObservable.pipe(
+            mergeMap((parentRecord: ClientRecord) => this.getChildRecords(parentRecord.client_id)),
+        );
+
+        return concat(validParentsObservable, validChildrenObservable);
     }
 
     public deleteRecord(key: string): Observable<boolean> {

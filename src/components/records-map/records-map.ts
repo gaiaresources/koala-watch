@@ -1,4 +1,4 @@
-import { GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng, Marker, } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, LatLng, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavParams } from 'ionic-angular';

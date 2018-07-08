@@ -113,6 +113,26 @@ export class ObservationPage {
 
         const count = !!formValues['Count'] ? formValues['Count'] : !!formValues['Koala #'] ? formValues['Koala #'] : 0;
 
+        // special case for species code
+        if (formValues.hasOwnProperty('SpeciesCode')) {
+            try {
+                const speciesCodeFD = this.recordForm.getFieldDescriptor('SpeciesCode');
+                const scientificNameFD = this.recordForm.getFieldDescriptor('ScientificName');
+                const scientificNameValue = formValues['ScientificName'];
+
+                // species code will be the equivalent option as species name (same index)
+                for (let i = 0, len = scientificNameFD.options.length; i < len; i++) {
+                    if (scientificNameFD.options[i].value === scientificNameValue) {
+                        formValues['SpeciesCode'] = speciesCodeFD.options[i].value;
+                        this.recordForm.value = formValues;
+                        break;
+                    }
+                }
+            } catch (err) {
+                // fail silently
+            }
+        }
+
         this.storageService.putRecord({
             valid: this.recordForm.valid,
             client_id: this.recordClientId,

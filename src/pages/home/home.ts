@@ -19,7 +19,6 @@ import { UploadService } from '../../shared/services/upload.service';
 import {
     DATASET_NAME_CENSUS,
     DATASET_NAME_OBSERVATION,
-    DATASET_NAME_TREESIGHTING,
     TOAST_DURATION
 } from '../../shared/utils/consts';
 import { isDatasetCensus } from '../../shared/utils/functions';

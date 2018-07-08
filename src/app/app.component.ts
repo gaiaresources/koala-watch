@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private resumeSubscription: Subscription;
 
     public menuItems: object[] = [
-        {title: 'Home', page: 'HomePage', img: 'assets/imgs/home.png'},
+        {title: 'Records', page: 'HomePage', img: 'assets/imgs/home.png'},
         {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/settings.png'},
         {title: 'About', page: 'AboutPage', img: 'assets/imgs/about.png'},
         {title: 'Help', page: 'HelpPage', img: 'assets/imgs/help.png'},
@@ -62,7 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     private reloadMetadata() {
-        console.log('reload');
         this.apiService.getDatasets({project__name: PROJECT_NAME}).pipe(
             mergeMap((datasets: Dataset[]) => from(datasets).pipe(
                 mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))

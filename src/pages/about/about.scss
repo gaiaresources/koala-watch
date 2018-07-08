@@ -1,18 +1,7 @@
-page-about {
+.no-grid-padding {
+    padding: 0;
 
-}
-
-img#about-footer {
-  max-width: 65%;
-}
-img#about-oeh {
-}
-
-h1 {
-  color: darkgreen;
-}
-
-table#logo-table {
-  height: 10%;
-  width: 100%;
+    * {
+        padding: 0;
+    }
 }
