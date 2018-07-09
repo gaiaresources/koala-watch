@@ -10,10 +10,12 @@
 <ion-content>
     <ion-card>
         <ion-card-content>
-            <ion-item>
-                <ion-label>Hide uploaded records</ion-label>
-                <ion-toggle [(ngModel)] = "hideUploaded" (ionChange)="ionChangeHideUploaded(event)"></ion-toggle>
-            </ion-item>
+            <ion-grid>
+                <ion-row>
+                    <ion-label>Hide uploaded records</ion-label>
+                    <ion-toggle [(ngModel)] = "hideUploaded" (ionChange)="ionChangeHideUploaded(event)"></ion-toggle>
+                </ion-row>
+            </ion-grid>
         </ion-card-content>
     </ion-card>
 </ion-content>
