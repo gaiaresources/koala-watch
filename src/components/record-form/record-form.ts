@@ -239,21 +239,18 @@ export class RecordFormComponent implements OnDestroy {
         throw new Error(`Cannot find ${fieldName} field in form descriptor`);
     }
 
-    public getSelectOptions(fieldDescriptor: FieldDescriptor): object {
-        if (fieldDescriptor.options === null) {
-            console.log(fieldDescriptor);
-        }
-
-        return {
-            filter: fieldDescriptor.options && fieldDescriptor.options.length > 10,
-            buttons: ['clear', 'cancel'],
-            theme: RecordFormComponent.SELECT_THEME
-        };
+    public onItemSelected(event: any) {
+        event.inst.select();
     }
 
-    public onItemSelected(event: any) {
-        event.inst.setVal(event.value);
-        event.inst.select();
+    public getSelectOptions(fieldDescriptor: FieldDescriptor): object {
+        return {
+            headerText: fieldDescriptor.label,
+            filter: fieldDescriptor.options && fieldDescriptor.options.length > 10,
+            buttons: ['clear', 'cancel'],
+            theme: RecordFormComponent.SELECT_THEME,
+            select: 1
+        };
     }
 
     private initialiseDefaults() {
