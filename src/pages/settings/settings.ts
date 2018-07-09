@@ -30,11 +30,7 @@ export class SettingsPage {
     }
 
     private saveSetting(name: string, setting: boolean) {
-        let value = 'false';
-        if (setting) {
-            value = 'true';
-        }
-        this.storageService.putSetting(name, value).subscribe();
+        this.storageService.putSetting(name, JSON.stringify(setting)).subscribe();
     }
 
 }

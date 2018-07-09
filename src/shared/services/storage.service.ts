@@ -164,7 +164,7 @@ export class StorageService {
         return this.putPhoto(clientPhoto);
     }
 
-    public getSetting(key: string): Observable<String> {
+    public getSetting(key: string): Observable<string> {
         return fromPromise(this.storage.get(`${StorageService.SETTING_PREFIX}${key}`));
     }
 
