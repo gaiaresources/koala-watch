@@ -18,15 +18,15 @@ export class SettingsPage {
 
     public hideUploaded: boolean;
 
+    public ionChangeHideUploaded(event) {
+        this.saveSetting('hideUploaded', this.hideUploaded);
+    }
+
     constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService) {
     }
 
     public ionViewWillEnter() {
         this.storageService.getSetting('hideUploaded').subscribe( setting => this.hideUploaded = setting === 'true');
-    }
-
-    public ionViewWillLeave() {
-        this.saveSetting('hideUploaded', this.hideUploaded);
     }
 
     private saveSetting(name: string, setting: boolean) {
