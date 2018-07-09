@@ -25,25 +25,20 @@ export class SettingsPage {
 
     public clickDeleteUploadedRecords() {
         this.storageService.getAllUploadedRecords().pipe(mergeMap(clientRecord =>
-            this.storageService.deleteRecord(clientRecord.client_id))).subscribe(
-            () => {},
-            (error) => {},
-            () => {
-                this.alertController.create({
-                    title: 'Settings',
-                    message: 'Uploaded records deleted',
-                    enableBackdropDismiss: true,
-                    buttons: [
-                        {
-                            text: 'Ok'
-                        }]
+            this.storageService.deleteRecord(clientRecord.client_id))).subscribe({
+                complete: () => {
+                    this.alertController.create({
+                        title: 'Settings',
+                        message: 'Uploaded records deleted',
+                        enableBackdropDismiss: true,
+                        buttons: [{text: 'Ok'}]
                 }).present();
             }
-        );
+        });
     }
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService,
-                private alertController: AlertController) {
+        private alertController: AlertController) {
     }
 
     public ionViewWillEnter() {
