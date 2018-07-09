@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment/moment';
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
-import {AlertController} from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 
 @Component({
     selector: 'photo-gallery',
