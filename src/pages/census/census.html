@@ -66,4 +66,10 @@
             <img alt="KLM-SAT Tree Sighting" src="assets/imgs/white_tree.png">
         </button>
     </ion-fab>
+    <ion-fab [hidden]="readonly || segmentContent != 'photos'" bottom right>
+        <button (click)="onClickedNewPhoto()" class="fab-census-tree">
+            <img alt="KLM-SAT Tree Sighting" class="fab-img" src="assets/imgs/fab-camera.png">
+        </button>
+    </ion-fab>
+
 </ion-content>

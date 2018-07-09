@@ -38,6 +38,10 @@ export class ObservationPage {
                 private alertController: AlertController) {
     }
 
+    public onClickedNewPhoto() {
+        this.photoGallery.onClickedNewPhoto();
+    }
+
     public ionViewWillEnter() {
         if (this.navParams.data.hasOwnProperty('parentId')) {
             this.parentId = this.navParams.get('parentId');

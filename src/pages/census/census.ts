@@ -63,6 +63,10 @@ export class CensusPage {
         });
     }
 
+    public onClickedNewPhoto() {
+        this.photoGallery.onClickedNewPhoto();
+    }
+
     public ionViewWillEnter() {
         if (!this.recordClientId) {
             this.recordClientId = this.navParams.get('recordClientId');
