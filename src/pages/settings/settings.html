@@ -15,6 +15,10 @@
                     <ion-label>Hide uploaded records</ion-label>
                     <ion-toggle [(ngModel)] = "hideUploaded" (ionChange)="ionChangeHideUploaded(event)"></ion-toggle>
                 </ion-row>
+                <ion-row>
+                    <ion-label>Delete uploaded records</ion-label>
+                    <button ion-button (click)="clickDeleteUploadedRecords()">Delete</button>
+                </ion-row>
             </ion-grid>
         </ion-card-content>
     </ion-card>

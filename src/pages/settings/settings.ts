@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { StorageService } from '../../shared/services/storage.service';
+import { mergeMap } from 'rxjs/operators';
 
 /**
  * Generated class for the SettingsPage page.
@@ -22,11 +23,26 @@ export class SettingsPage {
         this.saveSetting('hideUploaded', this.hideUploaded);
     }
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService) {
+    public clickDeleteUploadedRecords() {
+        this.storageService.getAllUploadedRecords().pipe(mergeMap(clientRecord =>
+            this.storageService.deleteRecord(clientRecord.client_id))).subscribe({
+                complete: () => {
+                    this.alertController.create({
+                        title: 'Settings',
+                        message: 'Uploaded records deleted',
+                        enableBackdropDismiss: true,
+                        buttons: [{text: 'Ok'}]
+                }).present();
+            }
+        });
+    }
+
+    constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService,
+        private alertController: AlertController) {
     }
 
     public ionViewWillEnter() {
-        this.storageService.getSetting('hideUploaded').subscribe( setting => this.hideUploaded = setting === 'true');
+        this.storageService.getSetting('hideUploaded').subscribe( setting => this.hideUploaded = JSON.parse(setting));
     }
 
     private saveSetting(name: string, setting: boolean) {

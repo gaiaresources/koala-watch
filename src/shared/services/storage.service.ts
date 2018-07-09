@@ -16,6 +16,7 @@ export class StorageService {
     private static readonly SETTING_PREFIX = 'Setting_';
 
     constructor(private storage: Storage) {
+
     }
 
     public putTeamMembers(users: User[]): Observable<boolean> {
@@ -72,6 +73,20 @@ export class StorageService {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
                 if (key.startsWith(StorageService.RECORD_PREFIX) && !value.parentId) {
+                    observer.next(value);
+                }
+            }).then(value => {
+                observer.complete();
+            }, reason => {
+                observer.error(reason);
+            });
+        });
+    }
+
+    public getAllUploadedRecords(): Observable<ClientRecord> {
+        return new Observable(observer => {
+            this.storage.forEach((value, key) => {
+                if (!!value.id) {
                     observer.next(value);
                 }
             }).then(value => {
