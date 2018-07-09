@@ -96,6 +96,20 @@ export class StorageService {
         });
     }
 
+    public getAllUploadedRecords(): Observable<ClientRecord> {
+        return new Observable(observer => {
+            this.storage.forEach((value, key) => {
+                if (!!value.id) {
+                    observer.next(value);
+                }
+            }).then(value => {
+                observer.complete();
+            }, reason => {
+                observer.error(reason);
+            });
+        });
+    }
+
     public getChildRecords(parentId: string): Observable<ClientRecord> {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
