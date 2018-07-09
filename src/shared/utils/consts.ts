@@ -6,7 +6,7 @@ export let RECORD_COMPLETE = '#ebffef';
 export let RECORD_INCOMPLETE = '#ebf6ff';
 export let RECORD_UPLOADED = '#ebf0df';
 
-export let APP_NAME = 'KoalaApp';
+export let APP_NAME = 'Koala Watch';
 
 export let PROJECT_NAME = 'Koala Pilot Project';
 

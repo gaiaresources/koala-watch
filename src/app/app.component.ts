@@ -61,6 +61,16 @@ export class AppComponent implements OnInit, OnDestroy {
         this.resumeSubscription.unsubscribe();
     }
 
+    public openPage(menuItem) {
+        // Reset the content nav to have just this page
+        // we wouldn't want the back button to show in this scenario
+        if (menuItem.title === 'Logout') {
+            this.askLogout();
+        } else {
+            this.nav.setRoot(menuItem.page);
+        }
+    }
+
     private reloadMetadata() {
         this.apiService.getDatasets({project__name: PROJECT_NAME}).pipe(
             mergeMap((datasets: Dataset[]) => from(datasets).pipe(
@@ -71,16 +81,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.apiService.getUsers({project__name: PROJECT_NAME}).pipe(
             mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
         ).subscribe();
-    }
-
-    public openPage(menuItem) {
-        // Reset the content nav to have just this page
-        // we wouldn't want the back button to show in this scenario
-        if (menuItem.title === 'Logout') {
-            this.askLogout();
-        } else {
-            this.nav.setRoot(menuItem.page);
-        }
     }
 
     private askLogout() {
