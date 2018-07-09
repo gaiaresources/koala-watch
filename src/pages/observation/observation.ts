@@ -115,7 +115,34 @@ export class ObservationPage {
         this.photoGallery.commit();
         const formValues: object = this.recordForm.value;
 
-        const count = !!formValues['Count'] ? formValues['Count'] : !!formValues['Koala #'] ? formValues['Koala #'] : 0;
+        let count;
+        if (formValues.hasOwnProperty('Count')) {
+            count = formValues['Count'];
+        } else if (formValues.hasOwnProperty('Koala #')) {
+            count = formValues['Koala #'];
+        } else if (formValues.hasOwnProperty('Koala count')) {
+            count = formValues['Koala count'];
+        }
+
+        // special case for species code
+        if (formValues.hasOwnProperty('SpeciesCode')) {
+            try {
+                const speciesCodeFD = this.recordForm.getFieldDescriptor('SpeciesCode');
+                const scientificNameFD = this.recordForm.getFieldDescriptor('ScientificName');
+                const scientificNameValue = formValues['ScientificName'];
+
+                // species code will be the equivalent option as species name (same index)
+                for (let i = 0, len = scientificNameFD.options.length; i < len; i++) {
+                    if (scientificNameFD.options[i].value === scientificNameValue) {
+                        formValues['SpeciesCode'] = speciesCodeFD.options[i].value;
+                        this.recordForm.value = formValues;
+                        break;
+                    }
+                }
+            } catch (err) {
+                // fail silently
+            }
+        }
 
         this.storageService.putRecord({
             valid: this.recordForm.valid,

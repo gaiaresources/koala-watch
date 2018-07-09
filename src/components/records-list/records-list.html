@@ -23,27 +23,16 @@
         </ion-list>
     </div>
 
-    <div [hidden]="records.length > 0" class="no-data-div">
-        <div id="no-data-div">
+    <div [hidden]="records.length" class="info">
+        <div *ngIf="showHowto">
+            <h1>Welcome to Koala Watch</h1>
+            <p>
+                To get started, choose from the buttons below to create an opportunistic observation
+                or start a census.
+            <p>
             <ion-grid>
-                <ion-row *ngIf="haveWelcome">
-                    <ion-col>
-                        <h1 class="no-data">Welcome to Koala Watch</h1>
-                        <p class="no-data">On this screen you can view records you are currently
-                        working with, and start a new census or observation. You can also switch
-                        between a list or map of your data using the tabs above.</p>
-                    </ion-col>
-                </ion-row>
-                <ion-row *ngIf="!haveWelcome" style="padding-bottom: 1em;">
-                    <ion-col>
-                        <h1 class="no-data">This Census does not have any Tree Sightings</h1>
-                        <p class="no-data">On this screen you can view the tree
-                        surveys related to this census. You can also create a new
-                        tree survey. Each Census can have many Tree Sightings.</p>
-                    </ion-col>
-                </ion-row>
-                <ion-row *ngIf="haveObservation">
-                    <ion-col>
+                <ion-row>
+                    <ion-col col-md-3 col-sm-6>
                         <button class="local-fab"
                                 (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
                             <img alt="Koala Opportunistic Observation" class="fab-img"
@@ -51,11 +40,11 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-data vertical-align-middle">Create an Opportunistic Observation</h1>
+                        <h2 class="vertical-align-middle">Create an Opportunistic Observation</h2>
                     </ion-col>
                 </ion-row>
-                <ion-row *ngIf="haveCensus">
-                    <ion-col>
+                <ion-row>
+                    <ion-col col-md-3 col-sm-6>
                         <button class="local-fab"
                                 (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
                             <img alt="Koala Census" class="fab-img"
@@ -63,24 +52,27 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-data vertical-align-middle">Start a Census</h1>
+                        <h2 class="vertical-align-middle">Start a Census</h2>
                     </ion-col>
                 </ion-row>
-                <ion-row *ngIf="haveTree">
-                    <ion-col>
-                        <button class="local-fab"
-                                (click)="onClickedNewRecord(DATASETNAME_TREESIGHTING)">
-                            <img alt="Koala Tree Survey" class="fab-img"
-                                 src="assets/imgs/fab-tree.png">
-                        </button>
-                    </ion-col>
-                    <ion-col>
-                        <h1 class="no-data vertical-align-middle">Create a Tree Sighting for this Census</h1>
-                    </ion-col>
-                </ion-row>
-
-                <ion-row *ngIf="haveUpload">
-                    <ion-col>
+            </ion-grid>
+            <p>
+                Once you have recorded your data, a list of the records will be displayed here.
+                You can also switch to see the records displayed on a map view using the tab buttons above.
+                Click on a record in the list to continue editing that record.
+            </p>
+            <h2>
+                Uploading Records
+            </h2>
+            <p>
+                When one or more records have been completed, you can upload them to the server by clicking the upload
+                button. Completed records (shown in green) are those where all required fields are entered and within
+                the allowable constraints. You can still upload the completed records even if there are incomplete
+                records (shown in blue), although the latter will not be uploaded.
+            </p>
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-md-3 col-sm-6>
                         <button class="local-fab"
                                 (click)="uploadClicked()">
                             <img class="fab-img"
@@ -88,7 +80,29 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="no-data vertical-align-middle">Upload Data</h1>
+                        <h1 class="vertical-align-middle">Upload Data</h1>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+
+        <div *ngIf="!showHowto">
+            <h1>This Census does not have any Tree Surveys</h1>
+            <p>
+                On this screen you can view the tree surveys related to this census. You can also create a
+                new tree survey. Each Census can have many Tree Surveys.
+            </p>
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-md-3 col-sm-6>
+                        <button class="local-fab"
+                                (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
+                            <img alt="Koala Tree Survey" class="fab-img"
+                                 src="assets/imgs/fab-tree.png">
+                        </button>
+                    </ion-col>
+                    <ion-col>
+                        <h2 class="vertical-align-middle">Create a Tree Survey for this Census</h2>
                     </ion-col>
                 </ion-row>
             </ion-grid>

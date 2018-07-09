@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AlertController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { Subscription } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs/observable/from';
 
@@ -16,11 +17,13 @@ import { PROJECT_NAME } from '../shared/utils/consts';
 @Component({
     templateUrl: 'app.html'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
     @ViewChild(Nav) nav: Nav;
 
+    private resumeSubscription: Subscription;
+
     public menuItems: object[] = [
-        {title: 'Home', page: 'HomePage', img: 'assets/imgs/home.png'},
+        {title: 'Records', page: 'HomePage', img: 'assets/imgs/home.png'},
         {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/settings.png'},
         {title: 'About', page: 'AboutPage', img: 'assets/imgs/about.png'},
         {title: 'Help', page: 'HelpPage', img: 'assets/imgs/help.png'},
@@ -42,19 +45,20 @@ export class AppComponent implements OnInit {
             if (!this.authService.isLoggedIn()) {
                 this.nav.setRoot('LoginPage');
             } else {
-                this.apiService.getDatasets({project__name: PROJECT_NAME}).pipe(
-                    mergeMap((datasets: Dataset[]) => from(datasets).pipe(
-                        mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
-                    ))
-                ).subscribe();
-
-                this.apiService.getUsers({project__name: PROJECT_NAME}).pipe(
-                    mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
-                ).subscribe();
-
+                this.reloadMetadata();
                 this.nav.setRoot('HomePage');
             }
         });
+
+        this.resumeSubscription = this.platform.resume.subscribe(() => {
+            if (this.authService.isLoggedIn()) {
+                this.reloadMetadata();
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        this.resumeSubscription.unsubscribe();
     }
 
     public openPage(menuItem) {
@@ -65,6 +69,18 @@ export class AppComponent implements OnInit {
         } else {
             this.nav.setRoot(menuItem.page);
         }
+    }
+
+    private reloadMetadata() {
+        this.apiService.getDatasets({project__name: PROJECT_NAME}).pipe(
+            mergeMap((datasets: Dataset[]) => from(datasets).pipe(
+                mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
+            ))
+        ).subscribe();
+
+        this.apiService.getUsers({project__name: PROJECT_NAME}).pipe(
+            mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
+        ).subscribe();
     }
 
     private askLogout() {

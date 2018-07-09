@@ -4,7 +4,7 @@ import { NavController, NavParams, Events } from 'ionic-angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
 import { RECORD_INCOMPLETE, RECORD_COMPLETE, RECORD_UPLOADED, DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS,
-    DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
+    DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
 import { isDatasetCensus } from '../../shared/utils/functions';
 import { StorageService } from '../../shared/services/storage.service';
 
@@ -18,15 +18,13 @@ export class RecordsListComponent {
     public items: Array<{ title: string, note: string, icon: string }>;
 
     // consts used in template
-    public DATASETNAME_TREESIGHTING = DATASET_NAME_TREESIGHTING;
+    public DATASETNAME_TREESURVEY = DATASET_NAME_TREESURVEY;
     public DATASETNAME_CENSUS = DATASET_NAME_CENSUS;
     public DATASETNAME_OBSERVATION = DATASET_NAME_OBSERVATION;
 
     @Input()
     public records: ClientRecord[];
 
-    @Input()
-    public showLegend = true;
 
     @Input()
     public baseNavController: NavController;
@@ -35,19 +33,10 @@ export class RecordsListComponent {
     public parentId: string;
 
     @Input()
-    public haveObservation = true;
+    public showHowto = true;
 
     @Input()
-    public haveCensus = true;
-
-    @Input()
-    public haveTree = true;
-
-    @Input()
-    public haveUpload = false;
-
-    @Input()
-    public haveWelcome = true;
+    public showLegend = true;
 
     @Output()
     public enteringRecord = new EventEmitter();
@@ -57,19 +46,9 @@ export class RecordsListComponent {
                 private storage: StorageService,
                 private events: Events) {
         this.baseNavController = (this.navParams.data.hasOwnProperty('navCtrl') ? this.navParams.get('navCtrl') : undefined);
+
         this.records = (this.navParams.data.hasOwnProperty('data') ? this.navParams.get('data') : []);
-        if (this.navParams.data.hasOwnProperty('haveTree')) {
-            this.haveTree = this.navParams.get('haveTree');
-        }
-        if (this.navParams.data.hasOwnProperty('haveCensus')) {
-            this.haveCensus = this.navParams.get('haveCensus');
-        }
-        if (this.navParams.data.hasOwnProperty('haveObservation')) {
-            this.haveObservation = this.navParams.get('haveObservation');
-        }
-        if (this.navParams.data.hasOwnProperty('haveUpload')) {
-            this.haveUpload = this.navParams.get('haveUpload');
-        }
+
         if (this.navParams.data.hasOwnProperty('showLegend')) {
             this.showLegend = this.navParams.get('showLegend');
         }
@@ -87,8 +66,8 @@ export class RecordsListComponent {
             case DATASET_NAME_OBSERVATION:
                 return 'assets/imgs/eye.png';
             case DATASET_NAME_CENSUS:
-                return 'assets/imgs/poop.png';
-            case DATASET_NAME_TREESIGHTING:
+                return 'assets/imgs/trees.png';
+            case DATASET_NAME_TREESURVEY:
                 return 'assets/imgs/tree.png';
         }
     }
@@ -99,7 +78,7 @@ export class RecordsListComponent {
                 return 'assets/imgs/koala.png';
             case DATASET_NAME_CENSUS:
                 return 'assets/imgs/tree.png';
-            case DATASET_NAME_TREESIGHTING:
+            case DATASET_NAME_TREESURVEY:
                 return 'assets/imgs/koala.png';
         }
     }

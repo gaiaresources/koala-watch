@@ -19,7 +19,6 @@ import { UploadService } from '../../shared/services/upload.service';
 import {
     DATASET_NAME_CENSUS,
     DATASET_NAME_OBSERVATION,
-    DATASET_NAME_TREESIGHTING,
     TOAST_DURATION
 } from '../../shared/utils/consts';
 import { isDatasetCensus } from '../../shared/utils/functions';
@@ -45,7 +44,7 @@ export class HomePage {
 
     @ViewChild('homeTabs') tabRef: Tabs;
 
-    public tabIsMap = false;
+    public isMapTabSelected = false;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private loadingCtrl: LoadingController,
                 private toastCtrl: ToastController, private storageService: StorageService,
@@ -94,6 +93,10 @@ export class HomePage {
     public onClickedNewRecord(datasetName: string) {
         const page = isDatasetCensus(datasetName) ? 'CensusPage' : 'ObservationPage';
         this.navCtrl.push(page, {datasetName: datasetName});
+    }
+
+    public setMapTabSelected(value: boolean) {
+        this.isMapTabSelected = value;
     }
 
     private loadRecords() {

@@ -15,7 +15,7 @@ export class UploadService {
     }
 
     public uploadValidRecords(): Observable<[ClientRecord, Record]> {
-        return this.storageService.getAllValidRecords().pipe(
+        return this.storageService.getUploadableRecords().pipe(
             mergeMap((clientRecord: ClientRecord) =>
                     this.apiService.createRecord(clientRecord).pipe(
                         mergeMap((record: Record) => this.storageService.updateRecordId(clientRecord, record.id),

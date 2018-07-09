@@ -56,7 +56,7 @@
 
                 <ion-input *ngSwitchCase="'select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
                            [mbsc-options]="getSelectOptions(field)" [disabled]="readonly"
-                           (onItemTap)="onItemSelected($event)">
+                           (onItemTap)="onItemSelected($event)" [placeholder]="field.description || ''">
                 </ion-input>
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
@@ -83,7 +83,7 @@
 
                 <ion-input *ngSwitchCase="'select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
                             [mbsc-options]="getSelectOptions(field)" [disabled]="readonly"
-                            (onItemTap)="onItemSelected($event)">
+                            (onItemTap)="onItemSelected($event)" [placeholder]="field.description || ''">
                 </ion-input>
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key" [disabled]="readonly">

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { from } from 'rxjs/observable/from';
@@ -46,14 +46,21 @@ export class LoginPage {
         });
         loading.present();
 
-        this.authService.login(this.form.value['username'], this.form.value['password']).subscribe(() => {
-                this.apiService.getDatasets({project__name: PROJECT_NAME }).pipe(
+        const username = this.form.value['username'];
+        const password = this.form.value['password'];
+
+        this.authService.login(username, password).subscribe(() => {
+                const params = {
+                    project__name: PROJECT_NAME
+                };
+
+                this.apiService.getDatasets(params).pipe(
                     mergeMap((datasets: Dataset[]) => from(datasets).pipe(
                         mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
                     ))
                 ).subscribe();
 
-                this.apiService.getUsers({project__name: PROJECT_NAME}).pipe(
+                this.apiService.getUsers(params).pipe(
                     mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
                 ).subscribe();
 
