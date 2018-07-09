@@ -246,10 +246,9 @@ export class RecordFormComponent implements OnDestroy {
     public getSelectOptions(fieldDescriptor: FieldDescriptor): object {
         return {
             headerText: fieldDescriptor.label,
-            filter: fieldDescriptor.options && fieldDescriptor.options.length > 10,
+            filter: true,
             buttons: ['clear', 'cancel'],
-            theme: RecordFormComponent.SELECT_THEME,
-            select: 1
+            theme: RecordFormComponent.SELECT_THEME
         };
     }
 
