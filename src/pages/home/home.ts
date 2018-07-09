@@ -100,6 +100,15 @@ export class HomePage {
         while (this.records.length) {
             this.records.pop();
         }
-        this.storageService.getParentRecords().subscribe((record: ClientRecord) => this.records.push(record));
+        this.storageService.getSetting('hideUploaded').subscribe( hideUploaded => {
+            if (JSON.parse(hideUploaded)) {
+                this.storageService.getParentRecords().filter(record => !(!!record.id)).subscribe(
+                    (record: ClientRecord) => this.records.push(record));
+            } else {
+                this.storageService.getParentRecords().subscribe(
+                    (record: ClientRecord) => this.records.push(record));
+            }
+        });
+
     }
 }

@@ -12,6 +12,7 @@ export class StorageService {
     private static readonly DATASET_PREFIX = 'Dataset_';
     private static readonly RECORD_PREFIX = 'Record_';
     private static readonly PHOTO_PREFIX = 'Photo_';
+    private static readonly SETTING_PREFIX = 'Setting_';
 
     constructor(private storage: Storage) {
 
@@ -161,6 +162,14 @@ export class StorageService {
     public updatePhotoMediaId(clientPhoto: ClientPhoto, id: number): Observable<boolean> {
         clientPhoto.id = id;
         return this.putPhoto(clientPhoto);
+    }
+
+    public getSetting(key: string): Observable<string> {
+        return fromPromise(this.storage.get(`${StorageService.SETTING_PREFIX}${key}`));
+    }
+
+    public putSetting(key: string, setting: string): Observable<boolean> {
+        return fromPromise(this.storage.set(`${StorageService.SETTING_PREFIX}${key}`, setting));
     }
 
 }
