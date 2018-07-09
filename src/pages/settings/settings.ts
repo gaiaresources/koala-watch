@@ -26,7 +26,7 @@ export class SettingsPage {
     }
 
     public ionViewWillEnter() {
-        this.storageService.getSetting('hideUploaded').subscribe( setting => this.hideUploaded = setting === 'true');
+        this.storageService.getSetting('hideUploaded').subscribe( setting => this.hideUploaded = JSON.parse(setting));
     }
 
     private saveSetting(name: string, setting: boolean) {
