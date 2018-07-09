@@ -32,9 +32,10 @@ export class SettingsPage {
                         message: 'Uploaded records deleted',
                         enableBackdropDismiss: true,
                         buttons: [{text: 'Ok'}]
-                }).present();
+                    }).present();
+                }
             }
-        });
+        );
     }
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private storageService: StorageService,
