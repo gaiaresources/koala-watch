@@ -14,7 +14,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 
-import { DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
+import { DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
 
 /**
  * Generated class for the CensusPage page.
@@ -46,7 +46,7 @@ export class CensusPage {
     @ViewChild(PhotoGalleryComponent)
     private photoGallery: PhotoGalleryComponent;
 
-    public DATASETNAME_TREESIGHTING = DATASET_NAME_TREESIGHTING;
+    public DATASETNAME_TREESURVEY = DATASET_NAME_TREESURVEY;
 
     constructor(public censusNavCtrl: NavController,
                 public navParams: NavParams,

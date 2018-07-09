@@ -44,7 +44,7 @@ export class HomePage {
 
     @ViewChild('homeTabs') tabRef: Tabs;
 
-    public tabIsMap = false;
+    public isMapTabSelected = false;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private loadingCtrl: LoadingController,
                 private toastCtrl: ToastController, private storageService: StorageService,
@@ -93,6 +93,10 @@ export class HomePage {
     public onClickedNewRecord(datasetName: string) {
         const page = isDatasetCensus(datasetName) ? 'CensusPage' : 'ObservationPage';
         this.navCtrl.push(page, {datasetName: datasetName});
+    }
+
+    public setMapTabSelected(value: boolean) {
+        this.isMapTabSelected = value;
     }
 
     private loadRecords() {

@@ -265,11 +265,18 @@ export class RecordFormComponent implements OnDestroy {
             });
         }
 
-        if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
-            const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
+        let observerFieldName: string;
+        if (this.form.contains('Observer Name')) {
+            observerFieldName = 'Observer Name';
+        } else if (this.form.contains('Census Observers')) {
+            observerFieldName = 'Census Observers';
+        } else if (this.form.contains('Census Observer')) {
+            observerFieldName = 'Census Observer';
+        }
 
-            this.authService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[fieldName].
-                setValue(formatUserFullName(currentUser))
+        if (observerFieldName) {
+            this.authService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[observerFieldName]
+                .setValue(formatUserFullName(currentUser))
             );
         }
     }

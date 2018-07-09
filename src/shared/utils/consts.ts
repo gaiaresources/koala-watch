@@ -12,7 +12,7 @@ export let PROJECT_NAME = 'Koala Pilot Project';
 
 export let DATASET_NAME_CENSUS = 'Koala Scat Census';
 export let DATASET_NAME_OBSERVATION = 'Koala Opportunistic Observation';
-export let DATASET_NAME_TREESIGHTING = 'Trees Surveyed';
+export let DATASET_NAME_TREESURVEY = 'Trees Surveyed';
 
 export let REGO_URL = 'http://www.environment.nsw.gov.au/atlaspublicapp/Registration.aspx';
 

@@ -4,7 +4,7 @@ import { NavController, NavParams, Events } from 'ionic-angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
 import { RECORD_INCOMPLETE, RECORD_COMPLETE, RECORD_UPLOADED, DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS,
-    DATASET_NAME_TREESIGHTING } from '../../shared/utils/consts';
+    DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
 import { isDatasetCensus } from '../../shared/utils/functions';
 import { StorageService } from '../../shared/services/storage.service';
 
@@ -18,7 +18,7 @@ export class RecordsListComponent {
     public items: Array<{ title: string, note: string, icon: string }>;
 
     // consts used in template
-    public DATASETNAME_TREESIGHTING = DATASET_NAME_TREESIGHTING;
+    public DATASETNAME_TREESURVEY = DATASET_NAME_TREESURVEY;
     public DATASETNAME_CENSUS = DATASET_NAME_CENSUS;
     public DATASETNAME_OBSERVATION = DATASET_NAME_OBSERVATION;
 
@@ -67,7 +67,7 @@ export class RecordsListComponent {
                 return 'assets/imgs/eye.png';
             case DATASET_NAME_CENSUS:
                 return 'assets/imgs/trees.png';
-            case DATASET_NAME_TREESIGHTING:
+            case DATASET_NAME_TREESURVEY:
                 return 'assets/imgs/tree.png';
         }
     }
@@ -78,7 +78,7 @@ export class RecordsListComponent {
                 return 'assets/imgs/koala.png';
             case DATASET_NAME_CENSUS:
                 return 'assets/imgs/tree.png';
-            case DATASET_NAME_TREESIGHTING:
+            case DATASET_NAME_TREESURVEY:
                 return 'assets/imgs/koala.png';
         }
     }
