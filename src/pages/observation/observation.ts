@@ -111,7 +111,14 @@ export class ObservationPage {
         this.photoGallery.commit();
         const formValues: object = this.recordForm.value;
 
-        const count = !!formValues['Count'] ? formValues['Count'] : !!formValues['Koala #'] ? formValues['Koala #'] : 0;
+        let count;
+        if (formValues.hasOwnProperty('Count')) {
+            count = formValues['Count'];
+        } else if (formValues.hasOwnProperty('Koala #')) {
+            count = formValues['Koala #'];
+        } else if (formValues.hasOwnProperty('Koala count')) {
+            count = formValues['Koala count'];
+        }
 
         // special case for species code
         if (formValues.hasOwnProperty('SpeciesCode')) {
