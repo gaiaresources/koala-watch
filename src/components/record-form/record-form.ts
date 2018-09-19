@@ -30,6 +30,7 @@ export class RecordFormComponent implements OnDestroy {
     private static readonly GEOLOCATION_TIMEOUT = 5000;
     private static readonly GEOLOCATION_MAX_AGE = 1000;
     private static readonly SELECT_THEME = 'auto';
+    private static readonly DEFAULT_PRECISION = 6;
 
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
@@ -250,6 +251,27 @@ export class RecordFormComponent implements OnDestroy {
             buttons: ['clear', 'cancel'],
             theme: RecordFormComponent.SELECT_THEME
         };
+    }
+
+    public getNumpadOptions(fieldDescriptor: FieldDescriptor): object {
+        const options = {
+            headerText: fieldDescriptor.label,
+            theme: RecordFormComponent.SELECT_THEME,
+            defaultValue: ''
+        };
+
+        options['disabled'] = this.readonly;
+
+        if (fieldDescriptor.type === 'integer') {
+            options['scale'] = 0;
+        } else if (fieldDescriptor.type === 'number' && fieldDescriptor.precision) {
+            options['scale'] = fieldDescriptor.precision;
+        } else {
+            options['scale'] = RecordFormComponent.DEFAULT_PRECISION;
+        }
+
+
+        return options;
     }
 
     private initialiseDefaults() {
