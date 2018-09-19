@@ -6,7 +6,6 @@
             </ion-col>
         </ion-row>
         <form [formGroup]="form" (ngSubmit)="login()">
-
             <ion-row>
                 <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
                     <ion-item no-padding>
@@ -27,6 +26,9 @@
         </form>
         <ion-row text-center>
             <ion-col>Don't have an account? <a href="{{REGO_URL}}">Sign Up</a></ion-col>
+        </ion-row>
+        <ion-row text-center>
+            <ion-col><a href="/#/forgot-password">Forgot your password?</a></ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>
