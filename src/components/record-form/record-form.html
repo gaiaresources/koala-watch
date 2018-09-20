@@ -36,6 +36,12 @@
                         ({{ getFieldError(field) }})
                     </span>
                 </ion-label>
+
+                <ion-input *ngSwitchCase="'integer'" [formControlName]="field.key" mbsc-numpad-decimal
+                           [mbsc-options]="getNumpadOptions(field)" [disabled]="readonly"
+                           [placeholder]="field.description || ''">
+                </ion-input>
+
                 <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key" [disabled]="readonly"></ion-input>
             </ion-item>
         </ion-item-group>
@@ -61,8 +67,13 @@
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
+                <ion-input *ngSwitchCase="'integer'" [formControlName]="field.key" mbsc-numpad-decimal
+                           [mbsc-options]="getNumpadOptions(field)" [disabled]="readonly"
+                           [placeholder]="field.description || ''">
+                </ion-input>
+
                 <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="readonly"
-                    *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type">
+                    *ngSwitchDefault [type]="field.type">
                 </ion-input>
             </ion-item>
         </ion-item-group>
@@ -92,11 +103,6 @@
                 <ion-input *ngSwitchCase="'integer'" [formControlName]="field.key" mbsc-numpad-decimal
                            [mbsc-options]="getNumpadOptions(field)" [disabled]="readonly"
                            [placeholder]="field.description || ''">
-                </ion-input>
-
-                <ion-input *ngSwitchCase="'number'" [formControlName]="field.key" mbsc-numpad-decimal
-                           [placeholder]="field.description || ''" [mbsc-options]="getNumpadOptions(field)"
-                           [disabled]="readonly">
                 </ion-input>
 
                 <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="readonly"

@@ -30,7 +30,6 @@ export class RecordFormComponent implements OnDestroy {
     private static readonly GEOLOCATION_TIMEOUT = 5000;
     private static readonly GEOLOCATION_MAX_AGE = 1000;
     private static readonly SELECT_THEME = 'auto';
-    private static readonly DEFAULT_PRECISION = 6;
 
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
@@ -257,19 +256,13 @@ export class RecordFormComponent implements OnDestroy {
         const options = {
             headerText: fieldDescriptor.label,
             theme: RecordFormComponent.SELECT_THEME,
-            defaultValue: ''
+            buttons: ['cancel', 'clear', 'set'],
+            max: 999999999999,
+            scale: 0,
+            thousandsSeparator: ''
         };
 
         options['disabled'] = this.readonly;
-
-        if (fieldDescriptor.type === 'integer') {
-            options['scale'] = 0;
-        } else if (fieldDescriptor.type === 'number' && fieldDescriptor.precision) {
-            options['scale'] = fieldDescriptor.precision;
-        } else {
-            options['scale'] = RecordFormComponent.DEFAULT_PRECISION;
-        }
-
 
         return options;
     }
@@ -280,10 +273,18 @@ export class RecordFormComponent implements OnDestroy {
             this.form.controls[this._dateFieldKey].setValue(moment().format());
         }
 
+        // note: must use form.controls[key].setValue(x) rather than form.value[key] = x or it won't set
         if (this.formDescriptor.hiddenFields) {
             this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
                 this.form.controls[field.key].setValue(field.defaultValue);
             });
+        }
+
+        // integer fields using numpad must have values of null (rather than empty string) to show the placeholder
+        for (const fieldType of ['locationFields', 'requiredFields', 'optionalFields']) {
+            this.formDescriptor[fieldType].filter((field: FieldDescriptor) => field.type === 'integer').map(
+                (field: FieldDescriptor) => this.form.controls[field.key].setValue(null)
+            );
         }
 
         let observerFieldName: string;
