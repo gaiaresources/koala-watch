@@ -252,16 +252,39 @@ export class RecordFormComponent implements OnDestroy {
         };
     }
 
+    public getNumpadOptions(fieldDescriptor: FieldDescriptor): object {
+        const options = {
+            headerText: fieldDescriptor.label,
+            theme: RecordFormComponent.SELECT_THEME,
+            buttons: ['cancel', 'clear', 'set'],
+            max: 999999999999,
+            scale: 0,
+            thousandsSeparator: ''
+        };
+
+        options['disabled'] = this.readonly;
+
+        return options;
+    }
+
     private initialiseDefaults() {
         if (this._dateFieldKey) {
             // moment().format() will return the current date/time in local timezone
             this.form.controls[this._dateFieldKey].setValue(moment().format());
         }
 
+        // note: must use form.controls[key].setValue(x) rather than form.value[key] = x or it won't set
         if (this.formDescriptor.hiddenFields) {
             this.formDescriptor.hiddenFields.map((field: FieldDescriptor) => {
                 this.form.controls[field.key].setValue(field.defaultValue);
             });
+        }
+
+        // integer fields using numpad must have values of null (rather than empty string) to show the placeholder
+        for (const fieldType of ['locationFields', 'requiredFields', 'optionalFields']) {
+            this.formDescriptor[fieldType].filter((field: FieldDescriptor) => field.type === 'integer').map(
+                (field: FieldDescriptor) => this.form.controls[field.key].setValue(null)
+            );
         }
 
         let observerFieldName: string;

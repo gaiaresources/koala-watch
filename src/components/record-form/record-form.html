@@ -36,6 +36,12 @@
                         ({{ getFieldError(field) }})
                     </span>
                 </ion-label>
+
+                <ion-input *ngSwitchCase="'integer'" [formControlName]="field.key" mbsc-numpad-decimal
+                           [mbsc-options]="getNumpadOptions(field)" [disabled]="readonly"
+                           [placeholder]="field.description || ''">
+                </ion-input>
+
                 <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key" [disabled]="readonly"></ion-input>
             </ion-item>
         </ion-item-group>
@@ -61,8 +67,13 @@
 
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
 
+                <ion-input *ngSwitchCase="'integer'" [formControlName]="field.key" mbsc-numpad-decimal
+                           [mbsc-options]="getNumpadOptions(field)" [disabled]="readonly"
+                           [placeholder]="field.description || ''">
+                </ion-input>
+
                 <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="readonly"
-                    *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type">
+                    *ngSwitchDefault [type]="field.type">
                 </ion-input>
             </ion-item>
         </ion-item-group>
@@ -89,13 +100,13 @@
                 <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key" [disabled]="readonly">
                 </ion-datetime>
 
-                <!--This is for the hypothetical "tool tip required" scenario:-->
-                <!--npm i &#45;&#45;save ionic-tooltips-->
-                <!--<button icon-only ion-button clear type="button" [tooltip]="field.description || field.label" item-right>-->
-                <!--<ion-icon name="help-circle"></ion-icon>-->
-                <!--</button>-->
+                <ion-input *ngSwitchCase="'integer'" [formControlName]="field.key" mbsc-numpad-decimal
+                           [mbsc-options]="getNumpadOptions(field)" [disabled]="readonly"
+                           [placeholder]="field.description || ''">
+                </ion-input>
+
                 <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="readonly"
-                           *ngSwitchDefault [type]="field.type == 'integer' ? 'number' : field.type">
+                           *ngSwitchDefault [type]="field.type">
                 </ion-input>
             </ion-item>
         </ion-item-group>
