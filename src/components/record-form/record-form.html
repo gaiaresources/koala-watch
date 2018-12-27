@@ -14,7 +14,8 @@
                         ({{ getFieldError(field) }})
                     </span>
                 </ion-label>
-                <ion-datetime [formControlName]="field.key"
+                <ion-datetime [max]="currentDate | date:'yyyy-MM-dd'"
+                              [formControlName]="field.key"
                               [displayFormat]="field.format | pyDateFormatToIonicDateFormat" [disabled]="readonly">
                 </ion-datetime>
             </ion-item>

@@ -39,6 +39,7 @@ export class RecordFormComponent implements OnDestroy {
     private lastLocation: Geoposition;
     private locationSubscription: Subscription;
     private delayedSetValues: object;
+    private currentDate: number = Date.now();
 
     @Input()
     public initialiseDefaultValues = false;
