@@ -72,7 +72,7 @@
                            [placeholder]="field.description || ''">
                 </ion-input>
 
-                <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="readonly"
+                <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="isFieldReadOnly(field.key)"
                     *ngSwitchDefault [type]="field.type">
                 </ion-input>
             </ion-item>
