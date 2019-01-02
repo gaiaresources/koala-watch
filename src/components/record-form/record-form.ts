@@ -176,7 +176,7 @@ export class RecordFormComponent implements OnDestroy {
         }
 
         if (this.form.contains('Accuracy')) {
-            valuesToPatch['Accuracy'] = this.lastLocation.coords.accuracy;
+            valuesToPatch['Accuracy'] = Math.round(this.lastLocation.coords.accuracy);
         }
 
         this.form.patchValue(valuesToPatch);
