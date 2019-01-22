@@ -49,7 +49,7 @@
         <ion-item-group *ngIf="formDescriptor.requiredFields && formDescriptor.requiredFields.length">
             <ion-item-divider color="secondary">
                 <ion-icon name="star"></ion-icon>
-                Required Fields
+                Required fields
             </ion-item-divider>
             <ion-item *ngFor="let field of formDescriptor.requiredFields" [ngSwitch]="field.type">
                 <ion-label
@@ -81,7 +81,7 @@
         <ion-item-group *ngIf="formDescriptor.optionalFields && formDescriptor.optionalFields.length">
             <ion-item-divider color="secondary">
                 <ion-icon name="star-outline"></ion-icon>
-                Optional Fields
+                Optional fields
             </ion-item-divider>
             <ion-item *ngFor="let field of formDescriptor.optionalFields" [ngSwitch]="field.type">
                 <ion-label

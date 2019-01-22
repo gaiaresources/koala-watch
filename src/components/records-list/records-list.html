@@ -27,7 +27,7 @@
         <div *ngIf="showHowto">
             <h1>Welcome to Koala Watch</h1>
             <p>
-                To get started, choose from the buttons below to create an opportunistic observation
+                To get started, choose from the buttons below to record an observation
                 or start a census.
             <p>
             <ion-grid>
@@ -40,7 +40,7 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h2 class="vertical-align-middle">Create an Opportunistic Observation</h2>
+                        <h2 class="vertical-align-middle">Record an observation</h2>
                     </ion-col>
                 </ion-row>
                 <ion-row>
@@ -52,7 +52,7 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h2 class="vertical-align-middle">Start a Census</h2>
+                        <h2 class="vertical-align-middle">Start a census</h2>
                     </ion-col>
                 </ion-row>
             </ion-grid>
@@ -67,8 +67,8 @@
             <p>
                 When one or more records have been completed, you can upload them to the server by clicking the upload
                 button. Completed records (shown in green) are those where all required fields are entered and within
-                the allowable constraints. You can still upload the completed records even if there are incomplete
-                records (shown in blue), although the latter will not be uploaded.
+                the allowable constraints. You can still upload completed records even if some are incomplete
+                (shown in blue). Incomplete records will not be uploaded.
             </p>
             <ion-grid>
                 <ion-row>
@@ -80,17 +80,17 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h1 class="vertical-align-middle">Upload Data</h1>
+                        <h1 class="vertical-align-middle">Upload data</h1>
                     </ion-col>
                 </ion-row>
             </ion-grid>
         </div>
 
         <div *ngIf="!showHowto">
-            <h1>This Census does not have any Tree Surveys</h1>
+            <h1>This census does not have any tree surveys</h1>
             <p>
                 On this screen you can view the tree surveys related to this census. You can also create a
-                new tree survey. Each Census can have many Tree Surveys.
+                new tree survey. Each census can have many tree surveys.
             </p>
             <ion-grid>
                 <ion-row>
@@ -102,7 +102,7 @@
                         </button>
                     </ion-col>
                     <ion-col>
-                        <h2 class="vertical-align-middle">Create a Tree Survey for this Census</h2>
+                        <h2 class="vertical-align-middle">Create a tree survey for this census</h2>
                     </ion-col>
                 </ion-row>
             </ion-grid>
