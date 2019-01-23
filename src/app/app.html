@@ -7,12 +7,8 @@
     <ion-content>
         <ion-list>
             <button menuClose ion-item *ngFor="let item of menuItems" (click)="openPage(item)">
-                <table>
-                    <tr>
-                        <td><img class="sidepanel-icon" [src]="item.img"></td>
-                        <td class="sidepanel-title">{{item.title}}</td>
-                    </tr>
-                </table>
+                <fa-icon icon="{{item.icon}}"></fa-icon>&nbsp;
+                <span class="sidepanel-title">{{item.title}}</span>
             </button>
         </ion-list>
     </ion-content>
