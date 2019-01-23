@@ -19,6 +19,10 @@ import { AuthService } from '../biosys-core/services/auth.service';
 import { ComponentsModule } from '../components/components.module';
 import { UploadService } from '../shared/services/upload.service';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+
 @NgModule({
     declarations: [
         AppComponent
@@ -29,7 +33,8 @@ import { UploadService } from '../shared/services/upload.service';
         ReactiveFormsModule,
         IonicModule.forRoot(AppComponent),
         IonicStorageModule.forRoot(),
-        ComponentsModule
+        ComponentsModule,
+        FontAwesomeModule
     ],
     bootstrap: [IonicApp],
     providers: [
@@ -58,4 +63,7 @@ import { UploadService } from '../shared/services/upload.service';
     ]
 })
 export class AppModule {
+    constructor() {
+        library.add(faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt);
+    }
 }
