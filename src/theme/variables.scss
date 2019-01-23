@@ -4,6 +4,7 @@
 // Font path is used to include ionicons,
 // roboto, and noto sans fonts
 $font-path: "../assets/fonts";
+$font-family-base: "Roboto";
 
 
 // The app direction is used to include
@@ -87,4 +88,3 @@ $fab-content-margin: 20px;
 // --------------------------------------------------
 
 @import "roboto";
-@import "noto-sans";

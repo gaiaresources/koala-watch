@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
         {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/settings.png'},
         {title: 'About', page: 'AboutPage', img: 'assets/imgs/about.png'},
         {title: 'Help', page: 'HelpPage', img: 'assets/imgs/help.png'},
-        {title: 'Logout', img: 'assets/imgs/logout.png'},
+        {title: 'Log out', img: 'assets/imgs/logout.png'},
     ];
 
     constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
