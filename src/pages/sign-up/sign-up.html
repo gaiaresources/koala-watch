@@ -1,0 +1,81 @@
+<!--
+  Generated template for the SignUpPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!--<ion-header>-->
+
+  <!--<ion-navbar>-->
+    <!--<ion-title>Sign Up To {{APP_NAME}}</ion-title>-->
+  <!--</ion-navbar>-->
+
+<!--</ion-header>-->
+
+<ion-content padding class="vertical-align-content">
+    <ion-grid>
+        <ion-row style="align-items: center; align-self: center; align-content: center">
+            <ion-col>
+                <img style="align-content: center; padding-top: 2em; max-height: 5em" src="assets/imgs/koalawatch_heading.png"/>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
+                To use {{APP_NAME}}, please full out the details below to sign up for an account.
+            </ion-col>
+        </ion-row>
+        <form [formGroup]="form" (ngSubmit)="signup()">
+            <ion-row>
+                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
+                    <ion-item>
+                        <ion-label color="primary" floating>Username</ion-label>
+                        <ion-input formControlName="name_user" autocapitalize=off></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
+                    <ion-item>
+                        <ion-label color="primary" floating>Email address</ion-label>
+                        <ion-input formControlName="email" type="email" autocapitalize=off></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
+                    <ion-item>
+                        <ion-label color="primary" floating>Given Names</ion-label>
+                        <ion-input formControlName="name_given" autocapitalize=off></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
+                    <ion-item>
+                        <ion-label color="primary" floating>Surname</ion-label>
+                        <ion-input formControlName="name_last" autocapitalize=off></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
+                    <ion-item>
+                        <ion-label color="primary" floating>Password</ion-label>
+                        <ion-input formControlName="password" type="password"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col col-8 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-2>
+                    <button ion-button type="submit" [disabled]="!form.valid" full
+                            (click)="signup()">Sign Up</button>
+                </ion-col>
+            </ion-row>
+        </form>
+    </ion-grid>
+</ion-content>

@@ -18,6 +18,7 @@ import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
 import { AuthService } from '../biosys-core/services/auth.service';
 import { ComponentsModule } from '../components/components.module';
 import { UploadService } from '../shared/services/upload.service';
+import { SignupService } from '../shared/services/signup.service';
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { UploadService } from '../shared/services/upload.service';
         {
             provide: ErrorHandler,
             useClass: IonicErrorHandler
-        }
+        },
+        SignupService
     ]
 })
 export class AppModule {
