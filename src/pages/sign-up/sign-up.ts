@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { APP_NAME } from '../../shared/utils/consts';
 import { FormBuilder, Validators } from '@angular/forms';
-import { formatAPIError } from 'biosys-core/utils/functions';
+import { formatAPIError } from '../../biosys-core/utils/functions';
 import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
-import { AuthService } from 'biosys-core/services/auth.service';
+import { AuthService } from '../../biosys-core/services/auth.service';
 import { SignupService } from '../../shared/services/signup.service';
 
 /**
