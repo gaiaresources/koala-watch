@@ -3,12 +3,12 @@
         <ion-title>{{ dataset?.name }}</ion-title>
         <ion-buttons *ngIf="!readonly" end>
             <button ion-button icon-end solid color="primary" (click)="delete()">
-                Delete
-                <ion-icon name="trash"></ion-icon>
+                Delete&nbsp;
+                <fa-icon [icon]="['far', 'trash-alt']"></fa-icon>
             </button>
             <button ion-button icon-end solid color="primary" (click)="save()">
-                Save
-                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                Save&nbsp;
+                <fa-icon [icon]="['far', 'save']"></fa-icon>
             </button>
         </ion-buttons>
     </ion-navbar>

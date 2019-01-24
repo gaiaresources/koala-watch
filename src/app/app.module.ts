@@ -20,6 +20,10 @@ import { ComponentsModule } from '../components/components.module';
 import { UploadService } from '../shared/services/upload.service';
 import { SignupService } from '../shared/services/signup.service';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+
 @NgModule({
     declarations: [
         AppComponent
@@ -30,7 +34,8 @@ import { SignupService } from '../shared/services/signup.service';
         ReactiveFormsModule,
         IonicModule.forRoot(AppComponent),
         IonicStorageModule.forRoot(),
-        ComponentsModule
+        ComponentsModule,
+        FontAwesomeModule
     ],
     bootstrap: [IonicApp],
     providers: [
@@ -60,4 +65,7 @@ import { SignupService } from '../shared/services/signup.service';
     ]
 })
 export class AppModule {
+    constructor() {
+        library.add(faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt);
+    }
 }

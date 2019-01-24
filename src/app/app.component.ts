@@ -23,11 +23,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private resumeSubscription: Subscription;
 
     public menuItems: object[] = [
-        {title: 'Records', page: 'HomePage', img: 'assets/imgs/home.png'},
-        {title: 'Settings', page: 'SettingsPage', img: 'assets/imgs/settings.png'},
-        {title: 'About', page: 'AboutPage', img: 'assets/imgs/about.png'},
-        {title: 'Help', page: 'HelpPage', img: 'assets/imgs/help.png'},
-        {title: 'Logout', img: 'assets/imgs/logout.png'},
+        {title: 'Records', page: 'HomePage', icon: 'tachometer-alt'},
+        {title: 'Settings', page: 'SettingsPage', icon: 'cog'},
+        {title: 'About', page: 'AboutPage', icon: 'info-circle'},
+        {title: 'Help', page: 'HelpPage', icon: 'question-circle'},
+        {title: 'Log out', icon: 'sign-out-alt'},
     ];
 
     constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
