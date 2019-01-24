@@ -27,12 +27,12 @@ export class SignupService {
   }
 
   public signUp(username: string, password: string, email: string, name_given: string, name_last: string) {
-    return this.httpClient.post(this.buildAbsoluteUrl('signup'), {
+    return this.httpClient.post(this.buildAbsoluteUrl('user'), {
         username: username,
         password: password,
         email: email,
-        name_given: name_given,
-        name_last: name_last
+        first_name: name_given,
+        last_name: name_last
       },
       {
         headers: new HttpHeaders({'content-type': 'application/json'})

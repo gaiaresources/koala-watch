@@ -62,6 +62,7 @@ export class SignUpPage {
           handler: () => {
             this.dialog.dismiss();
             this.dialog = undefined;
+            // navigate back to the login page:
             this.navCtrl.pop();
           }
         }
@@ -90,6 +91,7 @@ export class SignUpPage {
         subTitle: 'Your account has been created, and you can now login!',
         buttons: ['Ok']
       }).present().then(() => {
+        // navigate back to the login page:
         this.navCtrl.pop();
       });
       return;
