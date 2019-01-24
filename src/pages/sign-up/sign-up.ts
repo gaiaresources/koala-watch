@@ -35,7 +35,7 @@ export class SignUpPage {
       'name_user': ['', Validators.required],
       'name_given': ['', Validators.required],
       'name_last': ['', Validators.required],
-      'email': ['', Validators.required, Validators.email],
+      'email': ['', Validators.required],
       'password': ['', Validators.required],
     });
   }

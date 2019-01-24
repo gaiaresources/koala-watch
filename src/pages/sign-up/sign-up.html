@@ -72,7 +72,7 @@
 
             <ion-row>
                 <ion-col col-8 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-2>
-                    <button ion-button type="submit" full
+                    <button ion-button type="submit" [disabled]="!form.valid" full
                             (click)="signup()">Sign Up</button>
                 </ion-col>
             </ion-row>
