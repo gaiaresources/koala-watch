@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
-import { APP_NAME } from '../../shared/utils/consts';
+import { Alert, AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { APP_NAME, SIGNUP_TERMS_AND_CONDITIONS_HTML } from '../../shared/utils/consts';
 import { FormBuilder, Validators } from '@angular/forms';
 import { formatAPIError } from '../../biosys-core/utils/functions';
 import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
@@ -22,6 +22,7 @@ import { SignupService } from '../../shared/services/signup.service';
 export class SignUpPage {
   public APP_NAME = APP_NAME;
   public form: any;
+  private dialog: Alert;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -39,7 +40,39 @@ export class SignUpPage {
     });
   }
 
-  public signup() {
+  private signup() {
+    if (this.dialog !== undefined) {
+      return;
+    }
+    this.dialog = this.alertController.create({
+      title: 'Terms and Conditions',
+      subTitle: 'To sign up to I See Koala you\'ll need to agree to the following terms and conditions:',
+      message: SIGNUP_TERMS_AND_CONDITIONS_HTML,
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.dialog.dismiss();
+            this.dialog = undefined;
+            this.doSignup();
+          }
+        },
+        {
+          text: 'No',
+          handler: () => {
+            this.dialog.dismiss();
+            this.dialog = undefined;
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    });
+    this.dialog.present().then((result) => {
+    });
+  }
+
+
+  public doSignup() {
     const loading = this.loadingCtrl.create({
       content: 'Creating Your Account...'
     });
