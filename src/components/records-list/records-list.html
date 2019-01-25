@@ -30,32 +30,17 @@
                 To get started, choose from the buttons below to record an observation
                 or start a census.
             <p>
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-md-3 col-sm-6>
-                        <button class="local-fab"
-                                (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
-                            <img alt="Koala Opportunistic Observation" class="fab-img"
-                                 src="assets/imgs/fab-eye.png">
-                        </button>
-                    </ion-col>
-                    <ion-col>
-                        <h2 class="vertical-align-middle">Record an observation</h2>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col col-md-3 col-sm-6>
-                        <button class="local-fab"
-                                (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
-                            <img alt="Koala Census" class="fab-img"
-                                 src="assets/imgs/fab-trees.png">
-                        </button>
-                    </ion-col>
-                    <ion-col>
-                        <h2 class="vertical-align-middle">Start a census</h2>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+
+            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
+                <img class="fab-button__img" src="assets/imgs/fab-eye.png" alt="Koala Opportunistic Observation">
+                <span class="fab-button__text">Record an observation</span>
+            </button>
+
+            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
+                <img class="fab-button__img" src="assets/imgs/fab-trees.png" alt="Koala Census">
+                <span class="fab-button__text">Start a census</span>
+            </button>
+
             <p>
                 Once you have recorded your data, a list of the records will be displayed here.
                 You can also switch to see the records displayed on a map view using the tab buttons above.
@@ -70,20 +55,10 @@
                 the allowable constraints. You can still upload completed records even if some are incomplete
                 (shown in blue). Incomplete records will not be uploaded.
             </p>
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-md-3 col-sm-6>
-                        <button class="local-fab"
-                                (click)="uploadClicked()">
-                            <img class="fab-img"
-                                 src="assets/imgs/fab-upload.png">
-                        </button>
-                    </ion-col>
-                    <ion-col>
-                        <h1 class="vertical-align-middle">Upload data</h1>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+            <button class="fab-button" (click)="uploadClicked()">
+                <img class="fab-button__img" src="assets/imgs/fab-upload.png">
+                <span class="fab-button__text">Upload data</span>
+            </button>
         </div>
 
         <div *ngIf="!showHowto">
@@ -92,20 +67,10 @@
                 On this screen you can view the tree surveys related to this census. You can also create a
                 new tree survey. Each census can have many tree surveys.
             </p>
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-md-3 col-sm-6>
-                        <button class="local-fab"
-                                (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
-                            <img alt="Koala Tree Survey" class="fab-img"
-                                 src="assets/imgs/fab-tree.png">
-                        </button>
-                    </ion-col>
-                    <ion-col>
-                        <h2 class="vertical-align-middle">Create a tree survey for this census</h2>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
+                <img class="fab-button__img" src="assets/imgs/fab-tree.png" alt="Koala Tree Survey">
+                <span class="fab-button__text">Create a tree survey for this census</span>
+            </button>
         </div>
     </div>
 </ion-content>
