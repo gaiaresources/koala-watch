@@ -20,32 +20,16 @@
             To get started, choose from the buttons below to record an observation
             or start a census.
         <p>
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-md-3 col-sm-6>
-                        <button class="local-fab"
-                                (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
-                            <img alt="Koala Opportunistic Observation" class="fab-img"
-                                 src="assets/imgs/fab-eye.png">
-                        </button>
-                    </ion-col>
-                    <ion-col>
-                        <h2 class="vertical-align-middle">Record an observation</h2>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col col-md-3 col-sm-6>
-                        <button class="local-fab"
-                                (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
-                            <img alt="Koala Census" class="fab-img"
-                                 src="assets/imgs/fab-trees.png">
-                        </button>
-                    </ion-col>
-                    <ion-col>
-                        <h2 class="vertical-align-middle">Start a census</h2>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
+                <img class="fab-button__img" src="assets/imgs/fab-eye.png" alt="Koala Opportunistic Observation">
+                <span class="fab-button__text">Record an observation</span>
+            </button>
+
+            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
+                <img class="fab-button__img" src="assets/imgs/fab-trees.png" alt="Koala Census">
+                <span class="fab-button__text">Start a census</span>
+            </button>
+
         <p>
             Once you have recorded your data, a list of the records will be displayed here.
             You can also switch to see the records displayed on a map view using the tab buttons above.
@@ -60,39 +44,20 @@
             the allowable constraints. You can still upload completed records even if some are incomplete
             (shown in blue). Incomplete records will not be uploaded.
         </p>
-        <ion-grid>
-            <ion-row>
-                <ion-col col-md-3 col-sm-6>
-                    <button class="local-fab"
-                            (click)="uploadClicked()">
-                        <img class="fab-img"
-                             src="assets/imgs/fab-upload.png">
-                    </button>
-                </ion-col>
-                <ion-col>
-                    <h1 class="vertical-align-middle">Upload data</h1>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
+        <button class="fab-button" (click)="uploadClicked()">
+            <img class="fab-button__img" src="assets/imgs/fab-upload.png">
+            <span class="fab-button__text">Upload data</span>
+        </button>
 
         <h1>Tree surveys</h1>
         <p>
             When working on a census, you can create one or more tree sightings. Select the <strong>Tree surveys list
             </strong> tab at the top of the page and use the button below to create a new tree sighting.
         </p>
-        <ion-grid>
-            <ion-row>
-                <ion-col col-md-3 col-sm-6>
-                    <button class="local-fab">
-                        <img alt="Koala Tree Survey" class="fab-img"
-                             src="assets/imgs/fab-tree.png">
-                    </button>
-                </ion-col>
-                <ion-col>
-                    <h1 class="vertical-align-middle">Create a tree survey</h1>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
+        <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
+            <img class="fab-button__img" src="assets/imgs/fab-tree.png" alt="Koala Tree Survey">
+            <span class="fab-button__text">Create a tree survey</span>
+        </button>
         <h2>GPS accuracy</h2>
         <p>
             The accuracy of the GPS in your device will improve over time after it has been started. You may wish to
