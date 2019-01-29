@@ -5,7 +5,7 @@
                 <img width="100%" src="assets/imgs/koalawatch_heading.png"/>
             </ion-col>
         </ion-row>
-        <form [formGroup]="form" (ngSubmit)="login()">
+        <form [formGroup]="form">
             <ion-row>
                 <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
                     <ion-item no-padding>
@@ -20,13 +20,16 @@
             </ion-row>
             <ion-row>
                 <ion-col col-6 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-3>
-                    <button ion-button type="submit" [disabled]="!form.valid" full>Log in</button>
+                    <button ion-button type="submit" [disabled]="!form.valid" full
+                            (click)="login()">Log in</button>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-6 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-3>
+                    <button ion-button type="submit" full (click)="signup()">Sign Up</button>
                 </ion-col>
             </ion-row>
         </form>
-        <ion-row text-center>
-            <ion-col>Don't have an account? <a href="{{REGO_URL}}">Sign Up</a></ion-col>
-        </ion-row>
         <ion-row text-center>
             <ion-col><a href="/#/forgot-password">Forgot your password?</a></ion-col>
         </ion-row>

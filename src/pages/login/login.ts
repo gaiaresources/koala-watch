@@ -12,6 +12,8 @@ import { StorageService } from '../../shared/services/storage.service';
 import { formatAPIError } from '../../biosys-core/utils/functions';
 import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
 
+import { SignUpPage } from '../sign-up/sign-up';
+
 import { REGO_URL, PROJECT_NAME } from '../../shared/utils/consts';
 
 /**
@@ -31,13 +33,23 @@ export class LoginPage {
 
     public REGO_URL = REGO_URL;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private apiService: APIService,
-                private authService: AuthService, private storageService: StorageService,
-                private formBuilder: FormBuilder, private alertController: AlertController, private loadingCtrl: LoadingController) {
+    constructor(public navCtrl: NavController,
+                public navParams: NavParams,
+                private apiService: APIService,
+                private authService: AuthService,
+                private storageService: StorageService,
+                private formBuilder: FormBuilder,
+                private alertController: AlertController,
+                private loadingCtrl: LoadingController) {
         this.form = this.formBuilder.group({
             'username': ['', Validators.required],
             'password': ['', Validators.required]
         });
+    }
+
+    public signup() {
+        this.navCtrl.push('SignUpPage', {});
+        return;
     }
 
     public login() {

@@ -18,6 +18,7 @@ import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
 import { AuthService } from '../biosys-core/services/auth.service';
 import { ComponentsModule } from '../components/components.module';
 import { UploadService } from '../shared/services/upload.service';
+import { SignupService } from '../shared/services/signup.service';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -59,7 +60,8 @@ import { faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } 
         {
             provide: ErrorHandler,
             useClass: IonicErrorHandler
-        }
+        },
+        SignupService
     ]
 })
 export class AppModule {

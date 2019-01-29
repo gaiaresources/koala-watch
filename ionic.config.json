@@ -1,8 +1,7 @@
 {
-  "name": "koala-watch",
-  "app_id": "",
-  "type": "ionic-angular",
+  "name": "i-see-koalas",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "ionic-angular"
 }
