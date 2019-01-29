@@ -86,6 +86,9 @@ export class ObservationPage {
     }
 
     public ionViewCanLeave() {
+        if (this.readonly) {
+          return true;
+        }
         if (this.showLeavingAlertMessage) {
             this.alertController.create({
                 title: 'Leaving observation unsaved',

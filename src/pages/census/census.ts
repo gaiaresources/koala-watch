@@ -98,6 +98,10 @@ export class CensusPage {
     }
 
     public ionViewCanLeave() {
+      if (this.readonly) {
+        return true;
+      }
+
         if (this.showLeavingAlertMessage) {
             this.alertController.create({
                 title: 'Leaving census unsaved',
@@ -125,8 +129,9 @@ export class CensusPage {
 
     public willEnterChildRecord() {
         this.showLeavingAlertMessage = false;
-
-        this.save();
+        if (!this.readonly) {
+          this.save();
+        }
     }
 
     public save(popForm = false) {
