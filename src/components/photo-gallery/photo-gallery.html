@@ -19,20 +19,10 @@
                 <p>
                     Use the camera button to add photos to your record.
                 <p>
-                    <ion-grid>
-                        <ion-row>
-                            <ion-col col-md-3 col-sm-6>
-                                <button class="local-fab"
-                                        (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
-                                    <img alt="Koala Opportunistic Observation" class="fab-img"
-                                         src="assets/imgs/fab-camera.png">
-                                </button>
-                            </ion-col>
-                            <ion-col>
-                                <h2 class="vertical-align-middle">Take a photo</h2>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
+                <button class="fab-button" (click)="onClickedNewPhoto()">
+                    <img class="fab-button__img" src="assets/imgs/fab-camera.png" alt="Koala Opportunistic Observation">
+                    <span class="fab-button__text">Take a photo</span>
+                </button>
                 <p>
                     All photos relating to this record will be displayed here.  You will be able
                     to view each photo using the left and right chevrons. Photos can be deleted

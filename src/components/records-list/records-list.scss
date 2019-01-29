@@ -41,10 +41,23 @@ img.data-row {
     vertical-align: middle;
 }
 
-.local-fab {
+.fab-button {
+    position: relative;
     background-color: rgba(0,0,0,0);
-    width: 80px;
-    height: 80px;
+    display: flex;
+
+    &__img {
+        margin: 10px 30px 10px 0px;
+        width: 80px;
+        height: 80px;
+    }
+
+    &__text {
+        text-align: left;
+        font-size: 2.4rem;
+        font-weight: 500;
+        align-self: center;
+    }
 }
 
 
