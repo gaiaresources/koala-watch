@@ -64,7 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public openPage(menuItem) {
         // Reset the content nav to have just this page
         // we wouldn't want the back button to show in this scenario
-        if (menuItem.title === 'Logout') {
+        if (menuItem.title === 'Log out') {
             this.askLogout();
         } else {
             this.nav.setRoot(menuItem.page);

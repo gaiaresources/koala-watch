@@ -86,6 +86,7 @@ export class SignUpPage {
     const last = this.form.value['name_last'];
 
     this.signupService.signUp(username, password, email, first, last).subscribe(() => {
+      loading.dismiss();
       this.alertController.create({
         title: 'Signed Up',
         subTitle: 'Your account has been created, and you can now login!',
