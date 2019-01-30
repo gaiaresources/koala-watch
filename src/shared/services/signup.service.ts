@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '../../../node_modules/@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators/catchError';
+import { APIError } from 'biosys-core/interfaces/api.interfaces';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { APIError } from '../../biosys-core/interfaces/api.interfaces';
 
 // Keeping this as a separate class because of a few reasons
 // 1: The idea that randoms can sign themselves up to Biosys is antithetical

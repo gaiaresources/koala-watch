@@ -111,5 +111,5 @@
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="26.1.0" />
     </plugin>
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
-    <engine name="android" spec="7.1.0" />
+    <engine name="android" spec="7.1.4" />
 </widget>
