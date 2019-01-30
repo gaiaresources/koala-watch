@@ -4,6 +4,7 @@ import { catchError } from 'rxjs/operators/catchError';
 import { APIError } from 'biosys-core/interfaces/api.interfaces';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PROJECT_NAME } from '../utils/consts';
 
 // Keeping this as a separate class because of a few reasons
 // 1: The idea that randoms can sign themselves up to Biosys is antithetical
@@ -32,7 +33,8 @@ export class SignupService {
         password: password,
         email: email,
         first_name: name_given,
-        last_name: name_last
+        last_name: name_last,
+        projects: [PROJECT_NAME]
       },
       {
         headers: new HttpHeaders({'content-type': 'application/json'})
