@@ -53,10 +53,15 @@
             </ion-item-divider>
             <ion-item *ngFor="let field of formDescriptor.requiredFields" [ngSwitch]="field.type">
                 <ion-label
-                    color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                    stacked>
-                    {{ field.label }}
-                    <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
+                        color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
+                        stacked>
+                    <span *ngIf="!(form.controls[field.key].errors && form.controls[field.key].dirty)">
+                        {{ field.label }}
+                    </span>
+                    <span style="color: #f53d3d" *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
+                        {{ field.label }}
+                    </span>
+                    <span style="color: #f53d3d" *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
                         ({{ getFieldError(field) }})
                     </span>
                 </ion-label>
