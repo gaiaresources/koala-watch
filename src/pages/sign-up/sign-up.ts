@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Alert, AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { APP_NAME, SIGNUP_TERMS_AND_CONDITIONS_HTML } from '../../shared/utils/consts';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -19,7 +19,7 @@ import { SignupService } from '../../shared/services/signup.service';
   selector: 'page-sign-up',
   templateUrl: 'sign-up.html',
 })
-export class SignUpPage {
+export class SignUpPage implements OnInit {
   public APP_NAME = APP_NAME;
   public form: any;
   private dialog: Alert;
@@ -29,8 +29,8 @@ export class SignUpPage {
               private signupService: SignupService,
               private authService: AuthService,
               private formBuilder: FormBuilder,
-              private alertController: AlertController,
-              private loadingCtrl: LoadingController) {
+              private loadingCtrl: LoadingController,
+              private alertController: AlertController) {
     this.form = this.formBuilder.group({
       'name_user': ['', Validators.required],
       'name_given': ['', Validators.required],
@@ -40,36 +40,15 @@ export class SignUpPage {
     });
   }
 
+  ngOnInit(): void {
+  }
+
   private signup() {
-    if (this.dialog !== undefined) {
-      return;
-    }
-    this.dialog = this.alertController.create({
-      title: 'Terms and Conditions',
-      subTitle: 'To sign up to I See Koala you\'ll need to agree to the following terms and conditions:',
-      message: SIGNUP_TERMS_AND_CONDITIONS_HTML,
-      buttons: [
-        {
-          text: 'Yes',
-          handler: () => {
-            this.dialog.dismiss();
-            this.dialog = undefined;
-            this.doSignup();
-          }
-        },
-        {
-          text: 'No',
-          handler: () => {
-            this.dialog.dismiss();
-            this.dialog = undefined;
-            // navigate back to the login page:
-            this.navCtrl.pop();
-          }
-        }
-      ]
-    });
-    this.dialog.present().then((result) => {
-    });
+    this.doSignup();
+  }
+
+  private goBack() {
+    this.navCtrl.pop();
   }
 
 

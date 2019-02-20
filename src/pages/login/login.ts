@@ -14,7 +14,12 @@ import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
 
 import { SignUpPage } from '../sign-up/sign-up';
 
-import { REGO_URL, PROJECT_NAME } from '../../shared/utils/consts';
+import {
+  REGO_URL,
+  PROJECT_NAME,
+  SIGNUP_TERMS_AND_CONDITIONS_HTML,
+  SIGNUP_TERMS_AND_CONDITIONS_HTML_OLD
+} from '../../shared/utils/consts';
 
 /**
  * Generated class for the LoginPage page.
@@ -32,6 +37,7 @@ export class LoginPage {
     public form: FormGroup;
 
     public REGO_URL = REGO_URL;
+    private dialog: any;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -48,8 +54,28 @@ export class LoginPage {
     }
 
     public signup() {
-        this.navCtrl.push('SignUpPage', {});
-        return;
+      this.dialog = this.alertController.create({
+        title: 'Terms and Conditions',
+        subTitle: 'To sign up to I See Koala you\'ll need to agree to the following terms and conditions:',
+        message: SIGNUP_TERMS_AND_CONDITIONS_HTML,
+        mode: 'md',
+        buttons: [
+          {
+            text: 'Yes',
+            handler: () => {
+              this.navCtrl.push('SignUpPage', {});
+            }
+          },
+          {
+            text: 'No',
+            handler: () => {
+            }
+          }
+        ]
+      });
+      this.dialog.present().then((result) => {
+      });
+      return;
     }
 
     public login() {

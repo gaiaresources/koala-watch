@@ -21,7 +21,8 @@
         </ion-row>
         <ion-row>
             <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                To use {{APP_NAME}}, please full out the details below to sign up for an account.
+                To use {{APP_NAME}}, please full out the details below to sign up
+                for an account. Please note that all fields are mandatory.
             </ion-col>
         </ion-row>
         <form [formGroup]="form" (ngSubmit)="signup()">
@@ -74,6 +75,13 @@
                 <ion-col col-8 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-2>
                     <button ion-button type="submit" [disabled]="!form.valid" full
                             (click)="signup()">Sign Up</button>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col col-8 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-2>
+                    <button ion-button full type="button"
+                            (click)="goBack()">Go Back</button>
                 </ion-col>
             </ion-row>
         </form>
