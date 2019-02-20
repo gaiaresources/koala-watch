@@ -53,6 +53,7 @@ ion-segment {
 }
 
 // on iOS, Voiceover says "Button back back" meaning "'Button back', 'Back'"
-.back-button-icon {
-    aria-label: "";
+
+.ion-md-close {
+    name: '';
 }

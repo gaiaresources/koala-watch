@@ -13,7 +13,7 @@
         <ion-list>
             <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
                     (click)="itemTapped($event, record)">
-                <img item-start class="data-row" [src]="getDatasetIcon(record)"/>
+                <img item-start class="data-row" [alt]="getAltText(record)" [src]="getDatasetIcon(record)"/>
                 <ion-label>{{ record.datetime | date: angularDateFormat }}</ion-label>
                 <img item-end class="data-row" [src]="getCountIcon(record)"/>
                 <span item-end>{{ record.count || 0 }}</span>
@@ -56,7 +56,7 @@
                 (shown in blue). Incomplete records will not be uploaded.
             </p>
             <button class="fab-button" (click)="uploadClicked()">
-                <img class="fab-button__img" src="assets/imgs/fab-upload.png">
+                <img alt="Upload Data" class="fab-button__img" src="assets/imgs/fab-upload.png">
                 <span class="fab-button__text">Upload data</span>
             </button>
         </div>

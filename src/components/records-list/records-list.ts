@@ -65,7 +65,29 @@ export class RecordsListComponent {
         return record.valid ? RECORD_COMPLETE : RECORD_INCOMPLETE;
     }
 
-    public getDatasetIcon(record: ClientRecord): string {
+  public getAltText(record: ClientRecord): string {
+    let rv = '';
+    switch (record.datasetName) {
+      case DATASET_NAME_OBSERVATION:
+        rv = 'Observation ';
+        break;
+      case DATASET_NAME_CENSUS:
+        rv = 'Census ';
+        break;
+      case DATASET_NAME_TREESURVEY:
+        rv = 'Tree Survey ';
+        break;
+    }
+    if (record.id) {
+      rv += 'uploaded';
+    } else {
+      rv += record.valid ? 'complete but not uploaded' : 'incomplete';
+    }
+    return rv;
+  }
+
+
+  public getDatasetIcon(record: ClientRecord): string {
         switch (record.datasetName) {
             case DATASET_NAME_OBSERVATION:
                 return 'assets/imgs/eye.png';
