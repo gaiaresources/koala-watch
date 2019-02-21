@@ -23,6 +23,10 @@ export class SignUpPage implements OnInit {
   public APP_NAME = APP_NAME;
   public form: any;
   private dialog: Alert;
+  private passwordsMatch = true;
+  private passwordsOK = false;
+  private passwordsAdvice = '';
+  private usernameOK = true;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -37,6 +41,7 @@ export class SignUpPage implements OnInit {
       'name_last': ['', Validators.required],
       'email': ['', Validators.required],
       'password': ['', Validators.required],
+      'password_again': ['', Validators.required],
     });
   }
 
@@ -60,6 +65,7 @@ export class SignUpPage implements OnInit {
 
     const username = this.form.value['name_user'];
     const password = this.form.value['password'];
+    const password2 = this.form.value['password_again'];
     const email = this.form.value['email'];
     const first = this.form.value['name_given'];
     const last = this.form.value['name_last'];
@@ -101,5 +107,56 @@ export class SignUpPage implements OnInit {
   }
 
   ionViewDidLoad() {
+  }
+
+  private passwordCheck() {
+    const thePasswd = this.form.value['password'];
+    this.passwordsMatch = this.form.value['password'] === this.form.value['password_again'] || false;
+    if (thePasswd.indexOf('>') >= 0 || thePasswd.indexOf('<') >= 0) {
+      this.passwordsAdvice = 'Password may not contain < or >';
+      console.log('password', '>');
+      this.passwordsOK = false;
+      return;
+    }
+    if (thePasswd.length < 8) {
+      this.passwordsAdvice = 'Password is too short';
+      this.passwordsOK = false;
+      console.log('password', 'short');
+      return;
+    }
+    if (thePasswd.length > 16) {
+      this.passwordsAdvice = 'Password is too long';
+      this.passwordsOK = false;
+      console.log('password', 'long');
+      return;
+    }
+    if (!/a-z/.test(thePasswd)) {
+      console.log('password', 'a-z');
+      this.passwordsOK = false;
+      this.passwordsAdvice = 'Password must contain a lower case letter';
+      return;
+    }
+    if (!/A-Z/.test(thePasswd)) {
+      console.log('password', 'A-Z');
+      this.passwordsAdvice = 'Password must contain an upper case letter';
+      this.passwordsOK = false;
+      return;
+    }
+    if (!/0-9/.test(thePasswd)) {
+      console.log('password', '0-9');
+      this.passwordsAdvice = 'Password must contain a digit';
+      this.passwordsOK = false;
+      return;
+    }
+    this.passwordsOK = true;
+  }
+
+  private usernameCheck() {
+    const username = this.form.value['name_user'];
+    const reg = new RegExp('^[\\w.@+-]+$');
+    this.usernameOK = reg.test(username);
+    console.log('reg', reg);
+    console.log('reg', username);
+    console.log('reg', reg.test(username));
   }
 }

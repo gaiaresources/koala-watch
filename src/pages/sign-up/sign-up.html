@@ -30,7 +30,16 @@
                 <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
                     <ion-item>
                         <ion-label color="primary" floating>Username (visible to other users)</ion-label>
-                        <ion-input formControlName="name_user" autocapitalize=off></ion-input>
+                        <ion-input (ionChange)="usernameCheck()" formControlName="name_user" autocapitalize=off></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row [hidden]="usernameOK" >
+                <ion-col>
+                    <ion-item no-lines>
+                        <ion-label color="danger">Username may only contain alphanumeric<br/>
+                            characters, or .@+-_
+                        </ion-label>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -66,14 +75,32 @@
                 <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
                     <ion-item>
                         <ion-label color="primary" floating>Password</ion-label>
-                        <ion-input formControlName="password" type="password"></ion-input>
+                        <ion-input (ionChange)="passwordCheck()" formControlName="password" type="password"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
+                    <ion-item>
+                        <ion-label color="primary" floating>Repeat Password</ion-label>
+                        <ion-input (paste)="$event.preventDefault()" (ionChange)="passwordCheck()" formControlName="password_again" type="password"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item no-lines>
+                        <ion-label [hidden]="passwordsMatch" color="danger">Passwords must match</ion-label>
+                    </ion-item>
+                    <ion-item no-lines>
+                        <ion-label [hidden]="passwordsOK" color="danger">{{passwordsAdvice}}</ion-label>
                     </ion-item>
                 </ion-col>
             </ion-row>
 
             <ion-row>
                 <ion-col col-8 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-2>
-                    <button ion-button type="submit" [disabled]="!form.valid" full
+                    <button ion-button type="submit" [disabled]="!form.valid || !passwordsOK || passwordsAdvice.length > 0" full
                             (click)="signup()">Sign Up</button>
                 </ion-col>
             </ion-row>
