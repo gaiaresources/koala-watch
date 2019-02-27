@@ -17,8 +17,13 @@
     <div class="info">
         <h1>{{APP_NAME}} Help</h1>
         <p>
-            To get started, choose from the buttons below to record an observation
-            or start a census.
+            To get started, go to the ‘Records’ screen and choose from the buttons
+            below to record an observation or start a census (koala survey).  An
+            observation is a one-off recording of a koala sighting at a particular
+            location. A census is a systematic survey that is generally conducted at a
+            defined survey site.  The census method recorded by this app is Scats Around
+            Trees (SAT).  ‘Trees surveyed’ are always part of the census survey and record
+            the trees that have been identified as part of the survey site.
         <p>
             <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
                 <img class="fab-button__img" src="assets/imgs/fab-eye.png" alt="Koala Opportunistic Observation">
@@ -60,7 +65,8 @@
         </button>
         <h2>GPS accuracy</h2>
         <p>
-            The accuracy of the GPS in your device will improve over time after it has been started. You may wish to
+            The accuracy of the GPS in your device will improve over time after it
+            has been started as it picks up signals from more satellites. You may wish to
             update the location information in your observation or census periodically if the current accuracy is
             insufficient. This can be done by pressing the "{{UPDATE_BUTTON_NAME}}" button within a record form.
         </p>

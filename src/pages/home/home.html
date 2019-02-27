@@ -21,18 +21,20 @@
         <button alt="Upload Records" aria-name="Upload Records" ion-fab (click)="clickedUpload()">
             <img alt="Upload Records" class="home-fab-icon" src="assets/imgs/white_upload.png">
         </button>
+        <ion-label style="text-align: center">Upload</ion-label>
     </ion-fab>
-
 
     <ion-fab id="myFabObo" alt="Koala Opportunistic Observation" aria-name="Koala Observation" bottom right *ngIf="records && records.length && !isMapTabSelected" style="right: 120px">
         <button ion-fab (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
             <img alt="Create Koala Observation" class="home-fab-icon" src="assets/imgs/white_eye.png">
         </button>
+        <ion-label style="text-align: center">Observation</ion-label>
     </ion-fab>
 
     <ion-fab id="myFabTree" alt="Koala Census" aria-name="Koala Census" bottom right *ngIf="records && records.length && !isMapTabSelected">
         <button alt="Koala Census" aria-name="Koala Census" ion-fab (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
             <img alt="Create Census" class="home-fab-icon" src="assets/imgs/white_trees.png">
         </button>
+        <ion-label style="text-align: center">Census</ion-label>
     </ion-fab>
 </ion-content>
