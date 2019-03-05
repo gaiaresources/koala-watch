@@ -199,7 +199,8 @@ export let SIGNUP_TERMS_AND_CONDITIONS_HTML = `
 
 <h2>Your right to privacy</h2>
 <p>In dealing with your personal information OEH must comply with the Privacy and Personal Information Protection Act 1998 (NSW) which regulates the collection, storage, quality, use and disclosure of personal information.</p>
-What is your personal information?</h2>
+
+<h2>What is your personal information?</h2>
 <p>Personal information is information or an opinion about you. You do not need to be named in the information. It is only necessary that information about you is apparent or can reasonably be ascertained from the information. Personal information is found not just in paper files but also in such things as electronic records, video recordings and photographs.</p>
 <p>OEH does not disclose such information to any third party other than as specified below.</p>
 
@@ -238,7 +239,8 @@ We use your personal information to deliver our services to you so that you can 
 
 <h2>Is providing my personal information voluntary?</h2>
 <p>Providing the personal information described above is voluntary, yet if you do not provide this information you cannot use the App.</p>
-Will you disclose my personal information to any person?
+
+<h2>Will you disclose my personal information to any person?</h2>
 <p>Subject to the below, OEH will not disclose your personal information to any third party.</p>
 <p>When you post an observation, this information is published on the App. </p>
 <p>The information that will be published is your user name, your unique Bionet observer identification number, and information about the physical site where an observation was made, including place name, time, time zone, date and coordinates.  As noted above, your user name may include your personal information if you can be identified from this information.  However, your observer identity does not have to be your name and we publish the observer identity to project the integrity of the observation process. </p>
@@ -256,7 +258,8 @@ Will you disclose my personal information to any person?
 <p><b>Retention</b> – we will retain the information you have provided for a period that is appropriate for the purpose for which it was provided. Your information will be archived and disposed of in accordance with OEH policies, legislative requirements and guidelines based on the NSW State Records Act 1998.</p>
 <p><b>Security</b> - We take reasonable steps to preserve the security of your personal information and other information or data processed through the App. Unfortunately, no data transmission over the internet can be guaranteed as perfectly secure. As a result, although we strive to protect your personal information, we cannot guarantee the security of any information you transmit to us and you transmit such information at your own risk. </p>
 <p>Once we have received information you transmit to us, we take reasonable steps to protect information during transfer and storage. Physical measures, such as building and equipment security, are used in conjunction with digital technology, such as data encryption and firewalls, to minimise unauthorised access to information.</p>
-Privacy enquiries
+
+<h2>Privacy enquiries</h2>
 <p>General privacy enquiries or enquiries concerning access to, or amendment of, your personal information that is held by OEH, can be made by contacting the OEH Information and Privacy Team on 02 9995 5266, at pia@environment.nsw.gov.au or in writing to:</p>
 
 <p>

@@ -112,6 +112,7 @@ export class SignUpPage implements OnInit {
   private passwordCheck() {
     const thePasswd = this.form.value['password'];
     this.passwordsMatch = this.form.value['password'] === this.form.value['password_again'] || false;
+    console.log('password', thePasswd);
     if (thePasswd.indexOf('>') >= 0 || thePasswd.indexOf('<') >= 0) {
       this.passwordsAdvice = 'Password may not contain < or >';
       console.log('password', '>');
@@ -130,19 +131,19 @@ export class SignUpPage implements OnInit {
       console.log('password', 'long');
       return;
     }
-    if (!/a-z/.test(thePasswd)) {
+    if (!/[a-z]/.test(thePasswd)) {
       console.log('password', 'a-z');
-      this.passwordsOK = false;
       this.passwordsAdvice = 'Password must contain a lower case letter';
+      this.passwordsOK = false;
       return;
     }
-    if (!/A-Z/.test(thePasswd)) {
+    if (!/[A-Z]/.test(thePasswd)) {
       console.log('password', 'A-Z');
       this.passwordsAdvice = 'Password must contain an upper case letter';
       this.passwordsOK = false;
       return;
     }
-    if (!/0-9/.test(thePasswd)) {
+    if (!/[0-9]/.test(thePasswd)) {
       console.log('password', '0-9');
       this.passwordsAdvice = 'Password must contain a digit';
       this.passwordsOK = false;
@@ -155,8 +156,5 @@ export class SignUpPage implements OnInit {
     const username = this.form.value['name_user'];
     const reg = new RegExp('^[\\w.@+-]+$');
     this.usernameOK = reg.test(username);
-    console.log('reg', reg);
-    console.log('reg', username);
-    console.log('reg', reg.test(username));
   }
 }

@@ -16,7 +16,8 @@
                 </ion-label>
                 <ion-datetime [max]="currentDate | date:'yyyy-MM-dd'"
                               [formControlName]="field.key"
-                              [displayFormat]="field.format | pyDateFormatToIonicDateFormat" [disabled]="readonly">
+                              [displayFormat]="field.format | pyDateFormatToIonicDateFormat"
+                              [disabled]="readonly">
                 </ion-datetime>
             </ion-item>
         </ion-item-group>
@@ -38,12 +39,21 @@
                     </span>
                 </ion-label>
 
-                <ion-input *ngSwitchCase="'integer'" [formControlName]="field.key" mbsc-numpad-decimal
-                           [mbsc-options]="getNumpadOptions(field)" [disabled]="readonly"
+                <ion-input *ngSwitchCase="'integer'"
+                           [formControlName]="field.key"
+                           mbsc-numpad-decimal
+                           [mbsc-options]="getNumpadOptions(field)"
+                           [readonly]="readonly"
+                           [disabled]="readonly"
                            [placeholder]="field.description || ''">
                 </ion-input>
 
-                <ion-input *ngSwitchDefault [type]="field.type" [formControlName]="field.key" [disabled]="readonly"></ion-input>
+                <ion-input *ngSwitchDefault
+                           [type]="field.type"
+                           [formControlName]="field.key"
+                           [readonly]="readonly"
+                           [disabled]="readonly">
+                </ion-input>
             </ion-item>
         </ion-item-group>
         <ion-item-group *ngIf="formDescriptor.requiredFields && formDescriptor.requiredFields.length">
@@ -66,19 +76,34 @@
                     </span>
                 </ion-label>
 
-                <ion-input *ngSwitchCase="'select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
-                           [mbsc-options]="getSelectOptions(field)" [disabled]="readonly"
-                           (onItemTap)="onItemSelected($event)" [placeholder]="field.description || ''">
-                </ion-input>
-
-                <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key"></ion-datetime>
-
-                <ion-input *ngSwitchCase="'integer'" [formControlName]="field.key" mbsc-numpad-decimal
-                           [mbsc-options]="getNumpadOptions(field)" [disabled]="readonly"
+                <ion-input *ngSwitchCase="'select'"
+                           [formControlName]="field.key" mbsc-select
+                           [mbsc-data]="field.options"
+                           [mbsc-options]="getSelectOptions(field)"
+                           [disabled]="readonly"
+                           [readonly]="readonly"
+                           (onItemTap)="onItemSelected($event)"
                            [placeholder]="field.description || ''">
                 </ion-input>
 
-                <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="isFieldReadOnly(field.key)"
+                <ion-datetime *ngSwitchCase="'datetime'"
+                              [disabled]="readonly"
+                              [formControlName]="field.key"></ion-datetime>
+
+                <ion-input *ngSwitchCase="'integer'"
+                           [formControlName]="field.key"
+                           mbsc-numpad-decimal
+                           [mbsc-options]="getNumpadOptions(field)"
+                           [disabled]="readonly"
+                           [readonly]="readonly"
+                           [placeholder]="field.description || ''">
+                </ion-input>
+
+                <ion-input
+                        [placeholder]="field.description || ''"
+                        [formControlName]="field.key"
+                        [disabled]="isFieldReadOnly(field.key) || readonly"
+                        [readonly]="readonly"
                     *ngSwitchDefault [type]="field.type">
                 </ion-input>
             </ion-item>
@@ -98,26 +123,43 @@
                     </span>
                 </ion-label>
 
-                <ion-input *ngSwitchCase="'select'" [formControlName]="field.key" mbsc-select [mbsc-data]="field.options"
-                            [mbsc-options]="getSelectOptions(field)" [disabled]="readonly"
-                            (onItemTap)="onItemSelected($event)" [placeholder]="field.description || ''">
+                <ion-input *ngSwitchCase="'select'"
+                           [formControlName]="field.key"
+                           mbsc-select [mbsc-data]="field.options"
+                           [mbsc-options]="getSelectOptions(field)"
+                           [disabled]="readonly"
+                           [readonly]="readonly"
+                           (onItemTap)="onItemSelected($event)" [placeholder]="field.description || ''">
                 </ion-input>
 
-                <ion-datetime *ngSwitchCase="'datetime'" [formControlName]="field.key" [disabled]="readonly">
+                <ion-datetime *ngSwitchCase="'datetime'"
+                              [formControlName]="field.key"
+                              [disabled]="readonly">
                 </ion-datetime>
 
-                <ion-input *ngSwitchCase="'integer'" [formControlName]="field.key" mbsc-numpad-decimal
-                           [mbsc-options]="getNumpadOptions(field)" [disabled]="readonly"
+                <ion-input *ngSwitchCase="'integer'"
+                           [formControlName]="field.key"
+                           mbsc-numpad-decimal
+                           [mbsc-options]="getNumpadOptions(field)"
+                           [disabled]="readonly"
+                           [readonly]="readonly"
                            [placeholder]="field.description || ''">
                 </ion-input>
 
-                <ion-input [placeholder]="field.description || ''" [formControlName]="field.key" [disabled]="readonly"
+                <ion-input [placeholder]="field.description || ''"
+                           [formControlName]="field.key"
+                           [disabled]="readonly"
+                           [readonly]="readonly"
                            *ngSwitchDefault [type]="field.type">
                 </ion-input>
             </ion-item>
         </ion-item-group>
-        <ion-input *ngFor="let field of formDescriptor.hiddenFields" [type]="field.type"
-                   [formControlName]="field.key">
+        <ion-input
+               *ngFor="let field of formDescriptor.hiddenFields"
+               [type]="field.type"
+               [disabled]="readonly"
+               [readonly]="readonly"
+               [formControlName]="field.key">
         </ion-input>
     </form>
 </div>
