@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Alert, AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
 import { APP_NAME, SIGNUP_TERMS_AND_CONDITIONS_HTML } from '../../shared/utils/consts';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -19,57 +19,41 @@ import { SignupService } from '../../shared/services/signup.service';
   selector: 'page-sign-up',
   templateUrl: 'sign-up.html',
 })
-export class SignUpPage {
+export class SignUpPage implements OnInit {
   public APP_NAME = APP_NAME;
   public form: any;
   private dialog: Alert;
+  private passwordsMatch = true;
+  private passwordsOK = false;
+  private passwordsAdvice = '';
+  private usernameOK = true;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private signupService: SignupService,
               private authService: AuthService,
               private formBuilder: FormBuilder,
-              private alertController: AlertController,
-              private loadingCtrl: LoadingController) {
+              private loadingCtrl: LoadingController,
+              private alertController: AlertController) {
     this.form = this.formBuilder.group({
       'name_user': ['', Validators.required],
       'name_given': ['', Validators.required],
       'name_last': ['', Validators.required],
       'email': ['', Validators.required],
       'password': ['', Validators.required],
+      'password_again': ['', Validators.required],
     });
   }
 
+  ngOnInit(): void {
+  }
+
   private signup() {
-    if (this.dialog !== undefined) {
-      return;
-    }
-    this.dialog = this.alertController.create({
-      title: 'Terms and Conditions',
-      subTitle: 'To sign up to I See Koala you\'ll need to agree to the following terms and conditions:',
-      message: SIGNUP_TERMS_AND_CONDITIONS_HTML,
-      buttons: [
-        {
-          text: 'Yes',
-          handler: () => {
-            this.dialog.dismiss();
-            this.dialog = undefined;
-            this.doSignup();
-          }
-        },
-        {
-          text: 'No',
-          handler: () => {
-            this.dialog.dismiss();
-            this.dialog = undefined;
-            // navigate back to the login page:
-            this.navCtrl.pop();
-          }
-        }
-      ]
-    });
-    this.dialog.present().then((result) => {
-    });
+    this.doSignup();
+  }
+
+  private goBack() {
+    this.navCtrl.pop();
   }
 
 
@@ -81,6 +65,7 @@ export class SignUpPage {
 
     const username = this.form.value['name_user'];
     const password = this.form.value['password'];
+    const password2 = this.form.value['password_again'];
     const email = this.form.value['email'];
     const first = this.form.value['name_given'];
     const last = this.form.value['name_last'];
@@ -122,5 +107,47 @@ export class SignUpPage {
   }
 
   ionViewDidLoad() {
+  }
+
+  private passwordCheck() {
+    const thePasswd = this.form.value['password'];
+    this.passwordsMatch = this.form.value['password'] === this.form.value['password_again'] || false;
+    if (thePasswd.indexOf('>') >= 0 || thePasswd.indexOf('<') >= 0) {
+      this.passwordsAdvice = 'Password may not contain < or >';
+      this.passwordsOK = false;
+      return;
+    }
+    if (thePasswd.length < 8) {
+      this.passwordsAdvice = 'Password is too short';
+      this.passwordsOK = false;
+      return;
+    }
+    if (thePasswd.length > 16) {
+      this.passwordsAdvice = 'Password is too long';
+      this.passwordsOK = false;
+      return;
+    }
+    if (!/[a-z]/.test(thePasswd)) {
+      this.passwordsAdvice = 'Password must contain a lower case letter';
+      this.passwordsOK = false;
+      return;
+    }
+    if (!/[A-Z]/.test(thePasswd)) {
+      this.passwordsAdvice = 'Password must contain an upper case letter';
+      this.passwordsOK = false;
+      return;
+    }
+    if (!/[0-9]/.test(thePasswd)) {
+      this.passwordsAdvice = 'Password must contain a digit';
+      this.passwordsOK = false;
+      return;
+    }
+    this.passwordsOK = true;
+  }
+
+  private usernameCheck() {
+    const username = this.form.value['name_user'];
+    const reg = new RegExp('^[\\w.@+-]+$');
+    this.usernameOK = reg.test(username);
   }
 }

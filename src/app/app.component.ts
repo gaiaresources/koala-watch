@@ -90,7 +90,7 @@ export class AppComponent implements OnInit, OnDestroy {
             enableBackdropDismiss: true,
             buttons: [
                 {
-                    text: 'Logout',
+                    text: 'Log Out',
                     handler: () => {
                         this.authService.logout();
                         this.nav.setRoot('LoginPage');

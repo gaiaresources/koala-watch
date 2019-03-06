@@ -14,7 +14,12 @@ import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
 
 import { SignUpPage } from '../sign-up/sign-up';
 
-import { REGO_URL, PROJECT_NAME } from '../../shared/utils/consts';
+import {
+  REGO_URL,
+  PROJECT_NAME,
+  SIGNUP_TERMS_AND_CONDITIONS_HTML,
+  SIGNUP_TERMS_AND_CONDITIONS_HTML_OLD
+} from '../../shared/utils/consts';
 
 /**
  * Generated class for the LoginPage page.
@@ -32,6 +37,7 @@ export class LoginPage {
     public form: FormGroup;
 
     public REGO_URL = REGO_URL;
+    private dialog: any;
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
@@ -48,8 +54,28 @@ export class LoginPage {
     }
 
     public signup() {
-        this.navCtrl.push('SignUpPage', {});
-        return;
+      this.dialog = this.alertController.create({
+        title: 'Terms and Conditions',
+        subTitle: 'To sign up to I See Koala you\'ll need to agree to the following terms and conditions:',
+        message: SIGNUP_TERMS_AND_CONDITIONS_HTML,
+        mode: 'md',
+        buttons: [
+          {
+            text: 'Yes',
+            handler: () => {
+              this.navCtrl.push('SignUpPage', {});
+            }
+          },
+          {
+            text: 'No',
+            handler: () => {
+            }
+          }
+        ]
+      });
+      this.dialog.present().then((result) => {
+      });
+      return;
     }
 
     public login() {
@@ -90,5 +116,64 @@ export class LoginPage {
                 }).present();
             }
         );
+    }
+
+    public resetPassword() {
+      const askEmail = this.alertController.create({
+        title: 'Enter your email address',
+        subTitle: 'To unlock your account, please enter your email address.',
+        buttons: [
+          {
+            text: 'Ok',
+            handler: (deets) => {
+              const waitingForReset = this.alertController.create( {
+                title: 'Resetting your password',
+                subTitle: 'Requesting a password reset for your account...',
+                buttons: [ {
+                  text: 'Cancel',
+                  role: 'cancel',
+                }]
+              });
+              waitingForReset.present();
+
+              this.apiService.forgotPassword(deets.email).subscribe( (ok) => {
+                  waitingForReset.dismiss();
+                  const done = this.alertController.create( {
+                    title: 'Password Reset',
+                    subTitle: 'Your password has been reset. Please check your email for more details.',
+                    buttons: [ {
+                      text: 'OK',
+                      role: 'ok',
+                    }]
+                  });
+                  done.present();
+                },
+                (resetErr) => {
+                  waitingForReset.dismiss();
+                  const done = this.alertController.create( {
+                    title: 'Password Reset Problem',
+                    subTitle: 'There was a problem resetting your password. Please try again later.',
+                    buttons: [ {
+                      text: 'OK',
+                      role: 'ok',
+                    }]
+                  });
+                  done.present();
+                });
+            }
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel'
+          }
+        ],
+        inputs: [
+          {
+            name: 'email',
+            type: 'email',
+            placeholder: 'Please enter your email address'
+          }
+        ]
+      }).present();
     }
 }

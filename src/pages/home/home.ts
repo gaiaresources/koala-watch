@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
     Events,
     IonicPage,
@@ -28,7 +28,7 @@ import { isDatasetCensus } from '../../shared/utils/functions';
     selector: 'page-home',
     templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnInit {
     public showList = true;
 
     public records: ClientRecord[];
@@ -43,6 +43,8 @@ export class HomePage {
     public DATASETNAME_OBSERVATION = DATASET_NAME_OBSERVATION;
 
     @ViewChild('homeTabs') tabRef: Tabs;
+
+    @ViewChild('myFabUpload') fabUpload: any;
 
     public isMapTabSelected = false;
 
@@ -114,4 +116,33 @@ export class HomePage {
         });
 
     }
+
+  ngOnInit(): void {
+      setTimeout( () => {
+        // These are needed to fix the app when used with a screenreader. Otherwise,
+        // ionic adds a close-icon, which manifests itself as the screenreader saying
+        // Close <title of button> button.
+        let fabUp = document.getElementById('myFabUpload');
+        let fabUpIn = fabUp.children.item(0);
+        let fabStuff = fabUpIn.children;
+        let fabDelete = fabStuff.namedItem('close');
+        if (fabDelete) {
+          fabDelete.remove();
+        }
+        fabUp = document.getElementById('myFabObo');
+        fabUpIn = fabUp.children.item(0);
+        fabStuff = fabUpIn.children;
+        fabDelete = fabStuff.namedItem('close');
+        if (fabDelete) {
+          fabDelete.remove();
+        }
+        fabUp = document.getElementById('myFabTree');
+        fabUpIn = fabUp.children.item(0);
+        fabStuff = fabUpIn.children;
+        fabDelete = fabStuff.namedItem('close');
+        if (fabDelete) {
+          fabDelete.remove();
+        }
+      }, 500);
+  }
 }

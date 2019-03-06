@@ -13,7 +13,7 @@
         <ion-list>
             <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
                     (click)="itemTapped($event, record)">
-                <img item-start class="data-row" [src]="getDatasetIcon(record)"/>
+                <img item-start class="data-row" [alt]="getAltText(record)" [src]="getDatasetIcon(record)"/>
                 <ion-label>{{ record.datetime | date: angularDateFormat }}</ion-label>
                 <img item-end class="data-row" [src]="getCountIcon(record)"/>
                 <span item-end>{{ record.count || 0 }}</span>
@@ -27,8 +27,13 @@
         <div *ngIf="showHowto">
             <h1>Welcome to {{APP_NAME}}</h1>
             <p>
-                To get started, choose from the buttons below to record an observation
-                or start a census.
+                To get started, go to the ‘Records’ screen and choose from the buttons
+                below to record an observation or start a census (koala survey).  An
+                observation is a one-off recording of a koala sighting at a particular
+                location. A census is a systematic survey that is generally conducted at a
+                defined survey site.  The census method recorded by this app is Scats Around
+                Trees (SAT).  ‘Trees surveyed’ are always part of the census survey and record
+                the trees that have been identified as part of the survey site.
             <p>
 
             <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
@@ -56,7 +61,7 @@
                 (shown in blue). Incomplete records will not be uploaded.
             </p>
             <button class="fab-button" (click)="uploadClicked()">
-                <img class="fab-button__img" src="assets/imgs/fab-upload.png">
+                <img alt="Upload Data" class="fab-button__img" src="assets/imgs/fab-upload.png">
                 <span class="fab-button__text">Upload data</span>
             </button>
         </div>

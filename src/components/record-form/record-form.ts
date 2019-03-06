@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { AlertController } from 'ionic-angular';
 
@@ -83,8 +83,11 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    constructor(private schemaService: SchemaService, private storageService: StorageService, private authService: AuthService,
-                private geolocation: Geolocation, private alertCtrl: AlertController) {
+    constructor(private schemaService: SchemaService,
+                private storageService: StorageService,
+                private authService: AuthService,
+                private geolocation: Geolocation,
+                private alertCtrl: AlertController) {
     }
 
     ngOnDestroy() {
@@ -181,6 +184,10 @@ export class RecordFormComponent implements OnDestroy {
             valuesToPatch['Accuracy'] = Math.round(this.lastLocation.coords.accuracy);
         }
 
+        if (this.form.contains('Altitude')) {
+          valuesToPatch['Altitude'] = Math.round(this.lastLocation.coords.altitude);
+        }
+
         this.form.patchValue(valuesToPatch);
     }
 
@@ -200,6 +207,8 @@ export class RecordFormComponent implements OnDestroy {
         const errors: ValidationErrors = this.form.controls[fieldDescriptor.key].errors;
         const errorKey = Object.keys(errors)[0];
         const error = errors[errorKey];
+
+        console.log('err', this.form.controls['Altitude'].errors);
 
         switch (errorKey) {
             case 'required':

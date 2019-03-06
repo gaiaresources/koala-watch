@@ -51,3 +51,9 @@ td.sidepanel-title {
 ion-segment {
     padding-bottom: 16px;
 }
+
+// on iOS, Voiceover says "Button back back" meaning "'Button back', 'Back'"
+
+.ion-md-close {
+    name: '';
+}
