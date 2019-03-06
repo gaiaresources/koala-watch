@@ -117,4 +117,64 @@ export class LoginPage {
             }
         );
     }
+
+    public resetPassword() {
+      const askEmail = this.alertController.create({
+        title: 'Enter your email address',
+        subTitle: 'To unlock your account, please enter your email address.',
+        buttons: [
+          {
+            text: 'Ok',
+            handler: (deets) => {
+              const waitingForReset = this.alertController.create( {
+                title: 'Resetting your password',
+                subTitle: 'Requesting a password reset for your account...',
+                buttons: [ {
+                  text: 'Cancel',
+                  role: 'cancel',
+                }]
+              });
+              waitingForReset.present();
+
+              this.apiService.forgotPassword(deets.email).subscribe( (ok) => {
+                  waitingForReset.dismiss();
+                  const done = this.alertController.create( {
+                    title: 'Password Reset',
+                    subTitle: 'Your password has been reset. Please check your email for more details.',
+                    buttons: [ {
+                      text: 'OK',
+                      role: 'ok',
+                    }]
+                  });
+                  done.present();
+                },
+                (resetErr) => {
+                  waitingForReset.dismiss();
+                  console.log('resetErr', resetErr);
+                  const done = this.alertController.create( {
+                    title: 'Password Reset Problem',
+                    subTitle: 'There was a problem resetting your password. Please try again later.',
+                    buttons: [ {
+                      text: 'OK',
+                      role: 'ok',
+                    }]
+                  });
+                  done.present();
+                });
+            }
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel'
+          }
+        ],
+        inputs: [
+          {
+            name: 'email',
+            type: 'email',
+            placeholder: 'Please enter your email address'
+          }
+        ]
+      }).present();
+    }
 }
