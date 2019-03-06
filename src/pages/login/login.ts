@@ -150,7 +150,6 @@ export class LoginPage {
                 },
                 (resetErr) => {
                   waitingForReset.dismiss();
-                  console.log('resetErr', resetErr);
                   const done = this.alertController.create( {
                     title: 'Password Reset Problem',
                     subTitle: 'There was a problem resetting your password. Please try again later.',

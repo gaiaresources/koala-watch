@@ -112,39 +112,32 @@ export class SignUpPage implements OnInit {
   private passwordCheck() {
     const thePasswd = this.form.value['password'];
     this.passwordsMatch = this.form.value['password'] === this.form.value['password_again'] || false;
-    console.log('password', thePasswd);
     if (thePasswd.indexOf('>') >= 0 || thePasswd.indexOf('<') >= 0) {
       this.passwordsAdvice = 'Password may not contain < or >';
-      console.log('password', '>');
       this.passwordsOK = false;
       return;
     }
     if (thePasswd.length < 8) {
       this.passwordsAdvice = 'Password is too short';
       this.passwordsOK = false;
-      console.log('password', 'short');
       return;
     }
     if (thePasswd.length > 16) {
       this.passwordsAdvice = 'Password is too long';
       this.passwordsOK = false;
-      console.log('password', 'long');
       return;
     }
     if (!/[a-z]/.test(thePasswd)) {
-      console.log('password', 'a-z');
       this.passwordsAdvice = 'Password must contain a lower case letter';
       this.passwordsOK = false;
       return;
     }
     if (!/[A-Z]/.test(thePasswd)) {
-      console.log('password', 'A-Z');
       this.passwordsAdvice = 'Password must contain an upper case letter';
       this.passwordsOK = false;
       return;
     }
     if (!/[0-9]/.test(thePasswd)) {
-      console.log('password', '0-9');
       this.passwordsAdvice = 'Password must contain a digit';
       this.passwordsOK = false;
       return;
