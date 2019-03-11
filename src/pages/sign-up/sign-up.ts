@@ -142,6 +142,7 @@ export class SignUpPage implements OnInit {
       this.passwordsOK = false;
       return;
     }
+    this.passwordsAdvice = '';
     this.passwordsOK = true;
   }
 
@@ -151,3 +152,5 @@ export class SignUpPage implements OnInit {
     this.usernameOK = reg.test(username);
   }
 }
+
+// FIXME: android:windowSoftInputMode="adjustPan" needs to be added to the Android manifest
