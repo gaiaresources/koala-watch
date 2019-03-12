@@ -85,6 +85,10 @@ export class SignUpPage implements OnInit {
       loading.dismiss().then(() => {/* meh */
       });
       const apiResponse = formatAPIError(error) as ApiResponse;
+      console.log('signerr', apiResponse);
+      if (!apiResponse.hasOwnProperty('status')) {
+        return;
+      }
       let subTitle = !!apiResponse.non_field_errors ? apiResponse.non_field_errors[0] :
         'There was a problem contacting the server, try again later';
       switch (error.status) {
