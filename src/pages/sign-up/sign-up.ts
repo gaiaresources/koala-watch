@@ -85,7 +85,6 @@ export class SignUpPage implements OnInit {
       loading.dismiss().then(() => {/* meh */
       });
       const apiResponse = formatAPIError(error) as ApiResponse;
-      console.log('signerr', apiResponse);
       if (!apiResponse.hasOwnProperty('status')) {
         return;
       }
