@@ -6,26 +6,33 @@
 -->
 <!--<ion-header>-->
 
-  <!--<ion-navbar>-->
-    <!--<ion-title>Sign Up To {{APP_NAME}}</ion-title>-->
-  <!--</ion-navbar>-->
+<!--<ion-navbar>-->
+<!--<ion-title>Sign Up To {{APP_NAME}}</ion-title>-->
+<!--</ion-navbar>-->
 
 <!--</ion-header>-->
 
-<ion-content padding class="vertical-align-content">
-    <ion-grid>
-        <ion-row style="align-items: center; align-self: center; align-content: center">
-            <ion-col>
-                <img style="align-content: center; padding-top: 2em; max-height: 5em" src="assets/imgs/koalawatch_heading.png"/>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                To use {{APP_NAME}}, please full out the details below to sign up
-                for an account. Please note that all fields are mandatory.
-            </ion-col>
-        </ion-row>
-        <form [formGroup]="form" (ngSubmit)="signup()">
+<form [formGroup]="form" (ngSubmit)="signup()" style="width: 100%; height: 100%">
+    <ion-content>
+        <ion-grid>
+            <ion-row>
+                <ion-col col-12>
+                </ion-col>
+            </ion-row>
+
+            <ion-row style="align-items: center; align-self: center; align-content: center">
+                <ion-col col-12>
+                    <img style="width: auto; height: auto; display: block; max-width: 100%; align-content: center; padding-top: 2em; max-height: 10em" src="assets/imgs/koalawatch_heading.png"/>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col col-12>
+                    To use {{APP_NAME}}, please full out the details below to sign up
+                    for an account. Please note that all fields are mandatory.
+                </ion-col>
+            </ion-row>
+
             <ion-row>
                 <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
                     <ion-item>
@@ -100,7 +107,8 @@
 
             <ion-row>
                 <ion-col col-8 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-2>
-                    <button ion-button type="submit" [disabled]="!form.valid || !passwordsOK || passwordsAdvice.length > 0" full
+                    <button ion-button type="submit"
+                            [disabled]="!form.valid || !passwordsOK || passwordsAdvice.length > 0" full
                             (click)="signup()">Sign Up</button>
                 </ion-col>
             </ion-row>
@@ -111,6 +119,6 @@
                             (click)="goBack()">Go Back</button>
                 </ion-col>
             </ion-row>
-        </form>
-    </ion-grid>
-</ion-content>
+        </ion-grid>
+    </ion-content>
+</form>

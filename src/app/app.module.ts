@@ -32,7 +32,10 @@ import { faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } 
         BrowserModule,
         HttpClientModule,
         ReactiveFormsModule,
-        IonicModule.forRoot(AppComponent),
+        IonicModule.forRoot(AppComponent, {
+          scrollAssist: false,
+          autoFocusAssist: false
+        }),
         IonicStorageModule.forRoot(),
         ComponentsModule,
         FontAwesomeModule

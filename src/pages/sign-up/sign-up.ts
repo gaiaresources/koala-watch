@@ -85,6 +85,9 @@ export class SignUpPage implements OnInit {
       loading.dismiss().then(() => {/* meh */
       });
       const apiResponse = formatAPIError(error) as ApiResponse;
+      if (!apiResponse.hasOwnProperty('status')) {
+        return;
+      }
       let subTitle = !!apiResponse.non_field_errors ? apiResponse.non_field_errors[0] :
         'There was a problem contacting the server, try again later';
       switch (error.status) {
@@ -142,6 +145,7 @@ export class SignUpPage implements OnInit {
       this.passwordsOK = false;
       return;
     }
+    this.passwordsAdvice = '';
     this.passwordsOK = true;
   }
 
@@ -151,3 +155,5 @@ export class SignUpPage implements OnInit {
     this.usernameOK = reg.test(username);
   }
 }
+
+// FIXME: android:windowSoftInputMode="adjustPan" needs to be added to the Android manifest
