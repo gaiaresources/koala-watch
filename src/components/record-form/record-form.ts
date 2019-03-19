@@ -208,8 +208,6 @@ export class RecordFormComponent implements OnDestroy {
         const errorKey = Object.keys(errors)[0];
         const error = errors[errorKey];
 
-        console.log('err', this.form.controls['Altitude'].errors);
-
         switch (errorKey) {
             case 'required':
                 return 'This field is required';
