@@ -48,6 +48,14 @@
                            [placeholder]="field.description || ''">
                 </ion-input>
 
+                <ion-input *ngSwitchCase="'number'"
+                           [formControlName]="field.key"
+                           mbsc-numpad-decimal
+                           [mbsc-options]="getNumpadCoordinateOptions(field)"
+                           [readonly]="readonly"
+                           [disabled]="readonly">
+                </ion-input>
+
                 <ion-input *ngSwitchDefault
                            [type]="field.type"
                            [formControlName]="field.key"
@@ -100,6 +108,8 @@
                 </ion-input>
 
                 <ion-input
+                        (ionChange)="ionChange($event, field.key)"
+                        [maxlength]="inputMaxLength(field.key)"
                         [placeholder]="field.description || ''"
                         [formControlName]="field.key"
                         [disabled]="isFieldReadOnly(field.key) || readonly"
@@ -129,7 +139,8 @@
                            [mbsc-options]="getSelectOptions(field)"
                            [disabled]="readonly"
                            [readonly]="readonly"
-                           (onItemTap)="onItemSelected($event)" [placeholder]="field.description || ''">
+                           (onItemTap)="onItemSelected($event)"
+                           [placeholder]="field.description || ''">
                 </ion-input>
 
                 <ion-datetime *ngSwitchCase="'datetime'"
