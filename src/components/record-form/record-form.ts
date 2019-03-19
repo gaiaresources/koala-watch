@@ -267,7 +267,7 @@ export class RecordFormComponent implements OnDestroy {
             headerText: fieldDescriptor.label,
             theme: RecordFormComponent.SELECT_THEME,
             buttons: ['cancel', 'clear', 'set'],
-            max: 999999999999,
+            max: 999999,
             scale: 0,
             thousandsSeparator: ''
         };
