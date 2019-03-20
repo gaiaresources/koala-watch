@@ -42,6 +42,9 @@ export class RecordsListComponent {
     @Input()
     public showLegend = true;
 
+    @Input()
+    public readonly = false;
+
     @Output()
     public enteringRecord = new EventEmitter();
 
@@ -124,7 +127,8 @@ export class RecordsListComponent {
         const params = {
             datasetName: record.datasetName,
             recordClientId: record.client_id,
-            parentId: record.parentId
+            parentId: record.parentId,
+            readonly: this.readonly
         };
         this.navPush(page, params);
     }

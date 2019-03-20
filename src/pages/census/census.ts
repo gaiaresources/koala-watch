@@ -48,6 +48,8 @@ export class CensusPage {
 
     public DATASETNAME_TREESURVEY = DATASET_NAME_TREESURVEY;
 
+    private siteNumberOriginal = '';
+
     constructor(public censusNavCtrl: NavController,
                 public navParams: NavParams,
                 private storageService: StorageService,
@@ -151,6 +153,16 @@ export class CensusPage {
                 this.showLeavingAlertMessage = false;
                 this.censusNavCtrl.pop();
             }
+
+            if (result) {
+              if (formValues['SiteNo'] !== this.siteNumberOriginal) {
+                // alert('changed');
+                for (const obo of this.observationRecords) {
+                  obo.data['SiteNo'] = formValues['SiteNo'];
+                  this.storageService.putRecord(obo);
+                }
+              }
+            }
         });
     }
 
@@ -211,6 +223,7 @@ export class CensusPage {
                     this.record = record;
                     this.photoGallery.PhotoIds = record.photoIds;
                     this.readonly = !!record.id;
+                    this.siteNumberOriginal = record.data['SiteNo'];
                 }
             }),
             mergeMap(() => this.storageService.getChildRecords(this.recordClientId)),

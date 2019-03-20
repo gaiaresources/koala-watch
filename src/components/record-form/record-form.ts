@@ -166,7 +166,6 @@ export class RecordFormComponent implements OnDestroy {
                     buttons: ['OK']
                 }).present();
             }
-
             return;
         }
 
@@ -207,8 +206,6 @@ export class RecordFormComponent implements OnDestroy {
         const errors: ValidationErrors = this.form.controls[fieldDescriptor.key].errors;
         const errorKey = Object.keys(errors)[0];
         const error = errors[errorKey];
-
-        console.log('err', this.form.controls['Altitude'].errors);
 
         switch (errorKey) {
             case 'required':
@@ -269,7 +266,7 @@ export class RecordFormComponent implements OnDestroy {
             headerText: fieldDescriptor.label,
             theme: RecordFormComponent.SELECT_THEME,
             buttons: ['cancel', 'clear', 'set'],
-            max: 999999999999,
+            max: 9999999,
             scale: 0,
             thousandsSeparator: ''
         };
@@ -278,6 +275,22 @@ export class RecordFormComponent implements OnDestroy {
 
         return options;
     }
+
+  public getNumpadCoordinateOptions(fieldDescriptor: FieldDescriptor): object {
+    const options = {
+      headerText: fieldDescriptor.label,
+      theme: RecordFormComponent.SELECT_THEME,
+      buttons: ['cancel', 'clear', 'set'],
+      max: 360,
+      min: -360,
+      scale: 9,
+      thousandsSeparator: ''
+    };
+
+    options['disabled'] = this.readonly;
+
+    return options;
+  }
 
     private initialiseDefaults() {
         if (this._dateFieldKey) {
@@ -336,5 +349,30 @@ export class RecordFormComponent implements OnDestroy {
         return this.readonly ||
                fieldName === 'Census ID' ||
                (fieldName === 'SiteNo' && this.datasetName === DATASET_NAME_TREESURVEY);
+    }
+
+    private inputMaxLength(key: string) {
+      if (key === 'SiteNo') {
+        return 40;
+      } else {
+        return 1000;
+      }
+    }
+
+    private ionChange(event: Event, key: string) {
+      if (key !== 'SiteNo') {
+        return;
+      }
+      let theSite = this.form.value['SiteNo'];
+      if (theSite.length === 0) {
+        return;
+      }
+      if (!/^[0-9a-zA-Z]*$/.test(theSite)) {
+        do {
+          theSite = theSite.substring(0, theSite.length - 1);
+          this.form.controls['SiteNo'].setValue(theSite);
+        } while (!/^[0-9a-zA-Z]*$/.test(theSite));
+        return;
+      }
     }
 }

@@ -72,7 +72,7 @@
                 On this screen you can view the tree surveys related to this census. You can also create a
                 new tree survey. Each census can have many tree surveys.
             </p>
-            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
+            <button [hidden]="readonly" class="fab-button" (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
                 <img class="fab-button__img" src="assets/imgs/fab-tree.png" alt="Koala Tree Survey">
                 <span class="fab-button__text">Create a tree survey for this census</span>
             </button>
