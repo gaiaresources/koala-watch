@@ -154,7 +154,6 @@ export class RecordFormComponent implements OnDestroy {
             if (this.initialiseDefaultValues) {
                 this.initialiseDefaults();
             }
-          console.log('fooboo', this.formDescriptor.locationFields);
         });
     }
 
