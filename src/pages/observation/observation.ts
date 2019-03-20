@@ -48,6 +48,7 @@ export class ObservationPage {
     }
 
     this.recordClientId = this.navParams.get('recordClientId');
+    this.readonly = this.navParams.get('readonly');
     this.isNewRecord = !this.recordClientId;
     if (this.isNewRecord) {
       this.recordClientId = UUID.UUID();
@@ -67,7 +68,7 @@ export class ObservationPage {
                 this.recordForm.value = record.data;
                 this.recordForm.validate();
                 this.photoGallery.PhotoIds = record.photoIds;
-                this.readonly = !!record.id;
+                this.readonly = !!record.id || this.navParams.get('readonly');
 
                 this.storageService.getRecord(this.parentId).subscribe(
                   parentRecord => {

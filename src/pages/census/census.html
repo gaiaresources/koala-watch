@@ -39,8 +39,14 @@
             </record-form>
         </div>
         <div [hidden]="segmentContent != 'observations'">
-            <records-list [hidden]="recordForm.invalid" [showHowto]="false" [showLegend]="false" [baseNavController]="censusNavCtrl" [parentId]="recordClientId"
-                          [records]="observationRecords" (enteringRecord)="willEnterChildRecord()"></records-list>
+            <records-list
+                    [readonly]="readonly"
+                    [hidden]="recordForm.invalid"
+                    [showHowto]="false"
+                    [showLegend]="false"
+                    [baseNavController]="censusNavCtrl"
+                    [parentId]="recordClientId"
+                    [records]="observationRecords" (enteringRecord)="willEnterChildRecord()"></records-list>
             <div [hidden]="segmentContent != 'observations' || !recordForm.invalid || recordForm.valid">
                 <h1 style="align-content: center">Required Fields Not Filled Out</h1>
                 <p>Please fill out the required fields in the form before
