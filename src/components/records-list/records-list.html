@@ -25,6 +25,14 @@
 
     <div [hidden]="records.length" class="info">
         <div *ngIf="showHowto">
+            <ion-grid class="no-grid-padding">
+                <ion-row>
+                    <ion-col>
+                        <img style="float: left" src="assets/imgs/about_footer.png"/>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
             <h1>Welcome to {{APP_NAME}}</h1>
             <p>
                 To get started, go to the ‘Records’ screen and choose from the buttons
