@@ -1,16 +1,22 @@
 <ion-header>
     <ion-navbar>
-        <ion-title>{{ dataset?.name }}</ion-title>
-        <ion-buttons *ngIf="!readonly" end>
-            <button ion-button icon-end solid color="primary" (click)="delete()">
-                Delete&nbsp;
-                <fa-icon [icon]="['far', 'trash-alt']"></fa-icon>
-            </button>
-            <button ion-button icon-end solid color="primary" (click)="save()">
-                Save&nbsp;
-                <fa-icon [icon]="['far', 'save']"></fa-icon>
-            </button>
-        </ion-buttons>
+        <ion-grid>
+            <ion-row>
+                <ion-title>{{ dataset?.name }}</ion-title>
+            </ion-row>
+            <ion-row justify-content-end>
+                <ion-buttons *ngIf="!readonly" end>
+                    <button ion-button icon-end solid color="primary" (click)="delete()">
+                        Delete&nbsp;
+                        <fa-icon [icon]="['far', 'trash-alt']"></fa-icon>
+                    </button>
+                    <button ion-button icon-end solid color="primary" (click)="save()">
+                        Save&nbsp;
+                        <fa-icon [icon]="['far', 'save']"></fa-icon>
+                    </button>
+                </ion-buttons>
+            </ion-row>
+        </ion-grid>
     </ion-navbar>
 </ion-header>
 
