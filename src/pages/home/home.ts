@@ -61,6 +61,11 @@ export class HomePage implements OnInit {
     }
 
     public clickedUpload() {
+        if (this.records.length <= 0) {
+            // Disable this button if there are no records to prevent an issue
+            // where the spinner remains indefinitely.
+            return;
+        }
         this.loading = this.loadingCtrl.create({
             content: 'Uploading records'
         });
