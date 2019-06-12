@@ -45,12 +45,12 @@
             <p>
 
             <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
-                <img class="fab-button__img" src="assets/imgs/fab-eye.png" alt="Koala Opportunistic Observation">
+                <img class="fab-button__img" src="assets/imgs/white_eye.png" alt="Koala Opportunistic Observation">
                 <span class="fab-button__text">Record an observation</span>
             </button>
 
             <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
-                <img class="fab-button__img" src="assets/imgs/fab-trees.png" alt="Koala Census">
+                <img class="fab-button__img" src="assets/imgs/white_trees.png" alt="Koala Census">
                 <span class="fab-button__text">Start a census</span>
             </button>
 
@@ -69,7 +69,7 @@
                 (shown in blue). Incomplete records will not be uploaded.
             </p>
             <button class="fab-button" (click)="uploadClicked()">
-                <img alt="Upload Data" class="fab-button__img" src="assets/imgs/fab-upload.png">
+                <img alt="Upload Data" class="fab-button__img" src="assets/imgs/white_upload.png">
                 <span class="fab-button__text">Upload data</span>
             </button>
         </div>
@@ -81,7 +81,7 @@
                 new tree survey. Each census can have many tree surveys.
             </p>
             <button [hidden]="readonly" class="fab-button" (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
-                <img class="fab-button__img" src="assets/imgs/fab-tree.png" alt="Koala Tree Survey">
+                <img class="fab-button__img" src="assets/imgs/white_tree.png" alt="Koala Tree Survey">
                 <span class="fab-button__text">Create a tree survey for this census</span>
             </button>
         </div>
