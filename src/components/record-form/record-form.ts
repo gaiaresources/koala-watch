@@ -127,25 +127,6 @@ export class RecordFormComponent implements OnDestroy {
                 }
             });
 
-            if (this.form.contains('Observer Name') || this.form.contains('Census Observers')) {
-                const fieldName: string = this.form.contains('Observer Name') ? 'Observer Name' : 'Census Observers';
-                const fieldDescriptor: FieldDescriptor = this.getFieldDescriptor(fieldName);
-
-                this.storageService.getTeamMembers().subscribe({
-                    next: (users: User[]) => {
-                        fieldDescriptor.options = users.map((user: User) => {
-                            const userTitle = formatUserFullName(user);
-
-                            return {
-                                text: userTitle,
-                                value: userTitle
-                            };
-                        });
-                    },
-                    complete: () => fieldDescriptor.type = 'select'
-                });
-            }
-
             // special case for species code field which must be hidden
             if (this.form.contains('SpeciesCode')) {
                 this.hideField('SpeciesCode');
@@ -348,6 +329,8 @@ export class RecordFormComponent implements OnDestroy {
     private isFieldReadOnly(fieldName: string) {
         return this.readonly ||
                fieldName === 'Census ID' ||
+               fieldName === 'Observer Name' ||
+               fieldName === 'Census Observers' ||
                (fieldName === 'SiteNo' && this.datasetName === DATASET_NAME_TREESURVEY);
     }
 
