@@ -17,8 +17,7 @@ import { SignUpPage } from '../sign-up/sign-up';
 import {
   REGO_URL,
   PROJECT_NAME,
-  SIGNUP_TERMS_AND_CONDITIONS_HTML,
-  SIGNUP_TERMS_AND_CONDITIONS_HTML_OLD
+  SIGNUP_TERMS_AND_CONDITIONS_HTML
 } from '../../shared/utils/consts';
 
 /**

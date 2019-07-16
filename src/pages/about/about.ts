@@ -15,7 +15,6 @@ import {APP_NAME} from '../../shared/utils/consts';
     templateUrl: 'about.html',
 })
 export class AboutPage {
-
     public APP_NAME = APP_NAME;
     constructor(public navCtrl: NavController, public navParams: NavParams) {
     }
