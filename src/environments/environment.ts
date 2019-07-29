@@ -6,7 +6,7 @@
 
 export const environment = {
     production: false,
-    server: 'https://koalawatch.gaiaresources.com.au',
+    server: 'https://koalawatch-api.gaiaresources.com.au',
     apiExtension: '/api/',
     logoutUrl: '/#/login/',
     cookieAuthToken: 'auth_token'
