@@ -23,7 +23,7 @@ export class RecordsMapComponent implements OnInit {
                 private events: Events) {
     }
 
-    ngOnInit(): void {
+    private doTheMapThing() {
         this.map = GoogleMaps.create('map');
         this.map.setOptions({
             'backgroundColor': 'white',
@@ -51,6 +51,12 @@ export class RecordsMapComponent implements OnInit {
             this.records = this.navParams.get('data');
         }
         this.events.subscribe('home-willenter', () => this.ionViewWillEnter());
+    }
+
+    ngOnInit(): void {
+        setTimeout( () => {
+            this.doTheMapThing();
+        }, 2000);
     }
 
     public ionViewWillEnter() {
