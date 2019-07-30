@@ -11,6 +11,8 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
+    <preference name="GOOGLE_MAPS_IOS_API_KEY" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
@@ -97,22 +99,24 @@
             <string>Photo library required for storing photos of Koalas</string>
         </edit-config>
     </platform>
-    <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
-    <plugin name="cordova-plugin-device" spec="2.0.2" />
-    <plugin name="cordova-plugin-ionic-webview" spec="1.1.19" />
-    <plugin name="cordova-plugin-ionic-keyboard" spec="2.0.5" />
+    <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
+    <plugin name="cordova-plugin-device" spec="~2.0.2" />
+    <plugin name="cordova-plugin-ionic-webview" spec="~1.1.19" />
+    <plugin name="cordova-plugin-ionic-keyboard" spec="~2.0.5" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.1" />
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To set observation locations" />
     </plugin>
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
+    <plugin name="cordova-plugin-splashscreen" spec="~5.0.2" />
     <plugin name="cordova-plugin-googlemaps" spec="~2.3.4">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
         <variable name="PLAY_SERVICES_VERSION" value="15.0.1" />
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="26.1.0" />
+        <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="This app wants to get your location while this app runs only." />
+        <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="This app wants to get your location always, even this app runs in background." />
     </plugin>
-    <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <engine name="android" spec="7.1.0" />
 </widget>
