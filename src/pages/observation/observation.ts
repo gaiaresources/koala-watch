@@ -38,8 +38,8 @@ export class ObservationPage {
               private alertController: AlertController) {
   }
 
-  public onClickedNewPhoto() {
-    this.photoGallery.onClickedNewPhoto();
+  public onClickedNewPhoto(useCamera: boolean) {
+    this.photoGallery.onClickedNewPhoto(useCamera);
   }
 
   public ionViewWillEnter() {

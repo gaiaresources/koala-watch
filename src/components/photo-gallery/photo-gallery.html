@@ -19,9 +19,13 @@
                 <p>
                     Use the camera button to add photos to your record.
                 <p>
-                <button class="fab-button" (click)="onClickedNewPhoto()">
+                <button class="fab-button" (click)="onClickedNewPhoto(true)">
                     <img class="fab-button__img" src="assets/imgs/white_camera.png" alt="Koala Opportunistic Observation">
                     <span class="fab-button__text">Take a photo</span>
+                </button>
+                <button class="fab-button" (click)="onClickedNewPhoto(false)">
+                    <img class="fab-button__img" src="assets/imgs/white_photo_library.png" alt="Koala Opportunistic Observation">
+                    <span class="fab-button__text">Use an existing photo</span>
                 </button>
                 <p>
                     All photos relating to this record will be displayed here.  You will be able
