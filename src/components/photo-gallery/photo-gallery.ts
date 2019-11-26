@@ -137,6 +137,7 @@ export class PhotoGalleryComponent {
         }
 
         const options: CameraOptions = {
+            sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
             quality: 100,
             targetWidth: 1024,
             targetHeight: 1024,

@@ -1,4 +1,4 @@
-import { GoogleMap, GoogleMaps, LatLng, } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, LatLng, Marker, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavParams } from 'ionic-angular';
@@ -18,6 +18,7 @@ export class RecordsMapComponent implements OnInit {
 
     private map: GoogleMap;
     private _records: ClientRecord[];
+    private dragMarker: Marker;
 
     constructor(private navParams: NavParams,
                 private events: Events) {
@@ -51,13 +52,41 @@ export class RecordsMapComponent implements OnInit {
             this.records = this.navParams.get('data');
         }
         this.events.subscribe('home-willenter', () => this.ionViewWillEnter());
+        this.events.subscribe('map-whereispin', () => this.dragMarkerLocation());
     }
 
     public ionViewWillEnter() {
         timer(500).subscribe(() => this.loadMarkers());
     }
 
+    private dragMarkerLocation() {
+      console.log('PositionMap', this.dragMarker.getPosition())
+      this.events.publish('map-specifiedcoordinates', this.dragMarker.getPosition());
+    }
+
     private loadMarkers() {
+        if (this.map) {
+          this.dragMarker = this.map.addMarkerSync({
+            snippet: 'Draggable Pin',
+            title: 'Set this to koala sighting location',
+            icon: {
+              size: {
+                width: 45,
+                height: 45
+              }
+            },
+            animation: 'DROP',
+            position: {
+              lat: -33.0,
+              lng: 146.012
+            },
+            draggable: true
+          });
+        }
+
+        if (1 === 1) {
+          return;
+        }
         if (this.map) {
             this.map.clear();
             if (this._records && this._records.length) {
