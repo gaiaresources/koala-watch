@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, Events, IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as moment from 'moment/moment';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
@@ -11,6 +11,8 @@ import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gall
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
+import { MapCoordinatesPageModule } from '../map-coordinates/map-coordinates.module';
+import { MapCoordinatesPage } from '../map-coordinates/map-coordinates';
 
 @IonicPage()
 @Component({
@@ -34,8 +36,20 @@ export class ObservationPage {
   private dataset: Dataset;
   private recordClientId: string;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
-              private alertController: AlertController) {
+  constructor(private navCtrl: NavController, private navParams: NavParams,
+              private storageService: StorageService,
+              private alertController: AlertController,
+              private events: Events) {
+    this.events.subscribe('map-needmap', () => {
+      console.log('map-needmap');
+      this.showLeavingAlertMessage = false;
+      this.navCtrl.push('mcp');
+    });
+    this.events.subscribe('map-closeme', () => {
+      alert('pop');
+      console.log('map-closeme');
+      this.navCtrl.pop();
+    });
   }
 
   public onClickedNewPhoto(useCamera: boolean) {
@@ -119,7 +133,6 @@ export class ObservationPage {
             text: 'No'
           }]
       }).present();
-
       return false;
     } else {
       return true;

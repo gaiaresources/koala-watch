@@ -23,6 +23,7 @@ import { SignupService } from '../shared/services/signup.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { MapCoordinatesPageModule } from '../pages/map-coordinates/map-coordinates.module';
 
 @NgModule({
     declarations: [
@@ -38,7 +39,8 @@ import { faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } 
         }),
         IonicStorageModule.forRoot(),
         ComponentsModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        MapCoordinatesPageModule
     ],
     bootstrap: [IonicApp],
     providers: [

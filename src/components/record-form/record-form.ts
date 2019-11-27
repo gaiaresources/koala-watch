@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { AlertController } from 'ionic-angular';
+import { AlertController, Events, ModalController, NavController } from 'ionic-angular';
 
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
@@ -14,6 +14,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
 import { UPDATE_BUTTON_NAME, DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
+import { MapCoordinatesPage } from '../../pages/map-coordinates/map-coordinates';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -87,7 +88,8 @@ export class RecordFormComponent implements OnDestroy {
                 private storageService: StorageService,
                 private authService: AuthService,
                 private geolocation: Geolocation,
-                private alertCtrl: AlertController) {
+                private alertCtrl: AlertController,
+                private events: Events, public navCtrl: NavController) {
     }
 
     ngOnDestroy() {
@@ -97,7 +99,11 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     private setupForm(dataset: Dataset) {
-        this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
+      if (!this.initialiseDefaultValues) {
+        return;
+      }
+
+      this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
             this.formDescriptor = results[0];
             this.form = results[1];
 
@@ -136,6 +142,36 @@ export class RecordFormComponent implements OnDestroy {
                 this.initialiseDefaults();
             }
         });
+    }
+
+    private mapReturnedCoordinates(rv) {
+      alert(rv.toString());
+      const valuesToPatch = {};
+      if (this.form.contains('Latitude')) {
+        valuesToPatch['Latitude'] = rv.position.lat.toFixed(6);
+      }
+
+      if (this.form.contains('Longitude')) {
+        valuesToPatch['Longitude'] = rv.position.lng.toFixed(6);
+      }
+
+      if (this.form.contains('Accuracy')) {
+        valuesToPatch['Accuracy'] = 0;
+      }
+
+      if (this.form.contains('Altitude')) {
+        valuesToPatch['Altitude'] = 0;
+      }
+
+      this.form.patchValue(valuesToPatch);
+      this.events.unsubscribe('map-returnCoordinates', this.mapReturnedCoordinates);
+    }
+
+    public async updateLocationViaMap() {
+      this.events.subscribe('map-returnCoordinates', this.mapReturnedCoordinates);
+      this.initialiseDefaultValues = false;
+      this.events.publish('map-needmap', {})
+      return;
     }
 
     public updateLocationFields(initialUpdate = false) {
@@ -274,6 +310,7 @@ export class RecordFormComponent implements OnDestroy {
   }
 
     private initialiseDefaults() {
+      console.log('recform', 'init defaults!');
         if (this._dateFieldKey) {
             // moment().format() will return the current date/time in local timezone
             this.form.controls[this._dateFieldKey].setValue(moment().format());

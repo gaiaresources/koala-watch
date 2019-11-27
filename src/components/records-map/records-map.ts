@@ -66,28 +66,6 @@ export class RecordsMapComponent implements OnInit {
 
     private loadMarkers() {
         if (this.map) {
-          this.dragMarker = this.map.addMarkerSync({
-            snippet: 'Draggable Pin',
-            title: 'Set this to koala sighting location',
-            icon: {
-              size: {
-                width: 45,
-                height: 45
-              }
-            },
-            animation: 'DROP',
-            position: {
-              lat: -33.0,
-              lng: 146.012
-            },
-            draggable: true
-          });
-        }
-
-        if (1 === 1) {
-          return;
-        }
-        if (this.map) {
             this.map.clear();
             if (this._records && this._records.length) {
                 for (const record of this._records) {
