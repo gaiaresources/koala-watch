@@ -15,6 +15,7 @@ import { AuthService } from '../../biosys-core/services/auth.service';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
 import { UPDATE_BUTTON_NAME, DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
 import { MapCoordinatesPage } from '../../pages/map-coordinates/map-coordinates';
+import { ILatLng } from '@ionic-native/google-maps';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -145,14 +146,15 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     private mapReturnedCoordinates(rv) {
-      alert(rv.toString());
+      console.log(this);
+      console.log(rv);
       const valuesToPatch = {};
       if (this.form.contains('Latitude')) {
-        valuesToPatch['Latitude'] = rv.position.lat.toFixed(6);
+        valuesToPatch['Latitude'] = rv.lat.toFixed(6);
       }
 
       if (this.form.contains('Longitude')) {
-        valuesToPatch['Longitude'] = rv.position.lng.toFixed(6);
+        valuesToPatch['Longitude'] = rv.lng.toFixed(6);
       }
 
       if (this.form.contains('Accuracy')) {
@@ -168,9 +170,22 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     public async updateLocationViaMap() {
-      this.events.subscribe('map-returnCoordinates', this.mapReturnedCoordinates);
+      console.log('udm', this.form);
+      let l: ILatLng = null;
+
+      if (this.form.value['Latitude'] && this.form.value['Longitude']) {
+        l = {
+          lat: this.form.value['Latitude'],
+          lng: this.form.value['Longitude']
+        };
+      }
+      console.log('updatemap', l);
+
+      this.events.subscribe('map-returnCoordinates', (x) => {
+        this.mapReturnedCoordinates(x);
+      });
       this.initialiseDefaultValues = false;
-      this.events.publish('map-needmap', {})
+      this.events.publish('map-needmap', l);
       return;
     }
 

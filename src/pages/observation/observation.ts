@@ -40,15 +40,10 @@ export class ObservationPage {
               private storageService: StorageService,
               private alertController: AlertController,
               private events: Events) {
-    this.events.subscribe('map-needmap', () => {
-      console.log('map-needmap');
+    this.events.subscribe('map-needmap', (pos) => {
+      console.log('map-needmap', pos);
       this.showLeavingAlertMessage = false;
-      this.navCtrl.push('mcp');
-    });
-    this.events.subscribe('map-closeme', () => {
-      alert('pop');
-      console.log('map-closeme');
-      this.navCtrl.pop();
+      this.navCtrl.push('mcp', pos);
     });
   }
 
