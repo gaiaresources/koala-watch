@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 
-import { AlertController, Events, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, Events, IonicPage, Navbar, NavController, NavParams } from 'ionic-angular';
 import * as moment from 'moment/moment';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
@@ -36,15 +36,21 @@ export class ObservationPage {
   private dataset: Dataset;
   private recordClientId: string;
 
+  @ViewChild('ion-navbar', { read: ElementRef }) private navBar: Navbar;
+
+  private eventNeedMapHandler = (pos) => {
+      console.log('map-needmap', pos);
+      this.showLeavingAlertMessage = false;
+      this.navCtrl.push('mcp', pos);
+    }
+
   constructor(private navCtrl: NavController, private navParams: NavParams,
               private storageService: StorageService,
               private alertController: AlertController,
               private events: Events) {
-    this.events.subscribe('map-needmap', (pos) => {
-      console.log('map-needmap', pos);
-      this.showLeavingAlertMessage = false;
-      this.navCtrl.push('mcp', pos);
-    });
+  }
+
+  private backButtonClick(ev: UIEvent) {
   }
 
   public onClickedNewPhoto(useCamera: boolean) {
@@ -52,6 +58,7 @@ export class ObservationPage {
   }
 
   public ionViewWillEnter() {
+    this.events.subscribe('map-needmap', this.eventNeedMapHandler);
     if (this.navParams.data.hasOwnProperty('parentId')) {
       this.parentId = this.navParams.get('parentId');
     }
@@ -107,7 +114,9 @@ export class ObservationPage {
   }
 
   public ionViewCanLeave() {
+    this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
     if (this.readonly) {
+      // this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
       return true;
     }
     if (this.showLeavingAlertMessage) {
@@ -119,13 +128,17 @@ export class ObservationPage {
           {
             text: 'Yes',
             handler: () => {
+              // this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
               this.photoGallery.rollback();
               this.showLeavingAlertMessage = false;
               this.navCtrl.pop();
             }
           },
           {
-            text: 'No'
+            text: 'No',
+            handler: () => {
+              // this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
+            }
           }]
       }).present();
       return false;

@@ -17,13 +17,6 @@
         </ion-tab>
     </ion-tabs>
 
-    <ion-fab id="myFabTest" name="Test" alt="Test" aria-name="Test" bottom left>
-        <button alt="Test" aria-name="Upload Records" ion-fab (click)="clickedTest()">
-            <img alt="Test" class="home-fab-icon" src="assets/imgs/white_upload.png">
-        </button>
-        <ion-label style="text-align: center">Test</ion-label>
-    </ion-fab>
-
     <ion-fab id="myFabUpload" name="Upload" alt="Upload Records" aria-name="Upload Records" bottom left *ngIf="records && records.length && !isMapTabSelected">
         <button alt="Upload Records" aria-name="Upload Records" ion-fab (click)="clickedUpload()">
             <img alt="Upload Records" class="home-fab-icon" src="assets/imgs/white_upload.png">

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { AlertController, FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, Events, FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { UUID } from 'angular2-uuid';
 import * as moment from 'moment/moment';
@@ -49,17 +49,25 @@ export class CensusPage {
     public DATASETNAME_TREESURVEY = DATASET_NAME_TREESURVEY;
 
     private siteNumberOriginal = '';
+    private eventNeedMapHandler = (pos) => {
+        console.log('census - map-needmap', pos);
+        this.showLeavingAlertMessage = false;
+        this.navCtrl.push('mcp', pos);
+      }
 
-    constructor(public censusNavCtrl: NavController,
+    constructor(public navCtrl: NavController,
                 public navParams: NavParams,
                 private storageService: StorageService,
-                private alertController: AlertController) {
+                private alertController: AlertController,
+                private events: Events) {
     }
+
+  private backButtonClick(ev: UIEvent) {
+  }
 
     public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
         this.willEnterChildRecord();
-
-        this.censusNavCtrl.push('ObservationPage', {
+        this.navCtrl.push('ObservationPage', {
             datasetName: datasetName,
             parentId: this.recordClientId
         });
@@ -70,6 +78,7 @@ export class CensusPage {
     }
 
     public ionViewWillEnter() {
+      this.events.subscribe('map-needmap', this.eventNeedMapHandler);
         if (!this.recordClientId) {
             this.recordClientId = this.navParams.get('recordClientId');
         }
@@ -100,6 +109,7 @@ export class CensusPage {
     }
 
     public ionViewCanLeave() {
+      this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
       if (this.readonly) {
         return true;
       }
@@ -115,14 +125,15 @@ export class CensusPage {
                         handler: () => {
                             this.photoGallery.rollback();
                             this.showLeavingAlertMessage = false;
-                            this.censusNavCtrl.pop();
+                            this.navCtrl.pop();
                         }
                     },
-                    {
-                        text: 'No'
-                    }]
-            }).present();
-
+                  {
+                    text: 'No',
+                    handler: () => {
+                    }
+                  }]
+            }).present().then(() => {});
             return false;
         } else {
             return true;
@@ -151,7 +162,7 @@ export class CensusPage {
         }).subscribe((result: boolean) => {
             if (result && popForm) {
                 this.showLeavingAlertMessage = false;
-                this.censusNavCtrl.pop();
+                this.navCtrl.pop();
             }
 
             if (result) {
@@ -185,7 +196,7 @@ export class CensusPage {
                                 }
                                 // TODO: Delete any child records
                                 this.showLeavingAlertMessage = false;
-                                this.censusNavCtrl.pop();
+                                this.navCtrl.pop();
                             }, (error) => {
                                 this.alertController.create({
                                     title: 'Cannot Delete',
@@ -202,7 +213,7 @@ export class CensusPage {
                             });
                         } else {
                             this.showLeavingAlertMessage = false;
-                            this.censusNavCtrl.pop();
+                            this.navCtrl.pop();
                         }
                     }
                 },
