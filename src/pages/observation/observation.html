@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-navbar>
+    <ion-navbar (backButtonClick)="this.backButtonClick">
         <ion-grid>
             <ion-row>
                 <ion-title>{{ dataset?.name }}</ion-title>
@@ -42,8 +42,11 @@
     </div>
 
     <ion-fab [hidden]="readonly || showForm" bottom right>
-        <button aria-name="Add Photo" alt="Add Photo" ion-fab (click)="onClickedNewPhoto()" class="fab-census-tree">
+        <button aria-name="Add Photo From Camera" alt="Add Photo From Camera" ion-fab (click)="onClickedNewPhoto(true)" class="fab-census-tree">
             <img alt="Add Photo" class="fab-img" src="assets/imgs/fab-camera.png">
+        </button>
+        <button aria-name="Add Photo From Gallery" alt="Add Photo From Gallery" ion-fab (click)="onClickedNewPhoto(false)" class="fab-census-tree">
+            <img alt="Add Photo" class="fab-img" src="assets/imgs/fab-gallery.png">
         </button>
     </ion-fab>
 

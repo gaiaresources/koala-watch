@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 
-import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, Events, IonicPage, Navbar, NavController, NavParams } from 'ionic-angular';
 import * as moment from 'moment/moment';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
@@ -11,6 +11,8 @@ import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gall
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
+import { MapCoordinatesPageModule } from '../map-coordinates/map-coordinates.module';
+import { MapCoordinatesPage } from '../map-coordinates/map-coordinates';
 
 @IonicPage()
 @Component({
@@ -34,15 +36,29 @@ export class ObservationPage {
   private dataset: Dataset;
   private recordClientId: string;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
-              private alertController: AlertController) {
+  @ViewChild('ion-navbar', { read: ElementRef }) private navBar: Navbar;
+
+  private eventNeedMapHandler = (pos) => {
+      console.log('map-needmap', pos);
+      this.showLeavingAlertMessage = false;
+      this.navCtrl.push('mcp', pos);
+    }
+
+  constructor(private navCtrl: NavController, private navParams: NavParams,
+              private storageService: StorageService,
+              private alertController: AlertController,
+              private events: Events) {
   }
 
-  public onClickedNewPhoto() {
-    this.photoGallery.onClickedNewPhoto();
+  private backButtonClick(ev: UIEvent) {
+  }
+
+  public onClickedNewPhoto(useCamera: boolean) {
+    this.photoGallery.onClickedNewPhoto(useCamera);
   }
 
   public ionViewWillEnter() {
+    this.events.subscribe('map-needmap', this.eventNeedMapHandler);
     if (this.navParams.data.hasOwnProperty('parentId')) {
       this.parentId = this.navParams.get('parentId');
     }
@@ -98,7 +114,9 @@ export class ObservationPage {
   }
 
   public ionViewCanLeave() {
+    this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
     if (this.readonly) {
+      // this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
       return true;
     }
     if (this.showLeavingAlertMessage) {
@@ -110,16 +128,19 @@ export class ObservationPage {
           {
             text: 'Yes',
             handler: () => {
+              // this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
               this.photoGallery.rollback();
               this.showLeavingAlertMessage = false;
               this.navCtrl.pop();
             }
           },
           {
-            text: 'No'
+            text: 'No',
+            handler: () => {
+              // this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
+            }
           }]
       }).present();
-
       return false;
     } else {
       return true;

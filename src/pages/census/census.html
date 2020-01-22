@@ -5,7 +5,7 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-    <ion-navbar>
+    <ion-navbar (backButtonClick)="this.backButtonClick">
         <ion-grid>
             <ion-row>
                 <ion-title>{{ dataset?.name }}</ion-title>
@@ -50,7 +50,7 @@
                     [hidden]="recordForm.invalid"
                     [showHowto]="false"
                     [showLegend]="false"
-                    [baseNavController]="censusNavCtrl"
+                    [baseNavController]="navCtrl"
                     [parentId]="recordClientId"
                     [records]="observationRecords" (enteringRecord)="willEnterChildRecord()"></records-list>
             <div [hidden]="segmentContent != 'observations' || !recordForm.invalid || recordForm.valid">
@@ -70,9 +70,13 @@
         </button>
     </ion-fab>
     <ion-fab alt="Take a photo" aria-name="Take a photo"  [hidden]="readonly || segmentContent != 'photos'" bottom right>
-        <button alt="Take a photo" aria-name="Take a photo" ion-fab (click)="onClickedNewPhoto()" class="fab-census-tree">
+        <button alt="Take a photo" aria-name="Take a photo" ion-fab (click)="onClickedNewPhoto(true)" class="fab-census-tree">
             <img alt="Take a photo" class="fab-img" src="assets/imgs/fab-camera.png">
         </button>
     </ion-fab>
-
+    <ion-fab alt="Select a photo" aria-name="Select a photo"  [hidden]="readonly || segmentContent != 'photos'" bottom right>
+        <button alt="Select a photo" aria-name="Select a photo" ion-fab (click)="onClickedNewPhoto(false)" class="fab-census-tree">
+            <img alt="Select a photo" class="fab-img" src="assets/imgs/fab-camera.png">
+        </button>
+    </ion-fab>
 </ion-content>

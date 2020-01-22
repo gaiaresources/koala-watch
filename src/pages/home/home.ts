@@ -22,6 +22,7 @@ import {
     TOAST_DURATION
 } from '../../shared/utils/consts';
 import { isDatasetCensus } from '../../shared/utils/functions';
+import { ILatLng } from '@ionic-native/google-maps';
 
 @IonicPage()
 @Component({
@@ -58,6 +59,14 @@ export class HomePage implements OnInit {
         this.loadRecords();
         this.event.publish('home-willenter');
         this.event.subscribe('upload-clicked', () => this.clickedUpload());
+        this.event.subscribe('map-specifiedcoordinates', (position) => {
+          console.log(position)
+          alert(position.lat + ' ' + position.lng);
+        });
+    }
+
+    public clickedTest() {
+      this.event.publish('map-whereispin');
     }
 
     public clickedUpload() {
