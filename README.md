@@ -27,6 +27,8 @@ npm install
 To run the app in a browser, within the project directory use:
 
 ```bash
+sudo apt install gradle
+
 ionic serve
 ```
 
