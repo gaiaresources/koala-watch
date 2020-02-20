@@ -35,4 +35,6 @@ typings/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+
 my-release-key.jks
+*.apk

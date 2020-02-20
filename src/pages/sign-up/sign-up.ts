@@ -27,14 +27,15 @@ export class SignUpPage implements OnInit {
   private passwordsOK = false;
   private passwordsAdvice = '';
   private usernameOK = true;
+  showingSignupMsg: boolean;
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              private signupService: SignupService,
-              private authService: AuthService,
-              private formBuilder: FormBuilder,
-              private loadingCtrl: LoadingController,
-              private alertController: AlertController) {
+    public navParams: NavParams,
+    private signupService: SignupService,
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private loadingCtrl: LoadingController,
+    private alertController: AlertController) {
     this.form = this.formBuilder.group({
       'name_user': ['', Validators.required],
       'name_given': ['', Validators.required],
@@ -70,6 +71,8 @@ export class SignUpPage implements OnInit {
     const first = this.form.value['name_given'];
     const last = this.form.value['name_last'];
 
+    this.showingSignupMsg = false;
+
     this.signupService.signUp(username, password, email, first, last).subscribe(() => {
       loading.dismiss();
       this.alertController.create({
@@ -85,13 +88,13 @@ export class SignUpPage implements OnInit {
       loading.dismiss().then(() => {/* meh */
       });
       const apiResponse = formatAPIError(error) as ApiResponse;
-      if (!apiResponse.hasOwnProperty('status')) {
-        return;
-      }
+
       let subTitle = !!apiResponse.non_field_errors ? apiResponse.non_field_errors[0] :
         'There was a problem contacting the server, try again later';
       switch (error.status) {
         case 400:
+          subTitle = 'This username is already taken.';
+          break;
         case 409:
           // technically this is a "account already exists" but we need to be vague?
           subTitle = 'We were unable to create your account. This could be because ' +
@@ -99,13 +102,21 @@ export class SignUpPage implements OnInit {
             'Please check your details and try again.';
           break;
       }
-      this.alertController.create({
-        title: 'Sign-Up Problem',
-        subTitle: subTitle,
-        buttons: ['Ok']
-      }).present().then(() => {/* meh */
-      });
+
+      if (!this.showingSignupMsg) {
+        this.showingSignupMsg = true;
+
+        this.alertController.create({
+          title: 'Sign-Up Problem',
+          subTitle: subTitle,
+          buttons: ['Ok']
+        }).present().then(() => {/* meh */
+        });
+      }
+
+
     });
+    this.showingSignupMsg = false;
     return;
   }
 

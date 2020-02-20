@@ -132,10 +132,13 @@ export class HomePage implements OnInit {
     }
 
   ngOnInit(): void {
+    /*
       setTimeout( () => {
         // These are needed to fix the app when used with a screenreader. Otherwise,
         // ionic adds a close-icon, which manifests itself as the screenreader saying
         // Close <title of button> button.
+
+
         let fabUp = document.getElementById('myFabUpload');
         let fabUpIn = fabUp.children.item(0);
         let fabStuff = fabUpIn.children;
@@ -157,6 +160,7 @@ export class HomePage implements OnInit {
         if (fabDelete) {
           fabDelete.remove();
         }
-      }, 500);
+      }, 500); */
   }
+
 }
