@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Events, IonicPage, NavController, NavParams } from 'ionic-angular';
-import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker, GoogleMapOptions } from '@ionic-native/google-maps';
 import { timer } from '../../../node_modules/rxjs/observable/timer';
 
 /**
@@ -18,7 +18,7 @@ import { timer } from '../../../node_modules/rxjs/observable/timer';
   selector: 'page-map-coordinates',
   templateUrl: 'map-coordinates.html',
 })
-export class MapCoordinatesPage implements OnInit {
+export class MapCoordinatesPage implements AfterViewInit {
   private map: GoogleMap;
   private dragMarker: Marker;
   private startPos: ILatLng;
@@ -32,10 +32,19 @@ export class MapCoordinatesPage implements OnInit {
     return;
   }
 
-  ionViewDidLoad() {
+  ngAfterViewInit() {
+    alert("view loaded")
   }
 
-  ngOnInit(): void {
+  ionViewDidLoad() {
+    setTimeout( () => {
+      this.loadMap();
+    }, 2000);
+
+  }
+
+
+  loadMap(): void {
     this.map = GoogleMaps.create('map-getpin');
     this.map.setOptions({
       'backgroundColor': 'white',

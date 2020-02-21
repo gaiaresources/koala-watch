@@ -10,7 +10,7 @@ import * as moment from 'moment/moment';
     selector: 'records-map',
     templateUrl: 'records-map.html'
 })
-export class RecordsMapComponent implements OnInit {
+export class RecordsMapComponent {
     @Input()
     public set records(records: ClientRecord[]) {
         this._records = records;
@@ -24,7 +24,14 @@ export class RecordsMapComponent implements OnInit {
                 private events: Events) {
     }
 
-    ngOnInit(): void {
+    ionViewDidLoad() {
+      setTimeout( () => {
+        this.loadMap();
+      }, 2000);
+
+    }
+
+    loadMap(): void {
         this.map = GoogleMaps.create('map');
         this.map.setOptions({
             'backgroundColor': 'white',
