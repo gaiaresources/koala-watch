@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { Events, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker, GoogleMapOptions } from '@ionic-native/google-maps';
 import { timer } from '../../../node_modules/rxjs/observable/timer';
@@ -18,7 +18,7 @@ import { timer } from '../../../node_modules/rxjs/observable/timer';
   selector: 'page-map-coordinates',
   templateUrl: 'map-coordinates.html',
 })
-export class MapCoordinatesPage implements AfterViewInit {
+export class MapCoordinatesPage {
   private map: GoogleMap;
   private dragMarker: Marker;
   private startPos: ILatLng;
@@ -30,10 +30,6 @@ export class MapCoordinatesPage implements AfterViewInit {
     console.log('navpar', this.navParams);
     console.log('startpos', this.startPos);
     return;
-  }
-
-  ngAfterViewInit() {
-    alert("view loaded")
   }
 
   ionViewDidLoad() {
