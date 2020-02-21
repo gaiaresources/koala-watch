@@ -39,7 +39,6 @@ export class ObservationPage {
   @ViewChild('ion-navbar', { read: ElementRef }) private navBar: Navbar;
 
   private eventNeedMapHandler = (pos) => {
-      console.log('map-needmap', pos);
       this.showLeavingAlertMessage = false;
       this.navCtrl.push('mcp', pos);
     }

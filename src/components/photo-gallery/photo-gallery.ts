@@ -120,7 +120,7 @@ export class PhotoGalleryComponent {
                         if (this.photoIndex >= this._photoIds.length) {
                             this.photoIndex -= 1;
                         }
-                        console.log('photoIdex' + this.photoIndex);
+
                         this.updateImage();
                     }
                 },

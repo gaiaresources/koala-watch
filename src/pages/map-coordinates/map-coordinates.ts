@@ -27,8 +27,6 @@ export class MapCoordinatesPage {
               public navParams: NavParams,
               private events: Events) {
     this.startPos = this.navParams.data;
-    console.log('navpar', this.navParams);
-    console.log('startpos', this.startPos);
     return;
   }
 
@@ -71,7 +69,6 @@ export class MapCoordinatesPage {
       if (!(Math.abs(position.lat) > 0.1 && Math.abs(position.lng) > 0.1)) {
         position = new LatLng(-33.0, 146.012);
       }
-      console.log('pos', position);
       const options = {
         snippet: 'Move this pin to the koala sighting location',
         title: 'Move this pin to the koala sighting location',

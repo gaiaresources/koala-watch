@@ -60,7 +60,6 @@ export class HomePage implements OnInit {
         this.event.publish('home-willenter');
         this.event.subscribe('upload-clicked', () => this.clickedUpload());
         this.event.subscribe('map-specifiedcoordinates', (position) => {
-          console.log(position)
           alert(position.lat + ' ' + position.lng);
         });
     }
