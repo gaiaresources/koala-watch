@@ -1,7 +1,7 @@
 import { GoogleMap, GoogleMaps, LatLng, Marker, } from '@ionic-native/google-maps';
 import { Component, Input, OnInit } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { Events, NavParams } from 'ionic-angular';
+import { Events, NavParams, Platform } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
 import { isDatasetCensus } from '../../shared/utils/functions';
 import * as moment from 'moment/moment';
@@ -21,14 +21,14 @@ export class RecordsMapComponent {
     private dragMarker: Marker;
 
     constructor(private navParams: NavParams,
-                private events: Events) {
+                private events: Events,
+                private platform: Platform) {
     }
 
     ionViewDidLoad() {
-      setTimeout( () => {
-        this.loadMap();
-      }, 2000);
-
+        this.platform.ready().then(() => {
+            this.loadMap();
+        });
     }
 
     loadMap(): void {

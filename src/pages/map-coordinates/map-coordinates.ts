@@ -1,5 +1,5 @@
-import { Component} from '@angular/core';
-import { Events, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { Events, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker, GoogleMapOptions } from '@ionic-native/google-maps';
 import { timer } from '../../../node_modules/rxjs/observable/timer';
 
@@ -24,16 +24,17 @@ export class MapCoordinatesPage {
   private startPos: ILatLng;
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              private events: Events) {
+    public navParams: NavParams,
+    private events: Events,
+    private platform: Platform) {
     this.startPos = this.navParams.data;
     return;
   }
 
   ionViewDidLoad() {
-    setTimeout( () => {
+    this.platform.ready().then(() => {
       this.loadMap();
-    }, 2000);
+    });
 
   }
 
@@ -62,8 +63,8 @@ export class MapCoordinatesPage {
     });
     this.map.setMyLocationEnabled(true);
     this.map.setMyLocationButtonEnabled(true);
-    this.events.subscribe('home-willenter', () => {});
-    this.events.subscribe('map-whereispin', () => {});
+    this.events.subscribe('home-willenter', () => { });
+    this.events.subscribe('map-whereispin', () => { });
     timer(100).subscribe(() => {
       let position: LatLng = new LatLng(this.startPos.lat, this.startPos.lng);
       if (!(Math.abs(position.lat) > 0.1 && Math.abs(position.lng) > 0.1)) {
