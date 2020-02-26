@@ -50,7 +50,6 @@ export class CensusPage {
 
     private siteNumberOriginal = '';
     private eventNeedMapHandler = (pos) => {
-        console.log('census - map-needmap', pos);
         this.showLeavingAlertMessage = false;
         this.navCtrl.push('mcp', pos);
       }

@@ -62,3 +62,14 @@ ion-app.platform-ios12 ion-content {
 .ion-md-close {
     name: '';
 }
+
+// title
+.toolbar-title-md {
+	padding: 0 12px;
+	font-size: 1.8rem;
+	font-weight: 400;
+}
+
+.row[justify-content-end] {
+	padding-top: 0.2rem;
+}

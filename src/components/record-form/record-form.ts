@@ -146,8 +146,6 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     private mapReturnedCoordinates(rv) {
-      console.log(this);
-      console.log(rv);
       const valuesToPatch = {};
       if (this.form.contains('Latitude')) {
         valuesToPatch['Latitude'] = rv.lat.toFixed(6);
@@ -170,7 +168,6 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     public async updateLocationViaMap() {
-      console.log('udm', this.form);
       let l: ILatLng = null;
 
       if (this.form.value['Latitude'] && this.form.value['Longitude']) {
@@ -179,7 +176,6 @@ export class RecordFormComponent implements OnDestroy {
           lng: this.form.value['Longitude']
         };
       }
-      console.log('updatemap', l);
 
       this.events.subscribe('map-returnCoordinates', (x) => {
         this.mapReturnedCoordinates(x);
@@ -325,7 +321,6 @@ export class RecordFormComponent implements OnDestroy {
   }
 
     private initialiseDefaults() {
-      console.log('recform', 'init defaults!');
         if (this._dateFieldKey) {
             // moment().format() will return the current date/time in local timezone
             this.form.controls[this._dateFieldKey].setValue(moment().format());

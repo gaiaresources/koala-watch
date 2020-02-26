@@ -26,13 +26,13 @@
             <ion-item-divider color="secondary">
                 <fa-icon icon="location-arrow"></fa-icon>&nbsp;
                 Location (Current Accuracy: {{lastLocation && lastLocation.coords ? ((lastLocation.coords.accuracy | number: '1.0-0') || 'Waiting for Reading...') : 'Waiting for Reading...'}})
-                <br/>
+                <br/><br/>
                 <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationViaMap()" class="item-divider-button-map">
-                    Get Location From Map
+                  <ion-icon name="pin"></ion-icon>&nbsp; Map
                 </button>
 
                 <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
-                    Get Current Location
+                  <ion-icon name="locate"></ion-icon>&nbsp; GPS
                 </button>
 
             </ion-item-divider>
