@@ -80,22 +80,26 @@ export class ObservationPage {
             record => {
               if (record) {
                 this.record = record;
+                this.recordForm.initialiseDefaultValues = true;
+                this.recordForm.setupForm(this.dataset);
+
                 this.recordForm.value = record.data;
+
                 this.recordForm.validate();
                 this.photoGallery.PhotoIds = record.photoIds;
                 this.readonly = !!record.id || this.navParams.get('readonly');
 
-                this.storageService.getRecord(this.parentId).subscribe(
-                  parentRecord => {
-                    if (parentRecord) {
-                      if (parentRecord.data['SiteNo'] !== record.data['SiteNo']) {
-                        // changed
-                        record.data['SiteNo'] = parentRecord.data['SiteNo'];
-                        this.recordForm.value['SiteNo'] = record.data['SiteNo'];
-                        this.save(true);
+                  this.storageService.getRecord(this.parentId).subscribe(
+                    parentRecord => {
+                      if (parentRecord) {
+                        if (parentRecord.data['SiteNo'] !== record.data['SiteNo']) {
+                          // changed
+                          record.data['SiteNo'] = parentRecord.data['SiteNo'];
+                          this.recordForm.value['SiteNo'] = record.data['SiteNo'];
+                          this.save(true);
+                        }
                       }
-                    }
-                  });
+                    });
               }
             });
         } else if (this.parentId) {
