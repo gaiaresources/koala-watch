@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { AlertController, Events, ModalController, NavController } from 'ionic-angular';
+import { AlertController, Events, NavController } from 'ionic-angular';
 
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
@@ -14,7 +14,6 @@ import { StorageService } from '../../shared/services/storage.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
 import { UPDATE_BUTTON_NAME, DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
-import { MapCoordinatesPage } from '../../pages/map-coordinates/map-coordinates';
 import { ILatLng } from '@ionic-native/google-maps';
 
 /**
@@ -82,7 +81,7 @@ export class RecordFormComponent implements OnDestroy {
             this.form.patchValue(value);
         } else {
             this.delayedSetValues = !this.delayedSetValues ? value : Object.assign(this.delayedSetValues, value);
-        }
+          }
     }
 
     constructor(private schemaService: SchemaService,
@@ -99,7 +98,7 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    private setupForm(dataset: Dataset) {
+    public setupForm(dataset: Dataset) {
       if (!this.initialiseDefaultValues) {
         return;
       }
@@ -220,7 +219,7 @@ export class RecordFormComponent implements OnDestroy {
 
     public validate() {
         // need to show validation errors where appropriate for incomplete record
-        if (this.form.invalid) {
+        if (this.form?.invalid) {
             Object.keys(this.form.controls).forEach((fieldName: string) =>
                 this.form.get(fieldName).markAsDirty());
         }
@@ -336,7 +335,11 @@ export class RecordFormComponent implements OnDestroy {
         // integer fields using numpad must have values of null (rather than empty string) to show the placeholder
         for (const fieldType of ['locationFields', 'requiredFields', 'optionalFields']) {
             this.formDescriptor[fieldType].filter((field: FieldDescriptor) => field.type === 'integer').map(
-                (field: FieldDescriptor) => this.form.controls[field.key].setValue(null)
+                (field: FieldDescriptor) => {
+                  if (this.form.controls[field.key].value === '') {
+                    this.form.controls[field.key].setValue(null);
+                  }
+                }
             );
         }
 
