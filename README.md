@@ -7,7 +7,7 @@ Koala survey collection mobile-app based on Ionic Framework / Angular.
 Install the Ionic and Cordova CLI (note: you may need to have root access for this):
 
 ```bash
-npm install -g ionic cordova
+npm install -g ionic cordova cross-env
 ```
 
 This project contains submodules. To clone both the project and submodules, use:
@@ -26,8 +26,16 @@ npm install
 
 To run the app in a browser, within the project directory use:
 
+envs are prod or uat
+
 ```bash
-ionic serve
+cross-env ENV='uat' ionic serve
+```
+
+### Build
+envs are prod or uat
+```bash
+cross-env ENV='prod' ionic cordova build android 
 ```
 
 ### Apple App Store
