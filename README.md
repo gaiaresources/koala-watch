@@ -70,7 +70,7 @@ Log into the Apple Developer Portal and create a Distribution provisioning profi
 
 * https://developer.apple.com/account/#/overview/
 * Select application id Koala Watch
-* au.com.gaiaresources.koalawatch
+* au.gov.nsw.dpie.koalawatch
 * Type is iOS Distribution
 * Seletc App Store
 * Select certificate Gaia Resources (iOS Distribution)

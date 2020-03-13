@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="19" id="au.com.gaiaresources.koalawatch" version="0.0.18" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="25" id="au.gov.nsw.dpie.koalawatch" version="0.0.18" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>I Spy Koala</name>
     <description>App for surveying koala populations</description>
     <author email="devs@gaiaresources.com.au" href="https://www.gaiaresources.com.au">Gaia Resources</author>
@@ -11,6 +11,8 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
+    <preference name="GOOGLE_MAPS_IOS_API_KEY" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
