@@ -1,0 +1,41 @@
+
+
+desc 'test lane'
+lane :test do
+  print "TEST SUCCESSFUL!"
+end
+
+platform :ios do
+
+desc 'Build debug iOS application.'
+ lane :build do
+     ionic(
+       platform: 'ios',
+       prod: true,
+       release: false,
+       type: 'development'
+     )
+ end
+ 
+desc 'Build release iOS application.'
+ lane :beta do
+     ionic(
+       platform: 'ios',
+       prod: true,
+       release: true
+     )
+ end
+
+end
+
+platform :android do
+
+ desc 'Build the Android application.'
+ lane :build do
+ end
+
+ desc 'Ship to Playstore Alpha track.'
+ lane :alpha do
+ end
+
+end
