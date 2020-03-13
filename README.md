@@ -33,6 +33,9 @@ sudo apt install gradle
 
 
 cross-env ENV='uat' ionic serve
+
+android:
+cross-env ENV='uat' ionic cordova run android 
 ```
 
 ### Build

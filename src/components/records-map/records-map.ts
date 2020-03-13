@@ -1,7 +1,7 @@
-import { GoogleMap, GoogleMaps, LatLng, } from '@ionic-native/google-maps';
-import { Component, Input, OnInit } from '@angular/core/';
+import { GoogleMap, GoogleMaps, LatLng } from '@ionic-native/google-maps';
+import { Component, Input } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { Events, NavParams } from 'ionic-angular';
+import { Events, NavParams, Platform } from 'ionic-angular';
 import { timer } from 'rxjs/observable/timer';
 import { isDatasetCensus } from '../../shared/utils/functions';
 import * as moment from 'moment/moment';
@@ -10,7 +10,7 @@ import * as moment from 'moment/moment';
     selector: 'records-map',
     templateUrl: 'records-map.html'
 })
-export class RecordsMapComponent implements OnInit {
+export class RecordsMapComponent {
     @Input()
     public set records(records: ClientRecord[]) {
         this._records = records;
@@ -20,10 +20,17 @@ export class RecordsMapComponent implements OnInit {
     private _records: ClientRecord[];
 
     constructor(private navParams: NavParams,
-                private events: Events) {
+                private events: Events,
+                private platform: Platform) {
     }
 
-    ngOnInit(): void {
+    ionViewDidLoad() {
+        this.platform.ready().then(() => {
+            this.loadMap();
+        });
+    }
+
+    loadMap(): void {
         this.map = GoogleMaps.create('map');
         this.map.setOptions({
             'backgroundColor': 'white',
