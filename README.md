@@ -29,6 +29,9 @@ To run the app in a browser, within the project directory use:
 envs are prod or uat
 
 ```bash
+sudo apt install gradle
+
+
 cross-env ENV='uat' ionic serve
 ```
 
