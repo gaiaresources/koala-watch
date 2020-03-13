@@ -1,176 +1,183 @@
 <div *ngIf="form && formDescriptor">
-    <form [formGroup]="form">
-        <ion-item-group *ngIf="formDescriptor.dateFields && formDescriptor.dateFields.length">
-            <ion-item-divider color="secondary">
-                <fa-icon [icon]="['far', 'calendar']"></fa-icon>&nbsp;
-                Dates
-            </ion-item-divider>
-            <ion-item *ngFor="let field of formDescriptor.dateFields">
-                <ion-label
-                    color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                    stacked>
-                    {{ field.label }}
-                    <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                        ({{ getFieldError(field) }})
-                    </span>
-                </ion-label>
-                <ion-datetime [max]="currentDate | date:'yyyy-MM-dd'"
-                              [formControlName]="field.key"
-                              [displayFormat]="field.format | pyDateFormatToIonicDateFormat"
-                              [disabled]="readonly">
-                </ion-datetime>
-            </ion-item>
-        </ion-item-group>
-        <ion-item-group *ngIf="formDescriptor.locationFields && formDescriptor.locationFields.length">
-            <ion-item-divider color="secondary">
-                <fa-icon icon="location-arrow"></fa-icon>&nbsp;
-                Location (Current Accuracy: {{lastLocation && lastLocation.coords ? ((lastLocation.coords.accuracy | number: '1.0-0') || 'Waiting for Reading...') : 'Waiting for Reading...'}})
-                <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
-                    {{UPDATE_BUTTON_NAME}}
-                </button>
-            </ion-item-divider>
-            <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
-                <ion-label
-                    color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                    stacked>
-                    {{ field.label }}
-                    <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                        ({{ getFieldError(field) }})
-                    </span>
-                </ion-label>
+  <form [formGroup]="form">
+      <ion-item-group *ngIf="formDescriptor.dateFields && formDescriptor.dateFields.length">
+          <ion-item-divider color="secondary">
+              <fa-icon [icon]="['far', 'calendar']"></fa-icon>&nbsp;
+              Dates
+          </ion-item-divider>
+          <ion-item *ngFor="let field of formDescriptor.dateFields">
+              <ion-label
+                  color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
+                  stacked>
+                  {{ field.label }}
+                  <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
+                      ({{ getFieldError(field) }})
+                  </span>
+              </ion-label>
+              <ion-datetime [max]="currentDate | date:'yyyy-MM-dd'"
+                            [formControlName]="field.key"
+                            [displayFormat]="field.format | pyDateFormatToIonicDateFormat"
+                            [disabled]="readonly">
+              </ion-datetime>
+          </ion-item>
+      </ion-item-group>
 
-                <ion-input *ngSwitchCase="'integer'"
-                           [formControlName]="field.key"
-                           mbsc-numpad-decimal
-                           [mbsc-options]="getNumpadOptions(field)"
-                           [readonly]="readonly"
-                           [disabled]="readonly"
-                           [placeholder]="field.description || ''">
-                </ion-input>
+      <ion-item-group *ngIf="formDescriptor.locationFields && formDescriptor.locationFields.length">
+          <ion-item-divider color="secondary">
+              <fa-icon icon="location-arrow"></fa-icon>&nbsp;
+              Location (Current Accuracy: {{lastLocation && lastLocation.coords ? ((lastLocation.coords.accuracy | number: '1.0-0') || 'Waiting for Reading...') : 'Waiting for Reading...'}})
+              <br/>
+              <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationViaMap()" class="item-divider-button-map">
+                  Get Location From Map
+              </button>
 
-                <ion-input *ngSwitchCase="'number'"
-                           [formControlName]="field.key"
-                           mbsc-numpad-decimal
-                           [mbsc-options]="getNumpadCoordinateOptions(field)"
-                           [readonly]="readonly"
-                           [disabled]="readonly">
-                </ion-input>
+              <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
+                  Get Current Location
+              </button>
 
-                <ion-input *ngSwitchDefault
-                           [type]="field.type"
-                           [formControlName]="field.key"
-                           [readonly]="readonly"
-                           [disabled]="readonly">
-                </ion-input>
-            </ion-item>
-        </ion-item-group>
-        <ion-item-group *ngIf="formDescriptor.requiredFields && formDescriptor.requiredFields.length">
-            <ion-item-divider color="secondary">
-                <fa-icon icon="star"></fa-icon>&nbsp;
-                Required fields
-            </ion-item-divider>
-            <ion-item *ngFor="let field of formDescriptor.requiredFields" [ngSwitch]="field.type">
-                <ion-label
-                        color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                        stacked>
-                    <span *ngIf="!(form.controls[field.key].errors && form.controls[field.key].dirty)">
-                        {{ field.label }}
-                    </span>
-                    <span style="color: #f53d3d" *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                        {{ field.label }}
-                    </span>
-                    <span style="color: #f53d3d" *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                        ({{ getFieldError(field) }})
-                    </span>
-                </ion-label>
+          </ion-item-divider>
+          <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
+              <ion-label
+                  color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
+                  stacked>
+                  {{ field.label }}
+                  <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
+                      ({{ getFieldError(field) }})
+                  </span>
+              </ion-label>
 
-                <ion-input *ngSwitchCase="'select'"
-                           [formControlName]="field.key" mbsc-select
-                           [mbsc-data]="field.options"
-                           [mbsc-options]="getSelectOptions(field)"
-                           [disabled]="readonly"
-                           [readonly]="readonly"
-                           (onItemTap)="onItemSelected($event)"
-                           [placeholder]="field.description || ''">
-                </ion-input>
+              <ion-input *ngSwitchCase="'integer'"
+                         [formControlName]="field.key"
+                         mbsc-numpad-decimal
+                         [mbsc-options]="getNumpadOptions(field)"
+                         [readonly]="readonly"
+                         [disabled]="readonly"
+                         [placeholder]="field.description || ''">
+              </ion-input>
 
-                <ion-datetime *ngSwitchCase="'datetime'"
-                              [disabled]="readonly"
-                              [formControlName]="field.key"></ion-datetime>
+              <ion-input *ngSwitchCase="'number'"
+                         [formControlName]="field.key"
+                         mbsc-numpad-decimal
+                         [mbsc-options]="getNumpadCoordinateOptions(field)"
+                         [readonly]="readonly"
+                         [disabled]="readonly">
+              </ion-input>
 
-                <ion-input *ngSwitchCase="'integer'"
-                           [formControlName]="field.key"
-                           mbsc-numpad-decimal
-                           [mbsc-options]="getNumpadOptions(field)"
-                           [disabled]="readonly"
-                           [readonly]="readonly"
-                           [placeholder]="field.description || ''">
-                </ion-input>
+              <ion-input *ngSwitchDefault
+                         [type]="field.type"
+                         [formControlName]="field.key"
+                         [readonly]="readonly"
+                         [disabled]="readonly">
+              </ion-input>
+          </ion-item>
+      </ion-item-group>
+      <ion-item-group *ngIf="formDescriptor.requiredFields && formDescriptor.requiredFields.length">
+          <ion-item-divider color="secondary">
+              <fa-icon icon="star"></fa-icon>&nbsp;
+              Required fields
+          </ion-item-divider>
+          <ion-item *ngFor="let field of formDescriptor.requiredFields" [ngSwitch]="field.type">
+              <ion-label
+                      color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
+                      stacked>
+                  <span *ngIf="!(form.controls[field.key].errors && form.controls[field.key].dirty)">
+                      {{ field.label }}
+                  </span>
+                  <span style="color: #f53d3d" *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
+                      {{ field.label }}
+                  </span>
+                  <span style="color: #f53d3d" *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
+                      ({{ getFieldError(field) }})
+                  </span>
+              </ion-label>
 
-                <ion-input
-                        (ionChange)="ionChange($event, field.key)"
-                        [maxlength]="inputMaxLength(field.key)"
-                        [placeholder]="field.description || ''"
-                        [formControlName]="field.key"
-                        [disabled]="isFieldReadOnly(field.key) || readonly"
-                        [readonly]="readonly"
-                    *ngSwitchDefault [type]="field.type">
-                </ion-input>
-            </ion-item>
-        </ion-item-group>
-        <ion-item-group *ngIf="formDescriptor.optionalFields && formDescriptor.optionalFields.length">
-            <ion-item-divider color="secondary">
-                <fa-icon [icon]="['far', 'star']"></fa-icon>&nbsp;
-                Optional fields
-            </ion-item-divider>
-            <ion-item *ngFor="let field of formDescriptor.optionalFields" [ngSwitch]="field.type">
-                <ion-label
-                    color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-                    stacked>
-                    {{ field.label }}
-                    <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                        ({{ getFieldError(field) }})
-                    </span>
-                </ion-label>
+              <ion-input *ngSwitchCase="'select'"
+                         [formControlName]="field.key" mbsc-select
+                         [mbsc-data]="field.options"
+                         [mbsc-options]="getSelectOptions(field)"
+                         [disabled]="readonly"
+                         [readonly]="readonly"
+                         (onItemTap)="onItemSelected($event)"
+                         [placeholder]="field.description || ''">
+              </ion-input>
 
-                <ion-input *ngSwitchCase="'select'"
-                           [formControlName]="field.key"
-                           mbsc-select [mbsc-data]="field.options"
-                           [mbsc-options]="getSelectOptions(field)"
-                           [disabled]="readonly"
-                           [readonly]="readonly"
-                           (onItemTap)="onItemSelected($event)"
-                           [placeholder]="field.description || ''">
-                </ion-input>
+              <ion-datetime *ngSwitchCase="'datetime'"
+                            [disabled]="readonly"
+                            [formControlName]="field.key"></ion-datetime>
 
-                <ion-datetime *ngSwitchCase="'datetime'"
-                              [formControlName]="field.key"
-                              [disabled]="readonly">
-                </ion-datetime>
+              <ion-input *ngSwitchCase="'integer'"
+                         [formControlName]="field.key"
+                         mbsc-numpad-decimal
+                         [mbsc-options]="getNumpadOptions(field)"
+                         [disabled]="readonly"
+                         [readonly]="readonly"
+                         [placeholder]="field.description || ''">
+              </ion-input>
 
-                <ion-input *ngSwitchCase="'integer'"
-                           [formControlName]="field.key"
-                           mbsc-numpad-decimal
-                           [mbsc-options]="getNumpadOptions(field)"
-                           [disabled]="readonly"
-                           [readonly]="readonly"
-                           [placeholder]="field.description || ''">
-                </ion-input>
+              <ion-input
+                      (ionChange)="ionChange($event, field.key)"
+                      [maxlength]="inputMaxLength(field.key)"
+                      [placeholder]="field.description || ''"
+                      [formControlName]="field.key"
+                      [disabled]="isFieldReadOnly(field.key) || readonly"
+                      [readonly]="readonly"
+                  *ngSwitchDefault [type]="field.type">
+              </ion-input>
+          </ion-item>
+      </ion-item-group>
+      <ion-item-group *ngIf="formDescriptor.optionalFields && formDescriptor.optionalFields.length">
+          <ion-item-divider color="secondary">
+              <fa-icon [icon]="['far', 'star']"></fa-icon>&nbsp;
+              Optional fields
+          </ion-item-divider>
+          <ion-item *ngFor="let field of formDescriptor.optionalFields" [ngSwitch]="field.type">
+              <ion-label
+                  color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
+                  stacked>
+                  {{ field.label }}
+                  <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
+                      ({{ getFieldError(field) }})
+                  </span>
+              </ion-label>
 
-                <ion-input [placeholder]="field.description || ''"
-                           [formControlName]="field.key"
-                           [disabled]="readonly"
-                           [readonly]="readonly"
-                           *ngSwitchDefault [type]="field.type">
-                </ion-input>
-            </ion-item>
-        </ion-item-group>
-        <ion-input
-               *ngFor="let field of formDescriptor.hiddenFields"
-               [type]="field.type"
-               [disabled]="readonly"
-               [readonly]="readonly"
-               [formControlName]="field.key">
-        </ion-input>
-    </form>
+              <ion-input *ngSwitchCase="'select'"
+                         [formControlName]="field.key"
+                         mbsc-select [mbsc-data]="field.options"
+                         [mbsc-options]="getSelectOptions(field)"
+                         [disabled]="readonly"
+                         [readonly]="readonly"
+                         (onItemTap)="onItemSelected($event)"
+                         [placeholder]="field.description || ''">
+              </ion-input>
+
+              <ion-datetime *ngSwitchCase="'datetime'"
+                            [formControlName]="field.key"
+                            [disabled]="readonly">
+              </ion-datetime>
+
+              <ion-input *ngSwitchCase="'integer'"
+                         [formControlName]="field.key"
+                         mbsc-numpad-decimal
+                         [mbsc-options]="getNumpadOptions(field)"
+                         [disabled]="readonly"
+                         [readonly]="readonly"
+                         [placeholder]="field.description || ''">
+              </ion-input>
+
+              <ion-input [placeholder]="field.description || ''"
+                         [formControlName]="field.key"
+                         [disabled]="readonly"
+                         [readonly]="readonly"
+                         *ngSwitchDefault [type]="field.type">
+              </ion-input>
+          </ion-item>
+      </ion-item-group>
+      <ion-input
+             *ngFor="let field of formDescriptor.hiddenFields"
+             [type]="field.type"
+             [disabled]="readonly"
+             [readonly]="readonly"
+             [formControlName]="field.key">
+      </ion-input>
+  </form>
 </div>

@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { MapCoordinatesPageModule } from '../pages/map-coordinates/map-coordinates.module';
 
 import { AppComponent } from './app.component';
 
@@ -38,7 +39,8 @@ import { faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } 
         }),
         IonicStorageModule.forRoot(),
         ComponentsModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        MapCoordinatesPageModule
     ],
     bootstrap: [IonicApp],
     providers: [

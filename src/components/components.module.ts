@@ -13,6 +13,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faStar as farStar, faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as fasStar, faLocationArrow } from '@fortawesome/free-solid-svg-icons';
+import { MapCoordinatesPageModule } from '../pages/map-coordinates/map-coordinates.module';
+
 @NgModule({
     declarations: [
         RecordsListComponent,
@@ -24,7 +26,8 @@ import { faStar as fasStar, faLocationArrow } from '@fortawesome/free-solid-svg-
         IonicModule,
         MbscModule,
         SharedModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        MapCoordinatesPageModule
     ],
     entryComponents: [
         RecordsListComponent,
