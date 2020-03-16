@@ -166,7 +166,6 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     public async updateLocationViaMap() {
-        console.log('udm', this.form);
         let l: ILatLng = null;
 
         if (this.form.value['Latitude'] && this.form.value['Longitude']) {
@@ -175,7 +174,6 @@ export class RecordFormComponent implements OnDestroy {
                 lng: this.form.value['Longitude']
             };
         }
-        console.log('updatemap', l);
 
         this.events.subscribe('map-returnCoordinates', (x) => {
             this.mapReturnedCoordinates(x);

@@ -1,4 +1,4 @@
-import { GoogleMap, GoogleMaps, LatLng } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, LatLng, Marker } from '@ionic-native/google-maps';
 import { Component, Input } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavParams, Platform } from 'ionic-angular';
@@ -18,6 +18,7 @@ export class RecordsMapComponent {
 
     private map: GoogleMap;
     private _records: ClientRecord[];
+    private dragMarker: Marker;
 
     constructor(private navParams: NavParams,
                 private events: Events,
@@ -58,10 +59,16 @@ export class RecordsMapComponent {
             this.records = this.navParams.get('data');
         }
         this.events.subscribe('home-willenter', () => this.ionViewWillEnter());
+        this.events.subscribe('map-whereispin', () => this.dragMarkerLocation());
     }
 
     public ionViewWillEnter() {
         timer(500).subscribe(() => this.loadMarkers());
+    }
+
+    private dragMarkerLocation() {
+      console.log('PositionMap', this.dragMarker.getPosition())
+      this.events.publish('map-specifiedcoordinates', this.dragMarker.getPosition());
     }
 
     private loadMarkers() {
