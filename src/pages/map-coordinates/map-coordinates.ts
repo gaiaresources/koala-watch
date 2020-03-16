@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Events, IonicPage, NavController, NavParams } from 'ionic-angular';
-import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker } from '@ionic-native/google-maps';
+import { Component } from '@angular/core';
+import { Events, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker, GoogleMapOptions } from '@ionic-native/google-maps';
 import { timer } from '../../../node_modules/rxjs/observable/timer';
 
 /**
@@ -18,24 +18,28 @@ import { timer } from '../../../node_modules/rxjs/observable/timer';
   selector: 'page-map-coordinates',
   templateUrl: 'map-coordinates.html',
 })
-export class MapCoordinatesPage implements OnInit {
+export class MapCoordinatesPage {
   private map: GoogleMap;
   private dragMarker: Marker;
   private startPos: ILatLng;
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              private events: Events) {
+    public navParams: NavParams,
+    private events: Events,
+    private platform: Platform) {
     this.startPos = this.navParams.data;
-    console.log('navpar', this.navParams);
-    console.log('startpos', this.startPos);
     return;
   }
 
   ionViewDidLoad() {
+    this.platform.ready().then(() => {
+      this.loadMap();
+    });
+
   }
 
-  ngOnInit(): void {
+
+  loadMap(): void {
     this.map = GoogleMaps.create('map-getpin');
     this.map.setOptions({
       'backgroundColor': 'white',
@@ -59,14 +63,13 @@ export class MapCoordinatesPage implements OnInit {
     });
     this.map.setMyLocationEnabled(true);
     this.map.setMyLocationButtonEnabled(true);
-    this.events.subscribe('home-willenter', () => {});
-    this.events.subscribe('map-whereispin', () => {});
+    this.events.subscribe('home-willenter', () => { });
+    this.events.subscribe('map-whereispin', () => { });
     timer(100).subscribe(() => {
       let position: LatLng = new LatLng(this.startPos.lat, this.startPos.lng);
       if (!(Math.abs(position.lat) > 0.1 && Math.abs(position.lng) > 0.1)) {
         position = new LatLng(-33.0, 146.012);
       }
-      console.log('pos', position);
       const options = {
         snippet: 'Move this pin to the koala sighting location',
         title: 'Move this pin to the koala sighting location',
