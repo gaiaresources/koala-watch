@@ -23,19 +23,20 @@
       </ion-item-group>
 
       <ion-item-group *ngIf="formDescriptor.locationFields && formDescriptor.locationFields.length">
-          <ion-item-divider color="secondary">
-              <fa-icon icon="location-arrow"></fa-icon>&nbsp;
-              Location (Current Accuracy: {{lastLocation && lastLocation.coords ? ((lastLocation.coords.accuracy | number: '1.0-0') || 'Waiting for Reading...') : 'Waiting for Reading...'}})
-              <br/>
-              <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationViaMap()" class="item-divider-button-map">
-                  Get Location From Map
-              </button>
+        <ion-item-divider color="secondary">
+          <fa-icon icon="location-arrow"></fa-icon>&nbsp;
+          Location (Current Accuracy: {{lastLocation && lastLocation.coords ? ((lastLocation.coords.accuracy | number: '1.0-0') || 'Waiting for Reading...') : 'Waiting for Reading...'}})
+          <br/>
+          <br/><br/>
+          <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationViaMap()" class="item-divider-button-map">
+            <ion-icon name="pin"></ion-icon>&nbsp; Map
+          </button>
 
-              <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
-                  Get Current Location
-              </button>
+          <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
+            <ion-icon name="locate"></ion-icon>&nbsp; GPS
+          </button>
 
-          </ion-item-divider>
+      </ion-item-divider>
           <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
               <ion-label
                   color="{{ form.controls[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
