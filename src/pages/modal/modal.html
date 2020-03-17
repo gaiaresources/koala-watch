@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-      <ion-title>ModalPage</ion-title>
+      <ion-title>Map Coordinates</ion-title>
       <ion-buttons end>
       <button ion-button (click)="closeModal()">Close</button>
       </ion-buttons>
@@ -17,5 +17,7 @@
 
 
   <ion-content padding>
+    <div class="map-getpin" id="map-getpin"></div>
+    <button ion-button id="use" (click)="useClicked()">Use this location</button>
 
   </ion-content>
