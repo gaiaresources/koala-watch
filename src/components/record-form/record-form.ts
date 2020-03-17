@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { AlertController, Events, ModalController, NavController } from 'ionic-angular';
+import { AlertController, Events, ModalController, NavController} from 'ionic-angular';
 
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
@@ -85,12 +85,21 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
+    public openModal(){
+      let data = { message : 'hello world' };
+      let modalPage = this.modalCtrl.create('ModalPage',data);
+      modalPage.present();
+    }
+
     constructor(private schemaService: SchemaService,
         private storageService: StorageService,
         private authService: AuthService,
         private geolocation: Geolocation,
         private alertCtrl: AlertController,
-        private events: Events, public navCtrl: NavController) {
+        private events: Events,
+        public modalCtrl: ModalController,
+        public navCtrl: NavController
+        ) {
     }
 
     ngOnDestroy() {
@@ -143,7 +152,12 @@ export class RecordFormComponent implements OnDestroy {
 
     private mapReturnedCoordinates(rv) {
         console.log(this);
-        console.log(rv);
+        console.log("sdad", rv);
+
+        if (!rv) {
+          return;
+        }
+
         const valuesToPatch = {};
         if (this.form.contains('Latitude')) {
             valuesToPatch['Latitude'] = rv.lat.toFixed(6);
@@ -161,6 +175,8 @@ export class RecordFormComponent implements OnDestroy {
             valuesToPatch['Altitude'] = 0;
         }
 
+        console.log()
+
         this.form.patchValue(valuesToPatch);
         this.events.unsubscribe('map-returnCoordinates', this.mapReturnedCoordinates);
     }
@@ -174,6 +190,8 @@ export class RecordFormComponent implements OnDestroy {
                 lng: this.form.value['Longitude']
             };
         }
+
+        console.log("l", l)
 
         this.events.subscribe('map-returnCoordinates', (x) => {
             this.mapReturnedCoordinates(x);

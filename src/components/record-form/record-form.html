@@ -28,7 +28,7 @@
           Location (Current Accuracy: {{lastLocation && lastLocation.coords ? ((lastLocation.coords.accuracy | number: '1.0-0') || 'Waiting for Reading...') : 'Waiting for Reading...'}})
           <br/>
           <br/><br/>
-          <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationViaMap()" class="item-divider-button-map">
+          <button *ngIf="!readonly" ion-button color="primary" (click)="openModal()" class="item-divider-button-map">
             <ion-icon name="pin"></ion-icon>&nbsp; Map
           </button>
 
