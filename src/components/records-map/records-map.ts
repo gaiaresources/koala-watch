@@ -25,11 +25,28 @@ export class RecordsMapComponent {
                 private platform: Platform) {
     }
 
-    ionViewDidLoad() {
-        this.platform.ready().then(() => {
-            this.loadMap();
-        });
+    ionViewDidEnter() {
+      this.platform.ready().then(() => {
+        this.loadMap();
+      });
     }
+
+    ionViewDidLeave() {
+      if (this.map){
+        this.map.remove();
+
+        this.cleanup();
+      }
+    }
+
+    private cleanup() {
+      const nodeList = document.querySelectorAll('._gmaps_cdv_');
+
+      for (let k = 0; k < nodeList.length; ++k) {
+          nodeList.item(k).classList.remove('_gmaps_cdv_');
+      }
+    }
+
 
     loadMap(): void {
         this.map = GoogleMaps.create('map');
