@@ -1,43 +1,38 @@
 import { Component } from '@angular/core';
-import { Events, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform, Events } from 'ionic-angular';
 import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker, GoogleMapOptions } from '@ionic-native/google-maps';
-import { timer } from '../../../node_modules/rxjs/observable/timer';
+import { timer } from 'rxjs/observable/timer';
 
 /**
- * Generated class for the MapCoordinatesPage page.
+ * Generated class for the MapPinModalPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-  name: 'mcp',
-  segment: 'mcp'
-})
+@IonicPage()
 @Component({
-  selector: 'page-map-coordinates',
-  templateUrl: 'map-coordinates.html',
+  selector: 'page-modal',
+  templateUrl: 'map-pin-modal.html',
 })
-export class MapCoordinatesPage {
+export class MapPinModalPage {
   private map: GoogleMap;
   private dragMarker: Marker;
   private startPos: ILatLng;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    public viewCtrl: ViewController,
     private events: Events,
     private platform: Platform) {
-    this.startPos = this.navParams.data;
-    return;
+      this.startPos = this.navParams.data;
   }
 
   ionViewDidLoad() {
     this.platform.ready().then(() => {
       this.loadMap();
     });
-
   }
-
 
   loadMap(): void {
     this.map = GoogleMaps.create('map-getpin');
@@ -82,7 +77,22 @@ export class MapCoordinatesPage {
 
   useClicked() {
     this.events.publish('map-returnCoordinates', this.dragMarker.getPosition());
-    this.navCtrl.pop();
-    return;
+
+    this.closeModal();
   }
+
+  // hack required to remove maps background
+  private cleanup() {
+    const nodeList = document.querySelectorAll('._gmaps_cdv_');
+
+    for (let k = 0; k < nodeList.length; ++k) {
+        nodeList.item(k).classList.remove('_gmaps_cdv_');
+    }
+  }
+
+  public closeModal() {
+    this.cleanup();
+    this.viewCtrl.dismiss();
+  }
+
 }

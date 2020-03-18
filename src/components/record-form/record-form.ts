@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { AlertController, Events, ModalController, NavController } from 'ionic-angular';
+import { AlertController, Events, ModalController, NavController} from 'ionic-angular';
 
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
@@ -14,7 +14,6 @@ import { StorageService } from '../../shared/services/storage.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
 import { UPDATE_BUTTON_NAME, DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
-import { MapCoordinatesPage } from '../../pages/map-coordinates/map-coordinates';
 import { ILatLng } from '@ionic-native/google-maps';
 
 /**
@@ -85,12 +84,33 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
+    public openModal(){
+      let l: ILatLng = null;
+
+        if (this.form.value['Latitude'] && this.form.value['Longitude']) {
+            l = {
+                lat: this.form.value['Latitude'],
+                lng: this.form.value['Longitude']
+            };
+        }
+
+      const MapPinModalPage = this.modalCtrl.create('MapPinModalPage', l);
+      MapPinModalPage.present();
+
+      this.events.subscribe('map-returnCoordinates', (x) => {
+        this.mapReturnedCoordinates(x);
+      });
+    }
+
     constructor(private schemaService: SchemaService,
         private storageService: StorageService,
         private authService: AuthService,
         private geolocation: Geolocation,
         private alertCtrl: AlertController,
-        private events: Events, public navCtrl: NavController) {
+        private events: Events,
+        public modalCtrl: ModalController,
+        public navCtrl: NavController
+        ) {
     }
 
     ngOnDestroy() {
@@ -142,8 +162,10 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     private mapReturnedCoordinates(rv) {
-        console.log(this);
-        console.log(rv);
+        if (!rv) {
+          return;
+        }
+
         const valuesToPatch = {};
         if (this.form.contains('Latitude')) {
             valuesToPatch['Latitude'] = rv.lat.toFixed(6);
@@ -160,6 +182,7 @@ export class RecordFormComponent implements OnDestroy {
         if (this.form.contains('Altitude')) {
             valuesToPatch['Altitude'] = 0;
         }
+
 
         this.form.patchValue(valuesToPatch);
         this.events.unsubscribe('map-returnCoordinates', this.mapReturnedCoordinates);
