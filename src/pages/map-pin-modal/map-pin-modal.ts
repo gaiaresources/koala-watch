@@ -4,7 +4,7 @@ import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker, GoogleMapOptions } from
 import { timer } from 'rxjs/observable/timer';
 
 /**
- * Generated class for the ModalPage page.
+ * Generated class for the MapPinModalPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -13,9 +13,9 @@ import { timer } from 'rxjs/observable/timer';
 @IonicPage()
 @Component({
   selector: 'page-modal',
-  templateUrl: 'modal.html',
+  templateUrl: 'map-pin-modal.html',
 })
-export class ModalPage {
+export class MapPinModalPage {
   private map: GoogleMap;
   private dragMarker: Marker;
   private startPos: ILatLng;

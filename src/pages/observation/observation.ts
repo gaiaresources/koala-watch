@@ -11,8 +11,6 @@ import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gall
 import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
-import { MapCoordinatesPageModule } from '../map-coordinates/map-coordinates.module';
-import { MapCoordinatesPage } from '../map-coordinates/map-coordinates';
 
 @IonicPage()
 @Component({
@@ -39,7 +37,6 @@ export class ObservationPage {
   @ViewChild('ion-navbar', { read: ElementRef }) private navBar: Navbar;
 
   private eventNeedMapHandler = (pos) => {
-      console.log('map-needmap', pos);
       this.showLeavingAlertMessage = false;
       this.navCtrl.push('mcp', pos);
     }

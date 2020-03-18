@@ -14,7 +14,6 @@ import { StorageService } from '../../shared/services/storage.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
 import { UPDATE_BUTTON_NAME, DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
-import { MapCoordinatesPage } from '../../pages/map-coordinates/map-coordinates';
 import { ILatLng } from '@ionic-native/google-maps';
 
 /**
@@ -86,9 +85,21 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     public openModal(){
-      let data = { message : 'hello world' };
-      let modalPage = this.modalCtrl.create('ModalPage',data);
-      modalPage.present();
+      let l: ILatLng = null;
+
+        if (this.form.value['Latitude'] && this.form.value['Longitude']) {
+            l = {
+                lat: this.form.value['Latitude'],
+                lng: this.form.value['Longitude']
+            };
+        }
+
+      const MapPinModalPage = this.modalCtrl.create('MapPinModalPage', l);
+      MapPinModalPage.present();
+
+      this.events.subscribe('map-returnCoordinates', (x) => {
+        this.mapReturnedCoordinates(x);
+      });
     }
 
     constructor(private schemaService: SchemaService,
@@ -151,9 +162,6 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     private mapReturnedCoordinates(rv) {
-        console.log(this);
-        console.log("sdad", rv);
-
         if (!rv) {
           return;
         }
@@ -175,7 +183,6 @@ export class RecordFormComponent implements OnDestroy {
             valuesToPatch['Altitude'] = 0;
         }
 
-        console.log()
 
         this.form.patchValue(valuesToPatch);
         this.events.unsubscribe('map-returnCoordinates', this.mapReturnedCoordinates);
@@ -190,8 +197,6 @@ export class RecordFormComponent implements OnDestroy {
                 lng: this.form.value['Longitude']
             };
         }
-
-        console.log("l", l)
 
         this.events.subscribe('map-returnCoordinates', (x) => {
             this.mapReturnedCoordinates(x);

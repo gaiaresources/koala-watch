@@ -67,7 +67,6 @@ export class RecordsMapComponent {
     }
 
     private dragMarkerLocation() {
-      console.log('PositionMap', this.dragMarker.getPosition())
       this.events.publish('map-specifiedcoordinates', this.dragMarker.getPosition());
     }
 
