@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { AlertController } from 'ionic-angular';
+import { AlertController, Events, ModalController, NavController} from 'ionic-angular';
 
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
@@ -14,6 +14,7 @@ import { StorageService } from '../../shared/services/storage.service';
 import { AuthService } from '../../biosys-core/services/auth.service';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
 import { UPDATE_BUTTON_NAME, DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
+import { ILatLng } from '@ionic-native/google-maps';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -83,11 +84,33 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
+    public openModal(){
+      let l: ILatLng = null;
+
+        if (this.form.value['Latitude'] && this.form.value['Longitude']) {
+            l = {
+                lat: this.form.value['Latitude'],
+                lng: this.form.value['Longitude']
+            };
+        }
+
+      const MapPinModalPage = this.modalCtrl.create('MapPinModalPage', l);
+      MapPinModalPage.present();
+
+      this.events.subscribe('map-returnCoordinates', (x) => {
+        this.mapReturnedCoordinates(x);
+      });
+    }
+
     constructor(private schemaService: SchemaService,
-                private storageService: StorageService,
-                private authService: AuthService,
-                private geolocation: Geolocation,
-                private alertCtrl: AlertController) {
+        private storageService: StorageService,
+        private authService: AuthService,
+        private geolocation: Geolocation,
+        private alertCtrl: AlertController,
+        private events: Events,
+        public modalCtrl: ModalController,
+        public navCtrl: NavController
+        ) {
     }
 
     ngOnDestroy() {
@@ -138,6 +161,51 @@ export class RecordFormComponent implements OnDestroy {
         });
     }
 
+    private mapReturnedCoordinates(rv) {
+        if (!rv) {
+          return;
+        }
+
+        const valuesToPatch = {};
+        if (this.form.contains('Latitude')) {
+            valuesToPatch['Latitude'] = rv.lat.toFixed(6);
+        }
+
+        if (this.form.contains('Longitude')) {
+            valuesToPatch['Longitude'] = rv.lng.toFixed(6);
+        }
+
+        if (this.form.contains('Accuracy')) {
+            valuesToPatch['Accuracy'] = 0;
+        }
+
+        if (this.form.contains('Altitude')) {
+            valuesToPatch['Altitude'] = 0;
+        }
+
+
+        this.form.patchValue(valuesToPatch);
+        this.events.unsubscribe('map-returnCoordinates', this.mapReturnedCoordinates);
+    }
+
+    public async updateLocationViaMap() {
+        let l: ILatLng = null;
+
+        if (this.form.value['Latitude'] && this.form.value['Longitude']) {
+            l = {
+                lat: this.form.value['Latitude'],
+                lng: this.form.value['Longitude']
+            };
+        }
+
+        this.events.subscribe('map-returnCoordinates', (x) => {
+            this.mapReturnedCoordinates(x);
+        });
+        this.initialiseDefaultValues = false;
+        this.events.publish('map-needmap', l);
+        return;
+    }
+
     public updateLocationFields(initialUpdate = false) {
         if (!this.lastLocation) {
             // prevent showing this popup immediately upon showing form the first time
@@ -165,7 +233,7 @@ export class RecordFormComponent implements OnDestroy {
         }
 
         if (this.form.contains('Altitude')) {
-          valuesToPatch['Altitude'] = Math.round(this.lastLocation.coords.altitude);
+            valuesToPatch['Altitude'] = Math.round(this.lastLocation.coords.altitude);
         }
 
         this.form.patchValue(valuesToPatch);
@@ -257,21 +325,21 @@ export class RecordFormComponent implements OnDestroy {
         return options;
     }
 
-  public getNumpadCoordinateOptions(fieldDescriptor: FieldDescriptor): object {
-    const options = {
-      headerText: fieldDescriptor.label,
-      theme: RecordFormComponent.SELECT_THEME,
-      buttons: ['cancel', 'clear', 'set'],
-      max: 360,
-      min: -360,
-      scale: 9,
-      thousandsSeparator: ''
-    };
+    public getNumpadCoordinateOptions(fieldDescriptor: FieldDescriptor): object {
+        const options = {
+            headerText: fieldDescriptor.label,
+            theme: RecordFormComponent.SELECT_THEME,
+            buttons: ['cancel', 'clear', 'set'],
+            max: 360,
+            min: -360,
+            scale: 9,
+            thousandsSeparator: ''
+        };
 
-    options['disabled'] = this.readonly;
+        options['disabled'] = this.readonly;
 
-    return options;
-  }
+        return options;
+    }
 
     private initialiseDefaults() {
         if (this._dateFieldKey) {
@@ -314,7 +382,7 @@ export class RecordFormComponent implements OnDestroy {
 
         for (const category of fieldCategories) {
             const categoryFields = this.formDescriptor[category];
-            const fieldIndex = categoryFields.map((fd: FieldDescriptor) => fd.key ).indexOf(fieldName);
+            const fieldIndex = categoryFields.map((fd: FieldDescriptor) => fd.key).indexOf(fieldName);
 
             if (fieldIndex > -1) {
                 const fieldDescriptor = categoryFields[fieldIndex];
@@ -328,34 +396,34 @@ export class RecordFormComponent implements OnDestroy {
 
     private isFieldReadOnly(fieldName: string) {
         return this.readonly ||
-               fieldName === 'Census ID' ||
-               fieldName === 'Observer Name' ||
-               fieldName === 'Census Observers' ||
-               (fieldName === 'SiteNo' && this.datasetName === DATASET_NAME_TREESURVEY);
+            fieldName === 'Census ID' ||
+            fieldName === 'Observer Name' ||
+            fieldName === 'Census Observers' ||
+            (fieldName === 'SiteNo' && this.datasetName === DATASET_NAME_TREESURVEY);
     }
 
     private inputMaxLength(key: string) {
-      if (key === 'SiteNo') {
-        return 40;
-      } else {
-        return 1000;
-      }
+        if (key === 'SiteNo') {
+            return 40;
+        } else {
+            return 1000;
+        }
     }
 
     private ionChange(event: Event, key: string) {
-      if (key !== 'SiteNo') {
-        return;
-      }
-      let theSite = this.form.value['SiteNo'];
-      if (theSite.length === 0) {
-        return;
-      }
-      if (!/^[0-9a-zA-Z]*$/.test(theSite)) {
-        do {
-          theSite = theSite.substring(0, theSite.length - 1);
-          this.form.controls['SiteNo'].setValue(theSite);
-        } while (!/^[0-9a-zA-Z]*$/.test(theSite));
-        return;
-      }
+        if (key !== 'SiteNo') {
+            return;
+        }
+        let theSite = this.form.value['SiteNo'];
+        if (theSite.length === 0) {
+            return;
+        }
+        if (!/^[0-9a-zA-Z]*$/.test(theSite)) {
+            do {
+                theSite = theSite.substring(0, theSite.length - 1);
+                this.form.controls['SiteNo'].setValue(theSite);
+            } while (!/^[0-9a-zA-Z]*$/.test(theSite));
+            return;
+        }
     }
 }

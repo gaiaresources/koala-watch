@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 
-import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, Events, IonicPage, Navbar, NavController, NavParams } from 'ionic-angular';
 import * as moment from 'moment/moment';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
@@ -34,8 +34,17 @@ export class ObservationPage {
   private dataset: Dataset;
   private recordClientId: string;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, private storageService: StorageService,
-              private alertController: AlertController) {
+  @ViewChild('ion-navbar', { read: ElementRef }) private navBar: Navbar;
+
+  private eventNeedMapHandler = (pos) => {
+      this.showLeavingAlertMessage = false;
+      this.navCtrl.push('mcp', pos);
+    }
+
+  constructor(private navCtrl: NavController, private navParams: NavParams,
+              private storageService: StorageService,
+              private alertController: AlertController,
+              private events: Events) {
   }
 
   public onClickedNewPhoto() {
@@ -43,6 +52,7 @@ export class ObservationPage {
   }
 
   public ionViewWillEnter() {
+    this.events.subscribe('map-needmap', this.eventNeedMapHandler);
     if (this.navParams.data.hasOwnProperty('parentId')) {
       this.parentId = this.navParams.get('parentId');
     }
@@ -98,6 +108,7 @@ export class ObservationPage {
   }
 
   public ionViewCanLeave() {
+    this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
     if (this.readonly) {
       return true;
     }
@@ -116,7 +127,10 @@ export class ObservationPage {
             }
           },
           {
-            text: 'No'
+            text: 'No',
+            handler: () => {
+              // this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
+            }
           }]
       }).present();
 

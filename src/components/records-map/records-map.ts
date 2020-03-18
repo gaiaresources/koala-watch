@@ -1,4 +1,4 @@
-import { GoogleMap, GoogleMaps, LatLng } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, LatLng, Marker } from '@ionic-native/google-maps';
 import { Component, Input } from '@angular/core/';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { Events, NavParams, Platform } from 'ionic-angular';
@@ -18,17 +18,35 @@ export class RecordsMapComponent {
 
     private map: GoogleMap;
     private _records: ClientRecord[];
+    private dragMarker: Marker;
 
     constructor(private navParams: NavParams,
                 private events: Events,
                 private platform: Platform) {
     }
 
-    ionViewDidLoad() {
-        this.platform.ready().then(() => {
-            this.loadMap();
-        });
+    ionViewDidEnter() {
+      this.platform.ready().then(() => {
+        this.loadMap();
+      });
     }
+
+    ionViewDidLeave() {
+      if (this.map){
+        this.map.remove();
+
+        this.cleanup();
+      }
+    }
+
+    private cleanup() {
+      const nodeList = document.querySelectorAll('._gmaps_cdv_');
+
+      for (let k = 0; k < nodeList.length; ++k) {
+          nodeList.item(k).classList.remove('_gmaps_cdv_');
+      }
+    }
+
 
     loadMap(): void {
         this.map = GoogleMaps.create('map');
@@ -58,10 +76,15 @@ export class RecordsMapComponent {
             this.records = this.navParams.get('data');
         }
         this.events.subscribe('home-willenter', () => this.ionViewWillEnter());
+        this.events.subscribe('map-whereispin', () => this.dragMarkerLocation());
     }
 
     public ionViewWillEnter() {
         timer(500).subscribe(() => this.loadMarkers());
+    }
+
+    private dragMarkerLocation() {
+      this.events.publish('map-specifiedcoordinates', this.dragMarker.getPosition());
     }
 
     private loadMarkers() {
