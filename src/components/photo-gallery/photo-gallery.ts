@@ -120,7 +120,6 @@ export class PhotoGalleryComponent {
                         if (this.photoIndex >= this._photoIds.length) {
                             this.photoIndex -= 1;
                         }
-
                         this.updateImage();
                     }
                 },
@@ -130,13 +129,14 @@ export class PhotoGalleryComponent {
         }).present();
     }
 
-    public onClickedNewPhoto() {
+    public onClickedNewPhoto(useCamera: boolean) {
         if (this._photoIds.length >= 10) {
             alert('Maximum number of photos reached');
             return;
         }
 
         const options: CameraOptions = {
+            sourceType: useCamera ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY,
             quality: 100,
             targetWidth: 1024,
             targetHeight: 1024,
