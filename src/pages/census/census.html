@@ -65,14 +65,19 @@
     </div>
 
     <ion-fab alt="KLM-SAT Tree Survey" aria-name="Create a tree survey" [hidden]="readonly || segmentContent != 'observations' || !observationRecords.length" bottom right>
-        <button alt="Create a Tree Survey" aria-name="Create a tree survey" ion-fab (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
-            <img alt="Create a Tree Survey" src="assets/imgs/white_tree.png">
-        </button>
-    </ion-fab>
-    <ion-fab alt="Take a photo" aria-name="Take a photo"  [hidden]="readonly || segmentContent != 'photos'" bottom right>
-        <button alt="Take a photo" aria-name="Take a photo" ion-fab (click)="onClickedNewPhoto()" class="fab-census-tree">
-            <img alt="Take a photo" class="fab-img" src="assets/imgs/fab-camera.png">
-        </button>
-    </ion-fab>
+      <button alt="Create a Tree Survey" aria-name="Create a tree survey" ion-fab (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
+          <img alt="Create a Tree Survey" src="assets/imgs/white_tree.png">
+      </button>
+  </ion-fab>
+  <ion-fab alt="Take a photo" aria-name="Take a photo"  [hidden]="readonly || segmentContent != 'photos'" bottom right>
+      <button alt="Take a photo" aria-name="Take a photo" ion-fab (click)="onClickedNewPhoto(true)" class="fab-census-tree">
+          <img alt="Take a photo" class="fab-img" src="assets/imgs/fab-camera.png">
+      </button>
+  </ion-fab>
+  <ion-fab alt="Select a photo" aria-name="Select a photo"  [hidden]="readonly || segmentContent != 'photos'" bottom right>
+      <button alt="Select a photo" aria-name="Select a photo" ion-fab (click)="onClickedNewPhoto(false)" class="fab-census-tree">
+          <img alt="Select a photo" class="fab-img" src="assets/imgs/fab-camera.png">
+      </button>
+  </ion-fab>
 
 </ion-content>

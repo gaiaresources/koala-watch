@@ -47,8 +47,8 @@ export class ObservationPage {
               private events: Events) {
   }
 
-  public onClickedNewPhoto() {
-    this.photoGallery.onClickedNewPhoto();
+  public onClickedNewPhoto(useCamera: boolean) {
+    this.photoGallery.onClickedNewPhoto(useCamera);
   }
 
   public ionViewWillEnter() {
