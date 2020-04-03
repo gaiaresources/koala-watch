@@ -9,21 +9,23 @@ platform :ios do
 
 desc 'Build debug iOS application.'
  lane :build do
-     ionic(
-       platform: 'ios',
-       prod: true,
-       release: false,
-       type: 'development'
-     )
+    ionic(
+      platform: 'ios',
+      prod: true,
+      release: false,
+      type: 'development'
+    )
+    build_app(workspace: "platforms/ios/I\ Spy\ Koala.xcworkspace", scheme: "I\ Spy\ Koala")
  end
- 
+
 desc 'Build release iOS application.'
- lane :beta do
-     ionic(
-       platform: 'ios',
-       prod: true,
-       release: true
-     )
+ lane :release do
+    ionic(
+      platform: 'ios',
+      prod: true,
+      release: true
+    )
+    build_app(workspace: "platforms/ios/I\ Spy\ Koala.xcworkspace", scheme: "I\ Spy\ Koala")
  end
 
 end
@@ -32,10 +34,21 @@ platform :android do
 
  desc 'Build the Android application.'
  lane :build do
+    ionic(
+      platform: 'android',
+      prod: true,
+      release: false,
+      type: 'development'
+    )
  end
 
  desc 'Ship to Playstore Alpha track.'
- lane :alpha do
+ lane :release do
+    ionic(
+      platform: 'ios',
+      prod: true,
+      release: true
+    )
  end
 
 end

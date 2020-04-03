@@ -29,16 +29,11 @@ test lane
 fastlane ios build
 ```
 Build debug iOS application.
-### ios beta
+### ios release
 ```
-fastlane ios beta
+fastlane ios release
 ```
 Build release iOS application.
-### ios testflight
-```
-fastlane ios testflight
-```
-Ship to Testflight.
 
 ----
 
@@ -48,9 +43,9 @@ Ship to Testflight.
 fastlane android build
 ```
 Build the Android application.
-### android alpha
+### android release
 ```
-fastlane android alpha
+fastlane android release
 ```
 Ship to Playstore Alpha track.
 
