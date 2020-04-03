@@ -41,7 +41,13 @@ cross-env ENV='uat' ionic cordova run android
 ### Build
 envs are prod or uat
 ```bash
-cross-env ENV='prod' ionic cordova build android 
+cross-env ENV='uat' ionic cordova build android 
+```
+
+OR
+
+```bash
+./android-build-uat.sh
 ```
 
 ### Apple App Store

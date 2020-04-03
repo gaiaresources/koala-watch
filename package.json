@@ -40,7 +40,7 @@
         "angular2-uuid": "latest",
         "biosys-core": "./src/biosys-core",
         "cordova": "^8.0.0",
-        "cordova-android": "^7.0.0",
+        "cordova-android": "7.1.4",
         "cordova-browser": "5.0.3",
         "cordova-common": "^3.2.1",
         "cordova-ios": "5.0.0",
