@@ -26,10 +26,6 @@ desc 'Build release iOS application.'
       release: true
     )
     build_app(workspace: "platforms/ios/I\ Spy\ Koala.xcworkspace", scheme: "I\ Spy\ Koala")
-    ENV["DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS"] = "-t Aspera"
-    upload_to_testflight(
-        skip_waiting_for_build_processing: true
-    )
  end
 
 end

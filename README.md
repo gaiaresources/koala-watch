@@ -31,6 +31,16 @@ sudo apt install gradle
 
 ionic serve
 ```
+### Fastlane build
+
+Fastlane enables you to build an ipa file that can get uploaded via the Application Loader.
+
+```bash
+fastlane ios release
+```
+
+This command will build the ipa file in `platforms/ios`.
+
 
 ### Apple App Store
 
