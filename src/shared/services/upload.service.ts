@@ -9,7 +9,6 @@ import { Media, Record, APIError } from '../../biosys-core/interfaces/api.interf
 import { APIService } from '../../biosys-core/services/api.service';
 
 import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
-import { ILatLng } from '@ionic-native/google-maps';
 
 @Injectable()
 export class UploadService {
@@ -18,20 +17,27 @@ export class UploadService {
 
     public uploadValidRecords(): Observable<[ClientRecord, Record]> {
         return this.storageService.getUploadableRecords().pipe(
-            mergeMap((clientRecord: ClientRecord) =>
-                this.getElevation(clientRecord).pipe(
-                    map((record: ClientRecord) => record)
-                )
-                ,
-                (clientRecord: ClientRecord, record: Record) =>
-                    [clientRecord, record] as [ClientRecord, Record]
-            ),
-            mergeMap((clientRecord: ClientRecord) =>
-                this.apiService.createRecord(clientRecord).pipe(
+            mergeMap((clientRecord: ClientRecord) => {
+                return this.getElevation(clientRecord).pipe(
+                    mergeMap((elevation: any) => {
+                        // patch altitude if available
+                        if (clientRecord?.data['Altitude'] === null || clientRecord?.data['Altitude'] === undefined) {
+                            if (elevation['results']
+                                && elevation['results'][0]
+                                && elevation['results'][0]['elevation'] !== undefined
+                                && elevation['results'][0]['elevation'] !== null) {
+                                clientRecord.data['Altitude'] = parseInt(elevation['results'][0]['elevation'], 10);
+                            }
+                        }
 
-                    mergeMap((record: Record) => this.storageService.updateRecordId(clientRecord, record.id),
-                        (record: Record, updateRecordServerIdSuccess: boolean) => record)
-                )
+
+                        return this.apiService.createRecord(clientRecord).pipe(
+                            mergeMap((record: Record) => this.storageService.updateRecordId(clientRecord, record.id),
+                                (record: Record, updateRecordServerIdSuccess: boolean) => record)
+                        );
+                    })
+                );
+            }
                 ,
                 (clientRecord: ClientRecord, record: Record) =>
                     [clientRecord, record] as [ClientRecord, Record]
@@ -53,7 +59,7 @@ export class UploadService {
         );
     }
 
-    public getElevation(record: ClientRecord): Observable<ClientRecord> {
+    public getElevation(record: ClientRecord): Observable<any> {
 
         const lat = record.data['Latitude'];
         const lng = record.data['Longitude'];
@@ -62,16 +68,7 @@ export class UploadService {
 
         const url = `https://maps.googleapis.com/maps/api/elevation/json?locations=${lat},${lng}&key=${key}`;
 
-
-        return this.httpClient.get(url).map((response: Response) => {
-            const res = response.json();
-
-            record.data['Location Description'] = 'haha testing lol';
-
-            record.data['Altitude'] = res['results'][0]['elevation'];
-
-            return record;
-        });
+        return this.httpClient.get(url);
 
     }
 
