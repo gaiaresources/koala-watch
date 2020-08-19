@@ -63,18 +63,6 @@ export class MapPinModalPage {
     // Wait the MAP_READY before using any methods.
     this.map.one(GoogleMapsEvent.MAP_READY)
       .then(() => {
-        let position: LatLng = new LatLng(this.startPos.lat, this.startPos.lng);
-        if (!(Math.abs(position.lat) > 0.1 && Math.abs(position.lng) > 0.1)) {
-          position = new LatLng(-33.0, 146.012);
-        }
-        const options = {
-          snippet: 'Move this pin to the koala sighting location',
-          title: 'Move this pin to the koala sighting location',
-          position: position,
-          draggable: true
-        };
-        this.dragMarker = this.map.addMarkerSync(options);
-
         this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
             (data) => {
               this.map.clear();
