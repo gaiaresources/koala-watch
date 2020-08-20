@@ -65,13 +65,16 @@ export class MapPinModalPage {
       .then(() => {
         this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
             (data) => {
-              this.map.clear();
-              this.dragMarker = this.map.addMarkerSync({
-                snippet: 'Move this pin to the koala sighting location',
-                title: 'Move this pin to the koala sighting location',
-                position: data[0],
-                draggable: true
-              });
+              if (!this.dragMarker) {
+                this.dragMarker = this.map.addMarkerSync({
+                  snippet: 'Move this pin to the koala sighting location',
+                  title: 'Move this pin to the koala sighting location',
+                  position: data[0],
+                  draggable: true
+                });
+              } else {
+                this.dragMarker.setPosition(data[0]);
+              }
             }
         );
       });
