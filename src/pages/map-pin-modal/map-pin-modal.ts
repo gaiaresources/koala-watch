@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, Platform, Events } from 'ionic-angular';
-import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker, GoogleMapOptions } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker, GoogleMapOptions, GoogleMapsEvent } from '@ionic-native/google-maps';
 import { timer } from 'rxjs/observable/timer';
 
 /**
@@ -60,19 +60,24 @@ export class MapPinModalPage {
     this.map.setMyLocationButtonEnabled(true);
     this.events.subscribe('home-willenter', () => { });
     this.events.subscribe('map-whereispin', () => { });
-    timer(100).subscribe(() => {
-      let position: LatLng = new LatLng(this.startPos.lat, this.startPos.lng);
-      if (!(Math.abs(position.lat) > 0.1 && Math.abs(position.lng) > 0.1)) {
-        position = new LatLng(-33.0, 146.012);
-      }
-      const options = {
-        snippet: 'Move this pin to the koala sighting location',
-        title: 'Move this pin to the koala sighting location',
-        position: position,
-        draggable: true
-      };
-      this.dragMarker = this.map.addMarkerSync(options);
-    });
+    // Wait the MAP_READY before using any methods.
+    this.map.one(GoogleMapsEvent.MAP_READY)
+      .then(() => {
+        this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
+            (data) => {
+              if (!this.dragMarker) {
+                this.dragMarker = this.map.addMarkerSync({
+                  snippet: 'Move this pin to the koala sighting location',
+                  title: 'Move this pin to the koala sighting location',
+                  position: data[0],
+                  draggable: true
+                });
+              } else {
+                this.dragMarker.setPosition(data[0]);
+              }
+            }
+        );
+      });
   }
 
   useClicked() {
