@@ -1,0 +1,82 @@
+<!--
+  Generated template for the HelpPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <fa-icon icon="bars" size="lg"></fa-icon>
+        </button>
+        <ion-title>{{APP_NAME}} Help</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="info">
+        <ion-grid class="no-grid-padding">
+            <ion-row>
+                <ion-col>
+                    <img style="float: left" src="assets/imgs/about_footer.png"/>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <h1>{{APP_NAME}} Help</h1>
+        <p>
+            To get started, go to the ‘Records’ screen and choose from the buttons
+            below to record an observation or start a census (koala survey).  An
+            observation is a one-off recording of a koala sighting at a particular
+            location. A census is a systematic survey that is generally conducted at a
+            defined survey site.  The census method recorded by this app is Scats Around
+            Trees (SAT).  ‘Trees surveyed’ are always part of the census survey and record
+            the trees that have been identified as part of the survey site.
+        <p>
+            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
+                <img class="fab-button__img" src="assets/imgs/white_eye.png" alt="Koala Opportunistic Observation">
+                <span class="fab-button__text">Record an observation</span>
+            </button>
+
+            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
+                <img class="fab-button__img" src="assets/imgs/white_trees.png" alt="Koala Census">
+                <span class="fab-button__text">Start a census</span>
+            </button>
+
+        <p>
+            Once you have recorded your data, a list of the records will be displayed here.
+            You can also switch to see the records displayed on a map view using the tab buttons above.
+            Click on a record in the list to continue editing that record.
+        </p>
+        <h2>
+            Uploading Records
+        </h2>
+        <p>
+            When one or more records have been completed, you can upload them to the server by clicking the upload
+            button. Completed records (shown in green) are those where all required fields are entered and within
+            the allowable constraints. You can still upload completed records even if some are incomplete
+            (shown in blue). Incomplete records will not be uploaded.
+        </p>
+        <button class="fab-button" (click)="uploadClicked()">
+            <img class="fab-button__img" src="assets/imgs/white_upload.png">
+            <span class="fab-button__text">Upload data</span>
+        </button>
+
+        <h1>Tree surveys</h1>
+        <p>
+            When working on a census, you can create one or more tree sightings. Select the <strong>Tree surveys list
+            </strong> tab at the top of the page and use the button below to create a new tree sighting.
+        </p>
+        <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
+            <img class="fab-button__img" src="assets/imgs/white_tree.png" alt="Koala Tree Survey">
+            <span class="fab-button__text">Create a tree survey</span>
+        </button>
+        <h2>GPS accuracy</h2>
+        <p>
+            The accuracy of the GPS in your device will improve over time after it
+            has been started as it picks up signals from more satellites. You may wish to
+            update the location information in your observation or census periodically if the current accuracy is
+            insufficient. This can be done by pressing the "{{UPDATE_BUTTON_NAME}}" button within a record form.
+        </p>
+    </div>
+</ion-content>
