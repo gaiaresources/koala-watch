@@ -22,47 +22,47 @@ export let UPDATE_BUTTON_NAME = 'Use Current Location';
 
 export let SIGNUP_TERMS_AND_CONDITIONS_HTML = `
 <h1>Privacy Policy</h1>
-<p><i>Last modified on 13 February 2019</i></p>
-<p>The purpose of this policy is to tell you what kind of personal information  
-that the NSW Department of Planning, Industry and Environment (DPIE) may collect  
-from you when you use the Biosys, BioNet-Atlas, BioNet Vegetation Classification, 
-BioNet APIs and I-Spy-Koala applications (collectively the “App”), how we may 
-use that information, whether we disclose it to anyone and how you can access 
+<p><i>Last modified on 19 October 2020</i></p>
+<p>The purpose of this policy is to tell you what kind of personal information
+that the NSW Department of Planning, Industry and Environment (DPIE) may collect
+from you when you use the Biosys, BioNet-Atlas, BioNet Vegetation Classification,
+BioNet APIs and I Spy Koala applications (collectively the “App”), how we may
+use that information, whether we disclose it to anyone and how you can access
 this information. </p>
 
-<p>This privacy policy only concerns personal information collected by DPIE. 
-The I-Spy-Koala application is distributed through Google Play 
-and the App Store. By using this application you may also provide personal 
-information directly to Google or Apple. Depending on your preferred smart 
-phone system, we recommend that you examine the Privacy Policy of your Android 
+<p>This privacy policy only concerns personal information collected by DPIE.
+The I Spy Koala application is distributed through Google Play
+and the App Store. By using this application you may also provide personal
+information directly to Google or Apple. Depending on your preferred smart
+phone system, we recommend that you examine the Privacy Policy of your Android
 or Apple device and Terms of Service of Google Play and the App Store.</p>
 
 <h2>Your right to privacy</h2>
-<p>In dealing with your personal information DPIE must comply with the Privacy 
-and Personal Information Protection Act 1998 (NSW) which regulates the 
+<p>In dealing with your personal information DPIE must comply with the Privacy
+and Personal Information Protection Act 1998 (NSW) which regulates the
 collection, storage, quality, use and disclosure of personal information.</p>
 
 <h2>What is your personal information?</h2>
-<p>Personal information is information or an opinion about you. You do not 
-need to be named in the information. It is only necessary that information 
-about you is apparent or can reasonably be ascertained from the 
-information. Personal information is found not just in paper files but also in 
+<p>Personal information is information or an opinion about you. You do not
+need to be named in the information. It is only necessary that information
+about you is apparent or can reasonably be ascertained from the
+information. Personal information is found not just in paper files but also in
 such things as electronic records, video recordings and photographs.</p>
 
-<p>DPIE does not disclose such information to any third party other than as 
+<p>DPIE does not disclose such information to any third party other than as
 specified below.</p>
 
 <h2>What personal information do we collect?</h2>
-<p>We will collect the following personal information from you when you 
+<p>We will collect the following personal information from you when you
 register to use the App:</p>
 <ul>
 <li>your full name</li>
 <li>email address</li>
-<li>phone number (except for the I-Spy-Koala application).</li>
+<li>phone number (except for the I Spy Koala application).</li>
 </ul>
 
-<p>If you apply for a Sensitive Species Data Licence through BioNet Atlas, and 
-are applying as an individual, we will collect your full name, email address, 
+<p>If you apply for a Sensitive Species Data Licence through BioNet Atlas, and
+are applying as an individual, we will collect your full name, email address,
 postal address, suburb, postcode and phone number. </p>
 <p>You will also be directed to create a public username when using the App, your user name may include your personal information if you can be identified from this information. As noted below, your username is published when you post an observation on the App.  </p>
 <p>We may also collect the following information from you when you use the App:</p>
@@ -103,7 +103,7 @@ We use your personal information to deliver our services to you so that you can 
 <p>We recommend that you examine the Privacy Policy for all third-party websites you visit to understand their procedures for collecting, using and disclosing personal information.</p>
 
 <h2>Access, storage and accuracy of personal information</h2>
-<p>Your personal information is being collected by DPIE, Level 14, 59-61 Goulburn Street, Sydney NSW 2000. It will be held by DPIE in an encrypted cloud-based server.</p>
+<p>Your personal information is being collected by the Department of Planning, Industry and Environment, Locked Bag 5022, Parramatta NSW 2124. It will be held by DPIE in an encrypted cloud-based server.</p>
 <p><b>Access</b> - under the Privacy and Personal Information Protection Act 1998 you have the right to access personal information DPIE holds about you.</p>
 <p><b>Accuracy</b> - we are committed to ensuring that the information we hold is accurate, complete and up to date, so we encourage you to advise us if the information you have given us has changed. If you believe our information is inaccurate, please contact us.</p>
 <p><b>Retention</b> – we will retain the information you have provided for a period that is appropriate for the purpose for which it was provided. Your information will be archived and disposed of in accordance with DPIE policies, legislative requirements and guidelines based on the NSW State Records Act 1998.</p>
@@ -111,18 +111,25 @@ We use your personal information to deliver our services to you so that you can 
 <p>Once we have received information you transmit to us, we take reasonable steps to protect information during transfer and storage. Physical measures, such as building and equipment security, are used in conjunction with digital technology, such as data encryption and firewalls, to minimise unauthorised access to information.</p>
 
 <h2>Privacy enquiries</h2>
-<p>General privacy enquiries or enquiries concerning access to, or amendment 
-of, your personal information that is held by DPIE, can be made by contacting 
-the DPIE Information and Privacy Team on 02 9995 5266, at 
-<a href="mailto:pia@environment.nsw.gov.au">pia@environment.nsw.gov.au</a> or 
+<p>General privacy enquiries or enquiries concerning access to, or amendment
+of, your personal information that is held by DPIE, can be made by contacting
+our Information and Privacy Team on 02 9860 1440, or
 in writing to:</p>
 
 <p>
-Manager, Privacy and Information Access<br/>
-Privacy and Information Access Unit<br/>
-PO Box A290, Sydney South NSW 1232<br/>
+Public Access to Information and Privacy Unit<br/>
+GPO Box 39 Sydney NSW 2001<br/>
 </p>
 
-<p>Privacy information can also be found on our website at: 
-<a href="https://www.environment.nsw.gov.au/help/privacy.htm">https://www.environment.nsw.gov.au/help/privacy.htm</a></p>
+<p>
+Phone: 02 9860 1440
+<p>
+
+<p>
+Email: <a href="mailto:mailto:patiunit@planning.nsw.gov.au">mailto:patiunit@planning.nsw.gov.au</a>
+</p>
+
+<p>
+<a href="https://www.environment.nsw.gov.au/about-us/privacy-and-security">Privacy information</a> can also be found on our website.
+</p>
 `;

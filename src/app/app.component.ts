@@ -27,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
         {title: 'Settings', page: 'SettingsPage', icon: 'cog'},
         {title: 'About', page: 'AboutPage', icon: 'info-circle'},
         {title: 'Help', page: 'HelpPage', icon: 'question-circle'},
+        {title: 'Privacy Policy', page: 'PrivacyPolicyPage', icon: 'lock'},
         {title: 'Log out', icon: 'sign-out-alt'},
     ];
 
