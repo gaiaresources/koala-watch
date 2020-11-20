@@ -22,7 +22,7 @@ import { SignupService } from '../shared/services/signup.service';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 
 @NgModule({
     declarations: [
@@ -69,6 +69,6 @@ import { faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } 
 })
 export class AppModule {
     constructor() {
-        library.add(faTachometerAlt, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt);
+        library.add(fas);
     }
 }
