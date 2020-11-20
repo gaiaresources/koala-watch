@@ -11,10 +11,10 @@ import { APP_NAME, UPDATE_BUTTON_NAME } from '../../shared/utils/consts';
 
 @IonicPage()
 @Component({
-    selector: 'page-help',
-    templateUrl: 'help.html',
+    selector: 'page-privacy-policy',
+    templateUrl: 'privacy-policy.html',
 })
-export class PrivacyPolicy {
+export class PrivacyPolicyPage {
 
     public APP_NAME = APP_NAME;
     public UPDATE_BUTTON_NAME = UPDATE_BUTTON_NAME;

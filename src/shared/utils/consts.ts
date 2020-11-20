@@ -78,7 +78,7 @@ postal address, suburb, postcode and phone number. </p>
 
 <h2>Why are you collecting my personal information?</h2>
 <p>The purpose of collecting your personal information is to help administer the App and help validate any observations submitted by you. DPIE collects additional information for the Sensitive Species Data Licence because of the high-value information that this licence allows a person to access and enter into relevant App databases.</p>
-We use your personal information to deliver our services to you so that you can participate in the full experience of the App.</p>
+<p>We use your personal information to deliver our services to you so that you can participate in the full experience of the App.</p>
 <p>In addition to some of the specific uses of information we describe in this Privacy Policy, we may use information that we receive to:</p>
 <ul>
 <li>help you efficiently access your information after you sign in</li>

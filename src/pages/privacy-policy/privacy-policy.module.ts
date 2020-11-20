@@ -1,23 +1,23 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { PrivacyPolicy } from './privacy-policy';
+import { PrivacyPolicyPage } from './privacy-policy';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 @NgModule({
   declarations: [
-    PrivacyPolicy,
+    PrivacyPolicyPage,
   ],
   imports: [
-    IonicPageModule.forChild(PrivacyPolicy),
+    IonicPageModule.forChild(PrivacyPolicyPage),
     FontAwesomeModule
   ],
   entryComponents: [
-    PrivacyPolicy,
+    PrivacyPolicyPage,
   ]
 })
-export class PrivacyPolicyModule {
+export class PrivacyPolicyPageModule {
   constructor() {
     library.add(faBars);
   }
