@@ -210,7 +210,7 @@ export let SIGNUP_TERMS_AND_CONDITIONS_HTML = `
 <p>Phone: 02 9860 1440</p>
 <p></p>
 <p>
-    Email: privacy@dpie.nsw.gov.au
+  Email: <a href="mailto:privacy@dpie.nsw.gov.au">privacy@dpie.nsw.gov.au</a>
 </p>
 
 <p>
