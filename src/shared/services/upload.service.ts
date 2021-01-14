@@ -18,25 +18,13 @@ export class UploadService {
     public uploadValidRecords(): Observable<[ClientRecord, Record]> {
         return this.storageService.getUploadableRecords().pipe(
             mergeMap((clientRecord: ClientRecord) => {
-                return this.getElevation(clientRecord).pipe(
-                    mergeMap((elevation: any) => {
-                        // patch altitude if available
-                        if (clientRecord?.data['Altitude'] === null || clientRecord?.data['Altitude'] === undefined) {
-                            if (elevation['results']
-                                && elevation['results'][0]
-                                && elevation['results'][0]['elevation'] !== undefined
-                                && elevation['results'][0]['elevation'] !== null) {
-                                clientRecord.data['Altitude'] = parseInt(elevation['results'][0]['elevation'], 10);
-                            }
-                        }
+
+              return this.apiService.createRecord(clientRecord).pipe(
+                  mergeMap((record: Record) => this.storageService.updateRecordId(clientRecord, record.id),
+                      (record: Record, updateRecordServerIdSuccess: boolean) => record)
+              );
 
 
-                        return this.apiService.createRecord(clientRecord).pipe(
-                            mergeMap((record: Record) => this.storageService.updateRecordId(clientRecord, record.id),
-                                (record: Record, updateRecordServerIdSuccess: boolean) => record)
-                        );
-                    })
-                );
             }
                 ,
                 (clientRecord: ClientRecord, record: Record) =>
@@ -57,19 +45,6 @@ export class UploadService {
 
             )
         );
-    }
-
-    public getElevation(record: ClientRecord): Observable<any> {
-
-        const lat = record.data['Latitude'];
-        const lng = record.data['Longitude'];
-
-        const key = 'AIzaSyD16axSONu3sfHI6F0KBhaR8Cf7Ny7w0Nw';
-
-        const url = `https://maps.googleapis.com/maps/api/elevation/json?locations=${lat},${lng}&key=${key}`;
-
-        return this.httpClient.get(url);
-
     }
 
 }
