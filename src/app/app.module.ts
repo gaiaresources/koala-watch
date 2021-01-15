@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { HTTP } from '@ionic-native/http';
 
 import { AppComponent } from './app.component';
 
@@ -64,7 +65,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
             provide: ErrorHandler,
             useClass: IonicErrorHandler
         },
-        SignupService
+        SignupService,
+        HTTP
     ]
 })
 export class AppModule {
