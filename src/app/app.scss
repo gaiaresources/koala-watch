@@ -62,3 +62,12 @@ ion-app.platform-ios12 ion-content {
 .ion-md-close {
     name: '';
 }
+
+
+// https://forum.ionicframework.com/t/ionic-4-modal-size/152372/2
+.map-pin-modal .modal-wrapper {
+  height: 20%;
+  top: 80%;
+  position: absolute;
+  display: block;
+}
