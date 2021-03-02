@@ -74,3 +74,8 @@ ion-app.platform-ios12 ion-content {
   position: absolute;
   display: block;
 }
+
+  ion-content {
+    --overflow: hidden;
+  }
+
