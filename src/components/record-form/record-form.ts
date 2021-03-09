@@ -98,12 +98,7 @@ export class RecordFormComponent implements OnDestroy {
             };
         }
 
-      const MapPinModalPage = this.modalCtrl.create('MapPinModalPage', l);
-      MapPinModalPage.present();
-
-      this.events.subscribe('map-returnCoordinates', (x) => {
-        this.mapReturnedCoordinates(x);
-      });
+      this.navCtrl.push('MapPinPage', l);
     }
 
     constructor(private schemaService: SchemaService,

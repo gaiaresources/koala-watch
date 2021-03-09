@@ -147,7 +147,7 @@ export class CensusPage {
 
         if (this.activeRecordService.getGoingToMap()) {
           this.activeRecordService.setActiveFormNavigationRecord({
-            page: 'ObservationPage',
+            page: 'CensusPage',
             params: {
               datasetName: this.navParams.get('datasetName'),
               recordClientId: this.recordClientId,
