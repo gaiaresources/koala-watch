@@ -16,6 +16,8 @@ import { formatUserFullName } from '../../biosys-core/utils/functions';
 import { UPDATE_BUTTON_NAME, DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
 import { ILatLng } from '@ionic-native/google-maps';
 
+import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
+
 /**
  * Generated class for the RecordFormComponent component.
  *
@@ -84,7 +86,9 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    public openModal(){
+    public openModal() { // todo: change this to navigarte to new map page
+      this.activeRecordService.setGoingToMap(true); // save if new record and prepare for map view entry
+
       let l: ILatLng = null;
 
         if (this.form.value['Latitude'] && this.form.value['Longitude']) {
@@ -109,7 +113,8 @@ export class RecordFormComponent implements OnDestroy {
         private alertCtrl: AlertController,
         private events: Events,
         public modalCtrl: ModalController,
-        public navCtrl: NavController
+        public navCtrl: NavController,
+        public activeRecordService: ActiveRecordService
         ) {
     }
 

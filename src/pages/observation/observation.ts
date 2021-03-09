@@ -12,6 +12,8 @@ import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
 
+import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
+
 @IonicPage()
 @Component({
   selector: 'page-observation',
@@ -44,7 +46,8 @@ export class ObservationPage {
   constructor(private navCtrl: NavController, private navParams: NavParams,
               private storageService: StorageService,
               private alertController: AlertController,
-              private events: Events) {
+              private events: Events,
+              public activeRecordService: ActiveRecordService) {
   }
 
   public onClickedNewPhoto(useCamera: boolean) {
@@ -112,7 +115,11 @@ export class ObservationPage {
     if (this.readonly) {
       return true;
     }
-    if (this.showLeavingAlertMessage) {
+
+    if (this.activeRecordService.getGoingToMap()) {
+      this.save(true);
+      return true;
+    } else if (this.showLeavingAlertMessage) {
       this.alertController.create({
         title: 'Leaving observation unsaved',
         message: 'You are leaving the observation unsaved, are you sure?',
@@ -172,6 +179,19 @@ export class ObservationPage {
         // fail silently
       }
     }
+
+    if (this.activeRecordService.getGoingToMap()) {
+      this.activeRecordService.setActiveFormNavigationRecord({
+        page: 'ObservationPage',
+        params: {
+          datasetName: this.navParams.get('datasetName'),
+          recordClientId: this.recordClientId,
+          parentId: this.parentId,
+          readonly: false
+        }
+      } as FormNavigationRecord);
+    }
+    this.activeRecordService.setGoingToMap(false); // reset as "not going to map"
 
     this.storageService.putRecord({
       valid: this.recordForm.valid,

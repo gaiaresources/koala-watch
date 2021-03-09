@@ -16,6 +16,8 @@ import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gall
 
 import { DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
 
+import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
+
 /**
  * Generated class for the CensusPage page.
  *
@@ -53,7 +55,8 @@ export class CensusPage {
     constructor(public censusNavCtrl: NavController,
                 public navParams: NavParams,
                 private storageService: StorageService,
-                private alertController: AlertController) {
+                private alertController: AlertController,
+                public activeRecordService: ActiveRecordService) {
     }
 
     public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
@@ -104,7 +107,10 @@ export class CensusPage {
         return true;
       }
 
-        if (this.showLeavingAlertMessage) {
+      if (this.activeRecordService.getGoingToMap()) {
+        this.save(false);
+        return true;
+      } else if (this.showLeavingAlertMessage) {
             this.alertController.create({
                 title: 'Leaving census unsaved',
                 message: 'You are leaving the census form data unsaved, are you sure?',
@@ -138,6 +144,19 @@ export class CensusPage {
 
     public save(popForm = false) {
         const formValues: object = this.recordForm.value;
+
+        if (this.activeRecordService.getGoingToMap()) {
+          this.activeRecordService.setActiveFormNavigationRecord({
+            page: 'ObservationPage',
+            params: {
+              datasetName: this.navParams.get('datasetName'),
+              recordClientId: this.recordClientId,
+              readonly: false
+            }
+          } as FormNavigationRecord);
+        }
+        this.activeRecordService.setGoingToMap(false); // reset as "not going to map"
+
 
         this.storageService.putRecord({
             valid: this.recordForm.valid && this.observationRecords.reduce((acc, cur) => cur.valid && acc, true),
