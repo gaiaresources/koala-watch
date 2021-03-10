@@ -9,6 +9,7 @@ import {
 import { isDatasetCensus } from '../../shared/utils/functions';
 import { StorageService } from '../../shared/services/storage.service';
 import '../../shared/utils/consts';
+import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
 
 @Component({
     selector: 'records-list',
@@ -51,7 +52,8 @@ export class RecordsListComponent {
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
                 private storage: StorageService,
-                private events: Events) {
+                private events: Events,
+                public activeRecordService: ActiveRecordService) {
         this.baseNavController = (this.navParams.data.hasOwnProperty('navCtrl') ? this.navParams.get('navCtrl') : undefined);
 
         this.records = (this.navParams.data.hasOwnProperty('data') ? this.navParams.get('data') : []);
@@ -130,6 +132,11 @@ export class RecordsListComponent {
             parentId: record.parentId,
             readonly: this.readonly
         };
+
+        this.activeRecordService.setActiveFormNavigationRecord({
+          page: page,
+          params: params
+        } as FormNavigationRecord);
         this.navPush(page, params);
     }
 

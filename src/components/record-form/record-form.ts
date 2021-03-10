@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { AlertController, Events, ModalController, NavController} from 'ionic-angular';
+import { AlertController, Events, NavController} from 'ionic-angular';
 
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
@@ -15,6 +15,8 @@ import { AuthService } from '../../biosys-core/services/auth.service';
 import { formatUserFullName } from '../../biosys-core/utils/functions';
 import { UPDATE_BUTTON_NAME, DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
 import { ILatLng } from '@ionic-native/google-maps';
+
+import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -84,7 +86,9 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    public openModal(){
+    public openModal() { // todo: change this to navigarte to new map page
+      this.activeRecordService.setGoingToMap(true); // save if new record and prepare for map view entry
+
       let l: ILatLng = null;
 
         if (this.form.value['Latitude'] && this.form.value['Longitude']) {
@@ -94,12 +98,7 @@ export class RecordFormComponent implements OnDestroy {
             };
         }
 
-      const MapPinModalPage = this.modalCtrl.create('MapPinModalPage', l);
-      MapPinModalPage.present();
-
-      this.events.subscribe('map-returnCoordinates', (x) => {
-        this.mapReturnedCoordinates(x);
-      });
+      this.navCtrl.push('MapPinPage', l);
     }
 
     constructor(private schemaService: SchemaService,
@@ -108,8 +107,8 @@ export class RecordFormComponent implements OnDestroy {
         private geolocation: Geolocation,
         private alertCtrl: AlertController,
         private events: Events,
-        public modalCtrl: ModalController,
-        public navCtrl: NavController
+        public navCtrl: NavController,
+        public activeRecordService: ActiveRecordService
         ) {
     }
 
@@ -161,50 +160,6 @@ export class RecordFormComponent implements OnDestroy {
         });
     }
 
-    private mapReturnedCoordinates(rv) {
-        if (!rv) {
-          return;
-        }
-
-        const valuesToPatch = {};
-        if (this.form.contains('Latitude')) {
-            valuesToPatch['Latitude'] = rv.lat.toFixed(6);
-        }
-
-        if (this.form.contains('Longitude')) {
-            valuesToPatch['Longitude'] = rv.lng.toFixed(6);
-        }
-
-        if (this.form.contains('Accuracy')) {
-            valuesToPatch['Accuracy'] = null;
-        }
-
-        if (this.form.contains('Altitude')) {
-            valuesToPatch['Altitude'] = null;
-        }
-
-
-        this.form.patchValue(valuesToPatch);
-        this.events.unsubscribe('map-returnCoordinates', this.mapReturnedCoordinates);
-    }
-
-    public async updateLocationViaMap() {
-        let l: ILatLng = null;
-
-        if (this.form.value['Latitude'] && this.form.value['Longitude']) {
-            l = {
-                lat: this.form.value['Latitude'],
-                lng: this.form.value['Longitude']
-            };
-        }
-
-        this.events.subscribe('map-returnCoordinates', (x) => {
-            this.mapReturnedCoordinates(x);
-        });
-        this.initialiseDefaultValues = false;
-        this.events.publish('map-needmap', l);
-        return;
-    }
 
     public updateLocationFields(initialUpdate = false) {
         if (!this.lastLocation) {

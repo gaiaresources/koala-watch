@@ -24,53 +24,55 @@ import { SignupService } from '../shared/services/signup.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { ActiveRecordService } from '../providers/activerecordservice/active-record.service';
 
 @NgModule({
-    declarations: [
-        AppComponent
-    ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        IonicModule.forRoot(AppComponent, {
-          scrollAssist: false,
-          autoFocusAssist: false
-        }),
-        IonicStorageModule.forRoot(),
-        ComponentsModule,
-        FontAwesomeModule
-    ],
-    bootstrap: [IonicApp],
-    providers: [
-        StatusBar,
-        SplashScreen,
-        StorageService,
-        GoogleMaps,
-        Camera,
-        Geolocation,
-        APIService,
-        UploadService,
-        AuthService,
-        {
-            provide: ErrorHandler,
-            useClass: IonicErrorHandler
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: ApiInterceptor,
-            multi: true
-        },
-        {
-            provide: ErrorHandler,
-            useClass: IonicErrorHandler
-        },
-        SignupService,
-        HTTP
-    ]
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    IonicModule.forRoot(AppComponent, {
+      scrollAssist: false,
+      autoFocusAssist: false
+    }),
+    IonicStorageModule.forRoot(),
+    ComponentsModule,
+    FontAwesomeModule
+  ],
+  bootstrap: [IonicApp],
+  providers: [
+    StatusBar,
+    SplashScreen,
+    StorageService,
+    GoogleMaps,
+    Camera,
+    Geolocation,
+    APIService,
+    UploadService,
+    AuthService,
+    {
+      provide: ErrorHandler,
+      useClass: IonicErrorHandler
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiInterceptor,
+      multi: true
+    },
+    {
+      provide: ErrorHandler,
+      useClass: IonicErrorHandler
+    },
+    SignupService,
+    HTTP,
+    ActiveRecordService
+  ]
 })
 export class AppModule {
-    constructor() {
-        library.add(fas);
-    }
+  constructor() {
+    library.add(fas);
+  }
 }

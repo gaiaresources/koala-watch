@@ -12,6 +12,8 @@ import { from } from 'rxjs/observable/from';
 import { mergeMap } from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
 
+import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
+
 @IonicPage()
 @Component({
   selector: 'page-observation',
@@ -44,7 +46,8 @@ export class ObservationPage {
   constructor(private navCtrl: NavController, private navParams: NavParams,
               private storageService: StorageService,
               private alertController: AlertController,
-              private events: Events) {
+              private events: Events,
+              public activeRecordService: ActiveRecordService) {
   }
 
   public onClickedNewPhoto(useCamera: boolean) {
@@ -76,6 +79,7 @@ export class ObservationPage {
               if (record) {
                 this.record = record;
                 this.recordForm.value = record.data;
+                this.updateFromMap();
                 this.recordForm.validate();
                 this.photoGallery.PhotoIds = record.photoIds;
                 this.readonly = !!record.id || this.navParams.get('readonly');
@@ -87,6 +91,8 @@ export class ObservationPage {
                         // changed
                         record.data['SiteNo'] = parentRecord.data['SiteNo'];
                         this.recordForm.value['SiteNo'] = record.data['SiteNo'];
+
+                        this.updateFromMap();
                         this.save(true);
                       }
                     }
@@ -99,6 +105,8 @@ export class ObservationPage {
             record => {
               if (record) {
                 this.recordForm.value = record.data;
+
+                this.updateFromMap();
               }
             }
           );
@@ -107,12 +115,20 @@ export class ObservationPage {
     });
   }
 
+  public ionViewDidLeave() {
+    this.activeRecordService.setLatestCoords(null);
+  }
+
   public ionViewCanLeave() {
     this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
     if (this.readonly) {
       return true;
     }
-    if (this.showLeavingAlertMessage) {
+
+    if (this.activeRecordService.getGoingToMap()) {
+      this.save(true);
+      return true;
+    } else if (this.showLeavingAlertMessage) {
       this.alertController.create({
         title: 'Leaving observation unsaved',
         message: 'You are leaving the observation unsaved, are you sure?',
@@ -123,7 +139,7 @@ export class ObservationPage {
             handler: () => {
               this.photoGallery.rollback();
               this.showLeavingAlertMessage = false;
-              this.navCtrl.pop();
+              this.navCtrl.popToRoot();
             }
           },
           {
@@ -138,6 +154,18 @@ export class ObservationPage {
     } else {
       return true;
     }
+  }
+
+  private updateFromMap() {
+    const mapCoords = this.activeRecordService.getLatestCoords();
+
+      if (mapCoords) {
+        const valuesToPatch = {};
+        valuesToPatch['Latitude'] = mapCoords.lat.toFixed(6);
+        valuesToPatch['Longitude'] = mapCoords.lng.toFixed(6);
+
+        this.recordForm.value = valuesToPatch;
+      }
   }
 
   public save(dontQuit: boolean = false) {
@@ -173,6 +201,19 @@ export class ObservationPage {
       }
     }
 
+    if (this.activeRecordService.getGoingToMap()) {
+      this.activeRecordService.setActiveFormNavigationRecord({
+        page: 'ObservationPage',
+        params: {
+          datasetName: this.navParams.get('datasetName'),
+          recordClientId: this.recordClientId,
+          parentId: this.parentId,
+          readonly: false
+        }
+      } as FormNavigationRecord);
+    }
+    this.activeRecordService.setGoingToMap(false); // reset as "not going to map"
+
     this.storageService.putRecord({
       valid: this.recordForm.valid,
       client_id: this.recordClientId,
@@ -186,7 +227,7 @@ export class ObservationPage {
     }).subscribe((result: boolean) => {
       if (!dontQuit && result) {
         this.showLeavingAlertMessage = false;
-        this.navCtrl.pop();
+        this.navCtrl.popToRoot();
       }
     });
   }
@@ -209,7 +250,7 @@ export class ObservationPage {
                   ).subscribe();
                 }
                 this.showLeavingAlertMessage = false;
-                this.navCtrl.pop();
+                this.navCtrl.popToRoot();
               }, (error) => {
                 this.alertController.create({
                   title: 'Cannot Delete',
@@ -225,7 +266,7 @@ export class ObservationPage {
               });
             } else {
               this.showLeavingAlertMessage = false;
-              this.navCtrl.pop();
+              this.navCtrl.popToRoot();
             }
           }
         },

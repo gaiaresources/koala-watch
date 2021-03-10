@@ -9,12 +9,13 @@ import { map, mergeMap } from 'rxjs/operators';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { ObservationPage } from '../observation/observation';
 import { StorageService } from '../../shared/services/storage.service';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
 
 import { DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
+
+import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
 
 /**
  * Generated class for the CensusPage page.
@@ -53,7 +54,8 @@ export class CensusPage {
     constructor(public censusNavCtrl: NavController,
                 public navParams: NavParams,
                 private storageService: StorageService,
-                private alertController: AlertController) {
+                private alertController: AlertController,
+                public activeRecordService: ActiveRecordService) {
     }
 
     public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
@@ -99,12 +101,19 @@ export class CensusPage {
         this.showLeavingAlertMessage = true;
     }
 
+    public ionViewDidLeave() {
+      this.activeRecordService.setLatestCoords(null);
+    }
+
     public ionViewCanLeave() {
       if (this.readonly) {
         return true;
       }
 
-        if (this.showLeavingAlertMessage) {
+      if (this.activeRecordService.getGoingToMap()) {
+        this.save(false);
+        return true;
+      } else if (this.showLeavingAlertMessage) {
             this.alertController.create({
                 title: 'Leaving census unsaved',
                 message: 'You are leaving the census form data unsaved, are you sure?',
@@ -115,7 +124,7 @@ export class CensusPage {
                         handler: () => {
                             this.photoGallery.rollback();
                             this.showLeavingAlertMessage = false;
-                            this.censusNavCtrl.pop();
+                            this.censusNavCtrl.popToRoot();
                         }
                     },
                     {
@@ -136,8 +145,33 @@ export class CensusPage {
         }
     }
 
+    private updateFromMap() {
+      const mapCoords = this.activeRecordService.getLatestCoords();
+
+        if (mapCoords) {
+          const valuesToPatch = {};
+          valuesToPatch['Latitude'] = mapCoords.lat.toFixed(6);
+          valuesToPatch['Longitude'] = mapCoords.lng.toFixed(6);
+
+          this.recordForm.value = valuesToPatch;
+        }
+    }
+
     public save(popForm = false) {
         const formValues: object = this.recordForm.value;
+
+        if (this.activeRecordService.getGoingToMap()) {
+          this.activeRecordService.setActiveFormNavigationRecord({
+            page: 'CensusPage',
+            params: {
+              datasetName: this.navParams.get('datasetName'),
+              recordClientId: this.recordClientId,
+              readonly: false
+            }
+          } as FormNavigationRecord);
+        }
+        this.activeRecordService.setGoingToMap(false); // reset as "not going to map"
+
 
         this.storageService.putRecord({
             valid: this.recordForm.valid && this.observationRecords.reduce((acc, cur) => cur.valid && acc, true),
@@ -151,7 +185,7 @@ export class CensusPage {
         }).subscribe((result: boolean) => {
             if (result && popForm) {
                 this.showLeavingAlertMessage = false;
-                this.censusNavCtrl.pop();
+                this.censusNavCtrl.popToRoot();
             }
 
             if (result) {
@@ -185,7 +219,7 @@ export class CensusPage {
                                 }
                                 // TODO: Delete any child records
                                 this.showLeavingAlertMessage = false;
-                                this.censusNavCtrl.pop();
+                                this.censusNavCtrl.popToRoot();
                             }, (error) => {
                                 this.alertController.create({
                                     title: 'Cannot Delete',
@@ -202,7 +236,7 @@ export class CensusPage {
                             });
                         } else {
                             this.showLeavingAlertMessage = false;
-                            this.censusNavCtrl.pop();
+                            this.censusNavCtrl.popToRoot();
                         }
                     }
                 },
@@ -224,6 +258,7 @@ export class CensusPage {
                     this.photoGallery.PhotoIds = record.photoIds;
                     this.readonly = !!record.id;
                     this.siteNumberOriginal = record.data['SiteNo'];
+                    this.updateFromMap();
                 }
             }),
             mergeMap(() => this.storageService.getChildRecords(this.recordClientId)),
@@ -245,6 +280,7 @@ export class CensusPage {
                 }
 
                 this.recordForm.value = this.record.data;
+                this.updateFromMap();
 
                 this.recordForm.validate();
             }
