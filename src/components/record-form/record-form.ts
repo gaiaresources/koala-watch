@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { AlertController, Events, ModalController, NavController} from 'ionic-angular';
+import { AlertController, Events, NavController} from 'ionic-angular';
 
 import * as moment from 'moment/moment';
 import { Subscription } from 'rxjs/Subscription';
@@ -107,7 +107,6 @@ export class RecordFormComponent implements OnDestroy {
         private geolocation: Geolocation,
         private alertCtrl: AlertController,
         private events: Events,
-        public modalCtrl: ModalController,
         public navCtrl: NavController,
         public activeRecordService: ActiveRecordService
         ) {

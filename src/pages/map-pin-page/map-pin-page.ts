@@ -83,6 +83,14 @@ export class MapPinPage {
       });
   }
 
+  ionViewDidLeave() {
+    if (this.map){
+      this.map.remove();
+
+      this.cleanup();
+    }
+  }
+
   useClicked() {
     this.activeRecordService.setLatestCoords(this.dragMarker.getPosition());
     this.closeModal();
@@ -98,10 +106,7 @@ export class MapPinPage {
   }
 
   public closeModal() {
-    const activeRec = this.activeRecordService.getActiveFormNavigationRecord();
-
-    this.cleanup();
-    this.navCtrl.push(activeRec['page'], activeRec['params']);
+    this.navCtrl.pop();
   }
 
 }
