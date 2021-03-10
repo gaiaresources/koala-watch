@@ -9,7 +9,6 @@ import { map, mergeMap } from 'rxjs/operators';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { ObservationPage } from '../observation/observation';
 import { StorageService } from '../../shared/services/storage.service';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
@@ -121,7 +120,7 @@ export class CensusPage {
                         handler: () => {
                             this.photoGallery.rollback();
                             this.showLeavingAlertMessage = false;
-                            this.censusNavCtrl.pop();
+                            this.censusNavCtrl.popToRoot();
                         }
                     },
                     {
@@ -170,7 +169,7 @@ export class CensusPage {
         }).subscribe((result: boolean) => {
             if (result && popForm) {
                 this.showLeavingAlertMessage = false;
-                this.censusNavCtrl.pop();
+                this.censusNavCtrl.popToRoot();
             }
 
             if (result) {
@@ -204,7 +203,7 @@ export class CensusPage {
                                 }
                                 // TODO: Delete any child records
                                 this.showLeavingAlertMessage = false;
-                                this.censusNavCtrl.pop();
+                                this.censusNavCtrl.popToRoot();
                             }, (error) => {
                                 this.alertController.create({
                                     title: 'Cannot Delete',
@@ -221,7 +220,7 @@ export class CensusPage {
                             });
                         } else {
                             this.showLeavingAlertMessage = false;
-                            this.censusNavCtrl.pop();
+                            this.censusNavCtrl.popToRoot();
                         }
                     }
                 },

@@ -99,10 +99,10 @@ export class MapPinPage {
   }
 
   public closeModal() {
-    this.cleanup();
+    const activeRec = this.activeRecordService.getActiveFormNavigationRecord();
 
-    this.navCtrl.push(this.activeRecordService.getActiveFormNavigationRecord['page'],
-      this.activeRecordService.getActiveFormNavigationRecord['params']);
+    this.cleanup();
+    this.navCtrl.push(activeRec['page'], activeRec['params']);
   }
 
 }

@@ -130,7 +130,7 @@ export class ObservationPage {
             handler: () => {
               this.photoGallery.rollback();
               this.showLeavingAlertMessage = false;
-              this.navCtrl.pop();
+              this.navCtrl.popToRoot();
             }
           },
           {
@@ -206,7 +206,7 @@ export class ObservationPage {
     }).subscribe((result: boolean) => {
       if (!dontQuit && result) {
         this.showLeavingAlertMessage = false;
-        this.navCtrl.pop();
+        this.navCtrl.popToRoot();
       }
     });
   }
@@ -229,7 +229,7 @@ export class ObservationPage {
                   ).subscribe();
                 }
                 this.showLeavingAlertMessage = false;
-                this.navCtrl.pop();
+                this.navCtrl.popToRoot();
               }, (error) => {
                 this.alertController.create({
                   title: 'Cannot Delete',
@@ -245,7 +245,7 @@ export class ObservationPage {
               });
             } else {
               this.showLeavingAlertMessage = false;
-              this.navCtrl.pop();
+              this.navCtrl.popToRoot();
             }
           }
         },
