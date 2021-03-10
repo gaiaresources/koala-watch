@@ -161,50 +161,6 @@ export class RecordFormComponent implements OnDestroy {
         });
     }
 
-    private mapReturnedCoordinates(rv) {
-        if (!rv) {
-          return;
-        }
-
-        const valuesToPatch = {};
-        if (this.form.contains('Latitude')) {
-            valuesToPatch['Latitude'] = rv.lat.toFixed(6);
-        }
-
-        if (this.form.contains('Longitude')) {
-            valuesToPatch['Longitude'] = rv.lng.toFixed(6);
-        }
-
-        if (this.form.contains('Accuracy')) {
-            valuesToPatch['Accuracy'] = null;
-        }
-
-        if (this.form.contains('Altitude')) {
-            valuesToPatch['Altitude'] = null;
-        }
-
-
-        this.form.patchValue(valuesToPatch);
-        this.events.unsubscribe('map-returnCoordinates', this.mapReturnedCoordinates);
-    }
-
-    public async updateLocationViaMap() {
-        let l: ILatLng = null;
-
-        if (this.form.value['Latitude'] && this.form.value['Longitude']) {
-            l = {
-                lat: this.form.value['Latitude'],
-                lng: this.form.value['Longitude']
-            };
-        }
-
-        this.events.subscribe('map-returnCoordinates', (x) => {
-            this.mapReturnedCoordinates(x);
-        });
-        this.initialiseDefaultValues = false;
-        this.events.publish('map-needmap', l);
-        return;
-    }
 
     public updateLocationFields(initialUpdate = false) {
         if (!this.lastLocation) {

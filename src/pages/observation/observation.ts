@@ -79,6 +79,7 @@ export class ObservationPage {
               if (record) {
                 this.record = record;
                 this.recordForm.value = record.data;
+                this.updateFromMap();
                 this.recordForm.validate();
                 this.photoGallery.PhotoIds = record.photoIds;
                 this.readonly = !!record.id || this.navParams.get('readonly');
@@ -90,6 +91,8 @@ export class ObservationPage {
                         // changed
                         record.data['SiteNo'] = parentRecord.data['SiteNo'];
                         this.recordForm.value['SiteNo'] = record.data['SiteNo'];
+
+                        this.updateFromMap();
                         this.save(true);
                       }
                     }
@@ -102,12 +105,18 @@ export class ObservationPage {
             record => {
               if (record) {
                 this.recordForm.value = record.data;
+
+                this.updateFromMap();
               }
             }
           );
         }
       }
     });
+  }
+
+  public ionViewDidLeave() {
+    this.activeRecordService.setLatestCoords(null);
   }
 
   public ionViewCanLeave() {
@@ -145,6 +154,18 @@ export class ObservationPage {
     } else {
       return true;
     }
+  }
+
+  private updateFromMap() {
+    const mapCoords = this.activeRecordService.getLatestCoords();
+
+      if (mapCoords) {
+        const valuesToPatch = {};
+        valuesToPatch['Latitude'] = mapCoords.lat.toFixed(6);
+        valuesToPatch['Longitude'] = mapCoords.lng.toFixed(6);
+
+        this.recordForm.value = valuesToPatch;
+      }
   }
 
   public save(dontQuit: boolean = false) {

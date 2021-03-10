@@ -84,8 +84,7 @@ export class MapPinPage {
   }
 
   useClicked() {
-    //this.events.publish('map-returnCoordinates', this.dragMarker.getPosition());
-
+    this.activeRecordService.setLatestCoords(this.dragMarker.getPosition());
     this.closeModal();
   }
 

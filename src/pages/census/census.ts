@@ -101,6 +101,10 @@ export class CensusPage {
         this.showLeavingAlertMessage = true;
     }
 
+    public ionViewDidLeave() {
+      this.activeRecordService.setLatestCoords(null);
+    }
+
     public ionViewCanLeave() {
       if (this.readonly) {
         return true;
@@ -138,6 +142,18 @@ export class CensusPage {
         this.showLeavingAlertMessage = false;
         if (!this.readonly) {
           this.save();
+        }
+    }
+
+    private updateFromMap() {
+      const mapCoords = this.activeRecordService.getLatestCoords();
+
+        if (mapCoords) {
+          const valuesToPatch = {};
+          valuesToPatch['Latitude'] = mapCoords.lat.toFixed(6);
+          valuesToPatch['Longitude'] = mapCoords.lng.toFixed(6);
+
+          this.recordForm.value = valuesToPatch;
         }
     }
 
@@ -242,6 +258,7 @@ export class CensusPage {
                     this.photoGallery.PhotoIds = record.photoIds;
                     this.readonly = !!record.id;
                     this.siteNumberOriginal = record.data['SiteNo'];
+                    this.updateFromMap();
                 }
             }),
             mergeMap(() => this.storageService.getChildRecords(this.recordClientId)),
@@ -263,6 +280,7 @@ export class CensusPage {
                 }
 
                 this.recordForm.value = this.record.data;
+                this.updateFromMap();
 
                 this.recordForm.validate();
             }
