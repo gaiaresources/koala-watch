@@ -153,6 +153,10 @@ export class CensusPage {
           valuesToPatch['Latitude'] = mapCoords.lat.toFixed(6);
           valuesToPatch['Longitude'] = mapCoords.lng.toFixed(6);
 
+          // reset as they are not present in map coords
+          valuesToPatch['Accuracy'] = null;
+          valuesToPatch['Altitude'] = null;
+
           this.recordForm.value = valuesToPatch;
         }
     }
