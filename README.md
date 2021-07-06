@@ -54,6 +54,8 @@ android:
 cross-env ENV='uat' ionic cordova run android 
 ```
 
+NOTE: you need to remove the duplicate location entries manually from `/platforms/android/app/src/main/AndroidManifest.xml`
+
 ### Build
 envs are prod or uat
 ```bash

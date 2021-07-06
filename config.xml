@@ -46,9 +46,6 @@
         <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application/activity" xmlns:android="http://schemas.android.com/apk/res/android">
             <activity android:windowSoftInputMode="adjustResize" />
         </edit-config>
-        <edit-config file="app/src/main/AndroidManifest.xml" mode="overwrite" target="/manifest/uses-feature[@android:name='android.hardware.location.gps']" xmlns:android="http://schemas.android.com/apk/res/android">
-            <uses-feature android:name="android.hardware.location.gps" />
-        </edit-config>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
