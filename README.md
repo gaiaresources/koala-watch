@@ -8,6 +8,7 @@ Install the Ionic and Cordova CLI (note: you may need to have root access for th
 
 ```bash
 npm install -g ionic cordova@8.1.1 cordova-res cross-env
+
 ionic cordova plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="YOUR_ANDROID_API_KEY_IS_HERE" --variable API_KEY_FOR_IOS="YOUR_IOS_API_KEY_IS_HERE"
 ```
 

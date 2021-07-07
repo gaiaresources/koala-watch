@@ -106,7 +106,17 @@ export class MapPinPage {
   }
 
   public closeModal() {
-    this.navCtrl.pop();
+    if (this.activeRecordService.isNewRecord) {
+      // coming back from mapView
+      this.navCtrl.push(
+          this.activeRecordService.getActiveFormNavigationRecord().page, 
+          this.activeRecordService.getActiveFormNavigationRecord().params
+      );
+      
+    } else {
+      this.navCtrl.pop();
+    }
+    
   }
 
 }

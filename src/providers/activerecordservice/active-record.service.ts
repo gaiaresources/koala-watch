@@ -15,9 +15,11 @@ export class ActiveRecordService {
   activeFormNav: FormNavigationRecord;
   goingToMap: boolean;
   latestCoords: ILatLng;
+  isNewRecord: boolean;
 
   constructor() {
     this.goingToMap = false;
+    this.isNewRecord = false;
   }
 
   setActiveFormNavigationRecord(inActiveRec: FormNavigationRecord) {

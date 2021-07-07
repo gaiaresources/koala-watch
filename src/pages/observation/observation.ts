@@ -63,6 +63,7 @@ export class ObservationPage {
     this.recordClientId = this.navParams.get('recordClientId');
     this.readonly = this.navParams.get('readonly');
     this.isNewRecord = !this.recordClientId;
+    this.activeRecordService.isNewRecord = this.isNewRecord;
     if (this.isNewRecord) {
       this.recordClientId = UUID.UUID();
     }
