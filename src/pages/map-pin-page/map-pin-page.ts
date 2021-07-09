@@ -83,7 +83,8 @@ export class MapPinPage {
       });
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
+    this.activeRecordService.comingFromMap = true;
     if (this.map){
       this.map.remove();
 
@@ -106,16 +107,8 @@ export class MapPinPage {
   }
 
   public closeModal() {
-    if (this.activeRecordService.isNewRecord) {
-      // coming back from mapView
-      this.navCtrl.push(
-          this.activeRecordService.getActiveFormNavigationRecord().page, 
-          this.activeRecordService.getActiveFormNavigationRecord().params
-      );
-      
-    } else {
+    this.activeRecordService.comingFromMap = true;
       this.navCtrl.pop();
-    }
     
   }
 

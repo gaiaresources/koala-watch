@@ -16,10 +16,12 @@ export class ActiveRecordService {
   goingToMap: boolean;
   latestCoords: ILatLng;
   isNewRecord: boolean;
+  comingFromMap: boolean;
 
   constructor() {
     this.goingToMap = false;
     this.isNewRecord = false;
+    this.comingFromMap = false;
   }
 
   setActiveFormNavigationRecord(inActiveRec: FormNavigationRecord) {

@@ -77,6 +77,7 @@ export class CensusPage {
         }
 
         this.isNewRecord = !this.recordClientId;
+        this.activeRecordService.isNewRecord = this.isNewRecord;
         if (this.isNewRecord) {
             this.recordClientId = UUID.UUID();
         }
