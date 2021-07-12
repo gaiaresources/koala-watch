@@ -7,7 +7,9 @@ Koala survey collection mobile-app based on Ionic Framework / Angular.
 Install the Ionic and Cordova CLI (note: you may need to have root access for this):
 
 ```bash
-npm install -g ionic cordova cross-env
+npm install -g ionic cordova@8.1.1 cordova-res cross-env
+
+ionic cordova plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="YOUR_ANDROID_API_KEY_IS_HERE" --variable API_KEY_FOR_IOS="YOUR_IOS_API_KEY_IS_HERE"
 ```
 
 This project contains submodules. To clone both the project and submodules, use:
@@ -21,6 +23,21 @@ Then install node dependencies:
 ```bash
 npm install
 ```
+
+# Android/Java/local build/run setup
+Select java version ( https://chamikakasun.medium.com/how-to-manage-multiple-java-version-in-macos-e5421345f6d0 , https://github.com/jenv/jenv , (gradle) https://reflectoring.io/manage-jdks-with-jenv/ ):
+
+(if you don't have it)
+```bash
+brew install gradle
+```
+
+```bash
+jenv local
+nvm use
+
+```
+
 
 ### Running
 
@@ -37,6 +54,8 @@ cross-env ENV='uat' ionic serve
 android:
 cross-env ENV='uat' ionic cordova run android 
 ```
+
+NOTE: you need to remove the duplicate location entries manually from `/platforms/android/app/src/main/AndroidManifest.xml`
 
 ### Build
 envs are prod or uat

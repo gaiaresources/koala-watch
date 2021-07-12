@@ -77,6 +77,7 @@ export class CensusPage {
         }
 
         this.isNewRecord = !this.recordClientId;
+        this.activeRecordService.isNewRecord = this.isNewRecord;
         if (this.isNewRecord) {
             this.recordClientId = UUID.UUID();
         }
@@ -152,6 +153,10 @@ export class CensusPage {
           const valuesToPatch = {};
           valuesToPatch['Latitude'] = mapCoords.lat.toFixed(6);
           valuesToPatch['Longitude'] = mapCoords.lng.toFixed(6);
+
+          // reset as they are not present in map coords
+          valuesToPatch['Accuracy'] = null;
+          valuesToPatch['Altitude'] = null;
 
           this.recordForm.value = valuesToPatch;
         }

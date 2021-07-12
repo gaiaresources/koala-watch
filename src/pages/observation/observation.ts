@@ -13,6 +13,7 @@ import { mergeMap } from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
 
 import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
+import { DATASET_NAME_OBSERVATION } from '../../shared/utils/consts';
 
 @IonicPage()
 @Component({
@@ -60,9 +61,18 @@ export class ObservationPage {
       this.parentId = this.navParams.get('parentId');
     }
 
-    this.recordClientId = this.navParams.get('recordClientId');
+    if (this.activeRecordService.comingFromMap) {
+      this.recordClientId = this.activeRecordService.getActiveFormNavigationRecord().params.recordClientId;
+      this.parentId = this.activeRecordService.getActiveFormNavigationRecord().params.parentId;
+      this.activeRecordService.comingFromMap = false;
+    } else {
+      this.recordClientId = this.navParams.get('recordClientId');
+    }
+
     this.readonly = this.navParams.get('readonly');
     this.isNewRecord = !this.recordClientId;
+    this.activeRecordService.isNewRecord = this.isNewRecord;
+
     if (this.isNewRecord) {
       this.recordClientId = UUID.UUID();
     }
@@ -163,6 +173,10 @@ export class ObservationPage {
         const valuesToPatch = {};
         valuesToPatch['Latitude'] = mapCoords.lat.toFixed(6);
         valuesToPatch['Longitude'] = mapCoords.lng.toFixed(6);
+
+        // reset as they are not present in map coords
+        valuesToPatch['Accuracy'] = null;
+        valuesToPatch['Altitude'] = null;
 
         this.recordForm.value = valuesToPatch;
       }
