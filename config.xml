@@ -14,6 +14,7 @@
     <preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
     <preference name="GOOGLE_MAPS_IOS_API_KEY" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
     <preference name="ScrollEnabled" value="false" />
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <preference name="android-minSdkVersion" value="29" />
     <preference name="android-targetSdkVersion" value="29" />
     <preference name="BackupWebStorage" value="none" />
@@ -135,6 +136,6 @@
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
     </plugin>
-    <engine name="android" spec="~7.0.0" />
     <engine name="ios" spec="^4.5.5" />
+    <engine name="android" spec="^7.0.0" />
 </widget>

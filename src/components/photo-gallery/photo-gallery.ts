@@ -147,6 +147,7 @@ export class PhotoGalleryComponent {
         };
 
         this.camera.getPicture(options).then((base64) => {
+          console.log('CXamerta', this._recordId);
             const photoId = UUID.UUID();
             this.storageService.putPhoto({
                 clientId: photoId,

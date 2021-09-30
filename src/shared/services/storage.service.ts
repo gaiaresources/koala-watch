@@ -69,6 +69,20 @@ export class StorageService {
         return this.putRecord(record);
     }
 
+    public getRecordApiId(key: string): Observable<number> {
+      return new Observable(observer => {
+        this.storage.forEach((value, key) => {
+          if (key.startsWith(StorageService.RECORD_PREFIX) && value.client_id == key) {
+            observer.next(value.id);
+          }
+        }).then(value => {
+          observer.complete();
+        }, reason => {
+          observer.error(reason);
+        });
+      });
+    }
+
     public getParentRecords(): Observable<ClientRecord> {
         return new Observable(observer => {
             this.storage.forEach((value, key) => {
