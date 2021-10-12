@@ -54,7 +54,7 @@ export class UploadService {
   public uploadPendingRecordPhotos(): Observable<[ClientPhoto, Media]> {
     return this.storageService.getAllPendingPhotos().pipe(
       mergeMap((clientPhoto: ClientPhoto) =>
-        this.apiService.uploadRecordMediaBase64(clientPhoto.recordClientId, clientPhoto.base64).pipe(
+        this.apiService.uploadRecordMediaBase64(clientPhoto.recordClientId, clientPhoto.record, clientPhoto.base64).pipe(
           mergeMap((media: Media) => this.storageService.updatePhotoMediaId(clientPhoto, media.id),
             (media: Media) => media)
         ),
