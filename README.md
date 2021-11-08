@@ -35,8 +35,14 @@ brew install gradle
 ```bash
 jenv local
 nvm use
-
 ```
+
+```bash
+cordova plugin add cordova-android-support-gradle-release --variable ANDROID_SUPPORT_VERSION=27.0.0
+```
+
+It may be necessary to remove the duplicate `<uses feature="gps.location...`
+from the `AndroidManifest.xml`
 
 
 ### Running
