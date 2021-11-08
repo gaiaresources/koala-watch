@@ -1,10 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="46" id="au.gov.nsw.dpie.koalawatch"
-        ios-CFBundleIdentifier="au.gov.nsw.dpie.ispykoala"
-        ios-CFBundleVersion="11"
-        version="1.1.6"
-        xmlns="http://www.w3.org/ns/widgets"
-        xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="46" id="au.gov.nsw.dpie.koalawatch" ios-CFBundleIdentifier="au.gov.nsw.dpie.ispykoala" ios-CFBundleVersion="12" version="1.1.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>I Spy Koala</name>
     <description>App for surveying koala populations</description>
     <author email="devs@gaiaresources.com.au" href="https://www.gaiaresources.com.au">Gaia Resources</author>
@@ -96,7 +91,7 @@
         <splash height="1496" platform="ios" src="resources/ios/splash/Default-Landscape@2x.png" width="2048" />
         <splash height="1004" platform="ios" src="resources/ios/splash/Default-Portrait.png" width="768" />
         <splash height="2008" platform="ios" src="resources/ios/splash/Default-Portrait@2x.png" width="1536" />
-        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysUsageDescription">
             <string>Location services required for observation location</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
@@ -141,6 +136,6 @@
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyBAL66QBq-RH9pStWPUMyTdm9t05QtUmXg" />
     </plugin>
-    <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="^7.0.0" />
+    <engine name="ios" spec="^6.2.0" />
 </widget>
