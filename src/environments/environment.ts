@@ -4,8 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
-  server: 'https://uat-koalawatch-api.gaiaresources.com.au',
+  production: true,
+  server: 'https://koalawatch-api.gaiaresources.com.au',
   apiExtension: '/api/',
   logoutUrl: '/#/login/',
   cookieAuthToken: 'auth_token'

@@ -97,6 +97,17 @@ Fix the XCode project app icons and splash images using the bash script makeIcon
 ./makeIcons.sh
 ```
 
+*** 2021+ ***
+`ionic cordova platform rm ios`
+`ionic cordova platform add ios`
+`cross-env ENV='prod' ionic cordova build ios`
+
+go to ios folder:
+
+`https://stackoverflow.com/a/47107769` (maybe needs this)
+
+
+
 In Xcode:
 
 * Set the development team to Gaia Resources, from there the ios build command should succeed
