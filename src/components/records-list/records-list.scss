@@ -41,31 +41,6 @@ img.data-row {
     vertical-align: middle;
 }
 
-.fab-button {
-    position: relative;
-    color: white;
-    background-color: #417c3a;
-    display: flex;
-    align-items: center;
-    border: 1px solid black;
-    height: 100px;
-    width: 100%;
-    margin: 10px 0;
-
-    &__img {
-        margin: 10px 30px 10px 10px;
-        width: 80px;
-        height: auto;
-    }
-
-    &__text {
-        text-align: left;
-        font-size: 2.4rem;
-        font-weight: 500;
-    }
-}
-
-
 .row {
     align-items: center;
 }
@@ -84,4 +59,27 @@ img.data-row {
 .fabbed-img {
     width: 60px;
     height: 60px;
+}
+
+.fab-button {
+    position: relative;
+    color: white;
+    background-color: #417c3a;
+    display: flex;
+    justify-content: flex-start;
+    border: 1px solid black;
+    height: 100px;
+    width: 100%;
+    margin: 10px 0;
+
+    &__img {
+        margin: 10px 30px 10px 16px;
+        width: 80px;
+        height: auto;
+    }
+
+    &__text {
+        text-align: left;
+        font-weight: 500;
+    }
 }

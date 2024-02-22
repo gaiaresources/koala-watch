@@ -5,25 +5,25 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-    <ion-navbar>
+    <ion-nav>
         <ion-grid>
             <ion-row>
                 <ion-title>{{ dataset?.name }}</ion-title>
             </ion-row>
             <ion-row justify-content-end>
                 <ion-buttons *ngIf="!readonly" end>
-                    <button ion-button icon-end solid color="primary" (click)="delete()">
+                    <ion-button icon-end solid color="primary" (click)="delete()">
                         Delete&nbsp;
                         <fa-icon [icon]="['far', 'trash-alt']"></fa-icon>
-                    </button>
-                    <button ion-button icon-end solid color="primary" (click)="save(true)">
+                    </ion-button>
+                    <ion-button icon-end solid color="primary" (click)="save(true)">
                         Save&nbsp;
                         <fa-icon [icon]="['far', 'save']"></fa-icon>
-                    </button>
+                    </ion-button>
                 </ion-buttons>
             </ion-row>
         </ion-grid>
-    </ion-navbar>
+    </ion-nav>
 </ion-header>
 
 <ion-content padding>
@@ -40,11 +40,11 @@
     </ion-segment>
 
     <div>
-        <div [hidden]="segmentContent != 'form'">
+        <div [hidden]="segmentContent !== 'form'">
             <record-form [dataset]="dataset" [initialiseDefaultValues]="isNewRecord" [readonly]="readonly">
             </record-form>
         </div>
-        <div [hidden]="segmentContent != 'observations'">
+        <div [hidden]="segmentContent !== 'observations'">
             <records-list
                     [readonly]="readonly"
                     [hidden]="recordForm.invalid"
@@ -53,28 +53,28 @@
                     [baseNavController]="censusNavCtrl"
                     [parentId]="recordClientId"
                     [records]="observationRecords" (enteringRecord)="willEnterChildRecord()"></records-list>
-            <div [hidden]="segmentContent != 'observations' || !recordForm.invalid || recordForm.valid">
+            <div [hidden]="segmentContent !== 'observations' || !recordForm.invalid || recordForm.valid">
                 <h1 style="align-content: center">Required Fields Not Filled Out</h1>
                 <p>Please fill out the required fields in the form before
                    creating a tree survey.</p>
             </div>
         </div>
-        <div [hidden]="segmentContent != 'photos'">
+        <div [hidden]="segmentContent !== 'photos'">
             <photo-gallery [readonly]="readonly"></photo-gallery>
         </div>
     </div>
 
-    <ion-fab alt="KLM-SAT Tree Survey" aria-name="Create a tree survey" [hidden]="readonly || segmentContent != 'observations' || !observationRecords.length" bottom right>
+    <ion-fab alt="KLM-SAT Tree Survey" aria-name="Create a tree survey" [hidden]="readonly || segmentContent !== 'observations' || !observationRecords.length" bottom right>
       <button alt="Create a Tree Survey" aria-name="Create a tree survey" ion-fab (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
-          <img alt="Create a Tree Survey" src="assets/imgs/white_tree.png">
+          <img alt="Create a Tree Survey" src="../../assets/imgs/white_tree.png">
       </button>
   </ion-fab>
-  <ion-fab [hidden]="readonly || segmentContent != 'photos'" bottom right>
+  <ion-fab [hidden]="readonly || segmentContent !== 'photos'" bottom right>
     <button aria-name="Add Photo From Camera" alt="Add Photo From Camera" ion-fab (click)="onClickedNewPhoto(true)" class="fab-census-tree">
-        <img alt="Add Photo" class="fab-img" src="assets/imgs/fab-camera.png">
+        <img alt="Add Photo" class="fab-img" src="../../assets/imgs/fab-camera.png">
     </button>
     <button aria-name="Add Photo From Gallery" alt="Add Photo From Gallery" ion-fab (click)="onClickedNewPhoto(false)" class="fab-census-tree">
-        <img alt="Add Photo" class="fab-img" src="assets/imgs/fab-gallery.png">
+        <img alt="Add Photo" class="fab-img" src="../../assets/imgs/fab-gallery.png">
     </button>
   </ion-fab>
 

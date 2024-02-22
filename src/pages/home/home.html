@@ -1,40 +1,29 @@
 <ion-header>
-    <ion-navbar>
-        <button ion-button menuToggle>
-            <fa-icon icon="bars" size="lg"></fa-icon>
-        </button>
-        <ion-title>Observation / Census Records</ion-title>
-    </ion-navbar>
+    <ion-toolbar>
+        <ion-buttons class="ion-padding-start">
+            <ion-menu-toggle>
+                <fa-icon icon="bars" size="lg"></fa-icon>
+            </ion-menu-toggle>
+        </ion-buttons>
+        <ion-title class="custom-title-style">Observation / Census Records</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-tabs tabsLayout="icon-start" tabsPlacement="top">
-        <ion-tab tabIcon="list" tabTitle="List View" title="List" (ionSelect)="setMapTabSelected(false)"
-                 [rootParams]="{showLegend: true, data: records, navCtrl: navCtrl }" [root]="recordsList">
-        </ion-tab>
-        <ion-tab tabIcon="map" tabTitle="Map View" title="Map" (ionSelect)="setMapTabSelected(true)"
-                 [rootParams]="{data:records, navCtrl: navCtrl}" [root]="recordsMap">
-        </ion-tab>
+    <ion-tabs>
+        <ion-tab-bar slot="top" [selectedTab]="list">
+            <!-- Tab for List View -->
+            <ion-tab-button class="ion-tab-button" routerLink="recordslist" tab="list">
+                <ion-icon class="ion-tab-button__icon" name="list"></ion-icon>
+                <ion-label class="ion-tab-button__text" >List View</ion-label>
+            </ion-tab-button>
+
+            <!-- Tab for Map View -->
+            <ion-tab-button class="ion-tab-button" routerLink="recordsmap" tab="map">
+                <ion-icon class="ion-tab-button__icon" name="map"></ion-icon>
+                <ion-label class="ion-tab-button__text">Map View</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+        <ion-router-outlet overscroll="false"></ion-router-outlet>
     </ion-tabs>
-
-    <ion-fab id="myFabUpload" name="Upload" alt="Upload Records" aria-name="Upload Records" bottom left *ngIf="records && records.length && !isMapTabSelected">
-        <button alt="Upload Records" aria-name="Upload Records" ion-fab (click)="clickedUpload()">
-            <img alt="Upload Records" class="home-fab-icon" src="assets/imgs/white_upload.png">
-        </button>
-        <ion-label style="text-align: center">Upload</ion-label>
-    </ion-fab>
-
-    <ion-fab id="myFabObo" alt="Koala Opportunistic Observation" aria-name="Koala Observation" bottom right *ngIf="records && records.length && !isMapTabSelected" style="right: 120px">
-        <button ion-fab (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
-            <img alt="Create Koala Observation" class="home-fab-icon" src="assets/imgs/white_eye.png">
-        </button>
-        <ion-label style="text-align: center">Observation</ion-label>
-    </ion-fab>
-
-    <ion-fab id="myFabTree" alt="Koala Census" aria-name="Koala Census" bottom right *ngIf="records && records.length && !isMapTabSelected">
-        <button alt="Koala Census" aria-name="Koala Census" ion-fab (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
-            <img alt="Create Census" class="home-fab-icon" src="assets/imgs/white_trees.png">
-        </button>
-        <ion-label style="text-align: center">Census</ion-label>
-    </ion-fab>
 </ion-content>

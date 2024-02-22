@@ -1,4 +1,4 @@
-<ion-content style="min-height: 500px">
+<ion-content  >
     <div [hidden]="!records.length || !showLegend" id="category-legend-div">
         <ion-grid id="category-legend">
             <ion-row>
@@ -11,15 +11,15 @@
 
     <div [hidden]="!records.length">
         <ion-list>
-            <button ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
-                    (click)="itemTapped($event, record)">
-                <img item-start class="data-row" [alt]="getAltText(record)" [src]="getDatasetIcon(record)"/>
+            <ion-item *ngFor="let record of records" [style.background-color]="getStatusColor(record)"
+                    (click)="itemTapped(record)">
+                <ion-img slot="start" class="data-row" [alt]="getAltText(record)" [src]="getDatasetIcon(record)"/>
                 <ion-label>{{ record.datetime | date: angularDateFormat }}</ion-label>
-                <img item-end class="data-row" [src]="getCountIcon(record)"/>
-                <span item-end>{{ record.count || 0 }}</span>
-                <img item-end class="data-row" src="assets/imgs/camera.png"/>
-                <span item-end>{{ record.photoIds?.length || 0 }}</span>
-            </button>
+                <ion-img slot="end" class="data-row" [src]="getCountIcon(record)"/>
+                <span slot="end">{{ record.count || 0 }}</span>
+                <ion-img slot="end" class="data-row" src="assets/imgs/camera.png"/>
+                <span slot="end">{{ record.photoIds?.length || 0 }}</span>
+            </ion-item>
         </ion-list>
     </div>
 
@@ -28,7 +28,7 @@
             <ion-grid class="no-grid-padding">
                 <ion-row>
                     <ion-col>
-                        <img style="float: left" src="assets/imgs/about_footer.png"/>
+                        <ion-img style="float: left" src="assets/imgs/about_footer.png"/>
                     </ion-col>
                 </ion-row>
             </ion-grid>
@@ -42,15 +42,15 @@
               record the individual tree species, at a site, that have been searched for koalas and their scats.
             <p>
 
-            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
-                <img class="fab-button__img" src="assets/imgs/white_eye.png" alt="Koala Opportunistic Observation">
-                <span class="fab-button__text">Record an observation</span>
-            </button>
+            <ion-buttons class="fab-button" (click)="onClickedNewRecord(DATASETNAME_OBSERVATION)">
+                <ion-img class="fab-button__img" slot="start" src="assets/imgs/white_eye.png" alt="Koala Opportunistic Observation"/>
+                <ion-label class="fab-button__text" slot="start">Record an observation</ion-label>
+            </ion-buttons>
 
-            <button class="fab-button" (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
-                <img class="fab-button__img" src="assets/imgs/white_trees.png" alt="Koala Census">
-                <span class="fab-button__text">Start a census</span>
-            </button>
+            <ion-buttons class="fab-button" (click)="onClickedNewRecord(DATASETNAME_CENSUS)">
+                <ion-img class="fab-button__img" slot="start" src="assets/imgs/white_trees.png" alt="Koala Census"/>
+                <ion-label class="fab-button__text" slot="start" >Start a census</ion-label>
+            </ion-buttons>
 
             <p>
                 Once you have recorded your data, a list of the records will be displayed here.
@@ -66,10 +66,10 @@
                 the allowable constraints. You can still upload completed records even if some are incomplete
                 (shown in blue). Incomplete records will not be uploaded.
             </p>
-            <button class="fab-button" (click)="uploadClicked()">
-                <img alt="Upload Data" class="fab-button__img" src="assets/imgs/white_upload.png">
-                <span class="fab-button__text">Upload data</span>
-            </button>
+            <ion-buttons  class="fab-button" (click)="uploadClicked()">
+                <ion-img class="fab-button__img" slot="start" src="assets/imgs/white_upload.png"/>
+                <ion-label class="fab-button__text" slot="start" >Upload data</ion-label>
+            </ion-buttons>
         </div>
 
         <div *ngIf="!showHowto">
@@ -78,10 +78,10 @@
                 On this screen you can view the tree surveys related to this census. You can also create a
                 new tree survey. Each census can have many tree surveys.
             </p>
-            <button [hidden]="readonly" class="fab-button" (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
-                <img class="fab-button__img" src="assets/imgs/white_tree.png" alt="Koala Tree Survey">
-                <span class="fab-button__text">Create a tree survey for this census</span>
-            </button>
+            <ion-buttons class="fab-button" (click)="onClickedNewRecord(DATASETNAME_TREESURVEY)">
+                <ion-img class="fab-button__img" slot="start" src="assets/imgs/white_tree.png" alt="Koala Tree Survey"/>
+                <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
+            </ion-buttons>
         </div>
     </div>
 </ion-content>

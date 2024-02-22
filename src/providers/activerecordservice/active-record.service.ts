@@ -1,4 +1,4 @@
-import { ILatLng } from "@ionic-native/google-maps";
+import { LatLng } from "@capacitor/google-maps/dist/typings/definitions";
 
 export interface FormNavigationRecord {
   page: string;
@@ -12,9 +12,9 @@ export interface FormNavigationRecord {
 
 export class ActiveRecordService {
   // used to navigate back to the active form
-  activeFormNav: FormNavigationRecord;
+  activeFormNav!: FormNavigationRecord;
   goingToMap: boolean;
-  latestCoords: ILatLng;
+  latestCoords!: LatLng | null;
   isNewRecord: boolean;
   comingFromMap: boolean;
 
@@ -40,11 +40,11 @@ export class ActiveRecordService {
     return this.goingToMap;
   }
 
-  getLatestCoords(): ILatLng {
+  getLatestCoords(): LatLng | null {
     return this.latestCoords;
   }
 
-  setLatestCoords(inVal: ILatLng) {
+  setLatestCoords(inVal: LatLng | null) {
     this.latestCoords = inVal;
   }
 

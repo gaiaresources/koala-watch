@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import {AlertController, LoadingController, ModalController, NavController, NavParams} from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { from } from 'rxjs/observable/from';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
 import { AuthService } from '../../biosys-core/services/auth.service';
@@ -12,13 +12,13 @@ import { StorageService } from '../../shared/services/storage.service';
 import { formatAPIError } from '../../biosys-core/utils/functions';
 import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
 
-import { SignUpPage } from '../sign-up/sign-up';
-
 import {
-  REGO_URL,
-  PROJECT_NAME,
-  SIGNUP_TERMS_AND_CONDITIONS_HTML
+    PROJECT_NAME,
+    APP_NAME
 } from '../../shared/utils/consts';
+import {Router} from "@angular/router";
+import {SignupPrivacyPolicyPagePage} from "../signup-privacy-policy-page/signup-privacy-policy-page.page";
+import {AuthenticatedService} from "../../shared/services/authenticated.service";
 
 /**
  * Generated class for the LoginPage page.
@@ -27,61 +27,65 @@ import {
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
     selector: 'page-login',
     templateUrl: 'login.html',
+    styleUrls: ['login.scss']
 })
 export class LoginPage {
     public form: FormGroup;
 
-    public REGO_URL = REGO_URL;
-    private dialog: any;
-
-    constructor(public navCtrl: NavController,
-                public navParams: NavParams,
+    constructor(
                 private apiService: APIService,
                 private authService: AuthService,
                 private storageService: StorageService,
                 private formBuilder: FormBuilder,
                 private alertController: AlertController,
-                private loadingCtrl: LoadingController) {
+                private loadingCtrl: LoadingController,
+                private router: Router,
+                private modalController: ModalController,
+                private authenticatedService: AuthenticatedService) {
+
+        console.log("Testing - Login Constructor Called")
         this.form = this.formBuilder.group({
             'username': ['', Validators.required],
             'password': ['', Validators.required]
         });
     }
 
-    public signup() {
-      this.dialog = this.alertController.create({
-        title: 'Terms and Conditions',
-        subTitle: 'To sign up to I See Koala you\'ll need to agree to the following terms and conditions:',
-        message: SIGNUP_TERMS_AND_CONDITIONS_HTML,
-        mode: 'md',
-        buttons: [
-          {
-            text: 'Yes',
-            handler: () => {
-              this.navCtrl.push('SignUpPage', {});
-            }
-          },
-          {
-            text: 'No',
-            handler: () => {
-            }
-          }
-        ]
+    public async signup() {
+      await this.alertController.create({
+        header: 'Terms and Conditions',
+          message: 'To sign up to ' + APP_NAME + ' you\'ll need to agree to the following terms and conditions:',
+          mode: 'md',
+          buttons: [
+              {
+                  text: 'View',
+                  handler: async () => {
+                      const modal = await this.modalController.create({
+                          component: SignupPrivacyPolicyPagePage
+                      })
+
+                      return await modal.present()
+                  }
+              },
+              {
+                  text: 'Close',
+                  handler: () => {
+                  }
+              }
+          ]
+      }).then((alert) => {
+        alert.present();
       });
-      this.dialog.present().then((result) => {
-      });
-      return;
     }
 
-    public login() {
-        const loading = this.loadingCtrl.create({
-            content: 'Logging in'
+    public async login() {
+        const loading = await this.loadingCtrl.create({
+            message: 'Logging in'
         });
-        loading.present();
+
+        await loading.present();
 
         const username = this.form.value['username'];
         const password = this.form.value['password'];
@@ -91,74 +95,86 @@ export class LoginPage {
                     project__name: PROJECT_NAME
                 };
 
+                // Update authenticated check for split pane / drawer
+                this.authenticatedService.setAuthenticated(this.authService.isLoggedIn())
+
                 this.apiService.getDatasets(params).pipe(
                     mergeMap((datasets: Dataset[]) => from(datasets).pipe(
                         mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
                     ))
-                ).subscribe();
+                ).subscribe(() => {}, error => {
+                    console.log(error)
+                });
 
                 this.apiService.getUsers(params).pipe(
                     mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
-                ).subscribe();
+                ).subscribe(() => {}, error => {
+                    console.log(error)
+                });
 
-                loading.dismiss();
-                this.navCtrl.setRoot('HomePage');
+                loading?.dismiss()
+                this.router.navigateByUrl('/home')
             },
-            (error) => {
-                loading.dismiss();
+            async (error) => {
+                console.log(error)
+                loading?.dismiss();
                 const apiResponse = formatAPIError(error) as ApiResponse;
-                this.alertController.create({
-                    title: 'Login Problem',
-                    subTitle: !!apiResponse.non_field_errors ? apiResponse.non_field_errors[0] :
+                const problem = await this.alertController.create({
+                    header: 'Login Problem',
+                    subHeader: !!apiResponse.non_field_errors ? apiResponse.non_field_errors[0] :
                         'There was a problem contacting the server, try again later',
                     buttons: ['Ok']
-                }).present();
+                });
+                await problem.present();
             }
         );
     }
 
-    public resetPassword() {
-      const askEmail = this.alertController.create({
-        title: 'Enter your email address',
-        subTitle: 'To unlock your account, please enter your email address.',
+    public async resetPassword() {
+      const askEmail = await this.alertController.create({
+        header: 'Enter your email address',
+        subHeader: 'To unlock your account, please enter your email address.',
         buttons: [
           {
             text: 'Ok',
-            handler: (deets) => {
-              const waitingForReset = this.alertController.create( {
-                title: 'Resetting your password',
-                subTitle: 'Requesting a password reset for your account...',
-                buttons: [ {
-                  text: 'Cancel',
-                  role: 'cancel',
-                }]
-              });
-              waitingForReset.present();
-
-              this.apiService.forgotPassword(deets.email).subscribe( (ok) => {
-                  waitingForReset.dismiss();
-                  const done = this.alertController.create( {
-                    title: 'Password Reset',
-                    subTitle: 'Your password has been reset. Please check your email for more details.',
-                    buttons: [ {
-                      text: 'OK',
-                      role: 'ok',
+            handler: async (deets) => {
+                const waitingForReset = await this.alertController.create({
+                    header: 'Resetting your password',
+                    subHeader: 'Requesting a password reset for your account...',
+                    buttons: [{
+                        text: 'Cancel',
+                        role: 'cancel',
                     }]
-                  });
-                  done.present();
-                },
-                (resetErr) => {
-                  waitingForReset.dismiss();
-                  const done = this.alertController.create( {
-                    title: 'Password Reset Problem',
-                    subTitle: 'There was a problem resetting your password. Please try again later.',
-                    buttons: [ {
-                      text: 'OK',
-                      role: 'ok',
-                    }]
-                  });
-                  done.present();
                 });
+
+                await waitingForReset.present();
+
+                this.apiService.forgotPassword(deets.email).subscribe(async () => {
+                        await waitingForReset.dismiss();
+                        const done = await this.alertController.create({
+                            header: 'Password Reset',
+                            subHeader: 'Your password has been reset. Please check your email for more details.',
+                            buttons: [{
+                                text: 'OK',
+                                role: 'ok',
+                            }]
+                        });
+                        await done.present();
+                    },
+                    async (resetErr) => {
+                        await waitingForReset.dismiss();
+                        console.error(resetErr)
+                        const done = await this.alertController.create({
+                            header: 'Password Reset Problem',
+                            subHeader: 'There was a problem resetting your password. Please try again later.',
+                            message: resetErr,
+                            buttons: [{
+                                text: 'OK',
+                                role: 'ok',
+                            }]
+                        });
+                        await done.present();
+                    });
             }
           },
           {
@@ -173,6 +189,10 @@ export class LoginPage {
             placeholder: 'Please enter your email address'
           }
         ]
-      }).present();
+      });
+
+      await askEmail.present();
     }
+
+    protected readonly APP_NAME = APP_NAME;
 }

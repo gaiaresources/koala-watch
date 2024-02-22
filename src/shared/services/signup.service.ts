@@ -1,10 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { catchError } from 'rxjs/operators/catchError';
-import { APIError } from 'biosys-core/interfaces/api.interfaces';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {Observable, catchError, throwError} from 'rxjs';
 import { PROJECT_NAME } from '../utils/consts';
+import {APIError} from "../../biosys-core/interfaces/api.interfaces";
 
 // Keeping this as a separate class because of a few reasons
 // 1: The idea that randoms can sign themselves up to Biosys is antithetical
@@ -57,6 +56,7 @@ export class SignupService {
     } else {
       apiError.msg = body;
     }
-    return Observable.throw(apiError);
+
+    return throwError(() => apiError)
   }
 }

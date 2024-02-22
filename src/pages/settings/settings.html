@@ -1,23 +1,24 @@
 <ion-header>
-    <ion-navbar>
-        <button ion-button menuToggle>
-            <fa-icon icon="bars" size="lg"></fa-icon>
-        </button>
-        <ion-title>Settings</ion-title>
-    </ion-navbar>
+  <ion-toolbar>
+      <ion-buttons class="ion-padding-start">
+          <ion-menu-toggle>
+              <fa-icon icon="bars" size="lg"></fa-icon>
+          </ion-menu-toggle>
+      </ion-buttons>
+      <ion-title class="custom-title-style">Settings</ion-title>
+  </ion-toolbar>
 </ion-header>
-
 <ion-content>
     <ion-card>
         <ion-card-content>
             <ion-grid>
-                <ion-row>
+                <ion-row class="ion-justify-content-between ion-align-items-center ion-margin-bottom">
                     <ion-label>Hide uploaded records</ion-label>
-                    <ion-toggle [(ngModel)] = "hideUploaded" (ionChange)="ionChangeHideUploaded(event)"></ion-toggle>
+                    <ion-toggle alignment="end" [(ngModel)] = "hideUploaded" (ionChange)="ionChangeHideUploaded()"/>
                 </ion-row>
-                <ion-row>
+                <ion-row class="ion-justify-content-between ion-align-items-center">
                     <ion-label>Delete uploaded records</ion-label>
-                    <button ion-button small (click)="clickDeleteUploadedRecords()">Delete</button>
+                    <ion-button size="small" (click)="clickDeleteUploadedRecords()">Delete</ion-button>
                 </ion-row>
             </ion-grid>
         </ion-card-content>

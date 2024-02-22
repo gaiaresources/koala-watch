@@ -16,7 +16,7 @@
               </ion-label>
               <ion-datetime [max]="currentDate | date:'yyyy-MM-dd'"
                             [formControlName]="field.key"
-                            [displayFormat]="field.format | pyDateFormatToIonicDateFormat"
+                            [titleSelectedDatesFormatter]="field.format! | pyDateFormatToIonicDateFormat"
                             [disabled]="readonly">
               </ion-datetime>
           </ion-item>
@@ -28,13 +28,13 @@
           Location (Current Accuracy: {{lastLocation && lastLocation.coords ? ((lastLocation.coords.accuracy | number: '1.0-0') || 'Waiting for Reading...') : 'Waiting for Reading...'}})
           <br/>
           <br/><br/>
-          <button *ngIf="!readonly" ion-button color="primary" (click)="openModal()" class="item-divider-button-map">
+          <ion-button *ngIf="!readonly" color="primary" (click)="openModal()" class="item-divider-button-map">
             <ion-icon name="pin"></ion-icon>&nbsp; Map
-          </button>
+          </ion-button>
 
-          <button *ngIf="!readonly" ion-button color="primary" (click)="updateLocationFields()" class="item-divider-button">
+          <ion-button *ngIf="!readonly" color="primary" (click)="updateLocationFields()" class="item-divider-button">
             <ion-icon name="locate"></ion-icon>&nbsp; GPS
-          </button>
+          </ion-button>
 
       </ion-item-divider>
           <ion-item *ngFor="let field of formDescriptor.locationFields" [ngSwitch]="field.type">
@@ -50,7 +50,6 @@
               <ion-input *ngSwitchCase="'integer'"
                          [formControlName]="field.key"
                          mbsc-numpad-decimal
-                         [mbsc-options]="getNumpadOptions(field)"
                          [readonly]="readonly"
                          [disabled]="readonly"
                          [placeholder]="field.description || ''">
@@ -59,7 +58,6 @@
               <ion-input *ngSwitchCase="'number'"
                          [formControlName]="field.key"
                          mbsc-numpad-decimal
-                         [mbsc-options]="getNumpadCoordinateOptions(field)"
                          [readonly]="readonly"
                          [disabled]="readonly">
               </ion-input>
@@ -94,11 +92,9 @@
 
               <ion-input *ngSwitchCase="'select'"
                          [formControlName]="field.key" mbsc-select
-                         [mbsc-data]="field.options"
-                         [mbsc-options]="getSelectOptions(field)"
                          [disabled]="readonly"
                          [readonly]="readonly"
-                         (onItemTap)="onItemSelected($event)"
+                         (select)="onItemSelected($event)"
                          [placeholder]="field.description || ''">
               </ion-input>
 
@@ -109,7 +105,6 @@
               <ion-input *ngSwitchCase="'integer'"
                          [formControlName]="field.key"
                          mbsc-numpad-decimal
-                         [mbsc-options]="getNumpadOptions(field)"
                          [disabled]="readonly"
                          [readonly]="readonly"
                          [placeholder]="field.description || ''">
@@ -143,11 +138,9 @@
 
               <ion-input *ngSwitchCase="'select'"
                          [formControlName]="field.key"
-                         mbsc-select [mbsc-data]="field.options"
-                         [mbsc-options]="getSelectOptions(field)"
                          [disabled]="readonly"
                          [readonly]="readonly"
-                         (onItemTap)="onItemSelected($event)"
+                         (select)="onItemSelected($event)"
                          [placeholder]="field.description || ''">
               </ion-input>
 
@@ -159,7 +152,6 @@
               <ion-input *ngSwitchCase="'integer'"
                          [formControlName]="field.key"
                          mbsc-numpad-decimal
-                         [mbsc-options]="getNumpadOptions(field)"
                          [disabled]="readonly"
                          [readonly]="readonly"
                          [placeholder]="field.description || ''">

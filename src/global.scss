@@ -1,0 +1,87 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+@import "@mobiscroll/angular/dist/css/mobiscroll.scss";
+
+@import "theme/variables.scss";
+
+ion-fab {
+  height: 80px;
+  width: 80px;
+  margin: 20px;
+}
+
+.info {
+  padding-top: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
+
+  h1 {
+    color: black;
+  }
+
+  p {
+    color: black;
+    font-size: 14pt;
+  }
+}
+
+.alert-message {
+  min-width: 50%;
+  overflow-y: auto;
+}
+
+fa-icon {
+  margin-right: 1.5em;
+}
+
+ion-segment {
+  padding-bottom: 16px;
+}
+
+// fix scrolling on ios12.2
+ion-app.platform-ios12 ion-content {
+  pointer-events: auto;
+}
+
+// on iOS, Voiceover says "Button back back" meaning "'Button back', 'Back'"
+//.ion-md-close {
+ // name: '';
+//}
+
+// Resolves tab-bar having blank spacing between header and tabs
+// https://forum.ionicframework.com/t/tabs-within-ion-content-ios-issue/226439
+.ios ion-tab-bar {
+  margin-top: -12.5%;
+}
+
+.custom-title-style {
+  --padding-start: 64px;
+  -webkit-padding-start: 64px;
+  padding-inline-start: 64px;
+  width: fit-content;
+}
