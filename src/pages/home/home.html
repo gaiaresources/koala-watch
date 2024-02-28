@@ -13,17 +13,16 @@
     <ion-tabs>
         <ion-tab-bar slot="top" [selectedTab]="list">
             <!-- Tab for List View -->
-            <ion-tab-button class="ion-tab-button" routerLink="recordslist" tab="list">
+            <ion-tab-button class="ion-tab-button" tab="recordslist">
                 <ion-icon class="ion-tab-button__icon" name="list"></ion-icon>
                 <ion-label class="ion-tab-button__text" >List View</ion-label>
             </ion-tab-button>
 
             <!-- Tab for Map View -->
-            <ion-tab-button class="ion-tab-button" routerLink="recordsmap" tab="map">
+            <ion-tab-button class="ion-tab-button" tab="recordsmap">
                 <ion-icon class="ion-tab-button__icon" name="map"></ion-icon>
                 <ion-label class="ion-tab-button__text">Map View</ion-label>
             </ion-tab-button>
         </ion-tab-bar>
-        <ion-router-outlet overscroll="false"></ion-router-outlet>
     </ion-tabs>
 </ion-content>

@@ -18,7 +18,6 @@ const routes: Routes = [
     children: [
       { path: 'recordslist', loadChildren: () => import('../../components/records-list/records-list.module').then(m => m.RecordListModule) },
       { path: 'recordsmap', loadChildren: () => import('../../components/records-map/records-map.module').then(m => m.RecordsMapModule) }
-      //{ path: '', redirectTo: 'home/recordslist', pathMatch: 'full' }
     ]
   },
   { path: '', redirectTo: 'home/recordslist', pathMatch: 'full' }
