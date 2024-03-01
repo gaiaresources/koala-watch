@@ -67,7 +67,6 @@
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^8.0.1",
     "cordova-plugin-geolocation": "^4.1.0",
-    "cordova-plugin-googlemaps": "^2.7.1",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.1",
     "cordova-plugin-splashscreen": "^5.0.2",
@@ -142,10 +141,7 @@
       "cordova-android-support-gradle-release": {
         "ANDROID_SUPPORT_VERSION": "27.0.0"
       },
-      "cordova-sqlite-storage": {},
-      "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-googlemaps": {},
-      "cordova-plugin-androidx": {}
+      "cordova-sqlite-storage": {}
     },
     "config": {
       "ionic_copy": "./scripts/copy-mobiscroll-css.js"
