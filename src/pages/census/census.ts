@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { AlertController, FabContainer, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, NavController, NavParams } from '@ionic/angular';
 
 import { UUID } from 'angular2-uuid';
-import * as moment from 'moment/moment';
-import { from } from 'rxjs/observable/from';
+import moment from 'moment/moment';
+import { from } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
@@ -24,7 +24,6 @@ import { FormNavigationRecord, ActiveRecordService } from '../../providers/activ
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
     selector: 'page-census',
     templateUrl: 'census.html',
@@ -39,10 +38,10 @@ export class CensusPage {
 
     private showLeavingAlertMessage = true;
     private record: ClientRecord;
-    private recordClientId: string;
+    public recordClientId: string;
 
     @ViewChild(RecordFormComponent)
-    private recordForm: RecordFormComponent;
+    public recordForm: RecordFormComponent;
 
     @ViewChild(PhotoGalleryComponent)
     private photoGallery: PhotoGalleryComponent;
@@ -58,12 +57,16 @@ export class CensusPage {
                 public activeRecordService: ActiveRecordService) {
     }
 
-    public onClickedNewRecord(datasetName: string, fabContainer: FabContainer) {
+    public onClickedNewRecord(datasetName: string) {
         this.willEnterChildRecord();
 
-        this.censusNavCtrl.push('ObservationPage', {
+        const payload = {
             datasetName: datasetName,
             parentId: this.recordClientId
+        }
+
+        this.censusNavCtrl.navigateForward('ObservationPage', {
+            state: payload
         });
     }
 
@@ -116,22 +119,24 @@ export class CensusPage {
         return true;
       } else if (this.showLeavingAlertMessage) {
             this.alertController.create({
-                title: 'Leaving census unsaved',
+                header: 'Leaving census unsaved',
                 message: 'You are leaving the census form data unsaved, are you sure?',
-                enableBackdropDismiss: true,
+                backdropDismiss: true,
                 buttons: [
                     {
                         text: 'Yes',
                         handler: () => {
                             this.photoGallery.rollback();
                             this.showLeavingAlertMessage = false;
-                            this.censusNavCtrl.popToRoot();
+                            // TODO test
+                            this.censusNavCtrl.navigateRoot('/home')
+                            //this.censusNavCtrl.popToRoot();
                         }
                     },
                     {
                         text: 'No'
                     }]
-            }).present();
+            }).then((alert) => alert.present());
 
             return false;
         } else {
@@ -190,14 +195,16 @@ export class CensusPage {
         }).subscribe((result: boolean) => {
             if (result && popForm) {
                 this.showLeavingAlertMessage = false;
-                this.censusNavCtrl.popToRoot();
+                // TODO test
+                this.censusNavCtrl.navigateRoot('/home')
+                //this.censusNavCtrl.popToRoot();
             }
 
             if (result) {
               if (formValues['SiteNo'] !== this.siteNumberOriginal) {
                 // alert('changed');
                 for (const obo of this.observationRecords) {
-                  obo.data['SiteNo'] = formValues['SiteNo'];
+                  obo.data!['SiteNo'] = formValues['SiteNo'];
                   this.storageService.putRecord(obo);
                 }
               }
@@ -207,16 +214,16 @@ export class CensusPage {
 
     public delete() {
         this.alertController.create({
-            title: 'Census',
+            header: 'Census',
             message: 'Are you sure you want to delete this census?',
-            enableBackdropDismiss: true,
+            backdropDismiss: true,
             buttons: [
                 {
                     text: 'Yes',
                     handler: () => {
                         if (this.record) {
                             this.photoGallery.rollback();
-                            this.storageService.deleteRecord(this.record.client_id).subscribe(deleted => {
+                            this.storageService.deleteRecord(this.record.client_id!).subscribe(deleted => {
                                 if (this.record.photoIds) {
                                     from(this.record.photoIds).pipe(
                                         mergeMap(photoId => this.storageService.deletePhoto(photoId))
@@ -224,31 +231,35 @@ export class CensusPage {
                                 }
                                 // TODO: Delete any child records
                                 this.showLeavingAlertMessage = false;
-                                this.censusNavCtrl.popToRoot();
+                                // TODO Test
+                                this.censusNavCtrl.navigateRoot('/home')
+                                //this.censusNavCtrl.popToRoot();
                             }, (error) => {
                                 this.alertController.create({
-                                    title: 'Cannot Delete',
+                                    header: 'Cannot Delete',
                                     message: 'Sorry, cannot delete this observation.',
-                                    enableBackdropDismiss: true,
+                                    backdropDismiss: true,
                                     buttons: [
                                         {
                                             text: 'OK',
                                             handler: () => {}
                                         }
                                     ]
-                                }).present();
+                                }).then((alert) => alert.present());
 
                             });
                         } else {
                             this.showLeavingAlertMessage = false;
-                            this.censusNavCtrl.popToRoot();
+                            // TODO test
+                            this.censusNavCtrl.navigateRoot('/home')
+                            //this.censusNavCtrl.popToRoot();
                         }
                     }
                 },
                 {
                     text: 'No'
                 }]
-        }).present();
+        }).then((alert) => alert.present());
     }
 
     private loadRecordAndChildRecords() {
@@ -262,7 +273,7 @@ export class CensusPage {
                     this.record = record;
                     this.photoGallery.PhotoIds = record.photoIds;
                     this.readonly = !!record.id;
-                    this.siteNumberOriginal = record.data['SiteNo'];
+                    this.siteNumberOriginal = record.data!['SiteNo'];
                     this.updateFromMap();
                 }
             }),
@@ -280,11 +291,11 @@ export class CensusPage {
                 });
 
                 // patch in end datetime as the datetime of the last child element
-                if (this.record.data.hasOwnProperty('End Date and time') && this.observationRecords.length) {
-                    this.record.data['End Date and time'] = this.observationRecords.slice(-1)[0].datetime;
+                if (this.record.data!.hasOwnProperty('End Date and time') && this.observationRecords.length) {
+                    this.record.data!['End Date and time'] = this.observationRecords.slice(-1)[0].datetime;
                 }
 
-                this.recordForm.value = this.record.data;
+                this.recordForm.value = this.record.data!;
                 this.updateFromMap();
 
                 this.recordForm.validate();

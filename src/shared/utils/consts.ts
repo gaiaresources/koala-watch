@@ -218,3 +218,144 @@ export let SIGNUP_TERMS_AND_CONDITIONS_HTML = `
     can also be found on our website.
 </p>
 `;
+
+
+export let SIGNUP_TERMS_AND_CONDITIONS_HTML_2 = `
+
+Privacy Policy\n
+
+    Last modified on 19 October 2020\n\n\n
+
+
+    The purpose of this policy is to tell you what kind of personal information\n
+    that the NSW Department of Planning, Industry and Environment (DPIE) may collect\n
+    from you when you use the Biosys, BioNet Atlas, BioNet Vegetation Classification,\n
+    BioNet APIs and I Spy Koala applications (collectively the “App”), how we may\n
+    use that information, whether we disclose it to anyone and how you can access\n
+    this information.\n\n\n
+
+
+    This privacy policy only concerns personal information collected by DPIE.\n
+    The I Spy Koala application is distributed through Google Play\n
+    and the App Store. By using this application you may also provide personal\n
+    information directly to Google or Apple. Depending on your preferred smart\n
+    phone system, we recommend that you examine the Privacy Policy of your Android\n
+    or Apple device and Terms of Service of Google Play and the App Store.\n\n
+
+Your right to privacy\n\n
+
+    In dealing with your personal information the Department must comply with the Privacy\n
+    and Personal Information Protection Act 1998 (NSW) which regulates the\n
+    collection, storage, quality, use and disclosure of personal information.\n\n
+
+What is your personal information?\n\n
+
+    Personal information is information or an opinion about you. You do not\n
+    need to be named in the information. It is only necessary that information\n
+    about you is apparent or can reasonably be ascertained from the\n
+    information. Personal information is found not just in paper files but also in\n
+    such things as electronic records, video recordings and photographs.\n\n\n
+
+
+    The Department does not disclose such information to any third party other than as specified in this policy.\n\n\n
+
+
+    What personal information do we collect?\n\n
+
+    We will collect the following personal information from you when you\n
+    register to use the App:\n\n
+
+    - your full name\n
+    - email address\n
+    - phone numbers (except for the I Spy Koala application).\n\n\n
+
+
+    If you apply for a Sensitive Species Data Licence through BioNet Atlas, and\n
+    are applying as an individual, we will collect your full name, email address,\n
+    postal address, suburb, postcode and phone number.\n\n
+
+    You will also be directed to create a public username when using the App, your user name may \n
+    include your personal information if you can be identified from this information. \n
+    As noted below, your username is published when you post an observation on the App.\n\n
+
+    We may also collect the following information from you when you use the App:\n\n
+
+    - information about the physical site where an observation was made, including place name, time, time zone, date and coordinates\n
+    - your IP (internet protocol) address or host name when you visited the App\n
+    - the pages you attempted to view or download, and whether those pages were displayed\n
+    - the device and operating system you are using\n
+    - whether you have previously visited our App (only if you accept cookies).\n\n
+
+Why are you collecting my personal information?\n\n
+
+    The purpose of collecting your personal information is to help administer the App and help validate
+    any observations submitted by you. The Department collects additional information for the Sensitive
+    Species Data Licence because of the high-value information that this licence allows a person to
+    access and enter into relevant App databases.
+
+    We use your personal information to deliver our services to you so that you can participate in the
+    full experience of the App.
+
+    In addition to some of the specific uses of information we describe in this Privacy Policy, we may
+    use information that we receive to:
+
+    - help you efficiently access your information after you sign in
+    - remember information so you will not have to re-enter it during your visit
+    - provide, improve, test and monitor the effectiveness of the App
+    - develop and test new products and features
+    - diagnose or fix technology problems.
+
+Is providing my personal information voluntary?
+
+    Providing the personal information described above is voluntary, yet if you do not provide this information you cannot use the App.
+
+Will you disclose my personal information to any person?
+
+    Subject to the below, the Department will not disclose your personal information to any third party.
+
+    When you post an observation, this information is published on the App.
+
+    The information that will be published is your user name, your unique Bionet observer identification number, and information about the physical site where an observation was made, including place name, time, time zone, date and coordinates.  As noted above, your user name may include your personal information if you can be identified from this information.  However, your observer identity does not have to be your name and we publish the observer identity to protect the integrity of the observation process.
+
+    In addition to being published, this information will be disclosed to other parties. As these projects are part of broader national studies and conservation works we share your observations in a machine-readable format for certain observations with the Atlas of Living Australia, the Australian Ecological Knowledge Observation System (AEKOS), the Sharing and Enabling Environmental Data (SEED), and the Global Biodiversity Information Facility (GBIF).
+
+What about links to other websites?
+
+    This Privacy Policy applies solely to information collected by the App.
+
+    The App may contain links to other sites. We make no representations or warranties as to the privacy practices of any site operated by a third party and are not responsible for the privacy policies of such sites.
+
+    We recommend that you examine the Privacy Policy for all third-party websites you visit to understand their procedures for collecting, using and disclosing personal information.
+
+Access, storage and accuracy of personal information
+
+    Your personal information is being collected by the Department of Planning, Industry and Environment, Locked Bag 5022, Parramatta NSW 2124. It will be held by DPIE in an encrypted cloud-based server.
+
+    Access - under the Privacy and Personal Information Protection Act 1998 you have the right to access personal information the Department holds about you.
+
+    Accuracy - we are committed to ensuring that the information we hold is accurate, complete and up to date, so we encourage you to advise us if the information you have given us has changed. If you believe our information is inaccurate, please contact us.
+
+    Retention – we will retain the information you have provided for a period that is appropriate for the purpose for which it was provided. Your information will be archived and disposed of in accordance with Department policies, legislative requirements and guidelines based on the NSW State Records Act 1998.
+
+    Security - We take reasonable steps to preserve the security of your personal information and other information or data processed through the App. Unfortunately, no data transmission over the internet can be guaranteed as perfectly secure. As a result, although we strive to protect your personal information, we cannot guarantee the security of any information you transmit to us and you transmit such information at your own risk.
+
+    Once we have received information you transmit to us, we take reasonable steps to protect information during transfer and storage. Physical measures, such as building and equipment security, are used in conjunction with digital technology, such as data encryption and firewalls, to minimise unauthorised access to information.
+
+Privacy enquiries
+
+    For more information about privacy at the Department, please contact:
+
+    GIPA & Privacy Unit
+
+    Locked Bag 5022 Parramatta NSW 2124
+
+
+Phone: 02 9860 1440
+
+
+  Email: privacy@dpie.nsw.gov.au
+
+
+    Privacy information can also be found on our website.
+
+`;

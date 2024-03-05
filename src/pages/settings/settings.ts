@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from '@ionic/angular';
 import { StorageService } from '../../shared/services/storage.service';
 import { mergeMap } from 'rxjs/operators';
 
@@ -10,29 +10,29 @@ import { mergeMap } from 'rxjs/operators';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
     selector: 'page-settings',
     templateUrl: 'settings.html',
+    styleUrls: ['settings.scss']
 })
 export class SettingsPage {
 
     public hideUploaded: boolean;
 
-    public ionChangeHideUploaded(event) {
+    public ionChangeHideUploaded() {
         this.saveSetting('hideUploaded', this.hideUploaded);
     }
 
     public clickDeleteUploadedRecords() {
         this.storageService.getAllUploadedRecords().pipe(mergeMap(clientRecord =>
-            this.storageService.deleteRecord(clientRecord.client_id))).subscribe({
+            this.storageService.deleteRecord(clientRecord.client_id!))).subscribe({
                 complete: () => {
                     this.alertController.create({
-                        title: 'Settings',
+                        header: 'Settings',
                         message: 'Uploaded records deleted',
-                        enableBackdropDismiss: true,
+                        backdropDismiss: true,
                         buttons: [{text: 'Ok'}]
-                    }).present();
+                    }).then((alert) => alert.present());
                 }
             }
         );

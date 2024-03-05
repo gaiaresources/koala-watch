@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, NavParams} from '@ionic/angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
 import {
@@ -10,10 +10,13 @@ import { isDatasetCensus } from '../../shared/utils/functions';
 import { StorageService } from '../../shared/services/storage.service';
 import '../../shared/utils/consts';
 import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
+import {EventService} from "../../shared/services/event.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'records-list',
-    templateUrl: 'records-list.html'
+    templateUrl: 'records-list.html',
+    styleUrls: ['records-list.scss']
 })
 
 export class RecordsListComponent {
@@ -32,7 +35,7 @@ export class RecordsListComponent {
 
 
     @Input()
-    public baseNavController: NavController;
+    public baseNavController: NavController | undefined;
 
     @Input()
     public parentId: string;
@@ -49,11 +52,16 @@ export class RecordsListComponent {
     @Output()
     public enteringRecord = new EventEmitter();
 
-    constructor(public navCtrl: NavController,
-                public navParams: NavParams,
-                private storage: StorageService,
-                private events: Events,
-                public activeRecordService: ActiveRecordService) {
+    constructor(
+        public navCtrl: NavController,
+        public navParams: NavParams,
+        private router: Router,
+        private storage: StorageService,
+        public activeRecordService: ActiveRecordService,
+        private events: EventService)
+    {
+        console.log("Testing - Called Records-List constructor")
+
         this.baseNavController = (this.navParams.data.hasOwnProperty('navCtrl') ? this.navParams.get('navCtrl') : undefined);
 
         this.records = (this.navParams.data.hasOwnProperty('data') ? this.navParams.get('data') : []);
@@ -64,6 +72,7 @@ export class RecordsListComponent {
     }
 
     public getStatusColor(record: ClientRecord) {
+        console.log("Testing - Getting StatusColor")
         if (record.id) {
             return RECORD_UPLOADED;
         }
@@ -71,6 +80,7 @@ export class RecordsListComponent {
     }
 
   public getAltText(record: ClientRecord): string {
+      console.log("Testing - Getting Alt Text")
     let rv = '';
     switch (record.datasetName) {
       case DATASET_NAME_OBSERVATION:
@@ -93,6 +103,7 @@ export class RecordsListComponent {
 
 
   public getDatasetIcon(record: ClientRecord): string {
+      console.log("Testing - Getting DatasetIcon")
         switch (record.datasetName) {
             case DATASET_NAME_OBSERVATION:
                 return 'assets/imgs/eye.png';
@@ -100,10 +111,12 @@ export class RecordsListComponent {
                 return 'assets/imgs/trees.png';
             case DATASET_NAME_TREESURVEY:
                 return 'assets/imgs/tree.png';
+            default: return 'assets/imgs/koala.png';
         }
     }
 
     public getCountIcon(record: ClientRecord): string {
+      console.log("Testing - Called getCountIcon")
         switch (record.datasetName) {
             case DATASET_NAME_OBSERVATION:
                 return 'assets/imgs/koala.png';
@@ -111,21 +124,20 @@ export class RecordsListComponent {
                 return 'assets/imgs/tree.png';
             case DATASET_NAME_TREESURVEY:
                 return 'assets/imgs/koala.png';
+            default: return 'assets/imgs/koala.png';
         }
     }
 
-    private navPush(page, params) {
+    private navPush(page: string, params: { datasetName: string; recordClientId?: string | undefined; parentId?: string | null | undefined; readonly?: boolean; }) {
+      console.log("Testing - Called navPush")
         this.enteringRecord.emit();
-
-        if (!this.baseNavController) {
-            this.navCtrl.push(page, params);
-        } else {
-            this.baseNavController.push(page, params);
-        }
+       //this.navCtrl.navigateForward(page, { state: params })
     }
 
-    public itemTapped(event, record) {
-        const page = isDatasetCensus(record.datasetName) ? 'CensusPage' : 'ObservationPage';
+    public itemTapped(record: ClientRecord) {
+      console.log("Testing - Called itemTapped")
+
+        const page = isDatasetCensus(record.datasetName) ? '/census' : '/observation';
         const params = {
             datasetName: record.datasetName,
             recordClientId: record.client_id,
@@ -141,22 +153,25 @@ export class RecordsListComponent {
     }
 
     public onClickedNewRecord(datasetName: string) {
+      console.log("Testing - Called onClickedNewRecord")
         let page;
-        const params = {
+        const params: { datasetName: string; parentId: string | null} = {
             datasetName: datasetName,
+            parentId: null
         };
         if (isDatasetCensus(datasetName)) {
-            page = 'CensusPage';
+            page = '/census';
         } else {
             if (this.parentId) {
                 params['parentId'] = this.parentId;
             }
-            page = 'ObservationPage';
+            page = '/observation';
         }
         this.navPush(page, params);
     }
 
     public uploadClicked() {
-        this.events.publish('upload-clicked');
+        console.log("Testing - Upload Clicked")
+        this.events.publishEvent('upload-clicked');
     }
 }

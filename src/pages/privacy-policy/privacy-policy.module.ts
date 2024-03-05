@@ -1,20 +1,31 @@
 import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
+import {IonicModule, NavController, NavParams} from '@ionic/angular';
 import { PrivacyPolicyPage } from './privacy-policy';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import {RouterModule, Routes} from "@angular/router";
+
+const routes: Routes = [
+  {
+    path: '',
+    component: PrivacyPolicyPage
+  }
+]
+
 @NgModule({
   declarations: [
     PrivacyPolicyPage,
   ],
   imports: [
-    IonicPageModule.forChild(PrivacyPolicyPage),
-    FontAwesomeModule
+    IonicModule,
+    FontAwesomeModule,
+    RouterModule.forChild(routes)
   ],
-  entryComponents: [
-    PrivacyPolicyPage,
+  providers: [
+      NavController,
+      NavParams
   ]
 })
 export class PrivacyPolicyPageModule {

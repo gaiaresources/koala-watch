@@ -9,3 +9,21 @@ div.home-tab-content {
 .toast-message {
     text-align: center;
 }
+
+.ion-tab-button {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: stretch;
+
+    &__icon {
+        margin: 0 8px;
+    }
+
+    &__text {
+        text-align: center;
+        margin: 0;
+    }
+}

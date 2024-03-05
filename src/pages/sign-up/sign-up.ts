@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Alert, AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
-import { APP_NAME, SIGNUP_TERMS_AND_CONDITIONS_HTML } from '../../shared/utils/consts';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AlertController, IonItem, LoadingController, NavController, NavParams} from '@ionic/angular';
+import { APP_NAME } from '../../shared/utils/consts';
 import { FormBuilder, Validators } from '@angular/forms';
 import { formatAPIError } from '../../biosys-core/utils/functions';
 import { ApiResponse } from '../../shared/interfaces/mobile.interfaces';
-import { AuthService } from '../../biosys-core/services/auth.service';
 import { SignupService } from '../../shared/services/signup.service';
+import {Router} from "@angular/router";
 
 /**
  * Generated class for the SignUpPage page.
@@ -14,25 +14,32 @@ import { SignupService } from '../../shared/services/signup.service';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-sign-up',
   templateUrl: 'sign-up.html',
+  styleUrls: ['sign-up.scss']
 })
 export class SignUpPage implements OnInit {
   public APP_NAME = APP_NAME;
   public form: any;
-  private dialog: Alert;
-  private passwordsMatch = true;
-  private passwordsOK = false;
+  public passwordsMatch = true;
+  public passwordsOK = false;
   private passwordsAdvice = '';
-  private usernameOK = true;
-  showingSignupMsg: boolean;
+  public usernameOK = true;
+  private showingSignupMsg: boolean;
 
-  constructor(public navCtrl: NavController,
-    public navParams: NavParams,
+  public getPasswordAdvice() {
+    if (!this.passwordsMatch) {
+      return "Passwords must match"
+    } else if (this.passwordsAdvice.trim() !== '') {
+      return this.passwordsAdvice
+    } else {
+      return ""
+    }
+  }
+
+  constructor(private router: Router,
     private signupService: SignupService,
-    private authService: AuthService,
     private formBuilder: FormBuilder,
     private loadingCtrl: LoadingController,
     private alertController: AlertController) {
@@ -49,20 +56,21 @@ export class SignUpPage implements OnInit {
   ngOnInit(): void {
   }
 
-  private signup() {
-    this.doSignup();
+  public async signup() {
+    await this.doSignup();
   }
 
-  private goBack() {
-    this.navCtrl.pop();
+  public goBack() {
+    this.router.navigateByUrl('/login')
   }
 
 
-  public doSignup() {
-    const loading = this.loadingCtrl.create({
-      content: 'Creating Your Account...'
-    });
-    loading.present();
+  public async doSignup() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Creating Your Account...'
+    })
+
+    await loading.present();
 
     const username = this.form.value['name_user'];
     const password = this.form.value['password'];
@@ -76,17 +84,18 @@ export class SignUpPage implements OnInit {
     this.signupService.signUp(username, password, email, first, last).subscribe(() => {
       loading.dismiss();
       this.alertController.create({
-        title: 'Signed Up',
-        subTitle: 'Your account has been created, and you can now login!',
+        header: 'Signed Up',
+        subHeader: 'Your account has been created, and you can now login!',
         buttons: ['Ok']
-      }).present().then(() => {
-        // navigate back to the login page:
-        this.navCtrl.pop();
+      }).then((alert) => {
+        alert.present().then(() => {
+          // navigate back to the login page:
+          this.goBack()
+        });
       });
       return;
     }, (error) => {
-      loading.dismiss().then(() => {/* meh */
-      });
+      loading.dismiss().then(() => {/* meh */ });
       const apiResponse = formatAPIError(error) as ApiResponse;
 
       let subTitle = !!apiResponse.non_field_errors ? apiResponse.non_field_errors[0] :
@@ -107,23 +116,17 @@ export class SignUpPage implements OnInit {
         this.showingSignupMsg = true;
 
         this.alertController.create({
-          title: 'Sign-Up Problem',
-          subTitle: subTitle,
+          header: 'Sign-Up Problem',
+          subHeader: subTitle,
           buttons: ['Ok']
-        }).present().then(() => {/* meh */
-        });
+        }).then((alert) => { alert.present() });
       }
-
-
     });
     this.showingSignupMsg = false;
     return;
   }
 
-  ionViewDidLoad() {
-  }
-
-  private passwordCheck() {
+  public passwordCheck() {
     const thePasswd = this.form.value['password'];
     this.passwordsMatch = this.form.value['password'] === this.form.value['password_again'] || false;
     if (thePasswd.indexOf('>') >= 0 || thePasswd.indexOf('<') >= 0) {
@@ -160,7 +163,7 @@ export class SignUpPage implements OnInit {
     this.passwordsOK = true;
   }
 
-  private usernameCheck() {
+  public usernameCheck() {
     const username = this.form.value['name_user'];
     const reg = new RegExp('^[\\w.@+-]+$');
     this.usernameOK = reg.test(username);

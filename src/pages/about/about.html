@@ -1,21 +1,23 @@
 <ion-header>
-  <ion-navbar>
-      <button ion-button menuToggle>
-          <fa-icon icon="bars" size="lg"></fa-icon>
-      </button>
-      <ion-title>About</ion-title>
-  </ion-navbar>
+  <ion-toolbar>
+      <ion-buttons class="ion-padding-start">
+          <ion-menu-toggle>
+              <fa-icon icon="bars" size="lg"></fa-icon>
+          </ion-menu-toggle>
+      </ion-buttons>
+      <ion-title class="custom-title-style">About</ion-title>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content padding scrollX="false" scrollY="true">
+<ion-content class="ion-padding" scrollX="false" scrollY="true">
   <div class="info">
       <ion-grid class="no-grid-padding">
           <ion-row>
-              <ion-col>
-                  <img style="float: left" src="assets/imgs/about_footer.png"/>
+              <ion-col class="image-container">
+                  <ion-img src="../../assets/imgs/about_footer.png"/>
               </ion-col>
-              <ion-col>
-                  <img style="float: right"  src="assets/imgs/waratah-nsw-government-square-png-logo.png" height="80px"/>
+              <ion-col class="image-container">
+                  <ion-img src="../../assets/imgs/waratah-nsw-government-square-png-logo.png"/>
               </ion-col>
           </ion-row>
       </ion-grid>

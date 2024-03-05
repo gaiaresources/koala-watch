@@ -1,18 +1,18 @@
 import { Component, Input } from '@angular/core';
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import {Camera, CameraResultType, CameraSource, ImageOptions} from '@capacitor/camera';
 import { StorageService } from '../../shared/services/storage.service';
 import { UUID } from 'angular2-uuid';
 import { DomSanitizer } from '@angular/platform-browser';
-import * as moment from 'moment/moment';
-import { from } from 'rxjs/observable/from';
-import { mergeMap } from 'rxjs/operators';
-import { AlertController } from 'ionic-angular';
+import { from, mergeMap } from 'rxjs';
+import { AlertController } from '@ionic/angular';
+import moment from "moment";
 
 @Component({
     selector: 'photo-gallery',
     templateUrl: 'photo-gallery.html'
 })
 export class PhotoGalleryComponent {
+
 
     @Input()
     public readonly: boolean;
@@ -61,9 +61,7 @@ export class PhotoGalleryComponent {
 
     // Constructor
 
-    constructor(private camera: Camera, private domSanitizer: DomSanitizer, private storageService: StorageService,
-                private alertController: AlertController) {
-    }
+    constructor(private storageService: StorageService, private alertController: AlertController, public domSanitizer: DomSanitizer) {}
 
     // Template methods
 
@@ -103,9 +101,9 @@ export class PhotoGalleryComponent {
         }
 
         this.alertController.create({
-            title: 'Photos',
+            header: 'Photos',
             message: 'Delete photo?',
-            enableBackdropDismiss: true,
+            backdropDismiss: true,
             buttons: [
                 {
                     text: 'Yes',
@@ -126,7 +124,7 @@ export class PhotoGalleryComponent {
                 {
                     text: 'No'
                 }]
-        }).present();
+        }).then((alert) => { alert.present() })
     }
 
     public onClickedNewPhoto(useCamera: boolean) {
@@ -135,31 +133,29 @@ export class PhotoGalleryComponent {
             return;
         }
 
-        const options: CameraOptions = {
-            sourceType: useCamera ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY,
+        const options: ImageOptions = {
+            source: useCamera ? CameraSource.Camera : CameraSource.Photos,
             quality: 100,
-            targetWidth: 1024,
-            targetHeight: 1024,
-            destinationType: this.camera.DestinationType.DATA_URL,
-            encodingType: this.camera.EncodingType.JPEG,
-            mediaType: this.camera.MediaType.PICTURE,
+            width: 1024,
+            height: 1024,
+            resultType: CameraResultType.DataUrl,
             correctOrientation: true
         };
 
-        this.camera.getPicture(options).then((base64) => {
+        Camera.getPhoto(options).then((photo) => {
           console.log('CXamerta', this._recordId);
             const photoId = UUID.UUID();
             this.storageService.putPhoto({
                 clientId: photoId,
                 fileName: photoId + '.jpg',
                 recordClientId: this._recordId,
-                base64: base64,
-                datetime: moment().format()
+                base64: photo.base64String!,
+                datetime: moment.defaultFormat
             }).subscribe(put => {
                 if (put) {
                     this._photoIds.push(photoId);
                     this.addedPhotoIds.push(photoId);
-                    const photoSrc = PhotoGalleryComponent.makePhotoSrc(base64);
+                    const photoSrc = PhotoGalleryComponent.makePhotoSrc(photo.base64String!);
                     this.photoIndex = this._photoIds.length - 1;
                     this.photoSrc = photoSrc;
                 } else {
@@ -216,4 +212,5 @@ export class PhotoGalleryComponent {
         });
     }
 
+    protected readonly DomSanitizer = DomSanitizer;
 }

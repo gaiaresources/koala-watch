@@ -2,6 +2,46 @@
     display: flex!important;
     align-content: center!important;
     align-items: center!important;
+    flex-direction: column!important;
+    justify-content: center!important;
+}
+
+.login-col {
+    /* For small devices */
+    width: 100%; /* equivalent to col-12 */
+
+    /* For medium devices */
+    @media (min-width: 768px) {
+        width: 50%; /* equivalent to col-md-6 */
+        margin-left: auto; /* equivalent to offset-md-3 */
+        margin-right: auto; /* equivalent to offset-md-3 */
+    }
+
+    /* For large devices */
+    @media (min-width: 992px) {
+        width: 50%; /* equivalent to col-lg-6 */
+        margin-left: auto; /* equivalent to offset-lg-3 */
+        margin-right: auto; /* equivalent to offset-lg-3 */
+    }
+}
+
+.login-options {
+    /* Default width */
+    width: 70%; /* Equivalent to col-7 */
+    margin-left: auto;
+    margin-right: auto;
+
+    /* For medium devices */
+    @media (min-width: 768px) {
+        width: 33.3333%; /* Equivalent to col-md-4 */
+        margin-left: 33.3333%; /* Equivalent to offset-md-4 */
+    }
+
+    /* For large devices */
+    @media (min-width: 992px) {
+        width: 33.3333%; /* Equivalent to col-lg-4 */
+        margin-left: 33.3333%; /* Equivalent to offset-lg-4 */
+    }
 }
 
 ion-spinner {
