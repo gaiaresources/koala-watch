@@ -1,22 +1,32 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { AlertController, Events, NavController} from 'ionic-angular';
+import {Component, Input, OnDestroy} from '@angular/core';
+import {Geolocation, Position} from '@capacitor/geolocation';
+import {AlertController, NavController} from '@ionic/angular';
+//import {AlertController, Events, NavController} from '@ionic/angular';
 
 import * as moment from 'moment/moment';
-import { Subscription } from 'rxjs/Subscription';
-import { filter } from 'rxjs/operators';
+import Subscription from 'rxjs'
+import {filter} from 'rxjs/operators';
 
-import { FieldDescriptor, FormDescriptor } from '../../biosys-core/interfaces/form.interfaces';
-import { FormGroup, ValidationErrors } from '@angular/forms';
-import { SchemaService } from '../../biosys-core/services/schema.service';
-import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
-import { StorageService } from '../../shared/services/storage.service';
-import { AuthService } from '../../biosys-core/services/auth.service';
-import { formatUserFullName } from '../../biosys-core/utils/functions';
-import { UPDATE_BUTTON_NAME, DATASET_NAME_TREESURVEY } from '../../shared/utils/consts';
-import { ILatLng } from '@ionic-native/google-maps';
+import {FieldDescriptor, FormDescriptor} from '../../biosys-core/interfaces/form.interfaces';
+import {FormGroup, ValidationErrors} from '@angular/forms';
+import {SchemaService} from '../../biosys-core/services/schema.service';
+import {Dataset, User} from '../../biosys-core/interfaces/api.interfaces';
+import {StorageService} from '../../shared/services/storage.service';
+import {AuthService} from '../../biosys-core/services/auth.service';
+import {formatUserFullName} from '../../biosys-core/utils/functions';
+import {DATASET_NAME_TREESURVEY, UPDATE_BUTTON_NAME} from '../../shared/utils/consts';
 
-import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
+import {ActiveRecordService} from '../../providers/activerecordservice/active-record.service';
+import {LatLng} from "@capacitor/google-maps/dist/typings/definitions";
+
+
+interface LocationPatchValues {
+    Latitude?: string | number;
+    Longitude?: string | number;
+    Accuracy?: number;
+    Altitude?: number;
+}
+
 
 /**
  * Generated class for the RecordFormComponent component.
@@ -36,14 +46,14 @@ export class RecordFormComponent implements OnDestroy {
 
     public form: FormGroup;
     public formDescriptor: FormDescriptor;
-    private datasetName: string;
+    private datasetName: string | undefined;
 
     private _dateFieldKey: string;
 
-    private lastLocation: Geoposition;
-    private locationSubscription: Subscription;
-    private delayedSetValues: object;
-    private currentDate: number = Date.now();
+    public lastLocation: Position;
+    private locationSubscription: number;
+    private delayedSetValues: object | null;
+    public currentDate: number = Date.now();
 
     @Input()
     public initialiseDefaultValues = false;
@@ -89,7 +99,7 @@ export class RecordFormComponent implements OnDestroy {
     public openModal() { // todo: change this to navigarte to new map page
       this.activeRecordService.setGoingToMap(true); // save if new record and prepare for map view entry
 
-      let l: ILatLng = null;
+      let l: LatLng;
 
         if (this.form.value['Latitude'] && this.form.value['Longitude']) {
             l = {
@@ -98,7 +108,7 @@ export class RecordFormComponent implements OnDestroy {
             };
         }
 
-      this.navCtrl.push('MapPinPage', l);
+      //this.navCtrl.push('MapPinPage', l);
     }
 
     constructor(private schemaService: SchemaService,
@@ -106,7 +116,7 @@ export class RecordFormComponent implements OnDestroy {
         private authService: AuthService,
         private geolocation: Geolocation,
         private alertCtrl: AlertController,
-        private events: Events,
+        //private events: Events,
         public navCtrl: NavController,
         public activeRecordService: ActiveRecordService
         ) {
@@ -114,12 +124,12 @@ export class RecordFormComponent implements OnDestroy {
 
     ngOnDestroy() {
         if (this.locationSubscription) {
-            this.locationSubscription.unsubscribe();
+            this.geolocation.clearWatch(this.locationSubscription)
         }
     }
 
     private setupForm(dataset: Dataset) {
-        this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe(results => {
+        this.schemaService.getFormDescriptorAndGroupFromDataset(dataset).subscribe((results: [FormDescriptor, FormGroup]) => {
             this.formDescriptor = results[0];
             this.form = results[1];
 
@@ -135,19 +145,23 @@ export class RecordFormComponent implements OnDestroy {
 
             let performInitialLocationUpdate = this.initialiseDefaultValues;
 
-            this.locationSubscription = this.geolocation.watchPosition({
-                enableHighAccuracy: true,
-                timeout: RecordFormComponent.GEOLOCATION_TIMEOUT,
-                maximumAge: RecordFormComponent.GEOLOCATION_MAX_AGE
-            }).pipe(
-                filter(position => !!position['coords']) // filter out errors
-            ).subscribe(position => {
-                this.lastLocation = position;
-                if (performInitialLocationUpdate) {
-                    this.updateLocationFields(true);
-                    performInitialLocationUpdate = false;
-                }
-            });
+            this.locationSubscription = this.geolocation.watchPosition(
+                (position) => {
+                    this.lastLocation = position;
+                    if (performInitialLocationUpdate) {
+                        this.updateLocationFields(true);
+                        performInitialLocationUpdate = false;
+                    }
+                },
+                (positionError) => {
+
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: RecordFormComponent.GEOLOCATION_TIMEOUT,
+                    maximumAge: RecordFormComponent.GEOLOCATION_MAX_AGE
+                })
+                //).pipe(filter(position => !!position['coords']) // filter out errors )
 
             // special case for species code field which must be hidden
             if (this.form.contains('SpeciesCode')) {
@@ -160,20 +174,19 @@ export class RecordFormComponent implements OnDestroy {
         });
     }
 
-
     public updateLocationFields(initialUpdate = false) {
         if (!this.lastLocation) {
             // prevent showing this popup immediately upon showing form the first time
             if (!initialUpdate) {
                 this.alertCtrl.create({
-                    title: 'Location unavailable',
+                    header: 'Location unavailable',
                     buttons: ['OK']
-                }).present();
+                }).then((alert) => alert.present() )
             }
             return;
         }
 
-        const valuesToPatch = {};
+        const valuesToPatch: LocationPatchValues = {};
 
         if (this.form.contains('Latitude')) {
             valuesToPatch['Latitude'] = this.lastLocation.coords.latitude.toFixed(6);
@@ -188,7 +201,7 @@ export class RecordFormComponent implements OnDestroy {
         }
 
         if (this.form.contains('Altitude')) {
-            valuesToPatch['Altitude'] = Math.round(this.lastLocation.coords.altitude);
+            valuesToPatch['Altitude'] = Math.round(this.lastLocation.coords.altitude ?? -1);
         }
 
         this.form.patchValue(valuesToPatch);
@@ -198,7 +211,7 @@ export class RecordFormComponent implements OnDestroy {
         // need to show validation errors where appropriate for incomplete record
         if (this.form.invalid) {
             Object.keys(this.form.controls).forEach((fieldName: string) =>
-                this.form.get(fieldName).markAsDirty());
+                this.form.get(fieldName)?.markAsDirty());
         }
     }
 
@@ -207,7 +220,7 @@ export class RecordFormComponent implements OnDestroy {
             return '';
         }
 
-        const errors: ValidationErrors = this.form.controls[fieldDescriptor.key].errors;
+        const errors: ValidationErrors = this.form.controls[fieldDescriptor.key].errors!;
         const errorKey = Object.keys(errors)[0];
         const error = errors[errorKey];
 
@@ -224,25 +237,26 @@ export class RecordFormComponent implements OnDestroy {
                 return `Maximum length: ${error['maxLength']}`;
             case 'pattern':
                 return `Must match pattern: ${error['pattern']}`;
+            default: return `Unknown error result`;
         }
     }
 
     public getFieldDescriptor(fieldName: string): FieldDescriptor {
         let fields: FieldDescriptor[] =
-            this.formDescriptor.requiredFields.filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
+            this.formDescriptor.requiredFields!.filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
 
         if (fields.length) {
             return fields[0];
         }
 
-        fields = this.formDescriptor.optionalFields
+        fields = this.formDescriptor.optionalFields!
             .filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
 
         if (fields.length) {
             return fields[0];
         }
 
-        fields = this.formDescriptor.hiddenFields
+        fields = this.formDescriptor.hiddenFields!
             .filter((fieldDescriptor: FieldDescriptor) => fieldDescriptor.key === fieldName);
 
         if (fields.length) {
@@ -266,40 +280,34 @@ export class RecordFormComponent implements OnDestroy {
     }
 
     public getNumpadOptions(fieldDescriptor: FieldDescriptor): object {
-        const options = {
+        return {
             headerText: fieldDescriptor.label,
             theme: RecordFormComponent.SELECT_THEME,
             buttons: ['cancel', 'clear', 'set'],
             max: 999999,
             scale: 0,
-            thousandsSeparator: ''
+            thousandsSeparator: '',
+            disabled: this.readonly
         };
-
-        options['disabled'] = this.readonly;
-
-        return options;
     }
 
     public getNumpadCoordinateOptions(fieldDescriptor: FieldDescriptor): object {
-        const options = {
+        return {
             headerText: fieldDescriptor.label,
             theme: RecordFormComponent.SELECT_THEME,
             buttons: ['cancel', 'clear', 'set'],
             max: 360,
             min: -360,
             scale: 9,
-            thousandsSeparator: ''
+            thousandsSeparator: '',
+            disabled: this.readonly
         };
-
-        options['disabled'] = this.readonly;
-
-        return options;
     }
 
     private initialiseDefaults() {
         if (this._dateFieldKey) {
             // moment().format() will return the current date/time in local timezone
-            this.form.controls[this._dateFieldKey].setValue(moment().format());
+            this.form.controls[this._dateFieldKey].setValue(moment.defaultFormat);
         }
 
         // note: must use form.controls[key].setValue(x) rather than form.value[key] = x or it won't set
@@ -311,12 +319,13 @@ export class RecordFormComponent implements OnDestroy {
 
         // integer fields using numpad must have values of null (rather than empty string) to show the placeholder
         for (const fieldType of ['locationFields', 'requiredFields', 'optionalFields']) {
+            // @ts-ignore - Iterating over fields of name location/required/optional
             this.formDescriptor[fieldType].filter((field: FieldDescriptor) => field.type === 'integer').map(
                 (field: FieldDescriptor) => this.form.controls[field.key].setValue(null)
             );
         }
 
-        let observerFieldName: string;
+        let observerFieldName: string | null = null;
         if (this.form.contains('Observer Name')) {
             observerFieldName = 'Observer Name';
         } else if (this.form.contains('Census Observers')) {
@@ -325,8 +334,8 @@ export class RecordFormComponent implements OnDestroy {
             observerFieldName = 'Census Observer';
         }
 
-        if (observerFieldName) {
-            this.authService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[observerFieldName]
+        if (observerFieldName != null) {
+            this.authService.getCurrentUser().subscribe((currentUser: User) => this.form.controls[observerFieldName!]
                 .setValue(formatUserFullName(currentUser))
             );
         }
@@ -336,6 +345,7 @@ export class RecordFormComponent implements OnDestroy {
         const fieldCategories = Object.keys(this.formDescriptor);
 
         for (const category of fieldCategories) {
+            // @ts-ignore - Iterating over each field of arrays
             const categoryFields = this.formDescriptor[category];
             const fieldIndex = categoryFields.map((fd: FieldDescriptor) => fd.key).indexOf(fieldName);
 
@@ -343,13 +353,13 @@ export class RecordFormComponent implements OnDestroy {
                 const fieldDescriptor = categoryFields[fieldIndex];
                 fieldDescriptor.type = 'hidden';
                 categoryFields.splice(fieldIndex, 1);
-                this.formDescriptor.hiddenFields.push(fieldDescriptor);
+                this.formDescriptor.hiddenFields?.push(fieldDescriptor);
                 return;
             }
         }
     }
 
-    private isFieldReadOnly(fieldName: string) {
+    public isFieldReadOnly(fieldName: string) {
         return this.readonly ||
             fieldName === 'Census ID' ||
             fieldName === 'Observer Name' ||
@@ -357,7 +367,7 @@ export class RecordFormComponent implements OnDestroy {
             (fieldName === 'SiteNo' && this.datasetName === DATASET_NAME_TREESURVEY);
     }
 
-    private inputMaxLength(key: string) {
+    public inputMaxLength(key: string) {
         if (key === 'SiteNo') {
             return 40;
         } else {
@@ -365,7 +375,7 @@ export class RecordFormComponent implements OnDestroy {
         }
     }
 
-    private ionChange(event: Event, key: string) {
+    public ionChange(event: Event, key: string) {
         if (key !== 'SiteNo') {
             return;
         }

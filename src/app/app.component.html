@@ -1,0 +1,21 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" side="start" [disabled]="!isAuthenticated()">
+      <ion-header>
+        <ion-toolbar/>
+      </ion-header>
+
+      <ion-content>
+        <ion-list>
+          <ion-item [button]="true" *ngFor="let item of menuItems" (click)="openPage(item)">
+            <fa-icon [icon]="item.icon"></fa-icon>
+            <span>{{item.title}}</span>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+
+    <!-- Main content: ion-router-outlet is where pages will be rendered -->
+    <ion-router-outlet forceOverscroll="false" id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

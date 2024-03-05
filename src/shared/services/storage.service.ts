@@ -1,12 +1,8 @@
 import { Storage } from '@ionic/storage';
-import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
-import { fromPromise } from 'rxjs/observable/fromPromise';
 import { Dataset, User } from '../../biosys-core/interfaces/api.interfaces';
 import { ClientPhoto, ClientRecord } from '../interfaces/mobile.interfaces';
-import { from } from 'rxjs/observable/from';
-import { filter, mergeMap } from 'rxjs/operators';
-import { concat } from 'rxjs/observable/concat';
+import { from, filter, mergeMap, concat, Observable } from 'rxjs';
 
 @Injectable()
 export class StorageService {
@@ -17,22 +13,27 @@ export class StorageService {
 
     constructor(private storage: Storage) {
 
+
+    }
+
+    public initiate() {
+        return this.storage.create()
     }
 
     public putTeamMembers(users: User[]): Observable<boolean> {
-        return fromPromise(this.storage.set('Team Members', users));
+        return from(this.storage.set('Team Members', users));
     }
 
     public getTeamMembers(): Observable<User[]> {
-        return fromPromise(this.storage.get('Team Members'));
+        return from(this.storage.get('Team Members'));
     }
 
     public putDataset(dataset: Dataset): Observable<boolean> {
-        return fromPromise(this.storage.set(`${StorageService.DATASET_PREFIX}${dataset.name}`, dataset));
+        return from(this.storage.set(`${StorageService.DATASET_PREFIX}${dataset.name}`, dataset));
     }
 
     public getDataset(key: string): Observable<Dataset> {
-        return fromPromise(this.storage.get(`${StorageService.DATASET_PREFIX}${key}`));
+        return from(this.storage.get(`${StorageService.DATASET_PREFIX}${key}`));
     }
 
     public getAllDatasets(): Observable<Dataset> {
@@ -50,11 +51,11 @@ export class StorageService {
     }
 
     public putRecord(record: ClientRecord): Observable<boolean> {
-        return fromPromise(this.storage.set(`${StorageService.RECORD_PREFIX}${record.client_id}`, record));
+        return from(this.storage.set(`${StorageService.RECORD_PREFIX}${record.client_id}`, record));
     }
 
     public getRecord(key: string): Observable<ClientRecord> {
-        return fromPromise(this.storage.get(`${StorageService.RECORD_PREFIX}${key}`));
+        return from(this.storage.get(`${StorageService.RECORD_PREFIX}${key}`));
     }
 
     public updateRecordId(record: ClientRecord, id: number): Observable<boolean> {
@@ -117,7 +118,7 @@ export class StorageService {
         );
 
         const validChildrenObservable: Observable<ClientRecord> = validParentsObservable.pipe(
-            mergeMap((parentRecord: ClientRecord) => this.getChildRecords(parentRecord.client_id)),
+            mergeMap((parentRecord: ClientRecord) => this.getChildRecords(parentRecord.client_id!)),
         );
 
         return concat(validParentsObservable, validChildrenObservable);
@@ -153,23 +154,23 @@ export class StorageService {
                 ).subscribe();
             }
         });
-        return fromPromise(this.storage.remove(`${StorageService.RECORD_PREFIX}${key}`));
+        return from(this.storage.remove(`${StorageService.RECORD_PREFIX}${key}`));
     }
 
     public clearRecords(): Observable<void> {
-        return fromPromise(this.storage.clear());
+        return from(this.storage.clear());
     }
 
     public putPhoto(clientPhoto: ClientPhoto): Observable<boolean> {
-        return fromPromise(this.storage.set(`${StorageService.PHOTO_PREFIX}${clientPhoto.clientId}`, clientPhoto));
+        return from(this.storage.set(`${StorageService.PHOTO_PREFIX}${clientPhoto.clientId}`, clientPhoto));
     }
 
     public getPhoto(key: string): Observable<ClientPhoto> {
-        return fromPromise(this.storage.get(`${StorageService.PHOTO_PREFIX}${key}`));
+        return from(this.storage.get(`${StorageService.PHOTO_PREFIX}${key}`));
     }
 
     public deletePhoto(key: string): Observable<boolean> {
-        return fromPromise(this.storage.remove(`${StorageService.PHOTO_PREFIX}${key}`));
+        return from(this.storage.remove(`${StorageService.PHOTO_PREFIX}${key}`));
     }
 
     public getAllPendingPhotos(): Observable<ClientPhoto> {
@@ -192,11 +193,11 @@ export class StorageService {
     }
 
     public getSetting(key: string): Observable<string> {
-        return fromPromise(this.storage.get(`${StorageService.SETTING_PREFIX}${key}`));
+        return from(this.storage.get(`${StorageService.SETTING_PREFIX}${key}`));
     }
 
     public putSetting(key: string, setting: string): Observable<boolean> {
-        return fromPromise(this.storage.set(`${StorageService.SETTING_PREFIX}${key}`, setting));
+        return from(this.storage.set(`${StorageService.SETTING_PREFIX}${key}`, setting));
     }
 
 }

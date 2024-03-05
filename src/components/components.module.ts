@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { MbscModule } from '@mobiscroll/angular';
-
-import { RecordsListComponent } from './records-list/records-list';
-import { RecordsMapComponent } from './records-map/records-map';
-import { IonicModule } from 'ionic-angular';
+import {IonicModule, NavController, NavParams} from '@ionic/angular';
 import { RecordFormComponent } from './record-form/record-form';
 import { SharedModule } from '../shared/shared.module';
 import { PhotoGalleryComponent } from './photo-gallery/photo-gallery';
@@ -13,29 +9,37 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faStar as farStar, faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as fasStar, faLocationArrow } from '@fortawesome/free-solid-svg-icons';
+import {CommonModule, DatePipe} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MbscModule} from "@mobiscroll/angular";
+import {StorageService} from "../shared/services/storage.service";
+import {ActiveRecordService} from "../providers/activerecordservice/active-record.service";
+
 
 @NgModule({
     declarations: [
-        RecordsListComponent,
-        RecordsMapComponent,
         RecordFormComponent,
         PhotoGalleryComponent
     ],
     imports: [
         IonicModule,
-        MbscModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
         SharedModule,
-        FontAwesomeModule
-    ],
-    entryComponents: [
-        RecordsListComponent,
-        RecordsMapComponent
+        FontAwesomeModule,
+        DatePipe,
+        MbscModule,
     ],
     exports: [
-        RecordsListComponent,
-        RecordsMapComponent,
         RecordFormComponent,
         PhotoGalleryComponent
+    ],
+    providers: [
+        NavController,
+        NavParams,
+        StorageService,
+        ActiveRecordService
     ]
 })
 export class ComponentsModule {

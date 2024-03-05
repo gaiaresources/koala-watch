@@ -1,21 +1,21 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 
-import { AlertController, Events, IonicPage, Navbar, NavController, NavParams } from 'ionic-angular';
-import * as moment from 'moment/moment';
+import {AlertController, IonNav, NavController, NavParams} from '@ionic/angular';
+//import { AlertController, Events, IonicPage, Navbar, NavController, NavParams } from '@ionic/angular';
+import moment from 'moment/moment';
 
 import { Dataset } from '../../biosys-core/interfaces/api.interfaces';
 import { StorageService } from '../../shared/services/storage.service';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { RecordFormComponent } from '../../components/record-form/record-form';
 import { PhotoGalleryComponent } from '../../components/photo-gallery/photo-gallery';
-import { from } from 'rxjs/observable/from';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { UUID } from 'angular2-uuid';
 
 import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
 import { DATASET_NAME_OBSERVATION } from '../../shared/utils/consts';
 
-@IonicPage()
 @Component({
   selector: 'page-observation',
   templateUrl: 'observation.html'
@@ -34,20 +34,20 @@ export class ObservationPage {
 
   private showLeavingAlertMessage = true;
   private record: ClientRecord;
-  private dataset: Dataset;
+  public dataset: Dataset;
   private recordClientId: string;
 
-  @ViewChild('ion-navbar', { read: ElementRef }) private navBar: Navbar;
+  @ViewChild('ion-nav', { read: ElementRef }) private navBar: IonNav;
 
   private eventNeedMapHandler = (pos) => {
       this.showLeavingAlertMessage = false;
-      this.navCtrl.push('mcp', pos);
+      this.navCtrl.navigateForward('mcp', pos)
     }
 
   constructor(private navCtrl: NavController, private navParams: NavParams,
               private storageService: StorageService,
               private alertController: AlertController,
-              private events: Events,
+              //private events: Events,
               public activeRecordService: ActiveRecordService) {
   }
 
@@ -56,14 +56,14 @@ export class ObservationPage {
   }
 
   public ionViewWillEnter() {
-    this.events.subscribe('map-needmap', this.eventNeedMapHandler);
+    //this.events.subscribe('map-needmap', this.eventNeedMapHandler);
     if (this.navParams.data.hasOwnProperty('parentId')) {
       this.parentId = this.navParams.get('parentId');
     }
 
     if (this.activeRecordService.comingFromMap) {
       this.recordClientId = this.activeRecordService.getActiveFormNavigationRecord().params.recordClientId;
-      this.parentId = this.activeRecordService.getActiveFormNavigationRecord().params.parentId;
+      this.parentId = this.activeRecordService.getActiveFormNavigationRecord().params.parentId!;
       this.activeRecordService.comingFromMap = false;
     } else {
       this.recordClientId = this.navParams.get('recordClientId');
@@ -88,7 +88,7 @@ export class ObservationPage {
             record => {
               if (record) {
                 this.record = record;
-                this.recordForm.value = record.data;
+                this.recordForm.value = record.data!;
                 this.updateFromMap();
                 this.recordForm.validate();
                 this.photoGallery.PhotoIds = record.photoIds;
@@ -97,10 +97,10 @@ export class ObservationPage {
                 this.storageService.getRecord(this.parentId).subscribe(
                   parentRecord => {
                     if (parentRecord) {
-                      if (parentRecord.data['SiteNo'] !== record.data['SiteNo']) {
+                      if (parentRecord.data!['SiteNo'] !== record.data!['SiteNo']) {
                         // changed
-                        record.data['SiteNo'] = parentRecord.data['SiteNo'];
-                        this.recordForm.value['SiteNo'] = record.data['SiteNo'];
+                        record.data!['SiteNo'] = parentRecord.data!['SiteNo'];
+                        this.recordForm.value['SiteNo'] = record.data!['SiteNo'];
 
                         this.updateFromMap();
                         this.save(true);
@@ -114,7 +114,7 @@ export class ObservationPage {
           this.storageService.getRecord(this.parentId).subscribe(
             record => {
               if (record) {
-                this.recordForm.value = record.data;
+                this.recordForm.value = record.data!;
 
                 this.updateFromMap();
               }
@@ -130,7 +130,7 @@ export class ObservationPage {
   }
 
   public ionViewCanLeave() {
-    this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
+    //this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
     if (this.readonly) {
       return true;
     }
@@ -140,16 +140,19 @@ export class ObservationPage {
       return true;
     } else if (this.showLeavingAlertMessage) {
       this.alertController.create({
-        title: 'Leaving observation unsaved',
+        header: 'Leaving observation unsaved',
         message: 'You are leaving the observation unsaved, are you sure?',
-        enableBackdropDismiss: true,
+        backdropDismiss: true,
         buttons: [
           {
             text: 'Yes',
             handler: () => {
               this.photoGallery.rollback();
               this.showLeavingAlertMessage = false;
-              this.navCtrl.popToRoot();
+
+              // Maybe? Needs testing
+              this.navCtrl.navigateRoot('/home')
+              //this.navCtrl.popToRoot();
             }
           },
           {
@@ -158,7 +161,7 @@ export class ObservationPage {
               // this.events.unsubscribe('map-needmap', this.eventNeedMapHandler);
             }
           }]
-      }).present();
+      }).then((alert) => { alert.present() })
 
       return false;
     } else {
@@ -203,9 +206,9 @@ export class ObservationPage {
         const scientificNameValue = formValues['ScientificName'];
 
         // species code will be the equivalent option as species name (same index)
-        for (let i = 0, len = scientificNameFD.options.length; i < len; i++) {
-          if (scientificNameFD.options[i].value === scientificNameValue) {
-            formValues['SpeciesCode'] = speciesCodeFD.options[i].value;
+        for (let i = 0, len = scientificNameFD.options!.length; i < len; i++) {
+          if (scientificNameFD.options![i].value === scientificNameValue) {
+            formValues['SpeciesCode'] = speciesCodeFD.options![i].value;
             this.recordForm.value = formValues;
             break;
           }
@@ -241,52 +244,62 @@ export class ObservationPage {
     }).subscribe((result: boolean) => {
       if (!dontQuit && result) {
         this.showLeavingAlertMessage = false;
-        this.navCtrl.popToRoot();
+
+        // TODO Test
+        this.navCtrl.navigateRoot('/home')
+        //this.navCtrl.popToRoot();
       }
     });
   }
 
   public delete() {
     this.alertController.create({
-      title: 'Observation',
+      header: 'Observation',
       message: 'Are you sure you want to delete this observation?',
-      enableBackdropDismiss: true,
+      backdropDismiss: true,
       buttons: [
         {
           text: 'Yes',
           handler: () => {
             if (this.record) {
               this.photoGallery.rollback();
-              this.storageService.deleteRecord(this.record.client_id).subscribe(deleted => {
+              this.storageService.deleteRecord(this.record.client_id!).subscribe(deleted => {
                 if (this.record.photoIds) {
                   from(this.record.photoIds).pipe(
-                    mergeMap(photoId => this.storageService.deletePhoto(photoId))
+                      // TODO test
+                    mergeMap(photoId => this.storageService.deletePhoto(photoId as string))
                   ).subscribe();
                 }
                 this.showLeavingAlertMessage = false;
-                this.navCtrl.popToRoot();
+
+                // TODO test
+                this.navCtrl.navigateRoot('/home')
+                //this.navCtrl.popToRoot();
               }, (error) => {
                 this.alertController.create({
-                  title: 'Cannot Delete',
+                  header: 'Cannot Delete',
                   message: 'Sorry, cannot delete this observation.',
-                  enableBackdropDismiss: true,
+                  backdropDismiss: true,
                   buttons: [
                     {
                       text: 'OK',
                       handler: () => {}
                     }
                   ]
-                }).present();
+                }).then((alert) => { alert.present() });
               });
             } else {
               this.showLeavingAlertMessage = false;
-              this.navCtrl.popToRoot();
+
+              // TODO test
+              this.navCtrl.navigateRoot('/home')
+              //this.navCtrl.popToRoot();
             }
           }
         },
         {
           text: 'No'
         }]
-    }).present();
+    }).then((alert) => { alert.present() });
   }
 }

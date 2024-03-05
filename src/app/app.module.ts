@@ -1,62 +1,54 @@
+import { AppComponent } from './app.component';
+import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from "@angular/common";
 import { ErrorHandler, NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { HTTP } from '@ionic-native/http';
-
-import { AppComponent } from './app.component';
-
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { IonicStorageModule } from '@ionic/storage';
-import { GoogleMaps } from '@ionic-native/google-maps';
-import { Camera } from '@ionic-native/camera';
-import { Geolocation } from '@ionic-native/geolocation';
-import { ReactiveFormsModule } from '@angular/forms';
+import {IonicModule, IonicRouteStrategy, MenuController} from '@ionic/angular';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouteReuseStrategy, RouterModule } from "@angular/router";
 import { StorageService } from '../shared/services/storage.service';
 import { APIService } from '../biosys-core/services/api.service';
 import { ApiInterceptor } from '../biosys-core/services/api.interceptor';
 import { AuthService } from '../biosys-core/services/auth.service';
-import { ComponentsModule } from '../components/components.module';
 import { UploadService } from '../shared/services/upload.service';
 import { SignupService } from '../shared/services/signup.service';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 import { ActiveRecordService } from '../providers/activerecordservice/active-record.service';
+import { ComponentsModule } from '../components/components.module';
+import { AppRoutingModule } from "./app-routing.module";
+import { SharedModule } from "../shared/shared.module";
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from "@fortawesome/free-regular-svg-icons";
+import {AuthenticatedService} from "../shared/services/authenticated.service";
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  exports: [RouterModule],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
   imports: [
+    MbscModule,
     BrowserModule,
+    CommonModule,
+    FormsModule,
+    SharedModule,
     HttpClientModule,
     ReactiveFormsModule,
-    IonicModule.forRoot(AppComponent, {
+    IonicModule.forRoot({
       scrollAssist: false,
-      autoFocusAssist: false
+      // autoFocusAssist: false -- No longer part of configuration
     }),
     IonicStorageModule.forRoot(),
     ComponentsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    AppRoutingModule
   ],
-  bootstrap: [IonicApp],
   providers: [
-    StatusBar,
-    SplashScreen,
     StorageService,
-    GoogleMaps,
-    Camera,
-    Geolocation,
     APIService,
     UploadService,
     AuthService,
-    {
-      provide: ErrorHandler,
-      useClass: IonicErrorHandler
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiInterceptor,
@@ -64,15 +56,20 @@ import { ActiveRecordService } from '../providers/activerecordservice/active-rec
     },
     {
       provide: ErrorHandler,
-      useClass: IonicErrorHandler
+      useClass: ErrorHandler
     },
     SignupService,
-    HTTP,
-    ActiveRecordService
+    ActiveRecordService,
+    {
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
+    },
+      MenuController,
+      AuthenticatedService
   ]
 })
 export class AppModule {
-  constructor() {
-    library.add(fas);
+  constructor(library: FaIconLibrary) {
+    library.addIconPacks(fas, far)
   }
 }

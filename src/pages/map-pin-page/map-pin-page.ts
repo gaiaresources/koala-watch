@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, Events } from 'ionic-angular';
-import { GoogleMap, GoogleMaps, ILatLng, LatLng, Marker, GoogleMapOptions, GoogleMapsEvent } from '@ionic-native/google-maps';
-import { timer } from 'rxjs/observable/timer';
+import { NavController, NavParams, Platform } from '@ionic/angular';
+//import { NavController, NavParams, Platform, Events } from '@ionic/angular';
+//import { GoogleMap, GoogleMaps, ILatLng, LatLng, GoogleMapOptions, GoogleMapsEvent } from '@capacitor/google-maps';
+import { Marker, GoogleMap, LatLngBounds } from '@capacitor/google-maps'
 
 import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
+import {LatLng} from "@capacitor/google-maps/dist/typings/definitions";
 
 
 /**
@@ -13,22 +15,21 @@ import { FormNavigationRecord, ActiveRecordService } from '../../providers/activ
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'map-pin-page',
   templateUrl: 'map-pin-page.html',
 })
 export class MapPinPage {
-  private map: GoogleMap;
-  private dragMarker: Marker;
-  private startPos: ILatLng;
+  private map?: GoogleMap;
+  private dragMarker!: Marker;
+  private startPos: LatLng;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    private events: Events,
+    //private events: Events,
     private platform: Platform,
     public activeRecordService: ActiveRecordService) {
-    this.startPos = this.navParams.data;
+    this.startPos = this.navParams.data as LatLng;
   }
 
   ionViewDidLoad() {
@@ -38,7 +39,11 @@ export class MapPinPage {
   }
 
   loadMap(): void {
-    this.map = GoogleMaps.create('map-getpin');
+    /*
+    //this.map = GoogleMap.create({
+
+    //}).create('map-getpin');
+
     this.map.setOptions({
       'backgroundColor': 'white',
       'building': false,
@@ -59,15 +64,16 @@ export class MapPinPage {
         'zoom': 3.5,
       }
     });
-    this.map.setMyLocationEnabled(true);
-    this.map.setMyLocationButtonEnabled(true);
-    this.events.subscribe('home-willenter', () => { });
-    this.events.subscribe('map-whereispin', () => { });
+    this.map.enableCurrentLocation(true)
+    //this.map.setMyLocationEnabled(true);
+    //this.map.setMyLocationButtonEnabled(true);
+    //this.events.subscribe('home-willenter', () => { });
+    //this.events.subscribe('map-whereispin', () => { });
     // Wait the MAP_READY before using any methods.
     this.map.one(GoogleMapsEvent.MAP_READY)
       .then(() => {
         this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
-          (data) => {
+          (data: any[]) => {
             if (!this.dragMarker) {
               this.dragMarker = this.map.addMarkerSync({
                 snippet: 'Move this pin to the koala sighting location',
@@ -76,24 +82,26 @@ export class MapPinPage {
                 draggable: true
               });
             } else {
-              this.dragMarker.setPosition(data[0]);
+              this.dragMarker.coordinate = data[0];
             }
           }
         );
       });
+
+     */
   }
 
   ionViewWillLeave() {
     this.activeRecordService.comingFromMap = true;
     if (this.map){
-      this.map.remove();
+      this.map.destroy();
 
       this.cleanup();
     }
   }
 
   useClicked() {
-    this.activeRecordService.setLatestCoords(this.dragMarker.getPosition());
+    this.activeRecordService.setLatestCoords(this.dragMarker.coordinate);
     this.closeModal();
   }
 
@@ -109,7 +117,6 @@ export class MapPinPage {
   public closeModal() {
     this.activeRecordService.comingFromMap = true;
       this.navCtrl.pop();
-    
   }
 
 }

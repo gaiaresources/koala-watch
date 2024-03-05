@@ -1,23 +1,23 @@
 <ion-header>
-    <ion-navbar>
+    <ion-nav>
         <ion-grid>
             <ion-row>
                 <ion-title>{{ dataset?.name }}</ion-title>
             </ion-row>
             <ion-row justify-content-end>
                 <ion-buttons *ngIf="!readonly" end>
-                    <button ion-button icon-end solid color="primary" (click)="delete()">
+                    <ion-button icon-end solid color="primary" (click)="delete()">
                         Delete&nbsp;
                         <fa-icon [icon]="['far', 'trash-alt']"></fa-icon>
-                    </button>
-                    <button ion-button icon-end solid color="primary" (click)="save()">
+                    </ion-button>
+                    <ion-button icon-end solid color="primary" (click)="save()">
                         Save&nbsp;
                         <fa-icon [icon]="['far', 'save']"></fa-icon>
-                    </button>
+                    </ion-button>
                 </ion-buttons>
             </ion-row>
         </ion-grid>
-    </ion-navbar>
+    </ion-nav>
 </ion-header>
 
 <ion-content padding>
@@ -42,12 +42,12 @@
     </div>
 
     <ion-fab [hidden]="readonly || showForm" bottom right>
-      <button aria-name="Add Photo From Camera" alt="Add Photo From Camera" ion-fab (click)="onClickedNewPhoto(true)" class="fab-census-tree">
-          <img alt="Add Photo" class="fab-img" src="assets/imgs/fab-camera.png">
-      </button>
-      <button aria-name="Add Photo From Gallery" alt="Add Photo From Gallery" ion-fab (click)="onClickedNewPhoto(false)" class="fab-census-tree">
-          <img alt="Add Photo" class="fab-img" src="assets/imgs/fab-gallery.png">
-      </button>
+      <ion-fab-button aria-name="Add Photo From Camera" alt="Add Photo From Camera" (click)="onClickedNewPhoto(true)" class="fab-census-tree">
+          <img alt="Add Photo" class="fab-img" src="../../assets/imgs/fab-camera.png">
+      </ion-fab-button>
+      <ion-fab-button aria-name="Add Photo From Gallery" alt="Add Photo From Gallery" (click)="onClickedNewPhoto(false)" class="fab-census-tree">
+          <img alt="Add Photo" class="fab-img" src="../../assets/imgs/fab-gallery.png">
+      </ion-fab-button>
     </ion-fab>
 
 </ion-content>
