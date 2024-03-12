@@ -36,6 +36,8 @@ export class LoginPage {
     public form: FormGroup;
 
     constructor(
+                public navCtrl: NavController,
+                public navParams: NavParams,
                 private apiService: APIService,
                 private authService: AuthService,
                 private storageService: StorageService,
@@ -89,45 +91,51 @@ export class LoginPage {
 
         const username = this.form.value['username'];
         const password = this.form.value['password'];
+      this.authService.login(username, password).subscribe({
+        next: (x) => {
+          console.log(x)
+          const params = {
+            project__name: PROJECT_NAME
+          };
 
-        this.authService.login(username, password).subscribe(() => {
-                const params = {
-                    project__name: PROJECT_NAME
-                };
+          // Update authenticated check for split pane / drawer
+          this.authenticatedService.setAuthenticated(this.authService.isLoggedIn())
 
-                // Update authenticated check for split pane / drawer
-                this.authenticatedService.setAuthenticated(this.authService.isLoggedIn())
+          this.apiService.getDatasets(params).pipe(
+            mergeMap((datasets: Dataset[]) => from(datasets).pipe(
+              mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
+            ))
+          ).subscribe(() => {}, error => {
+            console.log(error)
+          });
+          this.apiService.getUsers(params).pipe(
+            mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
+          ).subscribe(() => {}, error => {
+            console.log(error)
+          });
 
-                this.apiService.getDatasets(params).pipe(
-                    mergeMap((datasets: Dataset[]) => from(datasets).pipe(
-                        mergeMap((dataset: Dataset) => this.storageService.putDataset(dataset))
-                    ))
-                ).subscribe(() => {}, error => {
-                    console.log(error)
-                });
-
-                this.apiService.getUsers(params).pipe(
-                    mergeMap((users: User[]) => this.storageService.putTeamMembers(users))
-                ).subscribe(() => {}, error => {
-                    console.log(error)
-                });
-
-                loading?.dismiss()
-                this.router.navigateByUrl('/home')
-            },
-            async (error) => {
-                console.log(error)
-                loading?.dismiss();
-                const apiResponse = formatAPIError(error) as ApiResponse;
-                const problem = await this.alertController.create({
-                    header: 'Login Problem',
-                    subHeader: !!apiResponse.non_field_errors ? apiResponse.non_field_errors[0] :
-                        'There was a problem contacting the server, try again later',
-                    buttons: ['Ok']
-                });
-                await problem.present();
-            }
-        );
+          console.log('Done', 'done')
+          loading?.dismiss()
+          // this.navCtrl.navigateRoot("/").then(x => {
+          //   console.log("nav", x)
+          // }).catch( x => {
+          //   console.log("naverror", x.toString())
+          // })
+          this.router.navigateByUrl('/home')
+        },
+        error: async (error) => {
+          console.log('error', error)
+          loading?.dismiss();
+          const apiResponse = formatAPIError(error) as ApiResponse;
+          const problem = await this.alertController.create({
+            header: 'Login Problem',
+            subHeader: !!apiResponse.non_field_errors ? apiResponse.non_field_errors[0] :
+              'There was a problem contacting the server, try again later',
+            buttons: ['Ok']
+          });
+          await problem.present();
+        }
+      })
     }
 
     public async resetPassword() {

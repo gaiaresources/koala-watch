@@ -9,6 +9,19 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import {BiosysCoreModule} from "../../biosys-core/biosys-core.module";
 import {StorageService} from "../../shared/services/storage.service";
 import {UploadService} from "../../shared/services/upload.service";
+import {RouterModule, Routes} from "@angular/router";
+
+const routes: Routes = [
+  {
+    path: 'home',
+    component: HomePage,
+    children: [
+      { path: 'recordslist', loadChildren: () => import('../../components/records-list/records-list.module').then(m => m.RecordListModule) },
+      { path: 'recordsmap', loadChildren: () => import('../../components/records-map/records-map.module').then(m => m.RecordsMapModule) }
+    ]
+  },
+  { path: '', redirectTo: 'home/recordslist', pathMatch: 'full' }
+]
 
 @NgModule({
   declarations: [
@@ -19,6 +32,7 @@ import {UploadService} from "../../shared/services/upload.service";
     ComponentsModule,
     FontAwesomeModule,
     BiosysCoreModule,
+    RouterModule.forChild(routes)
   ],
   providers: [
     NavController,
