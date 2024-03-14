@@ -130,7 +130,8 @@ export class RecordsListComponent {
 
     private navPush(page: string, params: { datasetName: string; recordClientId?: string | undefined; parentId?: string | null | undefined; readonly?: boolean; }) {
       console.log("Testing - Called navPush")
-        this.enteringRecord.emit();
+      // this.enteringRecord.emit();
+      this.router.navigateByUrl(page, { state: params });
        //this.navCtrl.navigateForward(page, { state: params })
     }
 
