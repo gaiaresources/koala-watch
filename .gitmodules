@@ -1,4 +1,0 @@
-[submodule "src/biosys-core"]
-	path = src/biosys-core
-	url = https://github.com/gaiaresources/biosys-core.git
-	branch = ionic_6
