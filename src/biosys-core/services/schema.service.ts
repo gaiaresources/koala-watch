@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Dataset } from '../interfaces/api.interfaces';
 import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 
-import { Package, DataPackage, Schema, Field } from 'datapackage';
+// TODO how to import these correctly?
+// import { Package, DataPackage, Schema, any } from 'datapackage';
 
 import { Observable ,  from as fromPromise ,  zip } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,7 +16,7 @@ export class SchemaService {
 
     private static readonly LOCATION_FIELDS = ['datum', 'lat', 'long', 'lon', 'latitude', 'longitude', 'accuracy', 'location description'];
 
-    private static schemaFieldTypeToFormFieldType(field: Field): string {
+    private static schemaFieldTypeToFormFieldType(field: any): string {
         if (field.type === 'string') {
             if ('constraints' in field && 'enum' in field.constraints) {
                 if (field.constraints.enum.length === 1) {
@@ -49,8 +50,8 @@ export class SchemaService {
         });
     }
 
-    private static getFormDescriptorFromDataPackage(dataPackage: DataPackage, resourceIndex: number): FormDescriptor {
-        const schema: Schema = dataPackage.resources[resourceIndex].schema;
+    private static getFormDescriptorFromDataPackage(dataPackage: any, resourceIndex: number): FormDescriptor {
+        const schema: any = dataPackage.resources[resourceIndex].schema;
         const fields = schema.fields;
 
         const fd: FormDescriptor = {
@@ -62,7 +63,7 @@ export class SchemaService {
         };
 
         for (let i = 0, len = fields.length; i < len; i++) {
-            const field: Field = fields[i];
+            const field: any = fields[i];
 
             const fieldOptions = schema.descriptor.fields[i].options;
 
@@ -88,7 +89,7 @@ export class SchemaService {
         return fd;
     }
 
-    private static createFieldDescriptorFromSchemaField(field: Field, fieldOptions?: object): FieldDescriptor {
+    private static createFieldDescriptorFromSchemaField(field: any, fieldOptions?: object): FieldDescriptor {
         const type: string = SchemaService.schemaFieldTypeToFormFieldType(field);
 
         return {
@@ -102,7 +103,7 @@ export class SchemaService {
         };
     }
 
-    private static createOptions(field: Field, fieldOptions?: object): FieldOption[] {
+    private static createOptions(field: any, fieldOptions?: object): FieldOption[] {
         const options: FieldOption[] = [];
 
         if (!fieldOptions || !fieldOptions.hasOwnProperty('enum') || !fieldOptions['enum'].hasOwnProperty('titles')) {
@@ -122,7 +123,7 @@ export class SchemaService {
         return options;
     }
 
-    private static isDateField(field: Field): boolean {
+    private static isDateField(field: any): boolean {
         if (typeof field === 'object') {
             return field.name.toLowerCase().indexOf('date') > -1;
         } else {
@@ -130,7 +131,7 @@ export class SchemaService {
         }
     }
 
-    private static isLocationField(field: Field): boolean {
+    private static isLocationField(field: any): boolean {
         if (typeof field === 'object') {
             return SchemaService.LOCATION_FIELDS.indexOf(field.name.toLowerCase()) > -1;
         } else {
@@ -138,7 +139,7 @@ export class SchemaService {
         }
     }
 
-    private static isRequiredField(field: Field): boolean {
+    private static isRequiredField(field: any): boolean {
         if (typeof field === 'object') {
             return !!field.required;
         } else {
@@ -146,7 +147,7 @@ export class SchemaService {
         }
     }
 
-    private static isHiddenField(field: Field): boolean {
+    private static isHiddenField(field: any): boolean {
         if (typeof field === 'object') {
             return 'constraints' in field && 'enum' in field.constraints && field.constraints.enum.length === 1;
         } else {
@@ -158,26 +159,28 @@ export class SchemaService {
     }
 
     public getFormDescriptorFromDataset(dataset: Dataset, resourceIndex: number = 0): Observable<FormDescriptor> {
-        return fromPromise(Package.load(dataset.data_package)).pipe(
-            map((dataPackage: DataPackage) =>
-                SchemaService.getFormDescriptorFromDataPackage(dataPackage, resourceIndex)
-            )
-        );
+        return new Observable<FormDescriptor>();
+        // return fromPromise(Package.load(dataset.data_package)).pipe(
+        //     map((dataPackage: any) =>
+        //         SchemaService.getFormDescriptorFromDataPackage(dataPackage, resourceIndex)
+        //     )
+        // );
     }
 
     public getFormGroupFromDataset(dataset: Dataset, resourceIndex: number = 0): Observable<FormGroup> {
-        return fromPromise(Package.load(dataset.data_package)).pipe(
-            map((dataPackage: DataPackage) => {
-                const group = {};
-
-                dataPackage.resources[resourceIndex].schema.fields.forEach((field: Field) => {
-                    const validators: ValidatorFn[] = field.constraints ? SchemaService.constraintsToValidators(field.constraints) : [];
-                    group[field.name] = ['', validators];
-                });
-
-                return this.formBuilder.group(group);
-            })
-        );
+        return new Observable<FormGroup>();
+        // return fromPromise(Package.load(dataset.data_package)).pipe(
+        //     map((dataPackage: any) => {
+        //         const group = {};
+        //
+        //         dataPackage.resources[resourceIndex].schema.fields.forEach((any: any) => {
+        //             const validators: ValidatorFn[] = any.constraints ? SchemaService.constraintsToValidators(any.constraints) : [];
+        //             group[any.name] = ['', validators];
+        //         });
+        //
+        //         return this.formBuilder.group(group);
+        //     })
+        // );
     }
 
     public getFormDescriptorAndGroupFromDataset(dataset: Dataset, resourceIndex: number = 0):

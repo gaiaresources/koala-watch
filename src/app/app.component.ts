@@ -40,6 +40,8 @@ export class AppComponent implements OnInit, OnDestroy {
         {title: 'Help', page: '/help', icon: 'question-circle'},
         {title: 'Privacy Policy', page: '/privacypolicy', icon: 'lock'},
         {title: 'Log out', icon: 'sign-out-alt'},
+        // TODO Remove this TESTING ONLY
+        {title: 'Observation', page: '/observation', icon: 'info-circle'},
     ];
 
 
@@ -83,7 +85,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.router.navigateByUrl('/login')
         } else {
           this.reloadMetadata();
-          this.router.navigateByUrl('/home')
+          // this.router.navigateByUrl('/home')
         }
       });
 
