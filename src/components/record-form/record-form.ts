@@ -114,7 +114,6 @@ export class RecordFormComponent implements OnDestroy {
     constructor(private schemaService: SchemaService,
         private storageService: StorageService,
         private authService: AuthService,
-        private geolocation: Geolocation,
         private alertCtrl: AlertController,
         //private events: Events,
         public navCtrl: NavController,
@@ -124,7 +123,9 @@ export class RecordFormComponent implements OnDestroy {
 
     ngOnDestroy() {
         if (this.locationSubscription) {
-            this.geolocation.clearWatch(this.locationSubscription)
+          // TODO Does this still work?
+          // this.geolocation.clearWatch(this.locationSubscription)
+          navigator.geolocation.clearWatch(this.locationSubscription)
         }
     }
 
@@ -145,7 +146,7 @@ export class RecordFormComponent implements OnDestroy {
 
             let performInitialLocationUpdate = this.initialiseDefaultValues;
 
-            this.locationSubscription = this.geolocation.watchPosition(
+            this.locationSubscription = navigator.geolocation.watchPosition(
                 (position) => {
                     this.lastLocation = position;
                     if (performInitialLocationUpdate) {
