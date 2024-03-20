@@ -14,6 +14,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MbscModule} from "@mobiscroll/angular";
 import {StorageService} from "../shared/services/storage.service";
 import {ActiveRecordService} from "../providers/activerecordservice/active-record.service";
+import {SchemaService} from "../biosys-core/services/schema.service";
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import {ActiveRecordService} from "../providers/activerecordservice/active-recor
         NavController,
         NavParams,
         StorageService,
+        SchemaService,
         ActiveRecordService
     ]
 })
