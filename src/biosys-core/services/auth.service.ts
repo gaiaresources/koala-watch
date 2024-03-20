@@ -8,12 +8,12 @@ import { APIService } from './api.service';
 
 @Injectable()
 export class AuthService {
-    protected user: User;
+    protected user: User | null;
 
     constructor(protected apiService: APIService) {
     }
 
-    public getAuthToken(): string {
+    public getAuthToken(): string | null {
         return localStorage.getItem('auth_token');
     }
 

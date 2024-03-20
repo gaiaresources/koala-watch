@@ -67,15 +67,15 @@ export class SchemaService {
             const fieldOptions = schema.descriptor.fields[i].options;
 
             if (SchemaService.isHiddenField(field)) {
-                fd.hiddenFields.push(SchemaService.createFieldDescriptorFromSchemaField(field));
+                fd.hiddenFields!.push(SchemaService.createFieldDescriptorFromSchemaField(field));
             } else if (SchemaService.isDateField(field)) {
-                fd.dateFields.push(SchemaService.createFieldDescriptorFromSchemaField(field));
+                fd.dateFields!.push(SchemaService.createFieldDescriptorFromSchemaField(field));
             } else if (SchemaService.isLocationField(field)) {
-                fd.locationFields.push(SchemaService.createFieldDescriptorFromSchemaField(field, fieldOptions));
+                fd.locationFields!.push(SchemaService.createFieldDescriptorFromSchemaField(field, fieldOptions));
             } else if (SchemaService.isRequiredField(field)) {
-                fd.requiredFields.push(SchemaService.createFieldDescriptorFromSchemaField(field, fieldOptions));
+                fd.requiredFields!.push(SchemaService.createFieldDescriptorFromSchemaField(field, fieldOptions));
             } else {
-                fd.optionalFields.push(SchemaService.createFieldDescriptorFromSchemaField(field, fieldOptions));
+                fd.optionalFields!.push(SchemaService.createFieldDescriptorFromSchemaField(field, fieldOptions));
             }
         }
 
@@ -97,7 +97,7 @@ export class SchemaService {
             description: field.descriptor.description,
             format: field.format,
             type: type,
-            options: type === 'select' ? SchemaService.createOptions(field, fieldOptions) : null,
+            options: type === 'select' ? SchemaService.createOptions(field, fieldOptions) : undefined,
             defaultValue: type === 'hidden' ? field.constraints.enum[0] : null
         };
     }

@@ -61,6 +61,8 @@ export class StorageService {
     public updateRecordId(record: ClientRecord, id: number): Observable<boolean> {
         for (const photoId of record.photoIds) {
             this.getPhoto(photoId).subscribe(clientPhoto => {
+                // TODO What should this value be?
+                // @ts-ignore
                 clientPhoto.record = id;
                 this.putPhoto(clientPhoto).subscribe();
             });

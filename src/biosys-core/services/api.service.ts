@@ -441,13 +441,13 @@ export class APIService {
                 catchError((err, caught) => this.handleError(err, caught))
             );
     }
-
     public createRecord(record: Record, strict = true): Observable<Record> {
         // strict is evaluated to true on the server if the parameter is passed with any value
         const params = strict ? {strict: 'true'} : {};
 
-        return this.httpClient.post(this.buildAbsoluteUrl('records'), record, {
-                params: params,
+        return this.httpClient.post<Record>(this.buildAbsoluteUrl('records'), record, {
+                // TODO Why doesn't this work? is it needed?
+                // params: params,
                 headers: new HttpHeaders({'content-type': 'application/json'})
             })
             .pipe(
@@ -460,7 +460,8 @@ export class APIService {
         const params = strict ? {strict: 'true'} : {};
 
         return this.httpClient.put(this.buildAbsoluteUrl('records/' + id), record, {
-                params: params,
+                // TODO Why doesn't this work? is it needed?
+                // params: params,
                 headers: new HttpHeaders({'content-type': 'application/json'})
             })
             .pipe(
@@ -473,7 +474,8 @@ export class APIService {
         const params = strict ? {strict: 'true'} : {};
 
         return this.httpClient.patch(this.buildAbsoluteUrl('records/' + id), {validated: validated}, {
-                params: params,
+                // TODO Why doesn't this work? is it needed?
+                // params: params,
                 headers: new HttpHeaders({'content-type': 'application/json'})
             })
             .pipe(
@@ -486,7 +488,8 @@ export class APIService {
         const params = strict ? {strict: 'true'} : {};
 
         return this.httpClient.patch(this.buildAbsoluteUrl('records/' + id), {locked: locked}, {
-                params: params,
+                // TODO Why doesn't this work? is it needed?
+                // params: params,
                 headers: new HttpHeaders({'content-type': 'application/json'})
             })
             .pipe(
@@ -499,7 +502,8 @@ export class APIService {
         const params = strict ? {strict: 'true'} : {};
 
         return this.httpClient.patch(this.buildAbsoluteUrl('records/' + id), {data: data}, {
-                params: params,
+                // TODO Why doesn't this work? is it needed?
+                // params: params,
                 headers: new HttpHeaders({'content-type': 'application/json'})
             })
             .pipe(
