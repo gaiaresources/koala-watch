@@ -7,10 +7,10 @@
     <ion-title>Observation</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button size="small" (click)="doDelete()">
+      <ion-button fill="solid" color="primary" size="small" (click)="doDelete()">
         Delete
       </ion-button>
-      <ion-button size="small" (click)="doSave()">
+      <ion-button fill="solid" color="primary" size="small" (click)="doSave()">
         Save
       </ion-button>
     </ion-buttons>
@@ -37,14 +37,5 @@
     <app-record-photos>
     </app-record-photos>
   </ng-container>
-
-  <ion-fab *ngIf="!readonly" slot="fixed" horizontal="end" vertical="bottom">
-    <ion-fab-button aria-label="Add Photo From Camera" (click)="doCamera()">
-      Cam
-    </ion-fab-button>
-    <ion-fab-button aria-label="Add Photo From Gallery" (click)="doGallery()">
-      Gal
-    </ion-fab-button>
-  </ion-fab>
 
 </ion-content>

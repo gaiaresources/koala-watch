@@ -1,3 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Koala Scat Census</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="solid" color="primary" size="small" (click)="doDelete()">
+        Delete
+      </ion-button>
+      <ion-button fill="solid" color="primary" size="small" (click)="doSave()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true" class="ion-padding">
-  Showing the census form.
+
+  <ion-segment [(ngModel)]="segment" color="primary">
+    <ion-segment-button value="form">
+      Form
+    </ion-segment-button>
+    <ion-segment-button value="observations">
+      Tree Surveys List
+    </ion-segment-button>
+    <ion-segment-button value="photos">
+      Photos
+    </ion-segment-button>
+  </ion-segment>
+
+  <ng-container *ngIf="segment === 'form'">
+    <app-record-form [dataset]="DATASET_NAME_CENSUS" [readonly]="readonly">
+    </app-record-form>
+  </ng-container>
+
+  <ng-container *ngIf="segment === 'observations'">
+    Tree Surveys List
+  </ng-container>
+
+  <ng-container *ngIf="segment === 'photos'">
+    <app-record-photos>
+    </app-record-photos>
+  </ng-container>
+
 </ion-content>
