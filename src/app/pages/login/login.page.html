@@ -1,20 +1,14 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
+<ion-content class="ion-padding">
   <ion-grid>
     <ion-row>
-      <ion-col>
+      <ion-col size-lg="6" size-md="6" offset-lg="3" offset-md="3">
         <ion-img style="width: 100%" src="../../assets/imgs/koalawatch_heading.png"/>
       </ion-col>
     </ion-row>
 
     <form [formGroup]="form">
       <ion-row>
-        <ion-col>
+        <ion-col size="12" size-lg="6" size-md="6" offset-lg="3" offset-md="3">
           <ion-item>
             <ion-input label="Username"
                        label-placement="floating"
@@ -31,7 +25,7 @@
       </ion-row>
 
       <ion-row>
-        <ion-col>
+        <ion-col size="7" size-lg="4" size-md="4" offset-md="4" offset-lg="4" offset="3">
           <ion-button type="submit"
                       expand="block"
                       [disabled]="!form.valid"
@@ -42,7 +36,7 @@
       </ion-row>
 
       <ion-row>
-        <ion-col>
+        <ion-col size="7" size-lg="4" size-md="4" offset-md="4" offset-lg="4" offset="3">
           <ion-button type="submit"
                       expand="block"
                       (click)="doSignup()">
@@ -52,7 +46,7 @@
       </ion-row>
 
       <ion-row>
-        <ion-col>
+        <ion-col size="7" size-lg="4" size-md="4" offset-md="4" offset-lg="4" offset="3">
           <ion-button type="submit"
                       expand="block"
                       (click)="doForgotPassword()">

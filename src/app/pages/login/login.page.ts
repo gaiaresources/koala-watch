@@ -91,11 +91,11 @@ export class LoginPage implements OnInit {
   async doSignup() {
     await this.alertController.create({
       header: 'Terms and Conditions',
-      message: 'To sign up to ' + this.appName + ' you\'ll need to agree to the following terms and conditions:',
+      subHeader: 'To sign up to ' + this.appName + ' you\'ll need to agree to the following terms and conditions:',
       mode: 'md',
       buttons: [
         {
-          text: 'View',
+          text: 'Yes',
           handler: async () => {
             const modal = await this.modalController.create({
               component: SignupModalComponent,
@@ -104,7 +104,7 @@ export class LoginPage implements OnInit {
           }
         },
         {
-          text: 'Close',
+          text: 'No',
           handler: () => {
           }
         }
