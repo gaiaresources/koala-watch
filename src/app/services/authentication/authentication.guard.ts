@@ -9,8 +9,6 @@ export const AuthenticationGuardFn: CanActivateFn = (
   const authService = inject(AuthenticationService);
   const router = inject(Router);
 
-  return true;
-
   const token = authService.getToken();
   if (token) {
     // authorised so return true
