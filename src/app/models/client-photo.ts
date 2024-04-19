@@ -1,4 +1,4 @@
-import {Media} from "./media";
+import { Media } from "./media";
 
 export interface ClientPhoto extends Media {
   clientId: string;

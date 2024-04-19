@@ -1,6 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   AlertController,
   IonButton,
@@ -19,12 +19,12 @@ import {
   LoadingController,
   ModalController
 } from '@ionic/angular/standalone';
-import {APP_NAME} from "../../tokens/app";
-import {AuthenticationService} from "../../services/authentication/authentication.service";
-import {firstValueFrom} from "rxjs";
-import {APIService} from "../../services/api/api.service";
-import {SignupModalComponent} from "../../components/signup-modal/signup-modal.component";
-import {Router} from "@angular/router";
+import { APP_NAME } from "../../tokens/app";
+import { AuthenticationService } from "../../services/authentication/authentication.service";
+import { firstValueFrom } from "rxjs";
+import { APIService } from "../../services/api/api.service";
+import { SignupModalComponent } from "../../components/signup-modal/signup-modal.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-login',

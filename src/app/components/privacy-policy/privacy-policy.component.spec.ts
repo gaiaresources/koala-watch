@@ -9,7 +9,7 @@ describe('PrivacyPolicyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrivacyPolicyComponent ],
+      declarations: [PrivacyPolicyComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

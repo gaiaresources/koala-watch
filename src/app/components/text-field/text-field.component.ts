@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {ReactiveFormsModule} from "@angular/forms";
-import {NgIf} from "@angular/common";
-import {IonInput, IonItem, IonLabel, IonText} from "@ionic/angular/standalone";
-import {BaseFieldComponent} from "../base-field/base-field.component";
+import { Component } from '@angular/core';
+import { ReactiveFormsModule } from "@angular/forms";
+import { NgIf } from "@angular/common";
+import { IonInput, IonItem, IonLabel, IonText } from "@ionic/angular/standalone";
+import { BaseFieldComponent } from "../base-field/base-field.component";
 
 @Component({
   selector: 'app-text-field',

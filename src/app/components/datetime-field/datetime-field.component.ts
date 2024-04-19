@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormGroup} from "@angular/forms";
-import {FieldDescriptor} from "../../models/field-descriptor";
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from "@angular/forms";
+import { FieldDescriptor } from "../../models/field-descriptor";
 
 @Component({
   selector: 'app-datetime-field',
@@ -8,7 +8,7 @@ import {FieldDescriptor} from "../../models/field-descriptor";
   styleUrls: ['./datetime-field.component.scss'],
   standalone: true,
 })
-export class DatetimeFieldComponent  implements OnInit {
+export class DatetimeFieldComponent implements OnInit {
 
   @Input()
   readonly: boolean = false;
@@ -19,8 +19,10 @@ export class DatetimeFieldComponent  implements OnInit {
   @Input({required: true})
   field?: FieldDescriptor;
 
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
 }

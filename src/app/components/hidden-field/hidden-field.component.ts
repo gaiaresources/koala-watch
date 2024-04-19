@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {FieldDescriptor} from "../../models/field-descriptor";
-import {IonicModule} from "@ionic/angular";
-import {JsonPipe, NgIf} from "@angular/common";
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FieldDescriptor } from "../../models/field-descriptor";
+import { IonicModule } from "@ionic/angular";
+import { JsonPipe, NgIf } from "@angular/common";
 
 @Component({
   selector: 'app-hidden-field',

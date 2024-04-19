@@ -1,5 +1,5 @@
-import {Routes} from '@angular/router';
-import {AuthenticationGuardFn} from "./services/authentication/authentication.guard";
+import { Routes } from '@angular/router';
+import { AuthenticationGuardFn } from "./services/authentication/authentication.guard";
 
 export const routes: Routes = [
   {

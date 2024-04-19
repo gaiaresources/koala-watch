@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {BehaviorSubject, Observable, shareReplay, switchMap} from 'rxjs';
-import {tap} from 'rxjs/operators';
-import {User} from "../../models/user";
-import {APIService} from "../api/api.service";
+import { BehaviorSubject, Observable, shareReplay, switchMap } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { User } from "../../models/user";
+import { APIService } from "../api/api.service";
 
 @Injectable({
   providedIn: 'root',

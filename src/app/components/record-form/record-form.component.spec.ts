@@ -9,7 +9,7 @@ describe('RecordFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecordFormComponent ],
+      declarations: [RecordFormComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

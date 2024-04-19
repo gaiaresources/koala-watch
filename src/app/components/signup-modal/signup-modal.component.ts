@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -10,8 +10,8 @@ import {
   IonToolbar,
   ModalController
 } from "@ionic/angular/standalone";
-import {Router} from "@angular/router";
-import {PrivacyPolicyComponent} from "../privacy-policy/privacy-policy.component";
+import { Router } from "@angular/router";
+import { PrivacyPolicyComponent } from "../privacy-policy/privacy-policy.component";
 
 @Component({
   standalone: true,

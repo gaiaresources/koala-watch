@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Camera, CameraResultType, CameraSource, ImageOptions} from "@capacitor/camera";
-import {ActiveRecordService} from "../active-record/active-record.service";
+import { Injectable } from '@angular/core';
+import { Camera, CameraResultType, CameraSource, ImageOptions } from "@capacitor/camera";
+import { ActiveRecordService } from "../active-record/active-record.service";
 
 @Injectable({
   providedIn: 'root'

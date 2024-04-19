@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {IonicModule} from "@ionic/angular";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
-import {ClientRecord} from "../../models/client-record";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { IonicModule } from "@ionic/angular";
+import { DatePipe, NgForOf, NgIf } from "@angular/common";
+import { ClientRecord } from "../../models/client-record";
 
 @Component({
   selector: 'app-records-list',

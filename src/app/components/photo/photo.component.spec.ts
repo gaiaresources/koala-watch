@@ -9,7 +9,7 @@ describe('PhotoComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PhotoComponent ],
+      declarations: [PhotoComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {ClientPhoto} from "../../models/client-photo";
-import {IonButton, IonButtons} from "@ionic/angular/standalone";
-import {AsyncPipe, NgIf} from "@angular/common";
-import {PhotoComponent} from "../photo/photo.component";
-import {combineLatest, map, Observable, tap} from "rxjs";
-import {ActiveRecordService} from "../../services/active-record/active-record.service";
+import { Component, OnInit } from '@angular/core';
+import { ClientPhoto } from "../../models/client-photo";
+import { IonButton, IonButtons } from "@ionic/angular/standalone";
+import { AsyncPipe, NgIf } from "@angular/common";
+import { PhotoComponent } from "../photo/photo.component";
+import { combineLatest, map, Observable, tap } from "rxjs";
+import { ActiveRecordService } from "../../services/active-record/active-record.service";
 
 @Component({
   standalone: true,

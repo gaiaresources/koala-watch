@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {IonicModule} from "@ionic/angular";
+import { IonicModule } from "@ionic/angular";
 
 @Component({
   standalone: true,
@@ -10,10 +10,12 @@ import {IonicModule} from "@ionic/angular";
     IonicModule
   ]
 })
-export class PrivacyPolicyComponent  implements OnInit {
+export class PrivacyPolicyComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
 }

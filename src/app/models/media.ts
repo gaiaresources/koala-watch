@@ -1,4 +1,3 @@
-
 export interface Media {
   id?: number;
   file?: string;

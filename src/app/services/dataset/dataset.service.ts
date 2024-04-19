@@ -1,10 +1,10 @@
-import {Inject, Injectable} from '@angular/core';
-import {AuthenticationService} from "../authentication/authentication.service";
-import {APIService} from "../api/api.service";
-import {PROJECT_NAME} from "../../tokens/app";
-import {distinctUntilChanged, map, Observable, of, shareReplay, switchMap} from "rxjs";
-import {StorageService} from "../storage/storage.service";
-import {Dataset} from "../../models/dataset";
+import { Inject, Injectable } from '@angular/core';
+import { AuthenticationService } from "../authentication/authentication.service";
+import { APIService } from "../api/api.service";
+import { PROJECT_NAME } from "../../tokens/app";
+import { distinctUntilChanged, map, Observable, of, shareReplay, switchMap } from "rxjs";
+import { StorageService } from "../storage/storage.service";
+import { Dataset } from "../../models/dataset";
 
 @Injectable({
   providedIn: 'root'

@@ -9,7 +9,7 @@ describe('SignupModalComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SignupModalComponent ],
+      declarations: [SignupModalComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

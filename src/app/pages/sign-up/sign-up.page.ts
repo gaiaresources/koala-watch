@@ -1,6 +1,6 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   AlertController,
   IonButton,
@@ -18,13 +18,13 @@ import {
   IonToolbar,
   LoadingController
 } from '@ionic/angular/standalone';
-import {APP_NAME} from "../../tokens/app";
-import {UsernameValidator} from "../../validators/username.validator";
-import {PasswordValidator} from "../../validators/password.validator";
-import {Errors} from "../../validators/errors";
-import {Router} from "@angular/router";
-import {APIService} from "../../services/api/api.service";
-import {firstValueFrom} from "rxjs";
+import { APP_NAME } from "../../tokens/app";
+import { UsernameValidator } from "../../validators/username.validator";
+import { PasswordValidator } from "../../validators/password.validator";
+import { Errors } from "../../validators/errors";
+import { Router } from "@angular/router";
+import { APIService } from "../../services/api/api.service";
+import { firstValueFrom } from "rxjs";
 
 @Component({
   selector: 'app-sign-up',

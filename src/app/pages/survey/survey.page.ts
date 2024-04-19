@@ -20,7 +20,8 @@ import {
 })
 export class SurveyPage implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

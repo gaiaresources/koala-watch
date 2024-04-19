@@ -1,8 +1,8 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {IonContent, IonHeader, IonTitle, IonToolbar} from '@ionic/angular/standalone';
-import {RecordsListComponent} from "../../components/records-list/records-list.component";
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { RecordsListComponent } from "../../components/records-list/records-list.component";
 
 @Component({
   selector: 'app-list',

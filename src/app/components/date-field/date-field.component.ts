@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NgIf} from "@angular/common";
-import {FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {FieldDescriptor} from "../../models/field-descriptor";
-import {IonicModule} from "@ionic/angular";
-import {IonDatetime, IonLabel} from "@ionic/angular/standalone";
+import { Component, Input, OnInit } from '@angular/core';
+import { NgIf } from "@angular/common";
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FieldDescriptor } from "../../models/field-descriptor";
+import { IonicModule } from "@ionic/angular";
+import { IonDatetime, IonLabel } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-date-field',

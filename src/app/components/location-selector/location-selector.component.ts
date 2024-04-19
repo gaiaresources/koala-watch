@@ -1,9 +1,9 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {FormGroup} from "@angular/forms";
-import {NgIf} from "@angular/common";
-import {Subscription} from "rxjs";
-import {IonicModule} from "@ionic/angular";
-import {IonButton, IonButtons, IonIcon} from "@ionic/angular/standalone";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { FormGroup } from "@angular/forms";
+import { NgIf } from "@angular/common";
+import { Subscription } from "rxjs";
+import { IonicModule } from "@ionic/angular";
+import { IonButton, IonButtons, IonIcon } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-location-selector',

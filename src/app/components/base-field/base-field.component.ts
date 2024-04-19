@@ -1,7 +1,7 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {FormGroup, ValidationErrors} from "@angular/forms";
-import {FieldDescriptor} from "../../models/field-descriptor";
-import {Subscription} from "rxjs";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { FormGroup, ValidationErrors } from "@angular/forms";
+import { FieldDescriptor } from "../../models/field-descriptor";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-base-field',

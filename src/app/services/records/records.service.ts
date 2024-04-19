@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {APIService} from "../api/api.service";
-import {BehaviorSubject, combineLatest, from, map, of, switchMap} from "rxjs";
-import {StorageService} from "../storage/storage.service";
-import {DatasetService} from "../dataset/dataset.service";
-import {ClientRecord} from "../../models/client-record";
+import { Injectable } from '@angular/core';
+import { APIService } from "../api/api.service";
+import { BehaviorSubject, combineLatest, from, map, of, switchMap } from "rxjs";
+import { StorageService } from "../storage/storage.service";
+import { DatasetService } from "../dataset/dataset.service";
+import { ClientRecord } from "../../models/client-record";
 
 @Injectable({
   providedIn: 'root'

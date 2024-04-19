@@ -1,4 +1,4 @@
-import {FieldOption} from "./field-option";
+import { FieldOption } from "./field-option";
 
 export interface FieldDescriptor {
   key: string;

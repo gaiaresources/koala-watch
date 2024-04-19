@@ -1,6 +1,6 @@
-import {CommonModule} from '@angular/common';
-import {Component} from '@angular/core';
-import {Router, RouterLink, RouterLinkActive} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import {
   AlertController,
   IonApp,
@@ -18,7 +18,7 @@ import {
   IonSplitPane,
   IonToolbar
 } from '@ionic/angular/standalone';
-import {addIcons} from 'ionicons';
+import { addIcons } from 'ionicons';
 import {
   archiveOutline,
   archiveSharp,
@@ -35,13 +35,20 @@ import {
   warningOutline,
   warningSharp
 } from 'ionicons/icons';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {faCog, faInfoCircle, faLock, faQuestionCircle, faSignOutAlt, faTachometerAlt} from "@fortawesome/free-solid-svg-icons";
-import {IconProp} from "@fortawesome/fontawesome-svg-core";
-import {AuthenticationService} from "./services/authentication/authentication.service";
-import {Observable} from "rxjs";
-import {HttpClientModule} from "@angular/common/http";
-import {User} from "./models/user";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {
+  faCog,
+  faInfoCircle,
+  faLock,
+  faQuestionCircle,
+  faSignOutAlt,
+  faTachometerAlt
+} from "@fortawesome/free-solid-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { AuthenticationService } from "./services/authentication/authentication.service";
+import { Observable } from "rxjs";
+import { HttpClientModule } from "@angular/common/http";
+import { User } from "./models/user";
 
 @Component({
   selector: 'app-root',
@@ -72,7 +79,7 @@ import {User} from "./models/user";
 })
 export class AppComponent {
   faSignOutAlt = faSignOutAlt;
-  public appPages: {title:string, url:string, icon: IconProp}[] = [
+  public appPages: { title: string, url: string, icon: IconProp }[] = [
     {title: 'Records', url: '/records', icon: faTachometerAlt},
     {title: 'Settings', url: '/settings', icon: faCog},
     {title: 'About', url: '/about', icon: faInfoCircle},

@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {ClientPhoto} from "../../models/client-photo";
-import {BehaviorSubject} from "rxjs";
+import { Injectable } from '@angular/core';
+import { ClientPhoto } from "../../models/client-photo";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
   providedIn: 'root'

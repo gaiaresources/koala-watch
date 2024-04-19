@@ -1,6 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   IonButton,
   IonButtons,
@@ -14,10 +14,10 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import {RecordsListComponent} from "../../components/records-list/records-list.component";
-import {APP_NAME} from "../../tokens/app";
-import {Router} from "@angular/router";
-import {ClientRecord} from "../../models/client-record";
+import { RecordsListComponent } from "../../components/records-list/records-list.component";
+import { APP_NAME } from "../../tokens/app";
+import { Router } from "@angular/router";
+import { ClientRecord } from "../../models/client-record";
 
 @Component({
   selector: 'app-observation-list',

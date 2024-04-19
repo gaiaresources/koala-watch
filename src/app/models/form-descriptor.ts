@@ -1,4 +1,4 @@
-import {FieldDescriptor} from "./field-descriptor";
+import { FieldDescriptor } from "./field-descriptor";
 
 export interface FormDescriptor {
   dateFields?: FieldDescriptor[];

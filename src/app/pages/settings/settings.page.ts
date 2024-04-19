@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   IonButton,
   IonButtons,
@@ -16,9 +16,9 @@ import {
   IonToggle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import {Observable} from "rxjs";
-import {SettingsService} from "../../services/settings/settings.service";
-import {tap} from "rxjs/operators";
+import { Observable } from "rxjs";
+import { SettingsService } from "../../services/settings/settings.service";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-settings',

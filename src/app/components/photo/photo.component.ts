@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {IonicModule} from "@ionic/angular";
-import {ClientPhoto} from "../../models/client-photo";
-import {NgIf} from "@angular/common";
-import {ActiveRecordService} from "../../services/active-record/active-record.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { IonicModule } from "@ionic/angular";
+import { ClientPhoto } from "../../models/client-photo";
+import { NgIf } from "@angular/common";
+import { ActiveRecordService } from "../../services/active-record/active-record.service";
 
 @Component({
   standalone: true,

@@ -1,5 +1,5 @@
-import {BehaviorSubject, distinctUntilChanged, Subscription} from "rxjs";
-import {FormGroup} from "@angular/forms";
+import { BehaviorSubject, distinctUntilChanged, Subscription } from "rxjs";
+import { FormGroup } from "@angular/forms";
 
 export interface ErrorMessages {
   [key: string]: string;

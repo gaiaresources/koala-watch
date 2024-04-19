@@ -1,6 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   IonButton,
   IonButtons,
@@ -15,10 +15,10 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import {APP_NAME} from "../../tokens/app";
-import {UploadService} from "../../services/upload/upload.service";
-import {firstValueFrom} from "rxjs";
-import {NavigationService} from "../../services/navigation/navigation.service";
+import { APP_NAME } from "../../tokens/app";
+import { UploadService } from "../../services/upload/upload.service";
+import { firstValueFrom } from "rxjs";
+import { NavigationService } from "../../services/navigation/navigation.service";
 
 @Component({
   selector: 'app-help',

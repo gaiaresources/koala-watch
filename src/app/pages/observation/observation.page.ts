@@ -20,7 +20,8 @@ import {
 })
 export class ObservationPage implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

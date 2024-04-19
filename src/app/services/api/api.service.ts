@@ -1,12 +1,12 @@
-import {map, Observable, of} from 'rxjs';
-import {Inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {catchError} from 'rxjs/operators';
-import {User} from "../../models/user";
-import {API_URL} from "../../tokens/api";
-import {PROJECT_NAME} from "../../tokens/app";
-import {Dataset} from "../../models/dataset";
-import {ClientRecord} from "../../models/client-record";
+import { map, Observable, of } from 'rxjs';
+import { Inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { User } from "../../models/user";
+import { API_URL } from "../../tokens/api";
+import { PROJECT_NAME } from "../../tokens/app";
+import { Dataset } from "../../models/dataset";
+import { ClientRecord } from "../../models/client-record";
 
 
 /**
