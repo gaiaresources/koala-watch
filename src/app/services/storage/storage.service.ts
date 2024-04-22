@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from "@ionic/storage-angular";
 import { ClientRecord } from "../../models/client-record";
-import { filter, Observable } from "rxjs";
+import { filter, from, map, Observable } from "rxjs";
 import { fromPromise } from "rxjs/internal/observable/innerFrom";
 
 @Injectable({
@@ -52,6 +52,40 @@ export class StorageService {
 
   public putRecord(record: ClientRecord): Observable<boolean> {
     return fromPromise(this.storage.set(`${StorageService.RECORD_PREFIX}${record.client_id}`, record));
+  }
+
+  public getUploadableRecords(): Observable<ClientRecord> {
+    const validParentsObservable: Observable<ClientRecord> = this.getParentRecords().pipe(
+      filter((record: ClientRecord) => record.valid && !record.id),
+    );
+
+    return validParentsObservable;
+
+      // this.getParentRecords().pipe(
+      // map((record: ClientRecord) => record)
+      // filter((record: ClientRecord) => record.valid && !record.id),
+    // );
+
+    // return validParentsObservable;
+    // const validChildrenObservable: Observable<ClientRecord> = validParentsObservable.pipe(
+    //   mergeMap((parentRecord: ClientRecord) => this.getChildRecords(parentRecord.client_id)),
+    // );
+
+    // return concat(validParentsObservable, validChildrenObservable);
+  }
+
+  public getParentRecords(): Observable<ClientRecord> {
+    return new Observable(observer => {
+      this.storage.forEach((value, key) => {
+        if (key.startsWith(StorageService.RECORD_PREFIX) && !value.parentId) {
+          observer.next(value);
+        }
+      }).then(value => {
+        observer.complete();
+      }, reason => {
+        observer.error(reason);
+      });
+    });
   }
 
 }

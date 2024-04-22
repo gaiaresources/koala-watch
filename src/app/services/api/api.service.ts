@@ -75,6 +75,10 @@ export class APIService {
       );
   }
 
+  public createRecord(record: object): Observable<object | null> {
+    return this.postRequest(this.buildAbsoluteUrl('records'), record);
+  }
+
   /**
    * @param err
    * @param caught
