@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Storage } from "@ionic/storage-angular";
+import { ClientRecord } from "../../models/client-record";
+import { filter, Observable } from "rxjs";
+import { fromPromise } from "rxjs/internal/observable/innerFrom";
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
+  private static readonly RECORD_PREFIX = 'Record_';
 
   private _storage: Storage | null = null;
 
@@ -44,6 +48,10 @@ export class StorageService {
     return this._storage.forEach((value, key) => {
       if (key.startsWith(prefix)) values[key.slice(length)] = value;
     }).then(() => values);
+  }
+
+  public putRecord(record: ClientRecord): Observable<boolean> {
+    return fromPromise(this.storage.set(`${StorageService.RECORD_PREFIX}${record.client_id}`, record));
   }
 
 }

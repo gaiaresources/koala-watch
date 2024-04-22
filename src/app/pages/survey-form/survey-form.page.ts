@@ -15,6 +15,9 @@ import { DATASET_NAME_TREESURVEY } from "../../tokens/app";
 import { RecordFormComponent } from "../../components/record-form/record-form.component";
 import { RecordPhotosComponent } from "../../components/record-photos/record-photos.component";
 import { PhotoService } from "../../services/photo/photo.service";
+import { ActiveRecordService } from "../../services/active-record/active-record.service";
+import { StorageService } from "../../services/storage/storage.service";
+import { UUID } from "angular2-uuid";
 
 @Component({
   selector: 'app-survey-form',
@@ -33,7 +36,9 @@ export class SurveyFormPage implements OnInit {
   segment: string = 'form';
 
   constructor(
-    private photoService: PhotoService
+    private activeRecordService: ActiveRecordService,
+    private photoService: PhotoService,
+    private storageService: StorageService,
   ) {
   }
 
@@ -49,7 +54,23 @@ export class SurveyFormPage implements OnInit {
   }
 
   doSave() {
+    const formValues = this.activeRecordService.getValues();
 
+    this.storageService.putRecord({
+      // TODO check record valid
+      valid: true, //this.recordForm.valid,
+      // TODO set this on new record (in ionViewWillEnter?)
+      client_id: UUID.UUID(),
+      // TODO where should this value be coming from?
+      dataset: 107,
+      datasetName: DATASET_NAME_TREESURVEY,
+      // TODO get date from Record if set.
+      datetime: new Date().toISOString(),
+      data: formValues,
+      // TODO Count?
+      count: 0,
+      photoIds: [],
+    });
   }
 
   async doDelete() {
