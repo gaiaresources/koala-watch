@@ -7,6 +7,9 @@ import { BehaviorSubject } from "rxjs";
 })
 export class ActiveRecordService {
 
+  public _clientId = new BehaviorSubject<string>("");
+  public clientId$ = this._clientId.asObservable();
+
   private _values = new BehaviorSubject<any>({});
   public values$ = this._values.asObservable();
 
@@ -27,6 +30,14 @@ export class ActiveRecordService {
     this._photos.next([]);
     this._status.next("");
     this._currentPhoto.next(0);
+  }
+
+  getClientId() {
+    return this._clientId.value;
+  }
+
+  setClientId(clientId: string) {
+    this._clientId.next(clientId);
   }
 
   getValues() {

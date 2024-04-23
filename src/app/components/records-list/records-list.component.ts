@@ -5,6 +5,9 @@ import { ClientRecord } from "../../models/client-record";
 import { StorageService } from "../../services/storage/storage.service";
 import { from, map, Observable, switchMap } from "rxjs";
 import { tap } from "rxjs/operators";
+import { DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESURVEY } from "../../tokens/app";
+import { NavigationService } from "../../services/navigation/navigation.service";
+import { ActiveRecordService } from "../../services/active-record/active-record.service";
 
 @Component({
   selector: 'app-records-list',
@@ -47,6 +50,8 @@ export class RecordsListComponent implements OnInit {
 
   constructor(
     private storageService: StorageService,
+    private navigationService: NavigationService,
+    private activeRecordService: ActiveRecordService,
   ) {
   }
 
@@ -108,7 +113,23 @@ export class RecordsListComponent implements OnInit {
    */
 
   doRecordClicked(record: ClientRecord) {
-    this.onRecordClicked.emit(record);
+    this.activeRecordService.clear();
+    if (record.client_id) {
+      this.activeRecordService.setClientId(record.client_id);
+      switch (record.datasetName) {
+        case DATASET_NAME_OBSERVATION:
+          this.navigationService.goObservation();
+          break;
+        case DATASET_NAME_CENSUS:
+          this.navigationService.goCensus();
+          break;
+        case DATASET_NAME_TREESURVEY:
+          this.navigationService.goSurvey();
+          break;
+        default:
+          alert('Unable to determine record type');
+      }
+    }
   }
 
 }

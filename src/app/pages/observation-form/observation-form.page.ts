@@ -66,6 +66,13 @@ export class ObservationFormPage implements OnInit {
   }
 
   ngOnInit() {
+    if (this.activeRecordService.getClientId()) {
+      let clientId = this.activeRecordService.getClientId();
+      this.storageService.load('Record_' + clientId).then(record => this.activeRecordService.setValues(record.data));
+    }
+    else {
+      this.activeRecordService.setClientId(UUID.UUID());
+    }
   }
 
   async doCamera() {
@@ -146,8 +153,7 @@ export class ObservationFormPage implements OnInit {
     this.storageService.putRecord({
       // TODO check record valid
       valid: true, //this.recordForm.valid,
-      // TODO set this on new record (in ionViewWillEnter?)
-      client_id: UUID.UUID(),
+      client_id: this.activeRecordService.getClientId(),
       // TODO where should this value be coming from?
       dataset: 105,
       datasetName: DATASET_NAME_OBSERVATION,

@@ -1,0 +1,87 @@
+table#category-legend {
+  min-height: 2em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.category-legend-colour {
+  height: 2em;
+  width: 2em;
+}
+
+.category-legend-label {
+  vertical-align: middle;
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  text-align: center;
+}
+
+div#category-legend-div {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+#category-completed {
+  background-color: #ebffef;
+}
+
+#category-incomplete {
+  background-color: #ebf6ff;
+}
+
+#category-uploaded {
+  background-color: #ebf0df;
+}
+
+img.data-row {
+  height: 40px;
+  width: 40px;
+  vertical-align: middle;
+}
+
+.ion-item {
+  position: relative;
+  color: white;
+  background-color: #417c3a;
+  display: flex;
+  align-items: center;
+  border: 1px solid black;
+  height: 100px;
+  width: 100%;
+  margin: 10px 0;
+
+  &__img {
+    margin: 10px 30px 10px 10px;
+    width: 80px;
+    height: auto;
+  }
+
+  &__text {
+    text-align: left;
+    font-size: 2.4rem;
+    font-weight: 500;
+  }
+}
+
+
+.row {
+  align-items: center;
+}
+
+.vertical-align-middle {
+  vertical-align: middle
+}
+
+.fab-img {
+  min-width: 80px;
+  min-height: 80px;
+  width: 80px;
+  height: 80px;
+  padding: 0;
+}
+.fabbed-img {
+  width: 60px;
+  height: 60px;
+}
