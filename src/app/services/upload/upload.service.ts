@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, map, mergeMap } from "rxjs";
+import { Observable, of } from "rxjs";
 import { StorageService } from "../storage/storage.service";
-import { Record } from "../../models/record";
 import { APIService } from "../api/api.service";
 
 @Injectable({
@@ -16,12 +15,14 @@ export class UploadService {
   }
 
   upload(): Observable<object| null> {
-    return this.storageService.getUploadableRecords().pipe(
-      map(clientRecord => {
-        // TODO need to subscribe? what to do with this?
-        return this.apiService.createRecord(clientRecord).subscribe(data => console.log(data))
-      })
-    );
+    this.storageService.getUploadableRecords().then((clientRecord) => {
+      if (Array.isArray(clientRecord)) {
+        clientRecord.forEach(record => {
+          this.apiService.createRecord(record).subscribe(data => console.log(data))
+        })
+      }
+    });
+    return of();
   }
 
 }

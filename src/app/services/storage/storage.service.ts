@@ -12,6 +12,8 @@ export class StorageService {
 
   private _storage: Storage | null = null;
 
+  private list: any[] = [];
+
   constructor(private storage: Storage) {
     this.init();
   }
@@ -54,38 +56,33 @@ export class StorageService {
     return fromPromise(this.storage.set(`${StorageService.RECORD_PREFIX}${record.client_id}`, record));
   }
 
-  public getUploadableRecords(): Observable<ClientRecord> {
-    const validParentsObservable: Observable<ClientRecord> = this.getParentRecords().pipe(
-      filter((record: ClientRecord) => record.valid && !record.id),
-    );
-
-    return validParentsObservable;
-
-      // this.getParentRecords().pipe(
-      // map((record: ClientRecord) => record)
-      // filter((record: ClientRecord) => record.valid && !record.id),
-    // );
-
-    // return validParentsObservable;
-    // const validChildrenObservable: Observable<ClientRecord> = validParentsObservable.pipe(
-    //   mergeMap((parentRecord: ClientRecord) => this.getChildRecords(parentRecord.client_id)),
-    // );
-
-    // return concat(validParentsObservable, validChildrenObservable);
+  public getUploadableRecords() {
+    return this.getParentRecords();
   }
 
-  public getParentRecords(): Observable<ClientRecord> {
-    return new Observable(observer => {
-      this.storage.forEach((value, key) => {
+  public getParentRecords() {
+    var promise = new Promise((resolve, reject) => {
+      this.storage.forEach((value, key, index) => {
         if (key.startsWith(StorageService.RECORD_PREFIX) && !value.parentId) {
-          observer.next(value);
+          this.list.push(value);
         }
-      }).then(value => {
-        observer.complete();
-      }, reason => {
-        observer.error(reason);
+      }).then((d) => {
+        resolve(this.list);
       });
     });
+    return promise;
+  }
+
+  // I'm so sorry, I couldn't figure it out.
+  public getAllRecords() {
+    var promise = new Promise((resolve, reject) => {
+      this.storage.forEach((value, key, index) => {
+        this.list.push(value);
+      }).then((d) => {
+        resolve(this.list);
+      });
+    });
+    return promise;
   }
 
 }
