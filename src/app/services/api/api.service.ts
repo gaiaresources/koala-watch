@@ -7,6 +7,7 @@ import { API_URL } from "../../tokens/api";
 import { PROJECT_NAME } from "../../tokens/app";
 import { Dataset } from "../../models/dataset";
 import { ClientRecord } from "../../models/client-record";
+import { Record } from "../../models/record";
 
 
 /**
@@ -75,7 +76,7 @@ export class APIService {
       );
   }
 
-  public createRecord(record: object): Observable<object | null> {
+  public createRecord(record: object): Observable<Record | null> {
     return this.postRequest(this.buildAbsoluteUrl('records'), record);
   }
 

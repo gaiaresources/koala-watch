@@ -56,6 +56,19 @@ export class StorageService {
     return fromPromise(this.storage.set(`${StorageService.RECORD_PREFIX}${record.client_id}`, record));
   }
 
+  public updateRecordId(record: ClientRecord, id: number): Observable<boolean> {
+    // for (const photoId of record.photoIds) {
+    //   this.getPhoto(photoId).subscribe(clientPhoto => {
+    //     clientPhoto.record = id;
+    //     this.putPhoto(clientPhoto).subscribe();
+    //   });
+    // }
+
+    record.id = id;
+    return this.putRecord(record);
+  }
+
+
   public getUploadableRecords() {
     return this.getParentRecords();
   }

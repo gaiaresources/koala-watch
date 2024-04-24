@@ -18,7 +18,14 @@ export class UploadService {
     this.storageService.getUploadableRecords().then((clientRecord) => {
       if (Array.isArray(clientRecord)) {
         clientRecord.forEach(record => {
-          this.apiService.createRecord(record).subscribe(data => console.log(data))
+          this.apiService.createRecord(record).subscribe(result => {
+            if (!result) {
+              return;
+            }
+            if (result.hasOwnProperty("id")) {
+              this.storageService.updateRecordId(record, result.id || 0);
+            }
+          })
         })
       }
     });
