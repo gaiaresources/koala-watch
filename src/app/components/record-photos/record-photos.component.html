@@ -7,9 +7,11 @@
             Use the camera button to add photos to your record.
           <p>
             <ion-button (click)="doCameraPhoto()">
+              <fa-icon class="iconButtons" [icon]="faCamera"></fa-icon>
               Take a photo
             </ion-button>
             <ion-button (click)="doLibraryPhoto()">
+              <fa-icon class="iconButtons" [icon]="faImage"></fa-icon>
               Use an existing photo
             </ion-button>
           <p>

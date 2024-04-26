@@ -1,11 +1,11 @@
 <ng-container *ngIf="field">
 
   <ng-container [ngSwitch]="field.type">
-    <app-integer-field *ngSwitchCase="'integer'" [formGroup]="formGroup" [field]="field" [readonly]="readonly" />
-    <app-number-field *ngSwitchCase="'number'" [formGroup]="formGroup" [field]="field" [readonly]="readonly" />
-    <app-select-field *ngSwitchCase="'select'" [formGroup]="formGroup" [field]="field" [readonly]="readonly" />
-    <app-datetime-field *ngSwitchCase="'datetime'" [formGroup]="formGroup" [field]="field" [readonly]="readonly" />
-    <app-text-field *ngSwitchDefault [formGroup]="formGroup" [field]="field" [readonly]="readonly" />
+    <app-integer-field *ngSwitchCase="'integer'" [formGroup]="formGroup" [field]="field" [readonly]="readonly"/>
+    <app-number-field *ngSwitchCase="'number'" [formGroup]="formGroup" [field]="field" [readonly]="readonly"/>
+    <app-select-field *ngSwitchCase="'select'" [formGroup]="formGroup" [field]="field" [readonly]="readonly"/>
+    <app-datetime-field *ngSwitchCase="'datetime'" [formGroup]="formGroup" [field]="field" [readonly]="readonly"/>
+    <app-text-field *ngSwitchDefault [formGroup]="formGroup" [field]="field" [readonly]="readonly"/>
   </ng-container>
 
 </ng-container>

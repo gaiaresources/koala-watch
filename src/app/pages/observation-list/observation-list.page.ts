@@ -16,8 +16,10 @@ import {
 } from '@ionic/angular/standalone';
 import { RecordsListComponent } from "../../components/records-list/records-list.component";
 import { APP_NAME } from "../../tokens/app";
-import { Router } from "@angular/router";
 import { ClientRecord } from "../../models/client-record";
+import { UploadService } from "../../services/upload/upload.service";
+import { NavigationService } from "../../services/navigation/navigation.service";
+import { firstValueFrom } from "rxjs";
 
 @Component({
   selector: 'app-observation-list',
@@ -30,26 +32,24 @@ export class ObservationListPage implements OnInit {
 
   constructor(
     @Inject(APP_NAME) public appName: string,
-    private router: Router,
+    private uploadService: UploadService,
+    private navigationService: NavigationService,
   ) {
   }
 
   ngOnInit() {
   }
 
+  async doUpload() {
+    await firstValueFrom(this.uploadService.upload());
+  }
+
   doNewObservation() {
-    this.router.navigateByUrl('/observation/form');
+    this.navigationService.goObservation();
   }
 
   doNewCensus() {
-    this.router.navigateByUrl('/census/form');
-  }
-
-  doUploadObservation() {
-    // this.router.navigateByUrl('/obser')
-  }
-
-  doRecord(record: ClientRecord) {
+    this.navigationService.goCensus();
   }
 
 }

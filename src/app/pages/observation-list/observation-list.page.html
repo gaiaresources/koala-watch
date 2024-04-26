@@ -1,9 +1,6 @@
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content class="ion-padding">
 
-  <app-records-list datasetIcon=""
-                    datasetPrefix=""
-                    countIcon=""
-                    (onRecordClicked)="doRecord($event)">
+  <app-records-list datasetPrefix="">
 
     <ion-grid class="no-grid-padding">
       <ion-row>
@@ -24,13 +21,17 @@
       record the individual tree species, at a site, that have been searched for koalas and their scats.
     <p>
 
-      <ion-button (click)="doNewObservation()">
-        <ion-label>Record an observation</ion-label>
-      </ion-button>
+    <ion-button class="fab-button" color="primary" (click)="doNewObservation()" expand="full" fill="solid">
+      <ion-img class="fab-button__img" slot="start" aria-hidden="true"
+               src="../../../assets/imgs/white_eye.png"></ion-img>
+      <ion-label class="fab-button__text">Record an observation</ion-label>
+    </ion-button>
 
-      <ion-button (click)="doNewCensus()">
-        <ion-label>Start a census</ion-label>
-      </ion-button>
+    <ion-button class="fab-button" color="primary" (click)="doNewCensus()" expand="full" fill="solid">
+      <ion-img class="fab-button__img" slot="start" aria-hidden="true"
+               src="../../../assets/imgs/white_trees.png"></ion-img>
+      <ion-label class="fab-button__text">Start a Census</ion-label>
+    </ion-button>
 
     <p>
       Once you have recorded your data, a list of the records will be displayed here.
@@ -47,8 +48,10 @@
       (shown in blue). Incomplete records will not be uploaded.
     </p>
 
-    <ion-button (click)="doUploadObservation()">
-      <ion-label>Upload data</ion-label>
+    <ion-button class="fab-button" color="primary" expand="full" fill="solid" (click)="doUpload()">
+      <ion-img class="fab-button__img" slot="start" aria-hidden="true"
+               src="../../../assets/imgs/white_upload.png"></ion-img>
+      <ion-label class="fab-button__text">Upload Data</ion-label>
     </ion-button>
 
   </app-records-list>

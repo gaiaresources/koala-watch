@@ -4,7 +4,7 @@ import { AuthenticationGuardFn } from "./services/authentication/authentication.
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'records',
+    redirectTo: 'observation',
     pathMatch: 'full',
   },
   {
@@ -64,7 +64,8 @@ export const routes: Routes = [
   },
   {
     path: 'observation/form',
-    loadComponent: () => import('./pages/observation-form/observation-form.page').then(m => m.ObservationFormPage)
+    loadComponent: () => import('./pages/observation-form/observation-form.page').then(m => m.ObservationFormPage),
+    canActivate: [AuthenticationGuardFn],
   },
   {
     path: 'census',
@@ -92,7 +93,8 @@ export const routes: Routes = [
   },
   {
     path: 'census/form',
-    loadComponent: () => import('./pages/census-form/census-form.page').then(m => m.CensusFormPage)
+    loadComponent: () => import('./pages/census-form/census-form.page').then(m => m.CensusFormPage),
+    canActivate: [AuthenticationGuardFn],
   },
   {
     path: 'survey',
@@ -120,11 +122,7 @@ export const routes: Routes = [
   },
   {
     path: 'survey/form',
-    loadComponent: () => import('./pages/survey-form/survey-form.page').then(m => m.SurveyFormPage)
-  },
-  {
-    path: 'records',
-    loadComponent: () => import('./pages/records/records.page').then(m => m.RecordsPage),
+    loadComponent: () => import('./pages/survey-form/survey-form.page').then(m => m.SurveyFormPage),
     canActivate: [AuthenticationGuardFn],
   },
 ];

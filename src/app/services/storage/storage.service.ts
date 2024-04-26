@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from "@ionic/storage-angular";
 import { ClientRecord } from "../../models/client-record";
-import { filter, from, map, Observable } from "rxjs";
+import { filter, Observable } from "rxjs";
 import { fromPromise } from "rxjs/internal/observable/innerFrom";
 
 @Injectable({

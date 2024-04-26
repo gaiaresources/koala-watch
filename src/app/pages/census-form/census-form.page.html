@@ -8,9 +8,11 @@
 
     <ion-buttons slot="end">
       <ion-button fill="solid" color="primary" size="small" (click)="doDelete()">
+        <fa-icon [icon]="faTrashCan"></fa-icon>
         Delete
       </ion-button>
       <ion-button fill="solid" color="primary" size="small" (click)="doSave()">
+        <fa-icon [icon]="faSave"></fa-icon>
         Save
       </ion-button>
     </ion-buttons>
@@ -18,14 +20,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-
   <ion-segment [(ngModel)]="segment" color="primary">
     <ion-segment-button value="form">
       Form
     </ion-segment-button>
+
     <ion-segment-button value="observations">
       Tree Surveys List
     </ion-segment-button>
+
     <ion-segment-button value="photos">
       Photos
     </ion-segment-button>
@@ -44,5 +47,14 @@
     <app-record-photos>
     </app-record-photos>
   </ng-container>
+
+  <ion-fab *ngIf="!readonly" slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button aria-label="Add Photo From Camera" (click)="doCamera()">
+      <fa-icon class="iconButtons" [icon]="faCamera"></fa-icon>
+    </ion-fab-button>
+    <ion-fab-button aria-label="Add Photo From Gallery" (click)="doGallery()">
+      <fa-icon class="iconButtons" [icon]="faImage"></fa-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

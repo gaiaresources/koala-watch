@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div>
+  <div class="info">
     <ion-grid>
       <ion-row>
         <ion-col>
@@ -29,14 +29,16 @@
       census and record the individual tree species, at each site, that have been searched for koalas and their scats.
     <p>
 
-      <ion-button color="primary" (click)="doNewObservation()" expand="full" fill="solid">
-        <ion-icon slot="start" aria-hidden="true"></ion-icon>
-        Record an observation
+      <ion-button class="fab-button" color="primary" (click)="doNewObservation()" expand="full" fill="solid">
+        <ion-img class="fab-button__img" slot="start" aria-hidden="true"
+                 src="../../../assets/imgs/white_eye.png"></ion-img>
+        <ion-label class="fab-button__text">Record an observation</ion-label>
       </ion-button>
 
-      <ion-button color="primary" (click)="doNewCensus()" expand="full" fill="solid">
-        <ion-icon slot="start" aria-hidden="true"></ion-icon>
-        Start a Census
+      <ion-button class="fab-button" color="primary" (click)="doNewCensus()" expand="full" fill="solid">
+        <ion-img class="fab-button__img" slot="start" aria-hidden="true"
+                 src="../../../assets/imgs/white_trees.png"></ion-img>
+        <ion-label class="fab-button__text">Start a Census</ion-label>
       </ion-button>
 
     <p>
@@ -54,9 +56,10 @@
       (shown in blue). Incomplete records will not be uploaded.
     </p>
 
-    <ion-button color="primary" expand="full" fill="solid" (click)="doUpload()">
-      <ion-icon slot="start" aria-hidden="true"></ion-icon>
-      Upload Data
+    <ion-button class="fab-button" color="primary" expand="full" fill="solid" (click)="doUpload()">
+      <ion-img class="fab-button__img" slot="start" aria-hidden="true"
+               src="../../../assets/imgs/white_upload.png"></ion-img>
+      <ion-label class="fab-button__text">Upload Data</ion-label>
     </ion-button>
 
     <h1>Tree surveys</h1>
@@ -65,9 +68,10 @@
     </strong> tab at the top of the page and use the button below to create a new tree sighting.
     </p>
 
-    <ion-button color="primary" expand="full" fill="solid" (click)="doNewTreeSurvey()">
-      <ion-icon slot="start" aria-hidden="true"></ion-icon>
-      Create a tree survey
+    <ion-button class="fab-button" color="primary" expand="full" fill="solid" (click)="doNewTreeSurvey()">
+      <ion-img class="fab-button__img" slot="start" aria-hidden="true"
+               src="../../../assets/imgs/white_tree.png"></ion-img>
+      <ion-label class="fab-button__text">Create a tree survey</ion-label>
     </ion-button>
 
     <h2>GPS accuracy</h2>

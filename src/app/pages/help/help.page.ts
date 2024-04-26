@@ -10,6 +10,7 @@ import {
   IonHeader,
   IonIcon,
   IonImg,
+  IonLabel,
   IonMenuButton,
   IonRow,
   IonTitle,
@@ -25,7 +26,7 @@ import { NavigationService } from "../../services/navigation/navigation.service"
   templateUrl: './help.page.html',
   styleUrls: ['./help.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol, IonImg, IonButton, IonIcon]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol, IonImg, IonButton, IonIcon, IonLabel]
 })
 export class HelpPage implements OnInit {
 

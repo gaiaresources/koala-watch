@@ -24,3 +24,37 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+ion-fab {
+  height: 80px;
+  width: 80px;
+  margin: 20px;
+}
+
+.info {
+  padding-top: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
+
+  h1 {
+    color: black;
+  }
+
+  p {
+    color: black;
+    font-size: 14pt;
+  }
+}
+
+.alert-message {
+  min-width: 50%;
+  overflow-y: auto;
+}
+
+fa-icon {
+  margin-right: 1.5em;
+}
+
+ion-segment {
+  padding-bottom: 16px;
+}

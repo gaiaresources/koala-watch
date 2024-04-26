@@ -8,7 +8,7 @@ import {
   IonContent,
   IonFab,
   IonFabButton,
-  IonHeader,
+  IonHeader, IonImg,
   IonMenuButton,
   IonSegment,
   IonSegmentButton,
@@ -20,6 +20,8 @@ import { DATASET_NAME_OBSERVATION } from "../../tokens/app";
 import { ActiveRecordService } from "../../services/active-record/active-record.service";
 import { RecordPhotosComponent } from "../../components/record-photos/record-photos.component";
 import { PhotoService } from "../../services/photo/photo.service";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faSave, faTrashCan, faCamera, faImage } from "@fortawesome/free-solid-svg-icons";
 import { StorageService } from "../../services/storage/storage.service";
 import { DatasetService } from "../../services/dataset/dataset.service";
 import { UUID } from "angular2-uuid";
@@ -45,11 +47,17 @@ import { UUID } from "angular2-uuid";
     RecordPhotosComponent,
     IonFab,
     IonFabButton,
+    IonImg,
+    FontAwesomeModule
   ]
 })
 export class ObservationFormPage implements OnInit {
 
   public DATASET_NAME_OBSERVATION = DATASET_NAME_OBSERVATION;
+  public faSave = faSave;
+  public faTrashCan = faTrashCan;
+  public faCamera = faCamera
+  public faImage = faImage
 
   @Input()
   readonly: boolean = false;

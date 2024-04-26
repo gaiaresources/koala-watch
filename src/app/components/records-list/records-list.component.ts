@@ -1,10 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IonicModule } from "@ionic/angular";
-import { AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf } from "@angular/common";
+import { DatePipe, NgForOf, NgIf } from "@angular/common";
 import { ClientRecord } from "../../models/client-record";
 import { StorageService } from "../../services/storage/storage.service";
-import { from, map, Observable, switchMap } from "rxjs";
-import { tap } from "rxjs/operators";
 import { DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESURVEY } from "../../tokens/app";
 import { NavigationService } from "../../services/navigation/navigation.service";
 import { ActiveRecordService } from "../../services/active-record/active-record.service";
@@ -18,16 +16,10 @@ import { ActiveRecordService } from "../../services/active-record/active-record.
     IonicModule,
     NgIf,
     NgForOf,
-    DatePipe,
-    AsyncPipe,
-    JsonPipe
+    DatePipe
   ]
 })
 export class RecordsListComponent implements OnInit {
-
-  RECORD_COMPLETE = '#ebffef';
-  RECORD_INCOMPLETE = '#ebf6ff';
-  RECORD_UPLOADED = '#ebf0df';
 
   @Input()
   showLegend: boolean = true;
@@ -35,16 +27,7 @@ export class RecordsListComponent implements OnInit {
   @Input()
   datasetPrefix: string = "";
 
-  @Input()
-  datasetIcon: string = "";
-
-  @Input()
-  countIcon: string = "";
-
-  _records: { data: ClientRecord, statusColor: string, altText: string }[] = [];
-
-  @Output()
-  onRecordClicked = new EventEmitter<ClientRecord>();
+  _records: { data: ClientRecord, statusClass: string, altText: string, datasetIcon: string, countIcon: string }[] = [];
 
   protected clientRecords$: any[] = [];
 
@@ -60,18 +43,20 @@ export class RecordsListComponent implements OnInit {
       if (Array.isArray(clientRecord)) {
         clientRecord.forEach(record => this._records.push({
           data: record,
-          statusColor: this.getStatusColor(record),
-          altText: this.getAltText(record)
+          statusClass: this.getStatusClass(record),
+          altText: this.getAltText(record),
+          datasetIcon: this.getDatasetIcon(record),
+          countIcon: this.getCountIcon(record),
         }));
       }
     });
   }
 
-  public getStatusColor(record: ClientRecord) {
+  public getStatusClass(record: ClientRecord) {
     if (record.id) {
-      return this.RECORD_UPLOADED;
+      return 'uploaded';
     }
-    return record.valid ? this.RECORD_COMPLETE : this.RECORD_INCOMPLETE;
+    return record.valid ? 'completed' : 'incomplete';
   }
 
   public getAltText(record: ClientRecord): string {
@@ -84,7 +69,6 @@ export class RecordsListComponent implements OnInit {
     return rv;
   }
 
-  /*
   public getDatasetIcon(record: ClientRecord): string {
     switch (record.datasetName) {
       case DATASET_NAME_OBSERVATION:
@@ -110,7 +94,6 @@ export class RecordsListComponent implements OnInit {
         return 'assets/imgs/koala.png';
     }
   }
-   */
 
   doRecordClicked(record: ClientRecord) {
     this.activeRecordService.clear();

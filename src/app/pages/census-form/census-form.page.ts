@@ -4,23 +4,22 @@ import { FormsModule } from '@angular/forms';
 import {
   AlertController,
   IonButton,
-  IonButtons, IonCard, IonCardContent,
+  IonButtons,
   IonContent,
   IonFab,
   IonFabButton,
-  IonHeader,
-  IonMenuButton,
-  IonSegment,
-  IonSegmentButton,
+  IonHeader, IonMenuButton, IonSegment, IonSegmentButton,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { RecordFormComponent } from "../../components/record-form/record-form.component";
-import { DATASET_NAME_CENSUS } from "../../tokens/app";
 import { RecordPhotosComponent } from "../../components/record-photos/record-photos.component";
+import { DATASET_NAME_CENSUS } from "../../tokens/app";
+import { faCamera, faImage, faSave, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { ActiveRecordService } from "../../services/active-record/active-record.service";
 import { PhotoService } from "../../services/photo/photo.service";
 import { UUID } from "angular2-uuid";
-import { ActiveRecordService } from "../../services/active-record/active-record.service";
 import { StorageService } from "../../services/storage/storage.service";
 
 @Component({
@@ -28,29 +27,15 @@ import { StorageService } from "../../services/storage/storage.service";
   templateUrl: './census-form.page.html',
   styleUrls: ['./census-form.page.scss'],
   standalone: true,
-  imports: [
-    IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-    CommonModule,
-    FormsModule,
-    IonSegment,
-    IonSegmentButton,
-    IonButtons,
-    IonMenuButton,
-    IonButton,
-    RecordFormComponent,
-    RecordPhotosComponent,
-    IonFab,
-    IonFabButton,
-    IonCard,
-    IonCardContent,
-  ]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent]
 })
 export class CensusFormPage implements OnInit {
 
   public DATASET_NAME_CENSUS = DATASET_NAME_CENSUS;
+  public faCamera = faCamera;
+  public faImage = faImage;
+  public faSave = faSave;
+  public faTrashCan = faTrashCan;
 
   @Input()
   readonly: boolean = false;
@@ -59,6 +44,7 @@ export class CensusFormPage implements OnInit {
 
   constructor(
     private activeRecordService: ActiveRecordService,
+    private alertController: AlertController,
     private photoService: PhotoService,
     private storageService: StorageService,
   ) {
@@ -83,7 +69,26 @@ export class CensusFormPage implements OnInit {
   }
 
   async doDelete() {
+    const alert = await this.alertController.create({
+      header: 'Observation',
+      message: 'Are you sure you want to delete this observation?',
+      backdropDismiss: true,
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.deleteRecord();
+          }
+        },
+        {
+          text: 'No'
+        }
+      ]
+    });
+    await alert.present();
+  }
 
+  deleteRecord() {
   }
 
   doSave() {
@@ -103,7 +108,5 @@ export class CensusFormPage implements OnInit {
       count: 0,
       photoIds: [],
     });
-
   }
-
 }

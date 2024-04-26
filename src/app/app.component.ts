@@ -80,7 +80,7 @@ import { User } from "./models/user";
 export class AppComponent {
   faSignOutAlt = faSignOutAlt;
   public appPages: { title: string, url: string, icon: IconProp }[] = [
-    {title: 'Records', url: '/records', icon: faTachometerAlt},
+    {title: 'Records', url: '/observation', icon: faTachometerAlt},
     {title: 'Settings', url: '/settings', icon: faCog},
     {title: 'About', url: '/about', icon: faInfoCircle},
     {title: 'Help', url: '/help', icon: faQuestionCircle},

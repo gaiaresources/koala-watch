@@ -15,16 +15,18 @@
 <ng-container *ngIf="_records.length">
   <ion-list>
     <ion-item *ngFor="let record of _records"
-              [style.background-color]="record.statusColor"
+              [class]="record.statusClass"
               (click)="doRecordClicked(record.data)">
       <ion-img slot="start"
+               class="data-row"
                [alt]="record.altText"
-               [src]="datasetIcon" aria-hidden="true"/>
+               [src]="record.datasetIcon" aria-hidden="true"/>
       <ion-label>
         {{ record.data.datetime | date: 'dd/MM/yyyy HH:mm' }}
       </ion-label>
       <ion-img slot="end"
-               [src]="countIcon"/>
+               class="data-row"
+               [src]="record.countIcon"/>
       <span slot="end">{{ record.data.count || 0 }}</span>
       <ion-img slot="end" class="data-row" src="assets/imgs/camera.png"/>
       <span slot="end">{{ record.data.photoIds.length || 0 }}</span>
