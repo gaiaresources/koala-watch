@@ -91,11 +91,11 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'census/form',
-    loadComponent: () => import('./pages/census-form/census-form.page').then(m => m.CensusFormPage),
-    canActivate: [AuthenticationGuardFn],
-  },
+  // {
+  //   path: 'census/form',
+  //   loadComponent: () => import('./pages/census-form/census-form.page').then(m => m.CensusFormPage),
+  //   canActivate: [AuthenticationGuardFn],
+  // },
   {
     path: 'survey',
     loadComponent: () => import('./pages/survey/survey.page').then(m => m.SurveyPage),
@@ -120,9 +120,9 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'survey/form',
-    loadComponent: () => import('./pages/survey-form/survey-form.page').then(m => m.SurveyFormPage),
-    canActivate: [AuthenticationGuardFn],
-  },
+  // {
+  //   path: 'survey/form',
+  //   loadComponent: () => import('./pages/survey-form/survey-form.page').then(m => m.SurveyFormPage),
+  //   canActivate: [AuthenticationGuardFn],
+  // },
 ];

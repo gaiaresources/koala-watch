@@ -49,11 +49,11 @@ export class HelpPage implements OnInit {
   }
 
   doNewCensus() {
-    this.navigationService.goCensus();
+    // this.navigationService.goCensus();
   }
 
   doNewTreeSurvey() {
-    this.navigationService.goSurvey();
+    // this.navigationService.goSurvey();
   }
 
 }
