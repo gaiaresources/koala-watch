@@ -20,20 +20,8 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
-  archiveOutline,
-  archiveSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-  heartOutline,
-  heartSharp, locateOutline, locateSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp, pinOutline, pinSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp
+  locate,
+  pin,
 } from 'ionicons/icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -107,24 +95,8 @@ export class AppComponent {
   ) {
     this.user$ = this.authenticationService.user$;
     addIcons({
-      mailOutline,
-      mailSharp,
-      paperPlaneOutline,
-      paperPlaneSharp,
-      heartOutline,
-      heartSharp,
-      archiveOutline,
-      archiveSharp,
-      trashOutline,
-      trashSharp,
-      warningOutline,
-      warningSharp,
-      bookmarkOutline,
-      bookmarkSharp,
-      pinOutline,
-      pinSharp,
-      locateOutline,
-      locateSharp,
+      locate,
+      pin,
     });
   }
 

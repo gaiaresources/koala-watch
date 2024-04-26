@@ -16,12 +16,7 @@
                 [disabled]="readonly">
   </ion-datetime>
   -->
-  <ion-datetime-button datetime="datetime" [formControlName]="field.key"></ion-datetime-button>
+  <ion-datetime [formControlName]="field.key">
 
-  <ion-modal [keepContentsMounted]="true">
-    <ng-template>
-      <ion-datetime id="datetime"></ion-datetime>
-    </ng-template>
-  </ion-modal>
-
+  </ion-datetime>
 </div>
