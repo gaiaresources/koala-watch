@@ -2,8 +2,9 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { FormGroup } from "@angular/forms";
 import { NgIf } from "@angular/common";
 import { Subscription } from "rxjs";
-import { IonicModule } from "@ionic/angular";
 import { IonButton, IonButtons, IonIcon } from "@ionic/angular/standalone";
+import { faLocationArrow, faMapPin, faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 @Component({
   selector: 'app-location-selector',
@@ -15,9 +16,14 @@ import { IonButton, IonButtons, IonIcon } from "@ionic/angular/standalone";
     IonButtons,
     IonButton,
     IonIcon,
+    FaIconComponent,
   ]
 })
 export class LocationSelectorComponent implements OnInit, OnChanges {
+
+  public faLocationArrow = faLocationArrow;
+  public faMapPin = faMapPin;
+  public faLocationCrosshairs = faLocationCrosshairs;
 
   @Input()
   readonly: boolean = false;

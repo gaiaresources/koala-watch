@@ -40,7 +40,7 @@
     </app-record-photos>
   </ng-container>
 
-  <ion-fab *ngIf="!readonly" slot="fixed" horizontal="end" vertical="bottom">
+  <ion-fab class="form-hover-buttons" *ngIf="!readonly" slot="fixed" horizontal="end" vertical="bottom">
     <ion-fab-button aria-label="Add Photo From Camera" (click)="doCamera()">
       <fa-icon class="iconButtons" [icon]="faCamera"></fa-icon>
     </ion-fab-button>

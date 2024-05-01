@@ -7,7 +7,6 @@ import { AsyncPipe, JsonPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDef
 import { BehaviorSubject, combineLatest, map, Observable, Subscription } from "rxjs";
 import { Dataset } from "../../models/dataset";
 import { tap } from "rxjs/operators";
-import { IonicModule } from "@ionic/angular";
 import { DateFieldComponent } from "../date-field/date-field.component";
 import { IntegerFieldComponent } from "../integer-field/integer-field.component";
 import { NumberFieldComponent } from "../number-field/number-field.component";
@@ -18,6 +17,10 @@ import { HiddenFieldComponent } from "../hidden-field/hidden-field.component";
 import { LocationSelectorComponent } from "../location-selector/location-selector.component";
 import { ActiveRecordService } from "../../services/active-record/active-record.service";
 import { IonItem, IonItemDivider, IonItemGroup, IonList } from "@ionic/angular/standalone";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { faCalendar, faStar } from "@fortawesome/free-regular-svg-icons";
+import { faAsterisk } from "@fortawesome/free-solid-svg-icons";
+
 
 @Component({
   standalone: true,
@@ -45,9 +48,14 @@ import { IonItem, IonItemDivider, IonItemGroup, IonList } from "@ionic/angular/s
     IonItem,
     IonItemGroup,
     IonItemDivider,
+    FaIconComponent,
   ]
 })
 export class RecordFormComponent implements OnInit, OnChanges {
+
+  public faCalendar = faCalendar;
+  public faStar = faStar;
+  public faAsterisk = faAsterisk;
 
   @Input()
   readonly: boolean = false;

@@ -4,6 +4,7 @@
 
       <ion-item-group *ngIf="fields.dateFields && fields.dateFields.length">
         <ion-item-divider color="secondary">
+          <fa-icon [icon]="faCalendar"></fa-icon>
           Dates
         </ion-item-divider>
 
@@ -28,6 +29,7 @@
 
       <ion-item-group *ngIf="fields.requiredFields && fields.requiredFields.length">
         <ion-item-divider color="secondary">
+          <fa-icon [icon]="faAsterisk" />
           Required fields
         </ion-item-divider>
 
@@ -40,6 +42,7 @@
 
       <ion-item-group *ngIf="fields.optionalFields && fields.optionalFields.length">
         <ion-item-divider color="secondary">
+          <fa-icon [icon]="faStar" />
           Optional fields
         </ion-item-divider>
 

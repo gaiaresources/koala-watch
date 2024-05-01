@@ -10,28 +10,33 @@
 <ion-content>
   <ion-tabs>
     <ion-tab-bar slot="top">
-      <ion-tab-button tab="list">
-        List
+      <ion-tab-button class="ion-tab-button" tab="list">
+        <fa-icon class="ion-tab-button__icon" [icon]="faList"/>
+        <ion-label class="ion-tab-button__text">List View</ion-label>
       </ion-tab-button>
-      <ion-tab-button tab="map">
-        Map
+      <ion-tab-button class="ion-tab-button" tab="map">
+        <fa-icon class="ion-tab-button__icon" [icon]="faMap"/>
+        <ion-label class="ion-tab-button__text">Map</ion-label>
       </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
 
   <ion-fab slot="fixed" horizontal="start" vertical="bottom">
     <ion-fab-button>
-      Upload
+      <ion-img class="fab-button__img" aria-hidden="true"
+               src="../../../assets/imgs/white_upload.png"></ion-img>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab slot="fixed" horizontal="end" vertical="bottom">
-    <ion-fab-button>
-      Koala
-    </ion-fab-button>
-    <ion-fab-button>
-      Census
-    </ion-fab-button>
+  <ion-fab class="form-hover-buttons" slot="fixed" horizontal="end" vertical="bottom">
+      <ion-fab-button>
+        <ion-img class="fab-button__img" aria-hidden="true"
+                 src="../../../assets/imgs/white_eye.png"></ion-img>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-img class="fab-button__img" aria-hidden="true"
+                 src="../../../assets/imgs/white_trees.png"></ion-img>
+      </ion-fab-button>
   </ion-fab>
 
 </ion-content>

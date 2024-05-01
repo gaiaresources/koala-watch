@@ -1,16 +1,17 @@
 <ng-container *ngIf="formGroup">
+  <fa-icon [icon]="faLocationArrow"></fa-icon>
   Location (Current Accuracy: Waiting for reading...)
 
-  <ion-buttons *ngIf="!readonly">
+  <ion-buttons class="location-buttons" *ngIf="!readonly">
 
-    <ion-button color="primary" fill="solid"
-                (click)="doMapSelect()">
-      <ion-icon name="pin"></ion-icon>&nbsp; Map
+    <ion-button class="location-button" (click)="doMapSelect()">
+      <fa-icon [icon]="faMapPin"/>
+        Map
     </ion-button>
 
-    <ion-button color="primary" fill="solid"
-                (click)="doGpsSelect()">
-      <ion-icon name="locate"></ion-icon>&nbsp; GPS
+    <ion-button class="location-button" (click)="doGpsSelect()">
+      <fa-icon [icon]="faLocationCrosshairs"/>&nbsp;
+        GPS
     </ion-button>
 
   </ion-buttons>
