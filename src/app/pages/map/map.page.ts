@@ -7,6 +7,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { ClientRecord } from "../../models/client-record";
 import { StorageService } from "../../services/storage/storage.service";
 import { DATASET_NAME_CENSUS } from "../../tokens/app";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-map',
@@ -63,7 +64,7 @@ export class MapPage implements OnInit {
       id: 'map',
       element: this.mapRef.nativeElement,
       // TODO How to handle API key?
-      apiKey: '',
+      apiKey: environment.googleMapsApi,
       config: {
         center: {
           lat: -25,
