@@ -21,7 +21,7 @@ def capacitor_pods
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
 end
 
-target 'App' do
+target 'I Spy Koala' do
   capacitor_pods
   # Add your Pods here
 end
