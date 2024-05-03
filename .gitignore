@@ -39,3 +39,5 @@ my-release-key.jks
 
 .vscode/
 typings/
+
+*.jks
