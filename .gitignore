@@ -39,3 +39,18 @@ my-release-key.jks
 
 .vscode/
 typings/
+
+*.jks
+
+
+android/app/src/main/res/*
+
+src/assets/icons/
+
+ios/App/App/Assets.xcassets/Splash.imageset/
+
+ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512\@2x.png
+
+ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json
+
+src/manifest.webmanifest

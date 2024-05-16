@@ -1,5 +1,7 @@
 require_relative '../../node_modules/@capacitor/ios/scripts/pods_helpers'
 
+project 'App.xcodeproj'
+
 platform :ios, '13.0'
 use_frameworks!
 
@@ -13,12 +15,13 @@ def capacitor_pods
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorApp', :path => '../../node_modules/@capacitor/app'
   pod 'CapacitorCamera', :path => '../../node_modules/@capacitor/camera'
+  pod 'CapacitorGoogleMaps', :path => '../../node_modules/@capacitor/google-maps'
   pod 'CapacitorHaptics', :path => '../../node_modules/@capacitor/haptics'
   pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
 end
 
-target 'App' do
+target 'I Spy Koala' do
   capacitor_pods
   # Add your Pods here
 end

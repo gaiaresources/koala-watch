@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'i-see-koala',
+  appName: 'I Spy Koala',
   webDir: 'www',
   server: {
     androidScheme: 'https'
