@@ -22,18 +22,18 @@
   </ion-tabs>
 
   <ion-fab slot="fixed" horizontal="start" vertical="bottom">
-    <ion-fab-button>
+    <ion-fab-button (click)="doUpload()">
       <ion-img class="fab-button__img" aria-hidden="true"
                src="../../../assets/imgs/white_upload.png"></ion-img>
     </ion-fab-button>
   </ion-fab>
 
   <ion-fab class="form-hover-buttons" slot="fixed" horizontal="end" vertical="bottom">
-      <ion-fab-button>
+      <ion-fab-button (click)="doNewObservation()">
         <ion-img class="fab-button__img" aria-hidden="true"
                  src="../../../assets/imgs/white_eye.png"></ion-img>
       </ion-fab-button>
-      <ion-fab-button>
+      <ion-fab-button (click)="doNewTreeSurvey()">
         <ion-img class="fab-button__img" aria-hidden="true"
                  src="../../../assets/imgs/white_trees.png"></ion-img>
       </ion-fab-button>

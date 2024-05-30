@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -19,6 +19,9 @@ import {
 } from '@ionic/angular/standalone';
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faList, faMap} from "@fortawesome/free-solid-svg-icons";
+import {UploadService} from "../../services/upload/upload.service";
+import {NavigationService} from "../../services/navigation/navigation.service";
+import {firstValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-observation',
@@ -32,10 +35,24 @@ export class ObservationPage implements OnInit {
   public faList = faList;
   public faMap = faMap;
 
-  constructor() {
+  constructor(
+    private uploadService: UploadService,
+    private navigationService: NavigationService,
+  ) {
   }
 
   ngOnInit() {
+  }
+  async doUpload() {
+    await firstValueFrom(this.uploadService.upload());
+  }
+
+  doNewObservation() {
+    this.navigationService.goObservation();
+  }
+
+  doNewTreeSurvey() {
+    this.navigationService.goSurvey();
   }
 
 }

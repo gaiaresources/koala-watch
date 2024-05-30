@@ -28,6 +28,10 @@
 	<string>Location services required for observation location</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo library required for storing photos of Koalas</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Photo library required for storing photos of Koalas</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera used to take photos for Koala surveys/census</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>
 	<key>UIMainStoryboardFile</key>
