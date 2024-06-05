@@ -5,7 +5,25 @@
     </ion-toolbar>
   </ion-header>
 
-  Showing {{ dataset }}.
+<!--  Showing {{ dataset }}.-->
 
-  <capacitor-google-map #map></capacitor-google-map>
+<!--  <capacitor-google-map #map></capacitor-google-map>-->
+  <div class="map-container" *ngIf="gmapsLoaded">
+    <google-map
+      height="100%"
+      width="100%"
+      [center]="config.center"
+      [zoom]="config.zoom"
+      [options]="config.options"
+    >
+      <map-marker
+        *ngFor="let marker of markers"
+        [position]="marker.coordinate"
+        [title]="marker.title"
+        [icon]="marker.icon"
+
+      >
+      </map-marker>
+    </google-map>
+  </div>
 </ion-content>

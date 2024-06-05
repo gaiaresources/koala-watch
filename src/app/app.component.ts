@@ -37,6 +37,7 @@ import { AuthenticationService } from "./services/authentication/authentication.
 import { Observable } from "rxjs";
 import { HttpClientModule } from "@angular/common/http";
 import { User } from "./models/user";
+import { GoogleMapsModule } from "@angular/google-maps";
 
 @Component({
   selector: 'app-root',
@@ -63,6 +64,7 @@ import { User } from "./models/user";
     IonToolbar,
     HttpClientModule,
     FontAwesomeModule,
+    GoogleMapsModule,
   ],
 })
 export class AppComponent {

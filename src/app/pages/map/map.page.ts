@@ -2,19 +2,19 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, Platform } from '@ionic/angular/standalone';
-import { GoogleMap } from '@capacitor/google-maps';
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { ClientRecord } from "../../models/client-record";
 import { StorageService } from "../../services/storage/storage.service";
 import { DATASET_NAME_CENSUS } from "../../tokens/app";
 import {environment} from "../../../environments/environment";
+import {GoogleMap, MapMarker} from "@angular/google-maps";
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule],
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, GoogleMap, MapMarker],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
 export class MapPage implements OnInit {
@@ -25,8 +25,24 @@ export class MapPage implements OnInit {
   @ViewChild('map')
   mapRef?: ElementRef<HTMLElement>;
   newMap?: GoogleMap;
+  gmapsLoaded: boolean = false;
 
   _records: ClientRecord[] = [];
+  config= {
+          center: {
+            lat: -25,
+            lng: 132,
+          },
+          zoom: 3.5,
+          options: {
+            zoomControl: false,
+            streetViewControl: false,
+            fullscreenControl: false,
+            mapTypeControl: false,
+          }
+        }
+
+  markers: any[] = [];
 
   constructor(
     private platform: Platform,
@@ -57,22 +73,16 @@ export class MapPage implements OnInit {
   }
 
   async loadMap() {
-    if (!this.mapRef?.nativeElement) {
-      return;
+    if (!this.gmapsLoaded) {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsApi}`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        this.gmapsLoaded = true;
+      };
+      document.head.appendChild(script);
     }
-    this.newMap = await GoogleMap.create({
-      id: 'map',
-      element: this.mapRef.nativeElement,
-      // TODO How to handle API key?
-      apiKey: environment.googleMapsApi,
-      config: {
-        center: {
-          lat: -25,
-          lng: 132,
-        },
-        zoom: 3.5,
-      },
-    });
     if (this._records && this._records.length) {
       for (const record of this._records) {
         let data = record.data || null;
@@ -83,19 +93,16 @@ export class MapPage implements OnInit {
           const snippet = record.datetime;
 
 
-          const marker = this.newMap.addMarker({
+          const marker = {
             snippet: snippet,
             title: title,
-            iconUrl: this.getIconUrl(record),
-            iconSize: {
-              width: 45,
-              height: 45
-            },
+            icon: this.getIconUrl(record),
             coordinate: {
               lat: data['Latitude'],
               lng: data['Longitude'],
             }
-          });
+          };
+          this.markers.push(marker);
         }
       }
     }
@@ -105,6 +112,12 @@ export class MapPage implements OnInit {
     let url = 'assets/imgs/';
     url += `${record.datasetName === DATASET_NAME_CENSUS ? 'tree' : 'eye'}-pin-`;
     url += `${record.valid ? 'complete' : 'incomplete'}.png`;
-    return url;
+    return {
+      url,
+      scaledSize: {
+        width: 45,
+        height: 45
+      },
+    };
   }
 }
