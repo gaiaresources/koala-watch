@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'https://uat-koalawatch-api.gaiaresources.com.au/api/',
+  googleMapsApi: '',
 };
 
 /*
