@@ -1,13 +1,14 @@
-import { map, Observable, of } from 'rxjs';
-import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { User } from "../../models/user";
-import { API_URL } from "../../tokens/api";
-import { PROJECT_NAME } from "../../tokens/app";
-import { Dataset } from "../../models/dataset";
-import { ClientRecord } from "../../models/client-record";
-import { Record } from "../../models/record";
+import {map, Observable, of, switchMap} from 'rxjs';
+import {Inject, Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {catchError} from 'rxjs/operators';
+import {User} from "../../models/user";
+import {API_URL} from "../../tokens/api";
+import {PROJECT_NAME} from "../../tokens/app";
+import {Dataset} from "../../models/dataset";
+import {ClientRecord} from "../../models/client-record";
+import {Record} from "../../models/record";
+import {NetworkService} from "../network/network.service";
 
 
 /**
@@ -29,12 +30,14 @@ export class APIService {
    * Creates a new APIService with the injected Http.
    * @param apiUrl
    * @param projectName
+   * @param networkService
    * @param {HttpClient} httpClient - The injected Http Client.
    * @constructor
    */
   constructor(
     @Inject(API_URL) private apiUrl: string,
     @Inject(PROJECT_NAME) private projectName: string,
+    private networkService: NetworkService,
     private httpClient: HttpClient
   ) {
   }
@@ -53,8 +56,13 @@ export class APIService {
    */
   private getRequest(url: string, params: any = {}): Observable<object | null> {
     this.resetError();
-    return this.httpClient.get(url, {params}).pipe(
-      catchError((err, caught) => this.error(err, caught))
+    return this.networkService.status$.pipe(
+      switchMap((status) => {
+        if (!status) return of(null);
+        return this.httpClient.get(url, {params}).pipe(
+          catchError((err, caught) => this.error(err, caught))
+        );
+      }),
     );
   }
 
@@ -67,13 +75,18 @@ export class APIService {
    */
   private postRequest(url: string, body: object): Observable<object | null> {
     this.resetError();
-    return this.httpClient.post(url, body,
-      {
-        headers: new HttpHeaders({'content-type': 'application/json'})
-      })
-      .pipe(
-        catchError((err, caught) => this.error(err, caught))
-      );
+    return this.networkService.status$.pipe(
+      switchMap((status) => {
+        if (!status) return of(null);
+        return this.httpClient.post(url, body,
+          {
+            headers: new HttpHeaders({'content-type': 'application/json'})
+          })
+          .pipe(
+            catchError((err, caught) => this.error(err, caught))
+          );
+      }),
+    );
   }
 
   public createRecord(record: object): Observable<Record | null> {
