@@ -1,18 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Storage} from "@ionic/storage-angular";
-import {ClientRecord} from "../../models/client-record";
-import {Observable} from "rxjs";
-import {fromPromise} from "rxjs/internal/observable/innerFrom";
+
+export interface StorageItem {
+  [key: string]: any;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
-  private static readonly RECORD_PREFIX = 'Record_';
-
   private _storage: Storage | null = null;
-
-  private list: any[] = [];
 
   constructor(private storage: Storage) {
   }
@@ -44,7 +41,7 @@ export class StorageService {
    *
    * @param prefix
    */
-  public async getPrefixed(prefix: string): Promise<any> {
+  public async getPrefixed(prefix: string): Promise<StorageItem> {
     const storage = await this.loaded();
 
     const values: any = {};
@@ -66,52 +63,6 @@ export class StorageService {
     return await storage.forEach((value, key) => {
       if (key.startsWith(prefix)) found = true;
     }).then(() => found);
-  }
-
-  public putRecord(record: ClientRecord): Observable<boolean> {
-    return fromPromise(this.storage.set(`${StorageService.RECORD_PREFIX}${record.client_id}`, record));
-  }
-
-  public updateRecordId(record: ClientRecord, id: number): Observable<boolean> {
-    // for (const photoId of record.photoIds) {
-    //   this.getPhoto(photoId).subscribe(clientPhoto => {
-    //     clientPhoto.record = id;
-    //     this.putPhoto(clientPhoto).subscribe();
-    //   });
-    // }
-
-    record.id = id;
-    return this.putRecord(record);
-  }
-
-
-  public getUploadableRecords() {
-    return this.getParentRecords();
-  }
-
-  public getParentRecords() {
-    var promise = new Promise((resolve, reject) => {
-      this.storage.forEach((value, key, index) => {
-        if (key.startsWith(StorageService.RECORD_PREFIX) && !value.parentId) {
-          this.list.push(value);
-        }
-      }).then((d) => {
-        resolve(this.list);
-      });
-    });
-    return promise;
-  }
-
-  // I'm so sorry, I couldn't figure it out.
-  public getAllRecords() {
-    var promise = new Promise((resolve, reject) => {
-      this.storage.forEach((value, key, index) => {
-        this.list.push(value);
-      }).then((d) => {
-        resolve(this.list);
-      });
-    });
-    return promise;
   }
 
 }
