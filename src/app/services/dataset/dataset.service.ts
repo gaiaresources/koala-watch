@@ -36,7 +36,10 @@ export class DatasetService {
 
   private async loadStoredDatasets(): Promise<Dataset[]> {
     const available = await this.storageService.hasPrefixed(this.DATASET_PREFIX);
-    if (available) return this.storageService.getPrefixed(this.DATASET_PREFIX);
+    if (available) {
+      const datasets = await this.storageService.getPrefixed(this.DATASET_PREFIX);
+      return Object.values(datasets);
+    }
 
     // Load from API and store them.
     const records = await firstValueFrom(this.apiService.getDatasets());

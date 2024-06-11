@@ -15,26 +15,28 @@ export class StorageService {
   private list: any[] = [];
 
   constructor(private storage: Storage) {
-    this.init();
   }
 
-  async init() {
-    this._storage = await this.storage.create();
+  async loaded(): Promise<Storage> {
+    if (!this._storage) {
+      this._storage = await this.storage.create();
+    }
+    return Promise.resolve(this._storage);
   }
 
-  public store(key: string, value: any): Promise<any> {
-    if (!this._storage) return Promise.reject();
-    return this._storage.set(key, value);
+  public async store(key: string, value: any): Promise<void> {
+    const storage = await this.loaded();
+    await storage.set(key, value);
   }
 
-  public load(key: string): Promise<any> {
-    if (!this._storage) return Promise.reject();
-    return this._storage.get(key);
+  public async load(key: string): Promise<any> {
+    const storage = await this.loaded();
+    return await storage.get(key);
   }
 
-  public remove(key: string): Promise<void> {
-    if (!this._storage) return Promise.reject();
-    return this._storage.remove(key);
+  public async remove(key: string): Promise<void> {
+    const storage = await this.loaded();
+    await storage.remove(key);
   }
 
   /**
@@ -42,12 +44,12 @@ export class StorageService {
    *
    * @param prefix
    */
-  public getPrefixed(prefix: string): Promise<any> {
-    if (!this._storage) return Promise.reject();
+  public async getPrefixed(prefix: string): Promise<any> {
+    const storage = await this.loaded();
 
     const values: any = {};
     const length = prefix.length;
-    return this._storage.forEach((value, key) => {
+    return await storage.forEach((value, key) => {
       if (key.startsWith(prefix)) values[key.slice(length)] = value;
     }).then(() => values);
   }
@@ -57,11 +59,12 @@ export class StorageService {
    *
    * @param prefix
    */
-  public hasPrefixed(prefix: string): Promise<boolean> {
-    if (!this._storage) return Promise.resolve(false);
+  public async hasPrefixed(prefix: string): Promise<boolean> {
+    const storage = await this.loaded();
+
     let found = false;
-    return this._storage.forEach(() => {
-      found = true;
+    return await storage.forEach((value, key) => {
+      if (key.startsWith(prefix)) found = true;
     }).then(() => found);
   }
 
