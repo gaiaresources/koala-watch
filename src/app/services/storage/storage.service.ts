@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Storage } from "@ionic/storage-angular";
-import { ClientRecord } from "../../models/client-record";
-import { filter, Observable } from "rxjs";
-import { fromPromise } from "rxjs/internal/observable/innerFrom";
+import {Injectable} from '@angular/core';
+import {Storage} from "@ionic/storage-angular";
+import {ClientRecord} from "../../models/client-record";
+import {Observable} from "rxjs";
+import {fromPromise} from "rxjs/internal/observable/innerFrom";
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +50,19 @@ export class StorageService {
     return this._storage.forEach((value, key) => {
       if (key.startsWith(prefix)) values[key.slice(length)] = value;
     }).then(() => values);
+  }
+
+  /**
+   * Check if any prefixed values exist.
+   *
+   * @param prefix
+   */
+  public hasPrefixed(prefix: string): Promise<boolean> {
+    if (!this._storage) return Promise.resolve(false);
+    let found = false;
+    return this._storage.forEach(() => {
+      found = true;
+    }).then(() => found);
   }
 
   public putRecord(record: ClientRecord): Observable<boolean> {
