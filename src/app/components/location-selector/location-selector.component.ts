@@ -1,10 +1,12 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup } from "@angular/forms";
-import { NgIf } from "@angular/common";
-import { Subscription } from "rxjs";
-import { IonButton, IonButtons, IonIcon } from "@ionic/angular/standalone";
-import { faLocationArrow, faMapPin, faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {FormGroup} from "@angular/forms";
+import {NgIf} from "@angular/common";
+import {Subscription} from "rxjs";
+import {IonButton, IonButtons, IonIcon} from "@ionic/angular/standalone";
+import {faLocationArrow, faLocationCrosshairs, faMapPin} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {LocationService} from "../../services/location/location.service";
+import {Position} from "@capacitor/geolocation";
 
 @Component({
   selector: 'app-location-selector',
@@ -33,7 +35,9 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
 
   subscription?: Subscription;
 
-  constructor() {
+  constructor(
+    private locationService: LocationService,
+  ) {
   }
 
   ngOnInit() {
@@ -67,7 +71,24 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
   }
 
   doGpsSelect() {
-    // TODO: Perform selection via the GPS.
+    this.locationService.getPosition().then((position: Position) => {
+      if (!this.formGroup) return;
+      const values: any = {};
+      if (this.formGroup.contains("Latitude")) {
+        values['Latitude'] = position.coords.latitude.toFixed(6);
+      }
+      if (this.formGroup.contains('Longitude')) {
+        values['Longitude'] = position.coords.longitude.toFixed(6);
+      }
+      if (this.formGroup.contains('Accuracy')) {
+        values['Accuracy'] = Math.round(position.coords.accuracy ?? -1);
+      }
+      if (this.formGroup.contains('Altitude')) {
+        values['Altitude'] = Math.round(position.coords.altitude ?? -1);
+      }
+
+      this.formGroup.patchValue(values);
+    });
   }
 
   updateForm() {
