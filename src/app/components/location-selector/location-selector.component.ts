@@ -1,12 +1,15 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {FormGroup} from "@angular/forms";
-import {NgIf} from "@angular/common";
+import {DecimalPipe, NgIf} from "@angular/common";
 import {Subscription} from "rxjs";
 import {IonButton, IonButtons, IonIcon} from "@ionic/angular/standalone";
 import {faLocationArrow, faLocationCrosshairs, faMapPin} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {LocationService} from "../../services/location/location.service";
 import {Position} from "@capacitor/geolocation";
+import {LocationMapSelectorComponent} from "../location-map-selector/location-map-selector.component";
+import {Coordinates} from "../../models/coordinates";
+import {ElevationService} from "../../services/elevation/elevation.service";
 
 @Component({
   selector: 'app-location-selector',
@@ -19,6 +22,8 @@ import {Position} from "@capacitor/geolocation";
     IonButton,
     IonIcon,
     FaIconComponent,
+    LocationMapSelectorComponent,
+    DecimalPipe,
   ]
 })
 export class LocationSelectorComponent implements OnInit, OnChanges {
@@ -35,8 +40,11 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
 
   subscription?: Subscription;
 
+  accuracy: number = -1;
+
   constructor(
     private locationService: LocationService,
+    private elevationService: ElevationService,
   ) {
   }
 
@@ -60,39 +68,52 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
     if (!this.formGroup) return;
 
     // Process form value changes internally.
-    this.subscription = this.formGroup?.valueChanges.subscribe((values) => {
-      // TODO: This should update the accuracy display
-      console.log(values);
+    this.subscription = this.formGroup.valueChanges.subscribe((values) => {
+      this.accuracy = values.Accuracy ?? -1;
     });
   }
 
-  doMapSelect() {
-    // TODO: Perform a selection via the map.
+  setLocationValues(lat: number, lng: number, accuracy: number, altitude: number) {
+    const promise = altitude === -1 ? this.elevationService.getElevation(lat, lng) : Promise.resolve(altitude);
+
+    promise.then((alt) => {
+      if (!this.formGroup) return;
+      const values: any = {};
+      if (this.formGroup.contains("Latitude")) {
+        values['Latitude'] = lat.toFixed(6);
+      }
+      if (this.formGroup.contains('Longitude')) {
+        values['Longitude'] = lng.toFixed(6);
+      }
+      if (this.formGroup.contains('Accuracy')) {
+        values['Accuracy'] = Math.round(accuracy ?? -1);
+      }
+      if (this.formGroup.contains('Altitude')) {
+        values['Altitude'] = Math.round(alt);
+      }
+      this.formGroup.patchValue(values);
+    })
+  }
+
+  doMapSelect(coords: Coordinates) {
+    this.setLocationValues(
+      coords.lat,
+      coords.lng,
+      coords.accuracy,
+      coords.altitude,
+    )
   }
 
   doGpsSelect() {
     this.locationService.getPosition().then((position: Position) => {
-      if (!this.formGroup) return;
-      const values: any = {};
-      if (this.formGroup.contains("Latitude")) {
-        values['Latitude'] = position.coords.latitude.toFixed(6);
-      }
-      if (this.formGroup.contains('Longitude')) {
-        values['Longitude'] = position.coords.longitude.toFixed(6);
-      }
-      if (this.formGroup.contains('Accuracy')) {
-        values['Accuracy'] = Math.round(position.coords.accuracy ?? -1);
-      }
-      if (this.formGroup.contains('Altitude')) {
-        values['Altitude'] = Math.round(position.coords.altitude ?? -1);
-      }
-
-      this.formGroup.patchValue(values);
+      const coords = position.coords;
+      this.setLocationValues(
+        coords.latitude,
+        coords.longitude,
+        coords.accuracy,
+        coords.altitude ?? -1,
+      );
     });
-  }
-
-  updateForm() {
-    // TODO: This updates the various values for the "location".
   }
 
 }

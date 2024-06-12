@@ -1,0 +1,23 @@
+<ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="onCancel()">Cancel</ion-button>
+        </ion-buttons>
+        <ion-title>Map Coordinates</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="onConfirm()" [strong]="true">Confirm</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <app-google-map (onPosition)="doPosition($event)">
+      </app-google-map>
+
+      <ion-button (click)="onConfirm()">
+        Use this location
+      </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>
