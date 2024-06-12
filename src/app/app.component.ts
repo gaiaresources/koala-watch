@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {
   AlertController,
   IonApp,
@@ -18,12 +18,9 @@ import {
   IonSplitPane,
   IonToolbar
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import {
-  locate,
-  pin,
-} from 'ionicons/icons';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {addIcons} from 'ionicons';
+import {locate, pin,} from 'ionicons/icons';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {
   faCog,
   faInfoCircle,
@@ -32,12 +29,11 @@ import {
   faSignOutAlt,
   faTachometerAlt
 } from "@fortawesome/free-solid-svg-icons";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { AuthenticationService } from "./services/authentication/authentication.service";
-import { Observable } from "rxjs";
-import { HttpClientModule } from "@angular/common/http";
-import { User } from "./models/user";
-import { GoogleMapsModule } from "@angular/google-maps";
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
+import {AuthenticationService} from "./services/authentication/authentication.service";
+import {Observable} from "rxjs";
+import {HttpClientModule} from "@angular/common/http";
+import {User} from "./models/user";
 
 @Component({
   selector: 'app-root',
@@ -64,7 +60,6 @@ import { GoogleMapsModule } from "@angular/google-maps";
     IonToolbar,
     HttpClientModule,
     FontAwesomeModule,
-    GoogleMapsModule,
   ],
 })
 export class AppComponent {
