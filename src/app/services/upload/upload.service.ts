@@ -15,6 +15,7 @@ export class UploadService {
   }
 
   upload(): Observable<object| null> {
+    /*
     this.storageService.getUploadableRecords().then((clientRecord) => {
       if (Array.isArray(clientRecord)) {
         clientRecord.forEach(record => {
@@ -29,6 +30,7 @@ export class UploadService {
         })
       }
     });
+     */
     return of();
   }
 

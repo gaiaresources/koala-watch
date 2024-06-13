@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ClientPhoto } from "../../models/client-photo";
-import { IonButton, IonButtons } from "@ionic/angular/standalone";
-import { AsyncPipe, NgIf } from "@angular/common";
-import { PhotoComponent } from "../photo/photo.component";
-import { combineLatest, map, Observable, tap } from "rxjs";
-import { ActiveRecordService } from "../../services/active-record/active-record.service";
+import {Component, OnInit} from '@angular/core';
+import {ClientPhoto} from "../../models/client-photo";
+import {IonButton, IonButtons} from "@ionic/angular/standalone";
+import {AsyncPipe, NgIf} from "@angular/common";
+import {PhotoComponent} from "../photo/photo.component";
+import {combineLatest, map, Observable, tap} from "rxjs";
+import {ActivePhotoService} from "../../services/active-photo/active-photo.service";
 
 @Component({
   standalone: true,
@@ -27,11 +27,11 @@ export class PhotoGalleryComponent implements OnInit {
   gallery$: Observable<{ photos: ClientPhoto[], current: number }>;
 
   constructor(
-    private activeRecordService: ActiveRecordService,
+    private activePhotoService: ActivePhotoService,
   ) {
     this.gallery$ = combineLatest([
-      this.activeRecordService.photos$,
-      this.activeRecordService.currentPhoto$,
+      this.activePhotoService.photos$,
+      this.activePhotoService.currentPhoto$,
     ]).pipe(
       map(([photos, current]) => {
         return {photos, current};
@@ -46,7 +46,7 @@ export class PhotoGalleryComponent implements OnInit {
   }
 
   doChangePhoto(index: number) {
-    this.activeRecordService.setCurrentPhoto(index);
+    this.activePhotoService.setCurrentPhoto(index);
   }
 
   setMoveButtons(current: number, length: number) {

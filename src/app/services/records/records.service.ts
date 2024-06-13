@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {APIService} from "../api/api.service";
 import {StorageService} from "../storage/storage.service";
 import {ClientRecord} from "../../models/client-record";
-import {BehaviorSubject, combineLatest, firstValueFrom, from, switchMap} from "rxjs";
+import {BehaviorSubject, combineLatest, firstValueFrom, from, Observable, switchMap} from "rxjs";
 import {NetworkService} from "../network/network.service";
 import {DatasetService} from "../dataset/dataset.service";
 import {Dataset} from "../../models/dataset";
@@ -43,7 +43,7 @@ export class RecordsService {
       this.datasetService.datasets$,
       this.apiService.getRecords(),
     ]).pipe(
-      switchMap<[Dataset[], ClientRecord[]]>(
+      switchMap<[Dataset[], ClientRecord[]], Observable<boolean>>(
         ([datasets, records]) => {
           // Process all the datasets as promises.
           const promises = Promise.all(
@@ -77,7 +77,7 @@ export class RecordsService {
 
   private updateRecordId(value: ClientRecord): Promise<boolean> {
     const record = this.records.get(value.client_id);
-    if (!record.id && value.id) {
+    if (record && !record.id && value.id) {
       record.id = value.id;
       this.records.set(record.client_id, record);
       return this.setStoredRecord(record).then(() => true);
@@ -90,7 +90,7 @@ export class RecordsService {
   }
 
   getRecords(dataset: string) {
-    const records = [];
+    const records: ClientRecord[] = [];
     this.records.forEach((value, key) => {
       if (value.datasetName === dataset) {
         records.push(value);
@@ -101,7 +101,7 @@ export class RecordsService {
 
   setRecord(record: ClientRecord) {
     this.records.set(record.client_id, record);
-    this.storageService.store(record.client_id, record).then(() => {
+    return this.setStoredRecord(record).then(() => {
       this._changed.next(true);
     });
   }
@@ -114,7 +114,7 @@ export class RecordsService {
   deleteRecord(clientId: string) {
     if (!this.records.has(clientId)) return;
 
-    const record = this.records.get(clientId);
+    // const record = this.records.get(clientId);
     this.records.delete(clientId);
 
     this._changed.next(true);

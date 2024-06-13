@@ -18,7 +18,7 @@ import { RecordPhotosComponent } from "../../components/record-photos/record-pho
 import { DATASET_NAME_CENSUS } from "../../tokens/app";
 import { faCamera, faImage, faSave, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { ActiveRecordService } from "../../services/active-record/active-record.service";
-import { PhotoService } from "../../services/photo/photo.service";
+import { CameraService } from "../../services/camera/camera.service";
 import { UUID } from "angular2-uuid";
 import { StorageService } from "../../services/storage/storage.service";
 
@@ -45,19 +45,12 @@ export class CensusFormPage implements OnInit {
   constructor(
     private activeRecordService: ActiveRecordService,
     private alertController: AlertController,
-    private photoService: PhotoService,
+    private photoService: CameraService,
     private storageService: StorageService,
   ) {
   }
 
   ngOnInit() {
-    if (this.activeRecordService.getClientId()) {
-      let clientId = this.activeRecordService.getClientId();
-      this.storageService.load('Record_' + clientId).then(record => this.activeRecordService.setValues(record.data));
-    }
-    else {
-      this.activeRecordService.setClientId(UUID.UUID());
-    }
   }
 
   async doCamera() {
@@ -92,12 +85,12 @@ export class CensusFormPage implements OnInit {
   }
 
   doSave() {
-    const formValues = this.activeRecordService.getValues();
-
-    this.storageService.putRecord({
+    /*
+    this.storageService.putRecord(new ClientRecord(
       // TODO check record valid
       valid: true, //this.recordForm.valid,
       client_id: this.activeRecordService.getClientId(),
+      parentId: "",
       // TODO where should this value be coming from?
       dataset: 105,
       datasetName: DATASET_NAME_CENSUS,
@@ -107,6 +100,7 @@ export class CensusFormPage implements OnInit {
       // TODO Count?
       count: 0,
       photoIds: [],
-    });
+  ));
+     */
   }
 }

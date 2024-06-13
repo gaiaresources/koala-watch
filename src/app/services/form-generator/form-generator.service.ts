@@ -131,7 +131,7 @@ export class FormGeneratorService {
 
   getFormGroup(formBuilder: FormBuilder, values: any, dataset: any, resource: number = 0): FormGroup {
     const group: any = {};
-    this.getFields(dataset, resource).forEach((field: any) => {
+    this.getFields(dataset, resource).forEach((field: any, index: any) => {
       let defaultValue = this.getFieldDefaultValue(field) || '';
       if (values.hasOwnProperty(field.name)) {
         defaultValue = values[field.name];

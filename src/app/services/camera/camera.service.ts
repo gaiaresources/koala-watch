@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
-import { Camera, CameraResultType, CameraSource, ImageOptions } from "@capacitor/camera";
-import { ActiveRecordService } from "../active-record/active-record.service";
+import {Injectable} from '@angular/core';
+import {Camera, CameraResultType, CameraSource, ImageOptions} from "@capacitor/camera";
+import {UUID} from "angular2-uuid";
+import * as dayjs from "dayjs";
+import {ClientPhoto} from "../../models/client-photo";
+import {ActivePhotoService} from "../active-photo/active-photo.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CameraService {
 
-  constructor(private activeRecordService: ActiveRecordService) {
+  constructor(private activePhotoService: ActivePhotoService) {
   }
 
   public async getCameraPhoto() {
@@ -31,13 +34,14 @@ export class CameraService {
     return Camera.getPhoto(options).then((photo) => {
       const base64 = photo.dataUrl;
       if (base64) {
-        return this.activeRecordService.addPhoto({
-          clientId: "",
-          datetime: "",
-          fileName: "",
+        const id = UUID.UUID();
+        return this.activePhotoService.addPhoto(new ClientPhoto({
+          clientId: id,
+          datetime: dayjs().format(),
+          fileName: id + ".jpg",
           recordClientId: "",
           base64: base64,
-        });
+        }));
       }
 
       return 0;

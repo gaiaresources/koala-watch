@@ -9,6 +9,7 @@ import {Dataset} from "../../models/dataset";
 import {ClientRecord} from "../../models/client-record";
 import {Record} from "../../models/record";
 import {NetworkService} from "../network/network.service";
+import {ClientPhoto} from "../../models/client-photo";
 
 
 /**
@@ -790,10 +791,36 @@ export class APIService {
   }
 
   public getRecords(params: any = {}): Observable<ClientRecord[]> {
+    // TODO: This seems to be broken on the API end.
+    return of([]);
+    /*
     return this.getRequest(
-      this.buildAbsoluteUrl('records'), {
-        params: params
-      }) as Observable<ClientRecord[]>;
+      this.buildAbsoluteUrl('records'), params
+    ).pipe(
+      map((data) => {
+        if (!data) return [];
+        console.log('getRecords', data);
+        console.error('This needs updating so that we convert the records correctly into the objects');
+        return data as ClientRecord[];
+      })
+    );
+     */
+  }
+
+  public getRecordMedia(recordId: string): Observable<ClientPhoto[]> {
+    const params = {
+      record: recordId
+    };
+    return this.getRequest(
+      this.buildAbsoluteUrl('media'), params
+    ).pipe(
+      map(data => {
+        if (!data) return [];
+        console.log('getRecordMedia');
+        console.log('Update to ensure photo converted to object');
+        return data as ClientPhoto[];
+      })
+    );
   }
 
 

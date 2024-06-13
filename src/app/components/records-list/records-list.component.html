@@ -1,4 +1,4 @@
-<ng-container *ngIf="showLegend && _records.length">
+<ng-container *ngIf="showLegend && displayRecords.length">
   <ion-grid>
     <ion-row>
       <ion-col class="category-legend-label" id="category-completed">Complete</ion-col>
@@ -8,13 +8,13 @@
   </ion-grid>
 </ng-container>
 
-<ng-container *ngIf="!_records.length">
+<ng-container *ngIf="!displayRecords.length">
   <ng-content></ng-content>
 </ng-container>
 
-<ng-container *ngIf="_records.length">
+<ng-container *ngIf="displayRecords.length">
   <ion-list>
-    <ion-item *ngFor="let record of _records"
+    <ion-item *ngFor="let record of displayRecords"
               [class]="record.statusClass"
               (click)="doRecordClicked(record.data)">
       <ion-img slot="start"

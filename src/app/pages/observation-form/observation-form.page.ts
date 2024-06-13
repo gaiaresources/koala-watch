@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, Input, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {
   AlertController,
   IonButton,
@@ -8,23 +8,23 @@ import {
   IonContent,
   IonFab,
   IonFabButton,
-  IonHeader, IonImg,
+  IonHeader,
+  IonImg,
   IonMenuButton,
   IonSegment,
   IonSegmentButton,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import { RecordFormComponent } from "../../components/record-form/record-form.component";
-import { DATASET_NAME_OBSERVATION } from "../../tokens/app";
-import { ActiveRecordService } from "../../services/active-record/active-record.service";
-import { RecordPhotosComponent } from "../../components/record-photos/record-photos.component";
-import { PhotoService } from "../../services/photo/photo.service";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faSave, faTrashCan, faCamera, faImage } from "@fortawesome/free-solid-svg-icons";
-import { StorageService } from "../../services/storage/storage.service";
-import { DatasetService } from "../../services/dataset/dataset.service";
-import { UUID } from "angular2-uuid";
+import {RecordFormComponent} from "../../components/record-form/record-form.component";
+import {DATASET_NAME_OBSERVATION} from "../../tokens/app";
+import {ActiveRecordService} from "../../services/active-record/active-record.service";
+import {RecordPhotosComponent} from "../../components/record-photos/record-photos.component";
+import {CameraService} from "../../services/camera/camera.service";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {faCamera, faImage, faSave, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import {StorageService} from "../../services/storage/storage.service";
+import {DatasetService} from "../../services/dataset/dataset.service";
 
 @Component({
   selector: 'app-observation-form-page',
@@ -67,20 +67,13 @@ export class ObservationFormPage implements OnInit {
   constructor(
     private activeRecordService: ActiveRecordService,
     private alertController: AlertController,
-    private photoService: PhotoService,
+    private photoService: CameraService,
     private storageService: StorageService,
     private datasetService: DatasetService,
   ) {
   }
 
   ngOnInit() {
-    if (this.activeRecordService.getClientId()) {
-      let clientId = this.activeRecordService.getClientId();
-      this.storageService.load('Record_' + clientId).then(record => this.activeRecordService.setValues(record.data));
-    }
-    else {
-      this.activeRecordService.setClientId(UUID.UUID());
-    }
   }
 
   async doCamera() {
@@ -156,22 +149,7 @@ export class ObservationFormPage implements OnInit {
   }
 
   doSave() {
-    const formValues = this.activeRecordService.getValues();
-
-    this.storageService.putRecord({
-      // TODO check record valid
-      valid: true, //this.recordForm.valid,
-      client_id: this.activeRecordService.getClientId(),
-      // TODO where should this value be coming from?
-      dataset: 105,
-      datasetName: DATASET_NAME_OBSERVATION,
-      // TODO get date from Record if set.
-      datetime: new Date().toISOString(),
-      data: formValues,
-      // TODO Count?
-      count: 0,
-      photoIds: [],
-    });
+    this.activeRecordService.save();
   }
 
 }

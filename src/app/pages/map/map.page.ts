@@ -1,21 +1,17 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, Platform } from '@ionic/angular/standalone';
-import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
-import { ClientRecord } from "../../models/client-record";
-import { StorageService } from "../../services/storage/storage.service";
-import { DATASET_NAME_CENSUS } from "../../tokens/app";
-import {environment} from "../../../environments/environment";
-import {GoogleMap, MapMarker} from "@angular/google-maps";
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {IonContent, IonHeader, IonTitle, IonToolbar, Platform} from '@ionic/angular/standalone';
+import {ClientRecord} from "../../models/client-record";
+import {StorageService} from "../../services/storage/storage.service";
+import {DATASET_NAME_CENSUS} from "../../tokens/app";
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, GoogleMap, MapMarker],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule],
 })
 export class MapPage implements OnInit {
 
@@ -24,23 +20,23 @@ export class MapPage implements OnInit {
 
   @ViewChild('map')
   mapRef?: ElementRef<HTMLElement>;
-  newMap?: GoogleMap;
-  gmapsLoaded: boolean = false;
+  // newMap?: GoogleMap;
+  // gmapsLoaded: boolean = false;
 
   _records: ClientRecord[] = [];
-  config= {
-          center: {
-            lat: -25,
-            lng: 132,
-          },
-          zoom: 3.5,
-          options: {
-            zoomControl: false,
-            streetViewControl: false,
-            fullscreenControl: false,
-            mapTypeControl: false,
-          }
-        }
+  config = {
+    center: {
+      lat: -25,
+      lng: 132,
+    },
+    zoom: 3.5,
+    options: {
+      zoomControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      mapTypeControl: false,
+    }
+  }
 
   markers: any[] = [];
 
@@ -51,11 +47,13 @@ export class MapPage implements OnInit {
   }
 
   ngOnInit() {
+    /*
     this.storageService.getAllRecords().then((clientRecord) => {
       if (Array.isArray(clientRecord)) {
         clientRecord.forEach(record => this._records.push( record ));
       }
     });
+     */
   }
 
   ionViewDidEnter() {
@@ -66,13 +64,14 @@ export class MapPage implements OnInit {
 
   ionViewDidLeave() {
     // if (this.map){
-      // this.map.remove();
+    // this.map.remove();
 
-      // this.cleanup();
+    // this.cleanup();
     // }
   }
 
   async loadMap() {
+    /*
     if (!this.gmapsLoaded) {
       const script = document.createElement('script');
       script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsApi}`;
@@ -106,6 +105,7 @@ export class MapPage implements OnInit {
         }
       }
     }
+     */
   }
 
   private getIconUrl(record: ClientRecord) {

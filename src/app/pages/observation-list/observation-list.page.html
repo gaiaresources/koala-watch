@@ -1,6 +1,6 @@
 <ion-content class="ion-padding">
 
-  <app-records-list datasetPrefix="">
+  <app-records-list *ngIf="records$ | async as records" [records]="records">
 
     <ion-grid class="no-grid-padding">
       <ion-row>

@@ -18,7 +18,7 @@ import { RecordPhotosComponent } from "../../components/record-photos/record-pho
 import { DATASET_NAME_TREESURVEY } from "../../tokens/app";
 import { faCamera, faImage, faSave, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { ActiveRecordService } from "../../services/active-record/active-record.service";
-import { PhotoService } from "../../services/photo/photo.service";
+import { CameraService } from "../../services/camera/camera.service";
 import { StorageService } from "../../services/storage/storage.service";
 import { UUID } from "angular2-uuid";
 
@@ -45,19 +45,13 @@ export class SurveyFormPage implements OnInit {
   constructor(
     private activeRecordService: ActiveRecordService,
     private alertController: AlertController,
-    private photoService: PhotoService,
+    private photoService: CameraService,
     private storageService: StorageService,
   ) {
+    // Client record plus data.
   }
 
   ngOnInit() {
-    if (this.activeRecordService.getClientId()) {
-      let clientId = this.activeRecordService.getClientId();
-      this.storageService.load('Record_' + clientId).then(record => this.activeRecordService.setValues(record.data));
-    }
-    else {
-      this.activeRecordService.setClientId(UUID.UUID());
-    }
   }
 
   async doCamera() {
@@ -92,8 +86,7 @@ export class SurveyFormPage implements OnInit {
   }
 
   doSave() {
-    const formValues = this.activeRecordService.getValues();
-
+    /*
     this.storageService.putRecord({
       // TODO check record valid
       valid: true, //this.recordForm.valid,
@@ -108,5 +101,6 @@ export class SurveyFormPage implements OnInit {
       count: 0,
       photoIds: [],
     });
+     */
   }
 }

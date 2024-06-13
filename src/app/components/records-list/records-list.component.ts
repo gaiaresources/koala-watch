@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IonicModule } from "@ionic/angular";
-import { DatePipe, NgForOf, NgIf } from "@angular/common";
-import { ClientRecord } from "../../models/client-record";
-import { StorageService } from "../../services/storage/storage.service";
-import { DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESURVEY } from "../../tokens/app";
-import { NavigationService } from "../../services/navigation/navigation.service";
-import { ActiveRecordService } from "../../services/active-record/active-record.service";
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {IonicModule} from "@ionic/angular";
+import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {ClientRecord} from "../../models/client-record";
+import {StorageService} from "../../services/storage/storage.service";
+import {DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESURVEY} from "../../tokens/app";
+import {NavigationService} from "../../services/navigation/navigation.service";
+import {ActiveRecordService} from "../../services/active-record/active-record.service";
 
 @Component({
   selector: 'app-records-list',
@@ -19,17 +19,21 @@ import { ActiveRecordService } from "../../services/active-record/active-record.
     DatePipe
   ]
 })
-export class RecordsListComponent implements OnInit {
+export class RecordsListComponent implements OnChanges {
 
   @Input()
   showLegend: boolean = true;
 
   @Input()
-  datasetPrefix: string = "";
+  records: ClientRecord[] = [];
 
-  _records: { data: ClientRecord, statusClass: string, altText: string, datasetIcon: string, countIcon: string }[] = [];
-
-  protected clientRecords$: any[] = [];
+  displayRecords: {
+    data: ClientRecord,
+    statusClass: string,
+    altText: string,
+    datasetIcon: string,
+    countIcon: string
+  }[] = [];
 
   constructor(
     private storageService: StorageService,
@@ -38,18 +42,20 @@ export class RecordsListComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
-    this.storageService.getAllRecords().then((clientRecord) => {
-      if (Array.isArray(clientRecord)) {
-        clientRecord.forEach(record => this._records.push({
-          data: record,
-          statusClass: this.getStatusClass(record),
-          altText: this.getAltText(record),
-          datasetIcon: this.getDatasetIcon(record),
-          countIcon: this.getCountIcon(record),
-        }));
-      }
-    });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['records']) {
+      this.displayRecords = this.records.map(
+        (record) => {
+          return {
+            data: record,
+            statusClass: this.getStatusClass(record),
+            altText: this.getAltText(record),
+            datasetIcon: this.getDatasetIcon(record),
+            countIcon: this.getCountIcon(record),
+          };
+        }
+      );
+    }
   }
 
   public getStatusClass(record: ClientRecord) {
@@ -60,7 +66,18 @@ export class RecordsListComponent implements OnInit {
   }
 
   public getAltText(record: ClientRecord): string {
-    let rv = this.datasetPrefix + ' ';
+    let rv = ' ';
+    switch (record.datasetName) {
+      case DATASET_NAME_OBSERVATION:
+        rv = 'Observation ';
+        break;
+      case DATASET_NAME_CENSUS:
+        rv = 'Census ';
+        break;
+      case DATASET_NAME_TREESURVEY:
+        rv = 'Tree Survey ';
+        break;
+    }
     if (record.id) {
       rv += 'uploaded';
     } else {
@@ -98,7 +115,7 @@ export class RecordsListComponent implements OnInit {
   doRecordClicked(record: ClientRecord) {
     this.activeRecordService.clear();
     if (record.client_id) {
-      this.activeRecordService.setClientId(record.client_id);
+      this.activeRecordService.setRecord(record);
       switch (record.datasetName) {
         case DATASET_NAME_OBSERVATION:
           this.navigationService.goObservation();

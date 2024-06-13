@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { ClientPhoto } from "../../models/client-photo";
-import { BehaviorSubject } from "rxjs";
-import { StorageService } from "../storage/storage.service";
-import { UUID } from "angular2-uuid";
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from "rxjs";
+import {RecordsService} from "../records/records.service";
+import {ActivePhotoService} from "../active-photo/active-photo.service";
+import {ClientRecord} from "../../models/client-record";
+import * as dayjs from "dayjs";
 
 
 @Injectable({
@@ -10,45 +11,52 @@ import { UUID } from "angular2-uuid";
 })
 export class ActiveRecordService {
 
-  public _clientId = new BehaviorSubject<string>("");
-  public clientId$ = this._clientId.asObservable();
-
-  private _values = new BehaviorSubject<any>({});
-  public values$ = this._values.asObservable();
+  public _record = new BehaviorSubject<ClientRecord>(new ClientRecord());
+  public record$ = this._record.asObservable();
 
   public _status = new BehaviorSubject<string>("");
   public status$ = this._status.asObservable();
 
-  private _photos = new BehaviorSubject<ClientPhoto[]>([]);
-  public photos$ = this._photos.asObservable();
+  constructor(
+    private recordsService: RecordsService,
+    private photoService: ActivePhotoService,
+  ) {
+    this.record$.subscribe((record) => {
+      this.photoService.setRecord(record);
+    });
 
-  private _currentPhoto = new BehaviorSubject<number>(0);
-  public currentPhoto$ = this._currentPhoto.asObservable();
-
-  constructor(private storageService: StorageService) {
+    // Always auto-update the photoIds for the values based on the changes to the photo service.
+    this.photoService.photos$.subscribe((photos) => {
+      const record = this._record.value;
+      record.photoIds = photos.map(p => p.clientId);
+      this._record.next(record);
+    });
   }
 
   clear() {
-    this._values.next({});
-    this._photos.next([]);
+    this._record.next(new ClientRecord());
     this._status.next("");
-    this._currentPhoto.next(0);
+  }
+
+  setRecord(record: ClientRecord) {
+    this._record.next(record);
+  }
+
+  getRecord() {
+    return this._record.value;
   }
 
   getClientId() {
-    return this._clientId.value;
+    const record = this._record.value;
+    return record.client_id;
   }
 
-  setClientId(clientId: string) {
-    this._clientId.next(clientId);
-  }
-
-  getValues() {
-    return this._values.value;
-  }
-
-  setValues(values: any) {
-    this._values.next(values);
+  setValues(data: any) {
+    const record: any = this._record.value;
+    for (let key in data) {
+      record[key] = data[key];
+    }
+    this._record.next(record);
   }
 
   getStatus() {
@@ -59,54 +67,11 @@ export class ActiveRecordService {
     this._status.next(status);
   }
 
-  getPhotos(): ClientPhoto[] {
-    return this._photos.value;
-  }
-
-  setPhotos(photos: ClientPhoto[]) {
-    this._photos.next(photos);
-  }
-
-  /**
-   * Adds a photo to the active record, returns index.
-   *
-   * @param photo
-   */
-  addPhoto(photo: ClientPhoto) {
-    const photos = this._photos.value;
-    photos.push(photo);
-    this._photos.next(photos);
-    return photos.length - 1;
-  }
-
-  deletePhoto(index: number) {
-    const photos = this._photos.value;
-    photos.splice(index, 1);
-    this._photos.next(photos);
-    if (index >= photos.length) {
-      this._currentPhoto.next(photos.length - 1);
-    }
-  }
-
-  getCurrentPhoto(): number {
-    return this._currentPhoto.value;
-  }
-
-  setCurrentPhoto(index: number) {
-    this._currentPhoto.next(index);
-  }
-
-  save() {
-    // TODO: Stores the active record into storage (which should list all the records of the user)
-    // Once it is uploaded then it should display on the API.
-    const record = {
-      values: this._values.value,
-      status: this._status.value,
-      photos: this._photos.value,
-      currentPhoto: this._currentPhoto.value
-    };
-    const key = UUID.UUID();
-    this.storageService.store(key, record);
+  async save() {
+    const record = this._record.value;
+    record.datetime = dayjs().format();
+    await this.recordsService.setRecord(record);
+    await this.photoService.save();
   }
 
 }
