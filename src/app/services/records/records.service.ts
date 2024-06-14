@@ -32,7 +32,7 @@ export class RecordsService {
     // Load the records and photos from storage.
     this.storageService.getPrefixed(this.RECORD_PREFIX).then((records) => {
       for (let key in records) {
-        this.records.set(key, records[key]);
+        this.records.set(key, new ClientRecord(records[key]));
       }
       this._changed.next(true);
     });
@@ -91,9 +91,32 @@ export class RecordsService {
 
   getRecords(dataset: string) {
     const records: ClientRecord[] = [];
-    this.records.forEach((value, key) => {
+    this.records.forEach((value) => {
       if (value.datasetName === dataset) {
         records.push(value);
+      }
+    });
+    return records;
+  }
+
+  private getChildRecords(recordId: string): ClientRecord[] {
+    const records: ClientRecord[] = [];
+    this.records.forEach((value) => {
+      if (value.parentId === recordId) {
+        records.push(value);
+        this.getChildRecords(value.client_id).forEach(v => records.push(v));
+      }
+    });
+    return records;
+  }
+
+  getUploadableRecords(): ClientRecord[] {
+    const records: ClientRecord[] = [];
+    this.records.forEach((value) => {
+      if (value.valid && !value.id) {
+        // if (value.valid && (!value.id || value.modified)) {
+        records.push(value);
+        this.getChildRecords(value.client_id).forEach(v => records.push(v));
       }
     });
     return records;
@@ -114,7 +137,6 @@ export class RecordsService {
   deleteRecord(clientId: string) {
     if (!this.records.has(clientId)) return;
 
-    // const record = this.records.get(clientId);
     this.records.delete(clientId);
 
     this._changed.next(true);

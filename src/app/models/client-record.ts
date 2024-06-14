@@ -18,6 +18,7 @@ export class ClientRecord implements Record {
   name_id?: number;
   parent?: number;
   children?: number[];
+  modified?: boolean;
 
   client_id: string;
   valid: boolean;
@@ -35,6 +36,21 @@ export class ClientRecord implements Record {
     this.datetime = data.datetime || dayjs().format();
     this.count = data.count || 0;
     this.photoIds = data.photoIds || [];
+    if (data.id) this.id = data.id;
+    if (data.dataset) this.dataset = data.dataset;
+    if (data.site) this.site = data.site;
+    if (data.source_info) this.source_info = data.source_info;
+    if (data.last_modified) this.last_modified = data.last_modified;
+    if (data.created) this.created = data.created;
+    if (data.data) this.data = data.data;
+    if (data.validated) this.validated = data.validated;
+    if (data.locked) this.locked = data.locked;
+    if (data.geometry) this.geometry = data.geometry;
+    if (data.species_name) this.species_name = data.species_name;
+    if (data.name_id) this.name_id = data.name_id;
+    if (data.parent) this.parent = data.parent;
+    if (data.children) this.children = data.children;
+    if (data.modified) this.modified = data.modified;
   }
 
 }

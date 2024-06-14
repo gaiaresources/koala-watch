@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {APIService} from "../api/api.service";
-import {StorageService} from "../storage/storage.service";
 import {BehaviorSubject, combineLatest, from, Observable, of, shareReplay, switchMap} from "rxjs";
 import {ClientPhoto} from "../../models/client-photo";
 import {NetworkService} from "../network/network.service";
 import {tap} from "rxjs/operators";
 import {ClientRecord} from "../../models/client-record";
+import {PhotoService} from "../photo/photo.service";
 
 export interface PhotoMap {
   [key: string]: ClientPhoto | null;
@@ -43,7 +43,7 @@ export class ActivePhotoService {
   constructor(
     private networkService: NetworkService,
     private apiService: APIService,
-    private storageService: StorageService,
+    private photoService: PhotoService,
   ) {
     this.photos$ = this._record.asObservable().pipe(
       switchMap((record) => {
@@ -132,25 +132,9 @@ export class ActivePhotoService {
   }
 
   private getStoredPhotos$(recordId: string): Observable<ClientPhoto[]> {
-    return from(this.storageService.getPrefixed(this.PHOTO_PREFIX).then((results) => {
-      const photos = [];
-      for (let key in results) {
-        if (results[key].recordClientId === recordId) {
-          photos.push(new ClientPhoto(results[key]));
-        }
-      }
-      return photos;
-    })).pipe(
+    return from(this.photoService.getRecordPhotos(recordId)).pipe(
       shareReplay(1),
     );
-  }
-
-  private storePhoto(photo: ClientPhoto) {
-    return this.storageService.store(`${this.PHOTO_PREFIX}${photo.clientId}`, photo);
-  }
-
-  private removePhoto(photo: ClientPhoto) {
-    return this.storageService.remove(`${this.PHOTO_PREFIX}${photo.clientId}`);
   }
 
   private getPhotoMap(
@@ -191,7 +175,7 @@ export class ActivePhotoService {
 
     // Perform storage update of all updated photos.
     const promise = updatePhotos.length > 0 ?
-      Promise.all(updatePhotos.map(photo => this.storePhoto(photo))) :
+      Promise.all(updatePhotos.map(photo => this.photoService.setPhoto(photo))) :
       Promise.resolve();
 
     // Return the combined photo list.
@@ -202,10 +186,10 @@ export class ActivePhotoService {
     const promises: Promise<void>[] = [];
 
     const addedPhotos = this._addedPhotos.value;
-    addedPhotos.forEach(photo => promises.push(this.storePhoto(photo)));
+    addedPhotos.forEach(photo => promises.push(this.photoService.setPhoto(photo)));
 
     const deletedPhotos = this._deletedPhotos.value;
-    deletedPhotos.forEach(photo => promises.push(this.removePhoto(photo)));
+    deletedPhotos.forEach(photo => promises.push(this.photoService.removePhoto(photo.clientId)));
 
     await Promise.all(promises);
   }

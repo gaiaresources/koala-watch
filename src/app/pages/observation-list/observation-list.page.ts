@@ -55,7 +55,7 @@ export class ObservationListPage implements OnInit {
   }
 
   async doUpload() {
-    await firstValueFrom(this.uploadService.upload());
+    await this.uploadService.upload();
   }
 
   doNewObservation() {

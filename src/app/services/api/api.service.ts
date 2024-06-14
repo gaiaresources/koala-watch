@@ -10,6 +10,7 @@ import {ClientRecord} from "../../models/client-record";
 import {Record} from "../../models/record";
 import {NetworkService} from "../network/network.service";
 import {ClientPhoto} from "../../models/client-photo";
+import {Media} from "../../models/media";
 
 
 /**
@@ -821,6 +822,16 @@ export class APIService {
         return data as ClientPhoto[];
       })
     );
+  }
+
+  public uploadRecordMediaBase64(recordId: number, file: string): Observable<Media | null> {
+    return this.postRequest(
+      this.buildAbsoluteUrl('media'),
+      {
+        record: recordId,
+        file: file,
+      },
+    ) as Observable<Media | null>;
   }
 
 

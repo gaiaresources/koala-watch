@@ -44,7 +44,7 @@ export class ObservationPage implements OnInit {
   ngOnInit() {
   }
   async doUpload() {
-    await firstValueFrom(this.uploadService.upload());
+    await this.uploadService.upload();
   }
 
   doNewObservation() {
