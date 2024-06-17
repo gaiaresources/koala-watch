@@ -1,4 +1,14 @@
-import {Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Platform} from "@ionic/angular/standalone";
 import {GOOGLE_MAP_API} from "../../tokens/gmap";
 import {NgIf} from "@angular/common";
@@ -14,6 +24,7 @@ import {Coordinates} from "../../models/coordinates";
   imports: [
     NgIf,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class GoogleMapComponent implements OnInit {
 
@@ -23,7 +34,7 @@ export class GoogleMapComponent implements OnInit {
   @Input()
   selectPosition: boolean = true;
 
-  @ViewChild('map')
+  @ViewChild('map', {static: false})
   mapRef?: ElementRef<HTMLElement>;
   newMap?: GoogleMap;
 
@@ -42,6 +53,9 @@ export class GoogleMapComponent implements OnInit {
     this.platform.ready().then(() => {
       this.loadMap();
     });
+  }
+
+  ionViewDidEnter() {
   }
 
   async updateSelectPosition() {
@@ -65,9 +79,9 @@ export class GoogleMapComponent implements OnInit {
         altitude: -1,
         accuracy: 0,
       };
-      this.position = await this.newMap.addMarker({ coordinate, draggable: true });
+      this.position = await this.newMap.addMarker({coordinate, draggable: true});
       await this.newMap.enableCurrentLocation(true);
-      await this.newMap.setCamera({ coordinate, zoom: 16 });
+      await this.newMap.setCamera({coordinate, zoom: 16});
       this.onPosition.emit(coordinate);
     }
   }
