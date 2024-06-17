@@ -1,7 +1,8 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar} from "@ionic/angular/standalone";
 import {GoogleMapComponent} from "../google-map/google-map.component";
 import {Coordinates} from "../../models/coordinates";
+import {GoogleMapMarkerComponent} from "../google-map-marker/google-map-marker.component";
 
 @Component({
   standalone: true,
@@ -16,12 +17,19 @@ import {Coordinates} from "../../models/coordinates";
     IonButtons,
     IonButton,
     IonTitle,
-    GoogleMapComponent
+    GoogleMapComponent,
+    GoogleMapMarkerComponent
   ]
 })
 export class LocationMapSelectorComponent implements OnInit {
 
   @ViewChild(IonModal) modal?: IonModal;
+
+  @Input()
+  lat?: number;
+
+  @Input()
+  lng?: number;
 
   coords: Coordinates = {lat: 0, lng: 0, altitude: -1, accuracy: -1};
 

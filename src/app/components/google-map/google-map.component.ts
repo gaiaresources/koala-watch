@@ -2,19 +2,21 @@ import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
-  EventEmitter,
+  inject,
   Inject,
   Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
   OnInit,
-  Output,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {Platform} from "@ionic/angular/standalone";
 import {GOOGLE_MAP_API} from "../../tokens/gmap";
 import {NgIf} from "@angular/common";
 import {GoogleMap} from "@capacitor/google-maps";
 import {LocationService} from "../../services/location/location.service";
-import {Coordinates} from "../../models/coordinates";
+import {GoogleMapEvents} from "./google-map-events";
 
 @Component({
   standalone: true,
@@ -26,46 +28,79 @@ import {Coordinates} from "../../models/coordinates";
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class GoogleMapComponent implements OnInit {
+export class GoogleMapComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   id: string = 'google-map';
 
   @Input()
-  selectPosition: boolean = true;
+  lat?: number;
+
+  @Input()
+  lng?: number;
+
+  @Input()
+  zoom: number = 8;
 
   @ViewChild('map', {static: false})
-  mapRef?: ElementRef<HTMLElement>;
-  newMap?: GoogleMap;
+  set mapRef(ref: ElementRef) {
+    setTimeout(() => {
+      this.createMap(ref.nativeElement);
+    }, 500);
+  }
 
-  position: string = "";
-  @Output()
-  onPosition = new EventEmitter<Coordinates>();
+  events = new GoogleMapEvents(inject(NgZone));
+  map: Promise<GoogleMap>;
+
+  private resolve: any;
 
   constructor(
     @Inject(GOOGLE_MAP_API) private googleMapApi: string,
-    private platform: Platform,
     private locationService: LocationService,
   ) {
-  }
-
-  ngOnInit() {
-    this.platform.ready().then(() => {
-      this.loadMap();
+    this.map = new Promise((resolve) => {
+      this.resolve = resolve;
     });
   }
 
-  ionViewDidEnter() {
+  ngOnInit() {
   }
 
+  ngOnDestroy() {
+    this.map.then((map) => {
+      map.destroy();
+    })
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['camera'] || changes['zoom']) {
+      this.setCamera();
+    }
+  }
+
+  async setCamera() {
+    this.map.then(async (map) => {
+      const bounds = await map.getMapBounds();
+      const coordinate = {
+        lat: this.lat ?? bounds.center.lat,
+        lng: this.lng ?? bounds.center.lng,
+      };
+      await map.setCamera({
+        coordinate: coordinate,
+        zoom: this.zoom,
+      });
+    });
+  }
+
+  /*
   async updateSelectPosition() {
-    if (!this.newMap) return;
+    if (!this.map) return;
 
     // There is no select position behaviour so remove any existing markers.
     if (!this.selectPosition) {
-      await this.newMap.enableCurrentLocation(false);
+      await this.map.enableCurrentLocation(false);
       if (this.position) {
-        await this.newMap.removeMarker(this.position);
+        await this.map.removeMarker(this.position);
         this.position = "";
       }
       return;
@@ -79,43 +114,30 @@ export class GoogleMapComponent implements OnInit {
         altitude: -1,
         accuracy: 0,
       };
-      this.position = await this.newMap.addMarker({coordinate, draggable: true});
-      await this.newMap.enableCurrentLocation(true);
-      await this.newMap.setCamera({coordinate, zoom: 16});
+      this.position = await this.map.addMarker({coordinate, draggable: true});
+      await this.map.enableCurrentLocation(true);
+      await this.map.setCamera({coordinate, zoom: 16});
       this.onPosition.emit(coordinate);
     }
   }
+  */
 
-  async loadMap() {
-    if (this.mapRef) {
-      const map = await GoogleMap.create({
-        id: this.id,
-        element: this.mapRef.nativeElement,
-        apiKey: this.googleMapApi,
-        config: {
-          center: {
-            lat: 33.6,
-            lng: -117.9,
-          },
-          zoom: 3.5,
+  async createMap(ref: HTMLElement) {
+    const current = await this.locationService.getPosition();
+    const map = await GoogleMap.create({
+      id: this.id,
+      element: ref,
+      apiKey: this.googleMapApi,
+      config: {
+        center: {
+          lat: this.lat ?? current.coords.latitude,
+          lng: this.lng ?? current.coords.longitude,
         },
-      });
-      this.newMap = map;
-
-      map.setOnMarkerDragEndListener((marker) => {
-        if (this.selectPosition && this.position) {
-          const coordinate = {
-            lat: marker.latitude,
-            lng: marker.longitude,
-            altitude: -1,
-            accuracy: 0,
-          };
-          this.onPosition.emit(coordinate);
-        }
-      });
-
-      await this.updateSelectPosition();
-    }
+        zoom: this.zoom,
+      },
+    });
+    this.resolve(map);
+    this.events.setMap(map);
   }
 
 }

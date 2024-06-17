@@ -12,7 +12,10 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <app-google-map (onPosition)="doPosition($event)">
+
+      <app-google-map [lat]="lat" [lng]="lng">
+        <app-google-map-marker [lat]="lat" [lng]="lng">
+        </app-google-map-marker>
       </app-google-map>
 
       <ion-button (click)="onConfirm()">
