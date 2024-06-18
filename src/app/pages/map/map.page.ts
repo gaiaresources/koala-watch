@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {IonContent, IonHeader, IonTitle, IonToolbar, Platform} from '@ionic/angular/standalone';
@@ -8,6 +8,7 @@ import {GoogleMapComponent} from "../../components/google-map/google-map.compone
 import {GoogleMapMarkerComponent} from "../../components/google-map-marker/google-map-marker.component";
 import {map, Observable, shareReplay} from "rxjs";
 import {RecordsService} from "../../services/records/records.service";
+import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-map',
@@ -18,10 +19,17 @@ import {RecordsService} from "../../services/records/records.service";
 })
 export class MapPage implements OnInit {
 
+  options = {
+    zoomControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
+    mapTypeControl: false,
+  };
+
   public records$: Observable<{
     snippet: string,
     title: string,
-    icon: any,
+    iconUrl: any,
     lat: number,
     lng: number,
   }[]>;
@@ -45,9 +53,9 @@ export class MapPage implements OnInit {
             return {
               snippet: "",
               title: "",
-              icon: this.getIconUrl(record),
+              iconUrl: this.getIconUrl(record),
               lat: (data['Latitude'] ? parseFloat(data['Latitude']) : 0),
-              lng: (data['Longitude'] ? parseFloat(data['Longitude']) : 0),
+              lng: (data['Longitude'] ? parseFloat(data['Longitude']) :  0),
             }
           });
       }),
@@ -62,12 +70,6 @@ export class MapPage implements OnInit {
     let url = 'assets/imgs/';
     url += `${record.datasetName === DATASET_NAME_CENSUS ? 'tree' : 'eye'}-pin-`;
     url += `${record.valid ? 'complete' : 'incomplete'}.png`;
-    return {
-      url,
-      scaledSize: {
-        width: 45,
-        height: 45
-      },
-    };
+    return url;
   }
 }

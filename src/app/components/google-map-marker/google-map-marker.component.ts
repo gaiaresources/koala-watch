@@ -4,12 +4,19 @@ import {LocationService} from "../../services/location/location.service";
 import {Coordinates} from "../../models/coordinates";
 import {MarkerCallbackData} from "@capacitor/google-maps/dist/typings/definitions";
 import {ElevationService} from "../../services/elevation/elevation.service";
+import {BehaviorSubject, combineLatest, concatMap, Observable} from "rxjs";
+import {GoogleMap} from "@capacitor/google-maps";
+import {AsyncPipe, NgIf} from "@angular/common";
 
 @Component({
   standalone: true,
   selector: 'app-google-map-marker',
   templateUrl: './google-map-marker.component.html',
   styleUrls: ['./google-map-marker.component.scss'],
+  imports: [
+    NgIf,
+    AsyncPipe
+  ]
 })
 export class GoogleMapMarkerComponent implements OnInit, OnChanges {
 
@@ -22,32 +29,59 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
   @Input()
   lng?: number;
 
+  @Input()
+  title?: string;
+
+  @Input()
+  iconUrl?: string;
+
+  @Input()
+  iconSize?: { width: number, height: number };
+
+  @Input()
+  iconOrigin?: { x: number, y: number };
+
+  @Input()
+  iconAnchor?: { x: number, y: number };
+
   @Output()
   onChanged = new EventEmitter<Coordinates>();
 
+  private _options = new BehaviorSubject<any>(null);
   private _marker: string = "";
+  public marker$: Observable<string>;
 
   constructor(
     private readonly mapComponent: GoogleMapComponent,
     private locationService: LocationService,
     private elevationService: ElevationService,
   ) {
-    this._marker = "";
+    this.marker$ = combineLatest([
+      this.mapComponent.map,
+      this._options.asObservable(),
+    ]).pipe(
+      concatMap(async ([map, options]) => {
+        if (!map || !options) return "";
+        return this.setMarker(map as GoogleMap, options);
+      }),
+    );
   }
 
   ngOnInit() {
-    if (!this.mapComponent.map) {
-      throw new Error('Google map missing in action.');
-    }
     this.setListeners();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.setMarker();
-  }
-
-  getMap() {
-    return this.mapComponent.map;
+    const options: any = {
+      lat: this.lat,
+      lng: this.lng,
+    };
+    this.getOptionalConfig().forEach(key => {
+      if (this.hasOwnProperty(key)) {
+        options[key] = (this as any)[key]
+      }
+    });
+    this._options.next(options);
   }
 
   async setListeners() {
@@ -63,25 +97,52 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
         lat,
         lng,
       });
+
+      // Allow elevation to be handled if supported.
+      self.elevationService.getElevation(lat, lng).then((value) => {
+        if (!value) return;
+        self.onChanged.emit({
+          accuracy: 0,
+          altitude: value,
+          lat,
+          lng,
+        });
+      });
     });
   }
 
-  async setMarker() {
-    const map = await this.getMap();
+  async setMarker(map: GoogleMap, options: any) {
     const marker = this._marker;
     if (marker) {
       await map.removeMarker(marker);
     }
 
     const current = await this.locationService.getPosition();
-
-    map.addMarker({
+    const config: any = {
       coordinate: {
-        lat: this.lat ?? current.coords.latitude,
-        lng: this.lng ?? current.coords.longitude,
+        lat: options.lat ?? current.coords.latitude,
+        lng: options.lng ?? current.coords.longitude,
       },
-      draggable: this.draggable,
-    }).then(marker => this._marker = marker);
+    };
+    this.getOptionalConfig().forEach(key => {
+      if (options.hasOwnProperty(key)) {
+        config[key] = options[key];
+      }
+    });
+
+    return map.addMarker(config).then(marker => this._marker = marker);
+  }
+
+  getOptionalConfig() {
+    return [
+      'draggable',
+      'iconSize',
+      'iconUrl',
+      'iconAnchor',
+      'iconOrigin',
+      'title',
+      'snippet',
+    ];
   }
 
 }

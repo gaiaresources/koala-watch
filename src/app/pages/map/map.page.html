@@ -5,11 +5,14 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-google-map>
+  <app-google-map [id]="'map-page'" [lat]="-25" [lng]="132" [zoom]="3.5" [options]="options">
     <ng-container *ngIf="records$ | async as markers">
       <app-google-map-marker *ngFor="let marker of markers"
                              [lat]="marker.lat"
-                             [lng]="marker.lng">
+                             [lng]="marker.lng"
+                             [iconUrl]="marker.iconUrl"
+                             [iconAnchor]="{ x: 22.5, y: 45 }"
+                             [iconSize]="{ width: 45, height: 45}">
       </app-google-map-marker>
     </ng-container>
   </app-google-map>
