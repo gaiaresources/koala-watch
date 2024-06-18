@@ -10,6 +10,8 @@
       <app-google-map-marker *ngFor="let marker of markers"
                              [lat]="marker.lat"
                              [lng]="marker.lng"
+                             [title]="marker.title"
+                             [snippet]="marker.snippet"
                              [iconUrl]="marker.iconUrl"
                              [iconAnchor]="{ x: 22.5, y: 45 }"
                              [iconSize]="{ width: 45, height: 45}">

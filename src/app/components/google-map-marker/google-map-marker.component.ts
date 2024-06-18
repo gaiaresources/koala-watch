@@ -33,6 +33,9 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
   title?: string;
 
   @Input()
+  snippet?: string;
+
+  @Input()
   iconUrl?: string;
 
   @Input()
@@ -89,25 +92,11 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
     const self = this;
     events.on<MarkerCallbackData>('MarkerDragEnd', function (e) {
       if (e.markerId !== self._marker) return;
-      const lat = e.latitude;
-      const lng = e.longitude;
-      self.onChanged.emit({
-        accuracy: 0,
-        altitude: 0,
-        lat,
-        lng,
-      });
-
-      // Allow elevation to be handled if supported.
-      self.elevationService.getElevation(lat, lng).then((value) => {
-        if (!value) return;
-        self.onChanged.emit({
-          accuracy: 0,
-          altitude: value,
-          lat,
-          lng,
-        });
-      });
+      self.doDragEnd(e);
+    });
+    events.on<MarkerCallbackData>('MarkerClick', function(e) {
+      if (e.markerId !== self._marker) return;
+       console.log('on click', e);
     });
   }
 
@@ -133,7 +122,7 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
     return map.addMarker(config).then(marker => this._marker = marker);
   }
 
-  getOptionalConfig() {
+  private getOptionalConfig() {
     return [
       'draggable',
       'iconSize',
@@ -143,6 +132,28 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
       'title',
       'snippet',
     ];
+  }
+
+  private doDragEnd(marker: MarkerCallbackData) {
+    const lat = marker.latitude;
+    const lng = marker.longitude;
+    this.onChanged.emit({
+      accuracy: 0,
+      altitude: 0,
+      lat,
+      lng,
+    });
+
+    // Allow elevation to be handled if supported.
+    this.elevationService.getElevation(lat, lng).then((value) => {
+      if (!value) return;
+      this.onChanged.emit({
+        accuracy: 0,
+        altitude: value,
+        lat,
+        lng,
+      });
+    });
   }
 
 }

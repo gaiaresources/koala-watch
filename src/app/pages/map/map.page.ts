@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {IonContent, IonHeader, IonTitle, IonToolbar, Platform} from '@ionic/angular/standalone';
@@ -8,7 +8,7 @@ import {GoogleMapComponent} from "../../components/google-map/google-map.compone
 import {GoogleMapMarkerComponent} from "../../components/google-map-marker/google-map-marker.component";
 import {map, Observable, shareReplay} from "rxjs";
 import {RecordsService} from "../../services/records/records.service";
-import {tap} from "rxjs/operators";
+import * as dayjs from "dayjs";
 
 @Component({
   selector: 'app-map',
@@ -41,7 +41,6 @@ export class MapPage implements OnInit {
     this.records$ = this.recordsService.changed$.pipe(
       map(() => {
         const records = this.recordsService.getAllRecords();
-
         return records
           .filter(record => {
             const data = record.data;
@@ -51,11 +50,11 @@ export class MapPage implements OnInit {
           .map((record) => {
             const data = record.data || {};
             return {
-              snippet: "",
-              title: "",
+              title: record.datasetName,
+              snippet: dayjs(record.datetime).format(),
               iconUrl: this.getIconUrl(record),
               lat: (data['Latitude'] ? parseFloat(data['Latitude']) : 0),
-              lng: (data['Longitude'] ? parseFloat(data['Longitude']) :  0),
+              lng: (data['Longitude'] ? parseFloat(data['Longitude']) : 0),
             }
           });
       }),

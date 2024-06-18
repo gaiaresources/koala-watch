@@ -42,9 +42,7 @@ export class ObservationListPage implements OnInit {
   ) {
     this.records$ = this.recordsService.changed$.pipe(
       map(() => {
-        const records = this.recordsService
-          .getRecords(DATASET_NAME_OBSERVATION)
-          .concat(this.recordsService.getRecords(DATASET_NAME_CENSUS));
+        const records = this.recordsService.getAllRecords();
         // TODO: The records should be ordered by datetime.
         return records;
       })
