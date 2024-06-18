@@ -56,8 +56,8 @@ export class ObservationFormPage implements OnInit {
   public DATASET_NAME_OBSERVATION = DATASET_NAME_OBSERVATION;
   public faSave = faSave;
   public faTrashCan = faTrashCan;
-  public faCamera = faCamera
-  public faImage = faImage
+  public faCamera = faCamera;
+  public faImage = faImage;
 
   @Input()
   readonly: boolean = false;

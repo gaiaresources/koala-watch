@@ -103,7 +103,7 @@ export class RecordsService {
     return records;
   }
 
-  private getChildRecords(recordId: string): ClientRecord[] {
+  public getChildRecords(recordId: string): ClientRecord[] {
     const records: ClientRecord[] = [];
     this.records.forEach((value) => {
       if (value.parentId === recordId) {

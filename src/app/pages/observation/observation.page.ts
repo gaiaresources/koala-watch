@@ -22,6 +22,7 @@ import {faList, faMap} from "@fortawesome/free-solid-svg-icons";
 import {UploadService} from "../../services/upload/upload.service";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {firstValueFrom} from "rxjs";
+import {ActiveRecordService} from "../../services/active-record/active-record.service";
 
 @Component({
   selector: 'app-observation',
@@ -38,6 +39,7 @@ export class ObservationPage implements OnInit {
   constructor(
     private uploadService: UploadService,
     private navigationService: NavigationService,
+    private activeRecordService: ActiveRecordService,
   ) {
   }
 
@@ -48,10 +50,12 @@ export class ObservationPage implements OnInit {
   }
 
   doNewObservation() {
+    this.activeRecordService.clear();
     this.navigationService.goObservation();
   }
 
   doNewTreeSurvey() {
+    this.activeRecordService.clear();
     this.navigationService.goSurvey();
   }
 

@@ -4,6 +4,7 @@ import { FormDescriptor } from "../../models/form-descriptor";
 import { FieldOption } from "../../models/field-option";
 import { FieldDescriptor } from "../../models/field-descriptor";
 import { Dataset } from "../../models/dataset";
+import * as dayjs from "dayjs";
 
 @Injectable({
   providedIn: 'root'
@@ -107,6 +108,7 @@ export class FormGeneratorService {
   }
 
   private getFieldDefaultValue(field: any): any | null {
+    if (this.isDateField(field)) return dayjs().format();
     if (!this.isHiddenField(field)) return null;
     return field.constraints.enum[0];
   }

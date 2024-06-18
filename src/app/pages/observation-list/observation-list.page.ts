@@ -21,6 +21,7 @@ import {NavigationService} from "../../services/navigation/navigation.service";
 import {firstValueFrom, map, Observable} from "rxjs";
 import {RecordsService} from "../../services/records/records.service";
 import {ClientRecord} from "../../models/client-record";
+import {ActiveRecordService} from "../../services/active-record/active-record.service";
 
 @Component({
   selector: 'app-observation-list',
@@ -39,6 +40,7 @@ export class ObservationListPage implements OnInit {
     private uploadService: UploadService,
     private navigationService: NavigationService,
     private recordsService: RecordsService,
+    private activeRecordService: ActiveRecordService,
   ) {
     this.records$ = this.recordsService.changed$.pipe(
       map(() => {
@@ -57,10 +59,12 @@ export class ObservationListPage implements OnInit {
   }
 
   doNewObservation() {
+    this.activeRecordService.clear();
     this.navigationService.goObservation();
   }
 
   doNewCensus() {
+    this.activeRecordService.clear();
     this.navigationService.goCensus();
   }
 

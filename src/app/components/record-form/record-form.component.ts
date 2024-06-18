@@ -21,7 +21,7 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faCalendar, faStar} from "@fortawesome/free-regular-svg-icons";
 import {faAsterisk} from "@fortawesome/free-solid-svg-icons";
 import {ClientRecord} from "../../models/client-record";
-
+import {RecordsService} from "../../services/records/records.service";
 
 @Component({
   standalone: true,
@@ -72,12 +72,14 @@ export class RecordFormComponent implements OnInit, OnChanges {
   dataset$: Observable<Dataset | undefined>;
   record$: Observable<ClientRecord | undefined>;
   subscriptions: Subscription[] = [];
+  clientId: string = "";
 
   constructor(
     private formBuilder: FormBuilder,
     private datasetService: DatasetService,
     private formGeneratorService: FormGeneratorService,
     private activeRecordService: ActiveRecordService,
+    private recordsService: RecordsService,
   ) {
     this.form = this.formBuilder.group({});
     this.dataset$ = combineLatest([
@@ -92,11 +94,13 @@ export class RecordFormComponent implements OnInit, OnChanges {
         }
       }),
     );
+
     this.record$ = combineLatest([
       this.dataset$,
       this.activeRecordService.record$,
     ]).pipe(
       tap(([dataset, record]) => {
+        if (record && this.clientId === record.client_id) return;
         if (this.subscriptions.length) {
           this.subscriptions.forEach(sub => sub.unsubscribe());
           this.subscriptions = [];
@@ -106,6 +110,7 @@ export class RecordFormComponent implements OnInit, OnChanges {
         this.fields = undefined;
         if (!dataset) return;
 
+        this.clientId = record.client_id;
         this.form = this.formGeneratorService.getFormGroup(this.formBuilder, record?.data || {}, dataset);
         this.fields = this.formGeneratorService.getFormFields(dataset);
         this.subscriptions = [
@@ -131,9 +136,20 @@ export class RecordFormComponent implements OnInit, OnChanges {
       dataset: this._dataset?.id,
       datasetName: this._dataset?.name,
       data: values,
+      count: 0,
       valid: this.form.valid,
       modified: this.form.dirty,
     }
+
+    // Default behaviour of count callback is how many child records exist.
+    if (values.hasOwnProperty('Count')) {
+      record.count = parseInt(values['Count'], 10);
+    } else {
+      const clientId = this.activeRecordService.getClientId();
+      const records = this.recordsService.getChildRecords(clientId);
+      record.count = records.length;
+    }
+
     this.activeRecordService.setValues(record);
   }
 
