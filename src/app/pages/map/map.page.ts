@@ -51,7 +51,7 @@ export class MapPage implements OnInit {
             const data = record.data || {};
             return {
               title: record.datasetName,
-              snippet: dayjs(record.datetime).format(),
+              snippet: dayjs(record.datetime).format('DD/MM/YYYY HH:mm'),
               iconUrl: this.getIconUrl(record),
               lat: (data['Latitude'] ? parseFloat(data['Latitude']) : 0),
               lng: (data['Longitude'] ? parseFloat(data['Longitude']) : 0),

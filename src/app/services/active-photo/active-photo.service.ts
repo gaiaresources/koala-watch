@@ -11,11 +11,18 @@ export interface PhotoMap {
   [key: string]: ClientPhoto | null;
 }
 
-const matchPhoto = function (id: string) {
+const matchId = function (id: number) {
+  return function (photo: ClientPhoto) {
+    return photo.id && photo.id === id;
+  };
+}
+
+const matchClientId = function (id: string) {
   return function (photo: ClientPhoto) {
     return photo.clientId && photo.clientId === id;
   };
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +55,7 @@ export class ActivePhotoService {
     this.photos$ = this._record.asObservable().pipe(
       switchMap((record) => {
         return combineLatest([
-          this.getApiPhotos$(record.id),
+          this.getApiPhotos$(record.id, record.client_id),
           this.getStoredPhotos$(record.client_id),
           this._addedPhotos.asObservable(),
           this._deletedPhotos.asObservable(),
@@ -124,9 +131,9 @@ export class ActivePhotoService {
     this._currentPhoto.next(index);
   }
 
-  private getApiPhotos$(recordId: number | undefined): Observable<ClientPhoto[]> {
+  private getApiPhotos$(recordId: number | undefined, clientId: string): Observable<ClientPhoto[]> {
     if (!recordId) return of([]);
-    return this.apiService.getRecordMedia(recordId.toString()).pipe(
+    return this.apiService.getRecordMedia(recordId.toString(), clientId).pipe(
       shareReplay(1),
     );
   }
@@ -156,7 +163,7 @@ export class ActivePhotoService {
     storedPhotos.forEach((photo) => {
       if (isDeleted(photo)) return;
 
-      let api = apiPhotos.find(matchPhoto(photo.clientId));
+      let api = apiPhotos.find(matchClientId(photo.clientId));
       if (api && !photo.id) {
         photo.id = api.id;
         updatePhotos.push(photo);
@@ -166,8 +173,8 @@ export class ActivePhotoService {
 
     // Add any uploaded API photos.
     apiPhotos.forEach((photo) => {
-      if (isDeleted(photo)) return;
-      if (storedPhotos.find(matchPhoto(photo.clientId))) return;
+      if (isDeleted(photo) || !photo.id) return;
+      if (storedPhotos.find(matchId(photo.id))) return;
 
       updatePhotos.push(photo);
       photos.push(photo);

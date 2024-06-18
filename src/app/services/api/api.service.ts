@@ -11,6 +11,7 @@ import {Record} from "../../models/record";
 import {NetworkService} from "../network/network.service";
 import {ClientPhoto} from "../../models/client-photo";
 import {Media} from "../../models/media";
+import {UUID} from "angular2-uuid";
 
 
 /**
@@ -56,7 +57,7 @@ export class APIService {
    * @param params
    * @private
    */
-  private getRequest(url: string, params: any = {}): Observable<object | null> {
+  private getRequest(url: string, params: any = {}): Observable<any | null> {
     this.resetError();
     return this.networkService.status$.pipe(
       switchMap((status) => {
@@ -75,7 +76,7 @@ export class APIService {
    * @param body
    * @private
    */
-  private postRequest(url: string, body: object): Observable<object | null> {
+  private postRequest(url: string, body: object): Observable<any | null> {
     this.resetError();
     return this.networkService.status$.pipe(
       switchMap((status) => {
@@ -808,18 +809,28 @@ export class APIService {
      */
   }
 
-  public getRecordMedia(recordId: string): Observable<ClientPhoto[]> {
+  public getRecordMedia(recordId: string, recordClientId: string): Observable<ClientPhoto[]> {
     const params = {
       record: recordId
     };
     return this.getRequest(
       this.buildAbsoluteUrl('media'), params
     ).pipe(
-      map(data => {
+      map<any[] | null, ClientPhoto[]>(data => {
         if (!data) return [];
-        console.log('getRecordMedia');
-        console.log('Update to ensure photo converted to object');
-        return data as ClientPhoto[];
+        return data.map(item => {
+          const uuid = UUID.UUID();
+          return new ClientPhoto({
+            id: item.id,
+            clientId: uuid,
+            recordClientId: recordClientId,
+            fileName: uuid + ".jpg",
+            base64: item.file,
+            created: item.created,
+            last_modified: item.last_modified,
+            datetime: item.last_modified,
+          });
+        });
       })
     );
   }

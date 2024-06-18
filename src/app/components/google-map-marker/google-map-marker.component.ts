@@ -7,6 +7,7 @@ import {ElevationService} from "../../services/elevation/elevation.service";
 import {BehaviorSubject, combineLatest, concatMap, Observable} from "rxjs";
 import {GoogleMap} from "@capacitor/google-maps";
 import {AsyncPipe, NgIf} from "@angular/common";
+import {AlertController} from "@ionic/angular/standalone";
 
 @Component({
   standalone: true,
@@ -58,6 +59,7 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
     private readonly mapComponent: GoogleMapComponent,
     private locationService: LocationService,
     private elevationService: ElevationService,
+    private alertController: AlertController,
   ) {
     this.marker$ = combineLatest([
       this.mapComponent.map,
@@ -96,7 +98,13 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
     });
     events.on<MarkerCallbackData>('MarkerClick', function(e) {
       if (e.markerId !== self._marker) return;
-       console.log('on click', e);
+      if (self.title && self.snippet) {
+        self.alertController.create({
+          header: self.title,
+          message: self.snippet,
+          buttons: ['OK'],
+        }).then(alert => alert.present());
+      }
     });
   }
 
