@@ -4,7 +4,7 @@ import {FormDescriptor} from "../../models/form-descriptor";
 import {DatasetService} from "../../services/dataset/dataset.service";
 import {FormGeneratorService} from "../../services/form-generator/form-generator.service";
 import {AsyncPipe, JsonPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
-import {BehaviorSubject, combineLatest, map, Observable, Subscription} from "rxjs";
+import {BehaviorSubject, combineLatest, map, Observable, shareReplay, Subscription} from "rxjs";
 import {Dataset} from "../../models/dataset";
 import {tap} from "rxjs/operators";
 import {DateFieldComponent} from "../date-field/date-field.component";
@@ -20,6 +20,7 @@ import {IonItem, IonItemDivider, IonItemGroup, IonList} from "@ionic/angular/sta
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faCalendar, faStar} from "@fortawesome/free-regular-svg-icons";
 import {faAsterisk} from "@fortawesome/free-solid-svg-icons";
+import {ClientRecord} from "../../models/client-record";
 
 
 @Component({
@@ -69,6 +70,7 @@ export class RecordFormComponent implements OnInit, OnChanges {
   _datasetName = new BehaviorSubject<string>("");
   _dataset?: Dataset;
   dataset$: Observable<Dataset | undefined>;
+  record$: Observable<ClientRecord | undefined>;
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -83,8 +85,18 @@ export class RecordFormComponent implements OnInit, OnChanges {
       this.datasetService.datasets$,
     ]).pipe(
       map(([datasetName, datasets]) => datasets.find(d => d.name === datasetName)),
+      shareReplay(1),
       tap((dataset) => {
-        this._dataset = dataset;
+        if (dataset) {
+          this._dataset = dataset;
+        }
+      }),
+    );
+    this.record$ = combineLatest([
+      this.dataset$,
+      this.activeRecordService.record$,
+    ]).pipe(
+      tap(([dataset, record]) => {
         if (this.subscriptions.length) {
           this.subscriptions.forEach(sub => sub.unsubscribe());
           this.subscriptions = [];
@@ -94,15 +106,14 @@ export class RecordFormComponent implements OnInit, OnChanges {
         this.fields = undefined;
         if (!dataset) return;
 
-        const values = this.activeRecordService.getRecord();
-        this.form = this.formGeneratorService.getFormGroup(this.formBuilder, values.data || {}, dataset);
+        this.form = this.formGeneratorService.getFormGroup(this.formBuilder, record?.data || {}, dataset);
         this.fields = this.formGeneratorService.getFormFields(dataset);
         this.subscriptions = [
           this.form.valueChanges.subscribe((values) => this.valueChanges(values)),
           this.form.statusChanges.subscribe(value => this.statusChanges(value)),
         ];
-        this.form.updateValueAndValidity({onlySelf: false, emitEvent: true});
       }),
+      map(([dataset, record]) => record),
     );
   }
 

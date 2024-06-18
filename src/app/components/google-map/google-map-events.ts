@@ -28,7 +28,6 @@ export class GoogleMapEvents {
   private addListener(eventName: string) {
     if (!this.map) return;
     const func = 'setOn' + eventName + 'Listener';
-    if (!this.map.hasOwnProperty(func)) return;
     (this.map as any)[func]((event: any) => {
       this.zone.run(() => {
         const listeners = this.getListeners(eventName);
@@ -39,9 +38,9 @@ export class GoogleMapEvents {
 
   setMap(map: GoogleMap) {
     this.map = map;
-    for (const eventName in this.listeners) {
+    this.listeners.forEach((value, eventName) => {
       this.addListener(eventName);
-    }
+    });
   }
 
 }

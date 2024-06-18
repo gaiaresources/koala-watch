@@ -44,9 +44,7 @@ export class GoogleMapComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('map', {static: false})
   set mapRef(ref: ElementRef) {
-    setTimeout(() => {
-      this.createMap(ref.nativeElement);
-    }, 500);
+    this.createMap(ref.nativeElement);
   }
 
   events = new GoogleMapEvents(inject(NgZone));
@@ -91,36 +89,6 @@ export class GoogleMapComponent implements OnInit, OnChanges, OnDestroy {
       });
     });
   }
-
-  /*
-  async updateSelectPosition() {
-    if (!this.map) return;
-
-    // There is no select position behaviour so remove any existing markers.
-    if (!this.selectPosition) {
-      await this.map.enableCurrentLocation(false);
-      if (this.position) {
-        await this.map.removeMarker(this.position);
-        this.position = "";
-      }
-      return;
-    }
-
-    if (!this.position) {
-      const position = await this.locationService.getPosition();
-      const coordinate = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-        altitude: -1,
-        accuracy: 0,
-      };
-      this.position = await this.map.addMarker({coordinate, draggable: true});
-      await this.map.enableCurrentLocation(true);
-      await this.map.setCamera({coordinate, zoom: 16});
-      this.onPosition.emit(coordinate);
-    }
-  }
-  */
 
   async createMap(ref: HTMLElement) {
     const current = await this.locationService.getPosition();

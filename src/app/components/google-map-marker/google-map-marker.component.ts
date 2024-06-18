@@ -2,7 +2,8 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {GoogleMapComponent} from "../google-map/google-map.component";
 import {LocationService} from "../../services/location/location.service";
 import {Coordinates} from "../../models/coordinates";
-import {MapClickCallbackData, MapListenerCallback} from "@capacitor/google-maps/dist/typings/definitions";
+import {MarkerCallbackData} from "@capacitor/google-maps/dist/typings/definitions";
+import {ElevationService} from "../../services/elevation/elevation.service";
 
 @Component({
   standalone: true,
@@ -24,15 +25,14 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
   @Output()
   onChanged = new EventEmitter<Coordinates>();
 
-  private marker: Promise<string>;
-
-  private dragListener: any;
+  private _marker: string = "";
 
   constructor(
     private readonly mapComponent: GoogleMapComponent,
     private locationService: LocationService,
+    private elevationService: ElevationService,
   ) {
-    this.marker = Promise.resolve("");
+    this._marker = "";
   }
 
   ngOnInit() {
@@ -40,7 +40,6 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
       throw new Error('Google map missing in action.');
     }
     this.setListeners();
-    this.setMarker();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -53,31 +52,36 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
 
   async setListeners() {
     const events = this.mapComponent.events;
+    const self = this;
+    events.on<MarkerCallbackData>('MarkerDragEnd', function (e) {
+      if (e.markerId !== self._marker) return;
+      const lat = e.latitude;
+      const lng = e.longitude;
+      self.onChanged.emit({
+        accuracy: 0,
+        altitude: 0,
+        lat,
+        lng,
+      });
+    });
   }
 
   async setMarker() {
     const map = await this.getMap();
-    const marker = await this.marker;
+    const marker = this._marker;
     if (marker) {
       await map.removeMarker(marker);
     }
 
-    let coords: any;
-    if (this.lat === undefined || this.lng === undefined) {
-      const current = await this.locationService.getPosition();
-      coords = current.coords;
-    }
+    const current = await this.locationService.getPosition();
 
-    this.marker = map.addMarker({
+    map.addMarker({
       coordinate: {
-        lat: this.lat ?? coords.latitude,
-        lng: this.lng ?? coords.longitude,
+        lat: this.lat ?? current.coords.latitude,
+        lng: this.lng ?? current.coords.longitude,
       },
       draggable: this.draggable,
-    }).then((marker) => {
-      console.log('id', marker, this.lat, this.lng, coords);
-      return marker;
-    });
+    }).then(marker => this._marker = marker);
   }
 
 }

@@ -1,4 +1,4 @@
-<ng-container *ngIf="dataset$ | async as dataset">
+<ng-container *ngIf="record$ | async">
   <ng-container *ngIf="fields; else noFields">
     <form [formGroup]="form">
 
@@ -17,7 +17,7 @@
 
       <ion-item-group *ngIf="fields.locationFields && fields.locationFields.length">
         <ion-item-divider color="secondary">
-          <app-location-selector [formGroup]="form" [readonly]="readonly"/>
+          <app-location-selector [formGroup]="form" [readonly]="readonly" />
         </ion-item-divider>
 
         <ion-list>

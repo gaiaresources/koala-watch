@@ -9,13 +9,16 @@
 
     <ion-button id="open-modal" class="location-button">
       <fa-icon [icon]="faMapPin"/>
-        Map
-      <app-location-map-selector (onSelect)="doMapSelect($event)"></app-location-map-selector>
+      Map
+      <app-location-map-selector (onSelect)="doMapSelect($event)"
+                                 [lat]="lat"
+                                 [lng]="lng">
+      </app-location-map-selector>
     </ion-button>
 
     <ion-button class="location-button" (click)="doGpsSelect()">
       <fa-icon [icon]="faLocationCrosshairs"/>&nbsp;
-        GPS
+      GPS
     </ion-button>
 
   </ion-buttons>

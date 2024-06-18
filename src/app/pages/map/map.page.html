@@ -4,27 +4,14 @@
       <ion-title size="large">map</ion-title>
     </ion-toolbar>
   </ion-header>
-<!--  Showing {{ dataset }}.-->
 
-<!--  <capacitor-google-map #map></capacitor-google-map>-->
-  <!--
-  <div class="map-container" *ngIf="gmapsLoaded">
-    <google-map
-      height="100%"
-      width="100%"
-      [center]="config.center"
-      [zoom]="config.zoom"
-      [options]="config.options"
-    >
-      <map-marker
-        *ngFor="let marker of markers"
-        [position]="marker.coordinate"
-        [title]="marker.title"
-        [icon]="marker.icon"
+  <app-google-map>
+    <ng-container *ngIf="records$ | async as markers">
+      <app-google-map-marker *ngFor="let marker of markers"
+                             [lat]="marker.lat"
+                             [lng]="marker.lng">
+      </app-google-map-marker>
+    </ng-container>
+  </app-google-map>
 
-      >
-      </map-marker>
-    </google-map>
-  </div>
-  -->
 </ion-content>

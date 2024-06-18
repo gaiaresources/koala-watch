@@ -89,6 +89,10 @@ export class RecordsService {
     return this.storageService.store(`${this.RECORD_PREFIX}${record.client_id}`, record);
   }
 
+  getAllRecords() {
+    return Array.from(this.records.values());
+  }
+
   getRecords(dataset: string) {
     const records: ClientRecord[] = [];
     this.records.forEach((value) => {

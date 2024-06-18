@@ -42,6 +42,9 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
 
   accuracy: number = -1;
 
+  lat?: number;
+  lng?: number;
+
   constructor(
     private locationService: LocationService,
     private elevationService: ElevationService,
@@ -71,6 +74,15 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
     this.subscription = this.formGroup.valueChanges.subscribe((values) => {
       this.accuracy = values.Accuracy ?? -1;
     });
+
+    if (this.formGroup.contains("Latitude")) {
+      const value = this.formGroup.get('Latitude')?.value;
+      this.lat = value ? parseFloat(value) : undefined;
+    }
+    if (this.formGroup.contains('Longitude')) {
+      const value = this.formGroup.get('Longitude')?.value;
+      this.lng = value ? parseFloat(value) : undefined;
+    }
   }
 
   setLocationValues(lat: number, lng: number, accuracy: number, altitude: number) {

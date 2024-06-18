@@ -14,7 +14,10 @@
     <ion-content class="ion-padding">
 
       <app-google-map [lat]="lat" [lng]="lng">
-        <app-google-map-marker [lat]="lat" [lng]="lng">
+        <app-google-map-marker [lat]="lat"
+                               [lng]="lng"
+                               [draggable]="true"
+                               (onChanged)="doPosition($event)">
         </app-google-map-marker>
       </app-google-map>
 
