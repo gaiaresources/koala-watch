@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, Input, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {
   AlertController,
   IonButton,
@@ -8,19 +8,21 @@ import {
   IonContent,
   IonFab,
   IonFabButton,
-  IonHeader, IonMenuButton, IonSegment, IonSegmentButton,
+  IonHeader,
+  IonMenuButton,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { RecordFormComponent } from "../../components/record-form/record-form.component";
-import { RecordPhotosComponent } from "../../components/record-photos/record-photos.component";
-import { DATASET_NAME_CENSUS } from "../../tokens/app";
-import { faCamera, faImage, faSave, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { ActiveRecordService } from "../../services/active-record/active-record.service";
-import { CameraService } from "../../services/camera/camera.service";
-import { UUID } from "angular2-uuid";
-import { StorageService } from "../../services/storage/storage.service";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {RecordFormComponent} from "../../components/record-form/record-form.component";
+import {RecordPhotosComponent} from "../../components/record-photos/record-photos.component";
+import {DATASET_NAME_CENSUS} from "../../tokens/app";
+import {faCamera, faImage, faSave, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import {ActiveRecordService} from "../../services/active-record/active-record.service";
+import {CameraService} from "../../services/camera/camera.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-census-form-page',
@@ -37,17 +39,16 @@ export class CensusFormPage implements OnInit {
   public faSave = faSave;
   public faTrashCan = faTrashCan;
 
-  @Input()
-  readonly: boolean = false;
-
   segment: string = 'form';
+
+  writeable$: Observable<boolean>;
 
   constructor(
     private activeRecordService: ActiveRecordService,
     private alertController: AlertController,
     private photoService: CameraService,
-    private storageService: StorageService,
   ) {
+    this.writeable$ = this.activeRecordService.writeable$;
   }
 
   ngOnInit() {
@@ -70,7 +71,7 @@ export class CensusFormPage implements OnInit {
         {
           text: 'Yes',
           handler: () => {
-            this.deleteRecord();
+            this.doDeleteRecord();
           }
         },
         {
@@ -81,26 +82,11 @@ export class CensusFormPage implements OnInit {
     await alert.present();
   }
 
-  deleteRecord() {
+  doDeleteRecord() {
+    this.activeRecordService.delete();
   }
 
   doSave() {
-    /*
-    this.storageService.putRecord(new ClientRecord(
-      // TODO check record valid
-      valid: true, //this.recordForm.valid,
-      client_id: this.activeRecordService.getClientId(),
-      parentId: "",
-      // TODO where should this value be coming from?
-      dataset: 105,
-      datasetName: DATASET_NAME_CENSUS,
-      // TODO get date from Record if set.
-      datetime: new Date().toISOString(),
-      data: formValues,
-      // TODO Count?
-      count: 0,
-      photoIds: [],
-  ));
-     */
+    this.activeRecordService.save();
   }
 }

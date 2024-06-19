@@ -23,8 +23,7 @@ import {RecordPhotosComponent} from "../../components/record-photos/record-photo
 import {CameraService} from "../../services/camera/camera.service";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faCamera, faImage, faSave, faTrashCan} from "@fortawesome/free-solid-svg-icons";
-import {StorageService} from "../../services/storage/storage.service";
-import {DatasetService} from "../../services/dataset/dataset.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-observation-form-page',
@@ -59,18 +58,16 @@ export class ObservationFormPage implements OnInit {
   public faCamera = faCamera;
   public faImage = faImage;
 
-  @Input()
-  readonly: boolean = false;
-
   segment: string = 'form';
+
+  writeable$: Observable<boolean>;
 
   constructor(
     private activeRecordService: ActiveRecordService,
     private alertController: AlertController,
     private photoService: CameraService,
-    private storageService: StorageService,
-    private datasetService: DatasetService,
   ) {
+    this.writeable$ = this.activeRecordService.writeable$;
   }
 
   ngOnInit() {
@@ -93,7 +90,7 @@ export class ObservationFormPage implements OnInit {
         {
           text: 'Yes',
           handler: () => {
-            this.deleteRecord();
+            this.doDeleteRecord();
           }
         },
         {
@@ -104,48 +101,8 @@ export class ObservationFormPage implements OnInit {
     await alert.present();
   }
 
-  deleteRecord() {
-    // TODO: This should clear the activeRecord information.
-
-    /*
-    if (this.record) {
-      this.photoGallery.rollback();
-      this.storageService.deleteRecord(this.record.client_id!).subscribe(deleted => {
-        if (this.record.photoIds) {
-          from(this.record.photoIds).pipe(
-            // TODO test
-            mergeMap(photoId => this.storageService.deletePhoto(photoId as string))
-          ).subscribe();
-        }
-        this.showLeavingAlertMessage = false;
-
-        // TODO test
-        this.navCtrl.navigateRoot('/home')
-        //this.navCtrl.popToRoot();
-      }, (error) => {
-        this.alertController.create({
-          header: 'Cannot Delete',
-          message: 'Sorry, cannot delete this observation.',
-          backdropDismiss: true,
-          buttons: [
-            {
-              text: 'OK',
-              handler: () => {
-              }
-            }
-          ]
-        }).then((alert) => {
-          alert.present()
-        });
-      });
-    } else {
-      this.showLeavingAlertMessage = false;
-
-      // TODO test
-      this.navCtrl.navigateRoot('/home')
-      //this.navCtrl.popToRoot();
-    }
-     */
+  doDeleteRecord() {
+    this.activeRecordService.delete();
   }
 
   doSave() {

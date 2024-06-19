@@ -22,6 +22,7 @@ import {faCalendar, faStar} from "@fortawesome/free-regular-svg-icons";
 import {faAsterisk} from "@fortawesome/free-solid-svg-icons";
 import {ClientRecord} from "../../models/client-record";
 import {RecordsService} from "../../services/records/records.service";
+import * as dayjs from "dayjs";
 
 @Component({
   standalone: true,
@@ -59,10 +60,13 @@ export class RecordFormComponent implements OnInit, OnChanges {
   public faAsterisk = faAsterisk;
 
   @Input()
-  readonly: boolean = false;
+  dataset: string = "";
 
   @Input()
-  dataset: string = "";
+  countField?: string;
+
+  @Input()
+  dateField?: string;
 
   form: FormGroup;
   fields?: FormDescriptor;
@@ -73,6 +77,8 @@ export class RecordFormComponent implements OnInit, OnChanges {
   record$: Observable<ClientRecord | undefined>;
   subscriptions: Subscription[] = [];
   clientId: string = "";
+
+  readonly: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -110,6 +116,7 @@ export class RecordFormComponent implements OnInit, OnChanges {
         this.fields = undefined;
         if (!dataset) return;
 
+        this.readonly = !!record.id;
         this.clientId = record.client_id;
         this.form = this.formGeneratorService.getFormGroup(this.formBuilder, record?.data || {}, dataset);
         this.fields = this.formGeneratorService.getFormFields(dataset);
@@ -119,6 +126,7 @@ export class RecordFormComponent implements OnInit, OnChanges {
         ];
       }),
       map(([dataset, record]) => record),
+      shareReplay(1),
     );
   }
 
@@ -132,7 +140,7 @@ export class RecordFormComponent implements OnInit, OnChanges {
   }
 
   valueChanges(values: any) {
-    const record = {
+    const record: any = {
       dataset: this._dataset?.id,
       datasetName: this._dataset?.name,
       data: values,
@@ -142,12 +150,17 @@ export class RecordFormComponent implements OnInit, OnChanges {
     }
 
     // Default behaviour of count callback is how many child records exist.
-    if (values.hasOwnProperty('Count')) {
-      record.count = parseInt(values['Count'], 10);
+    if (this.countField && values.hasOwnProperty(this.countField)) {
+      record.count = parseInt(values[this.countField], 10);
     } else {
       const clientId = this.activeRecordService.getClientId();
       const records = this.recordsService.getChildRecords(clientId);
       record.count = records.length;
+      record.valid = record.valid && !records.some(record => !record.valid);
+    }
+
+    if (this.dateField && values.hasOwnProperty(this.dateField)) {
+      record.datetime = dayjs(values[this.dateField]).format();
     }
 
     this.activeRecordService.setValues(record);

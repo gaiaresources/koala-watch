@@ -3,7 +3,6 @@ import {BehaviorSubject} from "rxjs";
 import {RecordsService} from "../records/records.service";
 import {ActivePhotoService} from "../active-photo/active-photo.service";
 import {ClientRecord} from "../../models/client-record";
-import * as dayjs from "dayjs";
 
 
 @Injectable({
@@ -16,6 +15,9 @@ export class ActiveRecordService {
 
   public _status = new BehaviorSubject<string>("");
   public status$ = this._status.asObservable();
+
+  public _writeable = new BehaviorSubject<boolean>(false);
+  public writeable$ = this._writeable.asObservable();
 
   constructor(
     private recordsService: RecordsService,
@@ -40,6 +42,7 @@ export class ActiveRecordService {
 
   setRecord(record: ClientRecord) {
     this._record.next(record);
+    this._writeable.next(!record.id);
   }
 
   getRecord() {
@@ -57,6 +60,7 @@ export class ActiveRecordService {
       record[key] = data[key];
     }
     this._record.next(record);
+    this._writeable.next(!record.id);
   }
 
   getStatus() {
@@ -69,9 +73,13 @@ export class ActiveRecordService {
 
   async save() {
     const record = this._record.value;
-    record.datetime = dayjs().format();
     await this.recordsService.setRecord(record);
     await this.photoService.save();
+  }
+
+  async delete() {
+    const record = this._record.value;
+    this.recordsService.deleteRecord(record.client_id);
   }
 
 }

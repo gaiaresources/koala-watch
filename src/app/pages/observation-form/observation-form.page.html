@@ -11,7 +11,7 @@
         <fa-icon [icon]="faTrashCan"></fa-icon>
         Delete
       </ion-button>
-      <ion-button fill="solid" color="primary" size="small" (click)="doSave()">
+      <ion-button *ngIf="writeable$ | async" fill="solid" color="primary" size="small" (click)="doSave()">
         <fa-icon [icon]="faSave"></fa-icon>
         Save
       </ion-button>
@@ -31,7 +31,9 @@
   </ion-segment>
 
   <ng-container *ngIf="segment === 'form'">
-    <app-record-form [dataset]="DATASET_NAME_OBSERVATION" [readonly]="readonly">
+    <app-record-form [dataset]="DATASET_NAME_OBSERVATION"
+                     [countField]="'Count'"
+                     [dateField]="'First Date'">
     </app-record-form>
   </ng-container>
 
@@ -40,7 +42,7 @@
     </app-record-photos>
   </ng-container>
 
-  <ion-fab class="form-hover-buttons" *ngIf="!readonly" slot="fixed" horizontal="end" vertical="bottom">
+  <ion-fab class="form-hover-buttons" *ngIf="writeable$ | async" slot="fixed" horizontal="end" vertical="bottom">
     <ion-fab-button aria-label="Add Photo From Camera" (click)="doCamera()">
       <fa-icon class="iconButtons" [icon]="faCamera"></fa-icon>
     </ion-fab-button>

@@ -142,6 +142,8 @@ export class RecordsService {
     if (!this.records.has(clientId)) return;
 
     this.records.delete(clientId);
+    // TODO: This needs to delete from the storage as well.
+    // TODO: And delete any records that are child records.
 
     this._changed.next(true);
   }
