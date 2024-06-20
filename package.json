@@ -26,7 +26,6 @@
     "@capacitor/camera": "^6.0.0",
     "@capacitor/core": "^6.0.0",
     "@capacitor/geolocation": "^6.0.0",
-    "@capacitor/google-maps": "^6.0.0-rc.0",
     "@capacitor/haptics": "^6.0.0",
     "@capacitor/ios": "^6.0.0",
     "@capacitor/keyboard": "^6.0.0",
