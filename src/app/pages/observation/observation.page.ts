@@ -15,7 +15,7 @@ import {
   IonToolbar,
   IonFabList,
   IonImg,
-  IonLabel
+  IonLabel, IonIcon
 } from '@ionic/angular/standalone';
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faList, faMap} from "@fortawesome/free-solid-svg-icons";
@@ -29,7 +29,7 @@ import {ActiveRecordService} from "../../services/active-record/active-record.se
   templateUrl: './observation.page.html',
   styleUrls: ['./observation.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonTabBar, IonTabButton, IonTabs, IonFab, IonFabButton, IonFabList, IonImg, FaIconComponent, IonLabel]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonTabBar, IonTabButton, IonTabs, IonFab, IonFabButton, IonFabList, IonImg, FaIconComponent, IonLabel, IonIcon]
 })
 export class ObservationPage implements OnInit {
 
@@ -47,6 +47,11 @@ export class ObservationPage implements OnInit {
   }
   async doUpload() {
     await this.uploadService.upload();
+  }
+
+  doNewCensus() {
+    this.activeRecordService.clear();
+    this.navigationService.goCensus();
   }
 
   doNewObservation() {

@@ -7,8 +7,8 @@ import {
   IonButtons,
   IonContent,
   IonFab,
-  IonFabButton,
-  IonHeader,
+  IonFabButton, IonFabList,
+  IonHeader, IonIcon,
   IonMenuButton,
   IonSegment,
   IonSegmentButton,
@@ -29,7 +29,7 @@ import {Observable} from "rxjs";
   templateUrl: './census-form.page.html',
   styleUrls: ['./census-form.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, IonFabList, IonIcon]
 })
 export class CensusFormPage implements OnInit {
 
@@ -80,6 +80,11 @@ export class CensusFormPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  doNewSurvey() {
+    // TODO: This should create a new active record for the tree survey dataset
+    // and set the parentId to the current active record client_id.
   }
 
   doDeleteRecord() {

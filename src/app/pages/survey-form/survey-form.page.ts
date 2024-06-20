@@ -7,8 +7,8 @@ import {
   IonButtons,
   IonContent,
   IonFab,
-  IonFabButton,
-  IonHeader,
+  IonFabButton, IonFabList,
+  IonHeader, IonIcon,
   IonMenuButton,
   IonSegment,
   IonSegmentButton,
@@ -30,7 +30,7 @@ import {Observable} from "rxjs";
   templateUrl: './survey-form.page.html',
   styleUrls: ['./survey-form.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, IonFabList, IonIcon]
 })
 export class SurveyFormPage implements OnInit {
 

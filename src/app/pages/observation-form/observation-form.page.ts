@@ -7,8 +7,8 @@ import {
   IonButtons,
   IonContent,
   IonFab,
-  IonFabButton,
-  IonHeader,
+  IonFabButton, IonFabList,
+  IonHeader, IonIcon,
   IonImg,
   IonMenuButton,
   IonSegment,
@@ -47,7 +47,9 @@ import {Observable} from "rxjs";
     IonFab,
     IonFabButton,
     IonImg,
-    FontAwesomeModule
+    FontAwesomeModule,
+    IonFabList,
+    IonIcon
   ]
 })
 export class ObservationFormPage implements OnInit {

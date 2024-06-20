@@ -19,7 +19,7 @@ import {
   IonToolbar
 } from '@ionic/angular/standalone';
 import {addIcons} from 'ionicons';
-import {locate, pin,} from 'ionicons/icons';
+import {add, locate, pin,} from 'ionicons/icons';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {
   faCog,
@@ -72,17 +72,6 @@ export class AppComponent {
     {title: 'Privacy Policy', url: '/privacy-policy', icon: faLock},
   ];
 
-  /* TODEL
-  public menuItems = [
-    {title: 'Records', page: '/home', icon: 'tachometer-alt'}, /// Might be wrong page
-    {title: 'Settings', page: '/settings', icon: 'cog'},
-    {title: 'About', page: '/about', icon: 'info-circle'},
-    {title: 'Help', page: '/help', icon: 'question-circle'},
-    {title: 'Privacy Policy', page: '/privacypolicy', icon: 'lock'},
-    {title: 'Log out', icon: 'sign-out-alt'},
-  ];
-   */
-
   user$: Observable<User | null>;
 
   constructor(
@@ -92,6 +81,7 @@ export class AppComponent {
   ) {
     this.user$ = this.authenticationService.user$;
     addIcons({
+      add,
       locate,
       pin,
     });
