@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {
   AlertController,
@@ -61,6 +61,7 @@ import {User} from "./models/user";
     HttpClientModule,
     FontAwesomeModule,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppComponent {
   faSignOutAlt = faSignOutAlt;

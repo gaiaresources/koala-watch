@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {
   IonButton,
   IonButtons,
@@ -16,9 +16,10 @@ import {
   IonToggle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import { Observable } from "rxjs";
-import { SettingsService } from "../../services/settings/settings.service";
-import { tap } from "rxjs/operators";
+import {Observable} from "rxjs";
+import {SettingsService} from "../../services/settings/settings.service";
+import {StorageService} from "../../services/storage/storage.service";
+import {RecordsService} from "../../services/records/records.service";
 
 @Component({
   selector: 'app-settings',
@@ -31,7 +32,10 @@ export class SettingsPage implements OnInit {
 
   settings$: Observable<any>;
 
-  constructor(private settingsService: SettingsService) {
+  constructor(
+    private settingsService: SettingsService,
+    private recordsService: RecordsService,
+  ) {
     this.settings$ = this.settingsService.values$;
   }
 
@@ -43,7 +47,7 @@ export class SettingsPage implements OnInit {
   }
 
   doClearUploaded() {
-    // TODO: Not sure how to clear the uploaded records.
+    this.recordsService.deleteUploadedRecords();
   }
 
 }
