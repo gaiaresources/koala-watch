@@ -1,9 +1,4 @@
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">map</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
   <app-google-map [id]="'map-page'" [lat]="-25" [lng]="132" [zoom]="3.5" [options]="options">
     <ng-container *ngIf="records$ | async as markers">

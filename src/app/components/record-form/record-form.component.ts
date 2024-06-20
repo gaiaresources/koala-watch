@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {FormDescriptor} from "../../models/form-descriptor";
 import {DatasetService} from "../../services/dataset/dataset.service";
@@ -68,6 +68,9 @@ export class RecordFormComponent implements OnInit, OnChanges {
   @Input()
   dateField?: string;
 
+  @Output()
+  onDirty = new EventEmitter<boolean>();
+
   form: FormGroup;
   fields?: FormDescriptor;
 
@@ -116,6 +119,14 @@ export class RecordFormComponent implements OnInit, OnChanges {
         this.fields = undefined;
         if (!dataset) return;
 
+        if (!record.dataset || !record.datasetName) {
+          this.activeRecordService.setValues({
+            dataset: dataset.id,
+            datasetName: dataset.name,
+          })
+          return;
+        }
+
         this.readonly = !!record.id;
         this.clientId = record.client_id;
         this.form = this.formGeneratorService.getFormGroup(this.formBuilder, record?.data || {}, dataset);
@@ -151,7 +162,7 @@ export class RecordFormComponent implements OnInit, OnChanges {
 
     // Default behaviour of count callback is how many child records exist.
     if (this.countField && values.hasOwnProperty(this.countField)) {
-      record.count = parseInt(values[this.countField], 10);
+      record.count = values[this.countField] ? parseInt(values[this.countField], 10) : 0;
     } else {
       const clientId = this.activeRecordService.getClientId();
       const records = this.recordsService.getChildRecords(clientId);
@@ -164,6 +175,8 @@ export class RecordFormComponent implements OnInit, OnChanges {
     }
 
     this.activeRecordService.setValues(record);
+
+    this.onDirty.emit(this.form.dirty);
   }
 
   statusChanges(value: string) {

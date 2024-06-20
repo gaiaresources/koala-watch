@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
@@ -7,8 +7,11 @@ import {
   IonButtons,
   IonContent,
   IonFab,
-  IonFabButton, IonFabList,
-  IonHeader, IonIcon,
+  IonFabButton,
+  IonFabList,
+  IonHeader,
+  IonIcon,
+  IonImg,
   IonMenuButton,
   IonSegment,
   IonSegmentButton,
@@ -22,14 +25,19 @@ import {DATASET_NAME_CENSUS} from "../../tokens/app";
 import {faCamera, faImage, faSave, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import {ActiveRecordService} from "../../services/active-record/active-record.service";
 import {CameraService} from "../../services/camera/camera.service";
-import {Observable} from "rxjs";
+import {combineLatest, map, Observable, shareReplay} from "rxjs";
+import {NavigationService} from "../../services/navigation/navigation.service";
+import {RecordsService} from "../../services/records/records.service";
+import {ClientRecord} from "../../models/client-record";
+import {RecordsListComponent} from "../../components/records-list/records-list.component";
+import {SettingsService} from "../../services/settings/settings.service";
 
 @Component({
   selector: 'app-census-form-page',
   templateUrl: './census-form.page.html',
   styleUrls: ['./census-form.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, IonFabList, IonIcon]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, IonFabList, IonIcon, RecordsListComponent, IonImg]
 })
 export class CensusFormPage implements OnInit {
 
@@ -42,13 +50,31 @@ export class CensusFormPage implements OnInit {
   segment: string = 'form';
 
   writeable$: Observable<boolean>;
+  children$: Observable<ClientRecord[]>;
+
+  dirty: boolean = false;
 
   constructor(
     private activeRecordService: ActiveRecordService,
     private alertController: AlertController,
     private photoService: CameraService,
+    private navigationService: NavigationService,
+    private recordsService: RecordsService,
+    private settingsService: SettingsService,
   ) {
     this.writeable$ = this.activeRecordService.writeable$;
+    this.children$ = combineLatest([
+      this.activeRecordService.record$,
+      this.settingsService.values$,
+    ]).pipe(
+      map(([record, settings]) => {
+        if (!record) return [];
+        return this.recordsService.getChildRecords(record.client_id)
+          .filter((record) => {
+            return !settings.hideUploaded || !record.isUploaded();
+          });
+      }),
+    );
   }
 
   ngOnInit() {
@@ -82,9 +108,36 @@ export class CensusFormPage implements OnInit {
     await alert.present();
   }
 
+  setDirty(dirty: boolean) {
+    this.dirty = dirty;
+  }
+
   doNewSurvey() {
-    // TODO: This should create a new active record for the tree survey dataset
-    // and set the parentId to the current active record client_id.
+    if (!this.dirty) {
+      this.createNewSurvey();
+      return;
+    }
+
+    this.alertController.create({
+      header: 'Census Modified',
+      message: 'Do you want to save the changes?',
+      backdropDismiss: true,
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.activeRecordService.save();
+            this.createNewSurvey();
+          }
+        },
+        {
+          text: 'No',
+          handler: () => {
+            this.createNewSurvey();
+          }
+        }
+      ]
+    }).then((alert) => alert.present());
   }
 
   doDeleteRecord() {
@@ -93,5 +146,16 @@ export class CensusFormPage implements OnInit {
 
   doSave() {
     this.activeRecordService.save();
+  }
+
+  createNewSurvey() {
+    const record = this.activeRecordService.getRecord();
+    this.activeRecordService.clear({
+      parentId: record.client_id,
+      data: {
+        "Census ID": record.client_id,
+      },
+    });
+    this.navigationService.goSurvey();
   }
 }

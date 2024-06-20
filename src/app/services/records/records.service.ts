@@ -6,6 +6,7 @@ import {BehaviorSubject, combineLatest, firstValueFrom, from, Observable, switch
 import {NetworkService} from "../network/network.service";
 import {DatasetService} from "../dataset/dataset.service";
 import {Dataset} from "../../models/dataset";
+import {PhotoService} from "../photo/photo.service";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,10 @@ export class RecordsService {
     private datasetService: DatasetService,
     private storageService: StorageService,
     private networkService: NetworkService,
+    private photoService: PhotoService,
   ) {
+    this.loadRecordsFromAPI();
+
     // When the network changes ensure that any discrepancies are fixed.
     this.networkService.status$.subscribe((changes) => {
       if (changes) this.loadRecordsFromAPI();
@@ -89,6 +93,10 @@ export class RecordsService {
     return this.storageService.store(`${this.RECORD_PREFIX}${record.client_id}`, record);
   }
 
+  private removeStoredRecord(recordId: string) {
+    return this.storageService.remove(`${this.RECORD_PREFIX}${recordId}`);
+  }
+
   getAllRecords() {
     return Array.from(this.records.values());
   }
@@ -138,13 +146,33 @@ export class RecordsService {
     return this.records.get(clientId);
   }
 
-  deleteRecord(clientId: string) {
+  async deleteRecord(clientId: string) {
     if (!this.records.has(clientId)) return;
 
-    this.records.delete(clientId);
-    // TODO: This needs to delete from the storage as well.
-    // TODO: And delete any records that are child records.
+    const record = this.records.get(clientId);
+    if (!record) return;
 
+    // Remove all photos associated with the record.
+    await Promise.all(
+      record.photoIds.map((photo) => {
+        return this.photoService.removePhoto(photo);
+      })
+    );
+
+    // Remove all the children records.
+    await Promise.all(
+      this.getChildRecords(record.client_id).map((child) => {
+        return this.deleteRecord(child.client_id)
+      }),
+    );
+
+    // Remove the record itself.
+    await this.removeStoredRecord(record.client_id);
+
+    // Update the record cache to not include the record.
+    this.records.delete(clientId);
+
+    // Notify of changes.
     this._changed.next(true);
   }
 

@@ -35,8 +35,8 @@ export class ActiveRecordService {
     });
   }
 
-  clear() {
-    this._record.next(new ClientRecord());
+  clear(values: any = {}) {
+    this._record.next(new ClientRecord(values));
     this._status.next("");
   }
 
@@ -79,7 +79,7 @@ export class ActiveRecordService {
 
   async delete() {
     const record = this._record.value;
-    this.recordsService.deleteRecord(record.client_id);
+    await this.recordsService.deleteRecord(record.client_id);
   }
 
 }

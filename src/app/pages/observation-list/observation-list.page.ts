@@ -15,13 +15,14 @@ import {
   IonToolbar
 } from '@ionic/angular/standalone';
 import {RecordsListComponent} from "../../components/records-list/records-list.component";
-import {APP_NAME, DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION} from "../../tokens/app";
+import {APP_NAME, DATASET_NAME_OBSERVATION} from "../../tokens/app";
 import {UploadService} from "../../services/upload/upload.service";
 import {NavigationService} from "../../services/navigation/navigation.service";
-import {firstValueFrom, map, Observable} from "rxjs";
+import {combineLatest, map, Observable} from "rxjs";
 import {RecordsService} from "../../services/records/records.service";
 import {ClientRecord} from "../../models/client-record";
 import {ActiveRecordService} from "../../services/active-record/active-record.service";
+import {SettingsService} from "../../services/settings/settings.service";
 
 @Component({
   selector: 'app-observation-list',
@@ -41,12 +42,18 @@ export class ObservationListPage implements OnInit {
     private navigationService: NavigationService,
     private recordsService: RecordsService,
     private activeRecordService: ActiveRecordService,
+    private settingsService: SettingsService,
   ) {
-    this.records$ = this.recordsService.changed$.pipe(
-      map(() => {
+    this.records$ = combineLatest([
+      this.recordsService.changed$,
+      this.settingsService.values$,
+    ]).pipe(
+      map(([_, settings]) => {
         const records = this.recordsService.getAllRecords();
         // TODO: The records should be ordered by datetime.
-        return records;
+        return records.filter((record) => {
+          return !settings.hideUploaded || !record.isUploaded();
+        });
       })
     );
   }

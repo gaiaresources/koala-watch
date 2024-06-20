@@ -1,4 +1,4 @@
-import {map, Observable, of, switchMap} from 'rxjs';
+import {forkJoin, map, Observable, of, switchMap} from 'rxjs';
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
@@ -788,25 +788,34 @@ export class APIService {
   }
 
   public getRecordsByDatasetId(id: number, params: any = {}): Observable<ClientRecord[]> {
-    params['dataset__id'] = id;
-    return this.getRecords(params);
+    return this.getRequest(
+      this.buildAbsoluteUrl('records/', ), {
+        ...params,
+        "dataset__id": id.toString(),
+      },
+    ).pipe(
+      map((data) => {
+        console.log('getRecordsByDatasetId', id, data);
+        return [];
+      })
+    );
   }
 
   public getRecords(params: any = {}): Observable<ClientRecord[]> {
-    // TODO: This seems to be broken on the API end.
+    // TODO: This should definitely be fixed since the returned set seems to include much more than it should be.
     return of([]);
     /*
-    return this.getRequest(
-      this.buildAbsoluteUrl('records'), params
-    ).pipe(
-      map((data) => {
-        if (!data) return [];
-        console.log('getRecords', data);
-        console.error('This needs updating so that we convert the records correctly into the objects');
-        return data as ClientRecord[];
-      })
+    return this.getDatasets().pipe(
+      switchMap((data) => {
+        if (!data) return of([]);
+        return forkJoin(data.map(dataset => this.getRecordsByDatasetId(dataset.id || 0)));
+      }),
+      map((sets) => {
+        console.log(sets);
+        return [];
+      }),
     );
-     */
+    */
   }
 
   public getRecordMedia(recordId: string, recordClientId: string): Observable<ClientPhoto[]> {

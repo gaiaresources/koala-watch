@@ -115,11 +115,10 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
     }
 
     const current = await this.locationService.getPosition();
+    const lat = options.lat ?? current.coords.latitude;
+    const lng = options.lng ?? current.coords.longitude;
     const config: any = {
-      coordinate: {
-        lat: options.lat ?? current.coords.latitude,
-        lng: options.lng ?? current.coords.longitude,
-      },
+      coordinate: { lat, lng },
     };
     this.getOptionalConfig().forEach(key => {
       if (options.hasOwnProperty(key)) {
@@ -127,6 +126,12 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
       }
     });
 
+    this.onChanged.next({
+      accuracy: 0,
+      altitude: 0,
+      lat,
+      lng,
+    });
     return map.addMarker(config).then(marker => this._marker = marker);
   }
 

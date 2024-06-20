@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {
   IonButtons,
   IonContent,
   IonHeader,
   IonMenuButton,
-  IonTabBar, IonTabButton, IonTabs,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';

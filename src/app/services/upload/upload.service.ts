@@ -23,7 +23,6 @@ export class UploadService {
     const records = this.recordsService.getUploadableRecords();
     records.forEach((record) => {
       delete record.modified;
-      // TODO: This should handle the case of updates to the record, not just creation.
       return firstValueFrom(this.apiService.createRecord(record)).then((result) => {
         if (result && result.id) {
           record.id = result.id;

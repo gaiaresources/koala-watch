@@ -123,10 +123,6 @@ export class ActivePhotoService {
     this._addedPhotos.next(added);
   }
 
-  async deleteRecord(recordId: string) {
-    // TODO: This needs to delete the photos associated with the record in storage.
-  }
-
   getCurrentPhoto(): number {
     return this._currentPhoto.value;
   }
