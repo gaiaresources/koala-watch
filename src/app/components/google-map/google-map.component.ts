@@ -14,11 +14,10 @@ import {
 } from '@angular/core';
 import {GOOGLE_MAP_API} from "../../tokens/gmap";
 import {NgIf} from "@angular/common";
-import {GoogleMap} from "@capacitor/google-maps";
 import {LocationService} from "../../services/location/location.service";
 import {GoogleMapEvents} from "./google-map-events";
 import {BehaviorSubject} from "rxjs";
-import {GoogleMapConfig} from "@capacitor/google-maps/dist/typings/definitions";
+import {GoogleMap} from "@angular/google-maps";
 
 @Component({
   standalone: true,
@@ -86,7 +85,7 @@ export class GoogleMapComponent implements OnInit, OnChanges, OnDestroy {
   private destroy() {
     const map = this.getMap();
     if (map) {
-      map.destroy();
+      // map.destroy();
     }
   }
 
@@ -94,6 +93,7 @@ export class GoogleMapComponent implements OnInit, OnChanges, OnDestroy {
     const map = this.getMap();
     if (!map) return;
 
+    /*
     const bounds = await map.getMapBounds();
     const coordinate = {
       lat: this.lat ?? bounds.center.lat,
@@ -103,9 +103,11 @@ export class GoogleMapComponent implements OnInit, OnChanges, OnDestroy {
       coordinate: coordinate,
       zoom: this.zoom,
     });
+     */
   }
 
   async createMap(ref: HTMLElement) {
+    /*
     const current = await this.locationService.getPosition();
     if (this.hasMap()) {
       this.destroy();
@@ -126,6 +128,7 @@ export class GoogleMapComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.events.setMap(map);
     this._map.next(map);
+     */
   }
 
 }

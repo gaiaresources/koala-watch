@@ -9,13 +9,14 @@ import {GoogleMapMarkerComponent} from "../../components/google-map-marker/googl
 import {map, Observable, shareReplay} from "rxjs";
 import {RecordsService} from "../../services/records/records.service";
 import * as dayjs from "dayjs";
+import {GoogleMap} from "@angular/google-maps";
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, GoogleMapComponent, GoogleMapMarkerComponent],
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, GoogleMapComponent, GoogleMapMarkerComponent, GoogleMap],
 })
 export class MapPage implements OnInit {
 

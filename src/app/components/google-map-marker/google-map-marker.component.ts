@@ -2,10 +2,8 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {GoogleMapComponent} from "../google-map/google-map.component";
 import {LocationService} from "../../services/location/location.service";
 import {Coordinates} from "../../models/coordinates";
-import {MarkerCallbackData} from "@capacitor/google-maps/dist/typings/definitions";
 import {ElevationService} from "../../services/elevation/elevation.service";
 import {BehaviorSubject, combineLatest, concatMap, Observable} from "rxjs";
-import {GoogleMap} from "@capacitor/google-maps";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {AlertController} from "@ionic/angular/standalone";
 
@@ -67,7 +65,8 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
     ]).pipe(
       concatMap(async ([map, options]) => {
         if (!map || !options) return "";
-        return this.setMarker(map as GoogleMap, options);
+        // return this.setMarker(map, options);
+        return "";
       }),
     );
   }
@@ -92,6 +91,7 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
   async setListeners() {
     const events = this.mapComponent.events;
     const self = this;
+    /*
     events.on<MarkerCallbackData>('MarkerDragEnd', function (e) {
       if (e.markerId !== self._marker) return;
       self.doDragEnd(e);
@@ -106,12 +106,13 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
         }).then(alert => alert.present());
       }
     });
+     */
   }
 
-  async setMarker(map: GoogleMap, options: any) {
+  async setMarker(map: any, options: any) {
     const marker = this._marker;
     if (marker) {
-      await map.removeMarker(marker);
+      // await map.removeMarker(marker);
     }
 
     const current = await this.locationService.getPosition();
@@ -132,7 +133,7 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
       lat,
       lng,
     });
-    return map.addMarker(config).then(marker => this._marker = marker);
+//    return map.addMarker(config).then(marker => this._marker = marker);
   }
 
   private getOptionalConfig() {
@@ -147,7 +148,8 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
     ];
   }
 
-  private doDragEnd(marker: MarkerCallbackData) {
+  private doDragEnd(marker: any) {
+    /*
     const lat = marker.latitude;
     const lng = marker.longitude;
     this.onChanged.emit({
@@ -167,6 +169,7 @@ export class GoogleMapMarkerComponent implements OnInit, OnChanges {
         lng,
       });
     });
+     */
   }
 
 }
