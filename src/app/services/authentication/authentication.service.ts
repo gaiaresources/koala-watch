@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable, shareReplay, switchMap } from 'rxjs';
+import {BehaviorSubject, distinctUntilChanged, map, Observable, of, shareReplay, switchMap} from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { User } from "../../models/user";
 import { APIService } from "../api/api.service";
@@ -13,15 +13,26 @@ export class AuthenticationService {
   private auth_token = new BehaviorSubject<string>(
     localStorage.getItem('auth_token') || ""
   );
+  public loggedIn$: Observable<boolean>;
   public user$: Observable<User | null>;
 
   constructor(
     protected apiService: APIService
   ) {
-    this.user$ = this.auth_token.asObservable().pipe(
-      switchMap((token) => {
+    this.loggedIn$ = this.auth_token.asObservable().pipe(
+      map((token) => {
+        return token !== "";
+      }),
+      distinctUntilChanged(),
+      shareReplay(1),
+    );
+
+    this.user$ = this.loggedIn$.pipe(
+      switchMap((status) => {
+        if (!status) return of(null);
         return this.apiService.whoAmI();
       }),
+      distinctUntilChanged(),
       shareReplay(1),
     );
   }

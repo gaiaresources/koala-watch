@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ObservationService } from './observation.service';
+import { GoogleMapsService } from './google-maps.service';
 
-describe('ObservationService', () => {
-  let service: ObservationService;
+describe('GoogleMapsService', () => {
+  let service: GoogleMapsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ObservationService);
+    service = TestBed.inject(GoogleMapsService);
   });
 
   it('should be created', () => {

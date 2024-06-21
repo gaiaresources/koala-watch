@@ -1,13 +1,17 @@
-import { map, Observable, of } from 'rxjs';
-import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { User } from "../../models/user";
-import { API_URL } from "../../tokens/api";
-import { PROJECT_NAME } from "../../tokens/app";
-import { Dataset } from "../../models/dataset";
-import { ClientRecord } from "../../models/client-record";
-import { Record } from "../../models/record";
+import {forkJoin, map, Observable, of, switchMap} from 'rxjs';
+import {Inject, Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {catchError} from 'rxjs/operators';
+import {User} from "../../models/user";
+import {API_URL} from "../../tokens/api";
+import {PROJECT_NAME} from "../../tokens/app";
+import {Dataset} from "../../models/dataset";
+import {ClientRecord} from "../../models/client-record";
+import {Record} from "../../models/record";
+import {NetworkService} from "../network/network.service";
+import {ClientPhoto} from "../../models/client-photo";
+import {Media} from "../../models/media";
+import {UUID} from "angular2-uuid";
 
 
 /**
@@ -29,12 +33,14 @@ export class APIService {
    * Creates a new APIService with the injected Http.
    * @param apiUrl
    * @param projectName
+   * @param networkService
    * @param {HttpClient} httpClient - The injected Http Client.
    * @constructor
    */
   constructor(
     @Inject(API_URL) private apiUrl: string,
     @Inject(PROJECT_NAME) private projectName: string,
+    private networkService: NetworkService,
     private httpClient: HttpClient
   ) {
   }
@@ -51,10 +57,15 @@ export class APIService {
    * @param params
    * @private
    */
-  private getRequest(url: string, params: any = {}): Observable<object | null> {
+  private getRequest(url: string, params: any = {}): Observable<any | null> {
     this.resetError();
-    return this.httpClient.get(url, {params}).pipe(
-      catchError((err, caught) => this.error(err, caught))
+    return this.networkService.status$.pipe(
+      switchMap((status) => {
+        if (!status) return of(null);
+        return this.httpClient.get(url, {params}).pipe(
+          catchError((err, caught) => this.error(err, caught))
+        );
+      }),
     );
   }
 
@@ -65,15 +76,20 @@ export class APIService {
    * @param body
    * @private
    */
-  private postRequest(url: string, body: object): Observable<object | null> {
+  private postRequest(url: string, body: object): Observable<any | null> {
     this.resetError();
-    return this.httpClient.post(url, body,
-      {
-        headers: new HttpHeaders({'content-type': 'application/json'})
-      })
-      .pipe(
-        catchError((err, caught) => this.error(err, caught))
-      );
+    return this.networkService.status$.pipe(
+      switchMap((status) => {
+        if (!status) return of(null);
+        return this.httpClient.post(url, body,
+          {
+            headers: new HttpHeaders({'content-type': 'application/json'})
+          })
+          .pipe(
+            catchError((err, caught) => this.error(err, caught))
+          );
+      }),
+    );
   }
 
   public createRecord(record: object): Observable<Record | null> {
@@ -772,15 +788,70 @@ export class APIService {
   }
 
   public getRecordsByDatasetId(id: number, params: any = {}): Observable<ClientRecord[]> {
-    params['dataset__id'] = id;
-    return this.getRecords(params);
+    return this.getRequest(
+      this.buildAbsoluteUrl('records/', ), {
+        ...params,
+        "dataset__id": id.toString(),
+      },
+    ).pipe(
+      map((data) => {
+        console.log('getRecordsByDatasetId', id, data);
+        return [];
+      })
+    );
   }
 
   public getRecords(params: any = {}): Observable<ClientRecord[]> {
+    // TODO: This should definitely be fixed since the returned set seems to include much more than it should be.
+    return of([]);
+    /*
+    return this.getDatasets().pipe(
+      switchMap((data) => {
+        if (!data) return of([]);
+        return forkJoin(data.map(dataset => this.getRecordsByDatasetId(dataset.id || 0)));
+      }),
+      map((sets) => {
+        console.log(sets);
+        return [];
+      }),
+    );
+    */
+  }
+
+  public getRecordMedia(recordId: string, recordClientId: string): Observable<ClientPhoto[]> {
+    const params = {
+      record: recordId
+    };
     return this.getRequest(
-      this.buildAbsoluteUrl('records'), {
-        params: params
-      }) as Observable<ClientRecord[]>;
+      this.buildAbsoluteUrl('media'), params
+    ).pipe(
+      map<any[] | null, ClientPhoto[]>(data => {
+        if (!data) return [];
+        return data.map(item => {
+          const uuid = UUID.UUID();
+          return new ClientPhoto({
+            id: item.id,
+            clientId: uuid,
+            recordClientId: recordClientId,
+            fileName: uuid + ".jpg",
+            base64: item.file,
+            created: item.created,
+            last_modified: item.last_modified,
+            datetime: item.last_modified,
+          });
+        });
+      })
+    );
+  }
+
+  public uploadRecordMediaBase64(recordId: number, file: string): Observable<Media | null> {
+    return this.postRequest(
+      this.buildAbsoluteUrl('media'),
+      {
+        record: recordId,
+        file: file,
+      },
+    ) as Observable<Media | null>;
   }
 
 

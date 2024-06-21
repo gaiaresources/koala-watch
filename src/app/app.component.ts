@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {CommonModule, DOCUMENT} from '@angular/common';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, Inject, OnInit} from '@angular/core';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {
   AlertController,
   IonApp,
@@ -18,12 +18,9 @@ import {
   IonSplitPane,
   IonToolbar
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import {
-  locate,
-  pin,
-} from 'ionicons/icons';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {addIcons} from 'ionicons';
+import {add, locate, pin,} from 'ionicons/icons';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {
   faCog,
   faInfoCircle,
@@ -32,12 +29,13 @@ import {
   faSignOutAlt,
   faTachometerAlt
 } from "@fortawesome/free-solid-svg-icons";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { AuthenticationService } from "./services/authentication/authentication.service";
-import { Observable } from "rxjs";
-import { HttpClientModule } from "@angular/common/http";
-import { User } from "./models/user";
-import { GoogleMapsModule } from "@angular/google-maps";
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
+import {AuthenticationService} from "./services/authentication/authentication.service";
+import {Observable} from "rxjs";
+import {HttpClientModule} from "@angular/common/http";
+import {User} from "./models/user";
+import {GOOGLE_MAP_API} from "./tokens/gmap";
+import {GoogleMapsService} from "./services/google-maps/google-maps.service";
 
 @Component({
   selector: 'app-root',
@@ -64,10 +62,10 @@ import { GoogleMapsModule } from "@angular/google-maps";
     IonToolbar,
     HttpClientModule,
     FontAwesomeModule,
-    GoogleMapsModule,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   faSignOutAlt = faSignOutAlt;
   public appPages: { title: string, url: string, icon: IconProp }[] = [
     {title: 'Records', url: '/observation', icon: faTachometerAlt},
@@ -77,29 +75,25 @@ export class AppComponent {
     {title: 'Privacy Policy', url: '/privacy-policy', icon: faLock},
   ];
 
-  /* TODEL
-  public menuItems = [
-    {title: 'Records', page: '/home', icon: 'tachometer-alt'}, /// Might be wrong page
-    {title: 'Settings', page: '/settings', icon: 'cog'},
-    {title: 'About', page: '/about', icon: 'info-circle'},
-    {title: 'Help', page: '/help', icon: 'question-circle'},
-    {title: 'Privacy Policy', page: '/privacypolicy', icon: 'lock'},
-    {title: 'Log out', icon: 'sign-out-alt'},
-  ];
-   */
-
   user$: Observable<User | null>;
 
   constructor(
+    @Inject(GOOGLE_MAP_API) private googleMapApi: string,
+    @Inject(DOCUMENT) private document: any,
     private authenticationService: AuthenticationService,
     private alertController: AlertController,
     private router: Router,
+    private googleMaps: GoogleMapsService,
   ) {
     this.user$ = this.authenticationService.user$;
     addIcons({
+      add,
       locate,
       pin,
     });
+  }
+
+  ngOnInit() {
   }
 
   askLogout() {

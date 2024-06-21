@@ -1,29 +1,21 @@
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">map</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-<!--  Showing {{ dataset }}.-->
+  <google-map class="map-container"
+              width="100%"
+              height="100%"
+              [id]="'map-page'"
+              [center]="{ lat: -25, lng: 132 }"
+              [zoom]="3.5"
+              [options]="options">
 
-<!--  <capacitor-google-map #map></capacitor-google-map>-->
-  <div class="map-container" *ngIf="gmapsLoaded">
-    <google-map
-      height="100%"
-      width="100%"
-      [center]="config.center"
-      [zoom]="config.zoom"
-      [options]="config.options"
-    >
-      <map-marker
-        *ngFor="let marker of markers"
-        [position]="marker.coordinate"
-        [title]="marker.title"
-        [icon]="marker.icon"
-
-      >
+    <ng-container *ngIf="records$ | async as markers">
+      <map-marker *ngFor="let marker of markers"
+                  [title]="marker.title"
+                  [position]="marker.position"
+                  [clickable]="true"
+                  [icon]="marker.icon" (mapClick)="doMarkerClick(marker, $event)">
       </map-marker>
-    </google-map>
-  </div>
+    </ng-container>
+  </google-map>
+
 </ion-content>

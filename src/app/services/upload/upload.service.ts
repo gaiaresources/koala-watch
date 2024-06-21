@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from "rxjs";
-import { StorageService } from "../storage/storage.service";
-import { APIService } from "../api/api.service";
+import {Injectable} from '@angular/core';
+import {firstValueFrom} from "rxjs";
+import {APIService} from "../api/api.service";
+import {RecordsService} from "../records/records.service";
+import {PhotoService} from "../photo/photo.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,27 +10,43 @@ import { APIService } from "../api/api.service";
 export class UploadService {
 
   constructor(
-    private storageService: StorageService,
     private apiService: APIService,
+    private recordsService: RecordsService,
+    private photoService: PhotoService,
   ) {
   }
 
-  upload(): Observable<object| null> {
-    this.storageService.getUploadableRecords().then((clientRecord) => {
-      if (Array.isArray(clientRecord)) {
-        clientRecord.forEach(record => {
-          this.apiService.createRecord(record).subscribe(result => {
-            if (!result) {
-              return;
-            }
-            if (result.hasOwnProperty("id")) {
-              this.storageService.updateRecordId(record, result.id || 0);
-            }
-          })
-        })
-      }
-    });
-    return of();
+  async upload() {
+    const promises: Promise<any>[] = [];
+
+    // Generate promises to upload, then update the storage with the newly created ID.
+    const records = this.recordsService.getUploadableRecords();
+    records.forEach((record) => {
+      delete record.modified;
+      return firstValueFrom(this.apiService.createRecord(record)).then((result) => {
+        if (result && result.id) {
+          record.id = result.id;
+          return this.recordsService.setRecord(record);
+        }
+        return;
+      });
+    })
+
+    // Generate promises to upload, then update the storage with the newly created id.
+    const photos = await this.photoService.getUploadablePhotos();
+    photos.forEach((photo) => {
+      const record = this.recordsService.getRecord(photo.recordClientId);
+      if (!record || !record.id) return;
+      return firstValueFrom(this.apiService.uploadRecordMediaBase64(record.id, photo.base64)).then((result) => {
+        if (result && result.id) {
+          photo.id = result.id;
+          return this.photoService.setPhoto(photo);
+        }
+        return;
+      });
+    })
+
+    await Promise.all(promises);
   }
 
 }

@@ -2,20 +2,7 @@
   <ion-label>
     {{ field.label }}
   </ion-label>
-  <!--
-  <ion-label color="{{ formGroup[field.key].errors && form.controls[field.key].dirty ? 'danger' : '#000' }}"
-             stacked>
-    {{ field.label }}
-    <span *ngIf="form.controls[field.key].errors && form.controls[field.key].dirty">
-                      ({{ getFieldError(field) }})
-                  </span>
-  </ion-label>
-  <ion-datetime [max]="currentDate | date:'yyyy-MM-dd'"
-                [formControlName]="field.key"
-                [titleSelectedDatesFormatter]="field.format! | pyDateFormatToIonicDateFormat"
-                [disabled]="readonly">
-  </ion-datetime>
-  -->
+
   <ion-datetime [formControlName]="field.key">
 
   </ion-datetime>

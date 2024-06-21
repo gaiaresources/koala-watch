@@ -1,50 +1,54 @@
-import { Injectable } from '@angular/core';
-import { Camera, CameraResultType, CameraSource, ImageOptions } from "@capacitor/camera";
-import { ActiveRecordService } from "../active-record/active-record.service";
+import {Injectable} from '@angular/core';
+import {ClientPhoto} from "../../models/client-photo";
+import {StorageService} from "../storage/storage.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoService {
+  private readonly PHOTO_PREFIX = 'Photo_';
 
-  constructor(private activeRecordService: ActiveRecordService) {
+  constructor(
+    private storageService: StorageService,
+  ) {
   }
 
-  public async getCameraPhoto() {
-    return this.getPhoto(CameraSource.Camera);
-  }
-
-  public async getLibraryPhoto() {
-    return this.getPhoto(CameraSource.Photos);
-  }
-
-  private getPhoto(source: CameraSource) {
-    const options: ImageOptions = {
-      source: source,
-      quality: 100,
-      width: 1024,
-      height: 1024,
-      resultType: CameraResultType.DataUrl,
-      correctOrientation: true
-    };
-
-    return Camera.getPhoto(options).then((photo) => {
-      const base64 = photo.dataUrl;
-      if (base64) {
-        return this.activeRecordService.addPhoto({
-          clientId: "",
-          datetime: "",
-          fileName: "",
-          recordClientId: "",
-          base64: base64,
-        });
+  getRecordPhotos(recordId: string) {
+    return this.storageService.getPrefixed(this.PHOTO_PREFIX).then((results) => {
+      const photos = [];
+      for (let key in results) {
+        if (results[key].recordClientId === recordId) {
+          photos.push(new ClientPhoto(results[key]));
+        }
       }
-
-      return 0;
-    }).catch((err) => {
-      console.log('camera error', err);
-      // TODO: Handle the proper user response to either cancelling taking the photo
-      // or some other issue.
+      return photos;
     });
   }
+
+  setPhoto(photo: ClientPhoto) {
+    return this.storageService.store(`${this.PHOTO_PREFIX}${photo.clientId}`, photo);
+  }
+
+  getPhoto(clientId: string) {
+    return this.storageService.load(`${this.PHOTO_PREFIX}${clientId}`).then((data) => {
+      return new ClientPhoto(data);
+    });
+  }
+
+  removePhoto(clientId: string) {
+    return this.storageService.remove(`${this.PHOTO_PREFIX}${clientId}`);
+  }
+
+  public getUploadablePhotos(): Promise<ClientPhoto[]> {
+    return this.storageService.getPrefixed(this.PHOTO_PREFIX).then((results) => {
+      const photos: ClientPhoto[] = [];
+      for (let key in results) {
+        if (!results[key].id) {
+          photos.push(results[key]);
+        }
+      }
+      return photos;
+    });
+  }
+
 }

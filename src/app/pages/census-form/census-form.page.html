@@ -11,7 +11,7 @@
         <fa-icon [icon]="faTrashCan"></fa-icon>
         Delete
       </ion-button>
-      <ion-button fill="solid" color="primary" size="small" (click)="doSave()">
+      <ion-button *ngIf="writeable$ | async" fill="solid" color="primary" size="small" (click)="doSave()">
         <fa-icon [icon]="faSave"></fa-icon>
         Save
       </ion-button>
@@ -35,12 +35,16 @@
   </ion-segment>
 
   <ng-container *ngIf="segment === 'form'">
-    <app-record-form [dataset]="DATASET_NAME_CENSUS" [readonly]="readonly">
+    <app-record-form [dataset]="DATASET_NAME_CENSUS" (onDirty)="setDirty($event)">
     </app-record-form>
   </ng-container>
 
   <ng-container *ngIf="segment === 'observations'">
-    Tree Surveys List
+    <ng-container *ngIf="children$ | async as children">
+      <app-records-list [records]="children">
+
+      </app-records-list>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="segment === 'photos'">
@@ -48,13 +52,23 @@
     </app-record-photos>
   </ng-container>
 
-  <ion-fab class="form-hover-buttons" *ngIf="!readonly" slot="fixed" horizontal="end" vertical="bottom">
-    <ion-fab-button aria-label="Add Photo From Camera" (click)="doCamera()">
-      <fa-icon class="iconButtons" [icon]="faCamera"></fa-icon>
+  <ion-fab class="form-hover-buttons" *ngIf="writeable$ | async" slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-    <ion-fab-button aria-label="Add Photo From Gallery" (click)="doGallery()">
-      <fa-icon class="iconButtons" [icon]="faImage"></fa-icon>
-    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button *ngIf="segment === 'observations'" aria-label="Create a tree survey" (click)="doNewSurvey()"
+                      color="primary">
+        <ion-img class="fab-button__img" aria-hidden="true"
+                 src="../../../assets/imgs/white_tree.png"></ion-img>
+      </ion-fab-button>
+      <ion-fab-button aria-label="Add Photo From Camera" (click)="doCamera()" color="primary">
+        <fa-icon class="iconButtons" [icon]="faCamera"></fa-icon>
+      </ion-fab-button>
+      <ion-fab-button aria-label="Add Photo From Gallery" (click)="doGallery()" color="primary">
+        <fa-icon class="iconButtons" [icon]="faImage"></fa-icon>
+      </ion-fab-button>
+    </ion-fab-list>
   </ion-fab>
 
 </ion-content>

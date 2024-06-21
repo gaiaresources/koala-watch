@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {
   AlertController,
   IonButton,
@@ -8,26 +8,36 @@ import {
   IonContent,
   IonFab,
   IonFabButton,
-  IonHeader, IonMenuButton, IonSegment, IonSegmentButton,
+  IonFabList,
+  IonHeader,
+  IonIcon,
+  IonImg,
+  IonMenuButton,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { RecordFormComponent } from "../../components/record-form/record-form.component";
-import { RecordPhotosComponent } from "../../components/record-photos/record-photos.component";
-import { DATASET_NAME_CENSUS } from "../../tokens/app";
-import { faCamera, faImage, faSave, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { ActiveRecordService } from "../../services/active-record/active-record.service";
-import { PhotoService } from "../../services/photo/photo.service";
-import { UUID } from "angular2-uuid";
-import { StorageService } from "../../services/storage/storage.service";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {RecordFormComponent} from "../../components/record-form/record-form.component";
+import {RecordPhotosComponent} from "../../components/record-photos/record-photos.component";
+import {DATASET_NAME_CENSUS} from "../../tokens/app";
+import {faCamera, faImage, faSave, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import {ActiveRecordService} from "../../services/active-record/active-record.service";
+import {CameraService} from "../../services/camera/camera.service";
+import {combineLatest, map, Observable, shareReplay} from "rxjs";
+import {NavigationService} from "../../services/navigation/navigation.service";
+import {RecordsService} from "../../services/records/records.service";
+import {ClientRecord} from "../../models/client-record";
+import {RecordsListComponent} from "../../components/records-list/records-list.component";
+import {SettingsService} from "../../services/settings/settings.service";
 
 @Component({
   selector: 'app-census-form-page',
   templateUrl: './census-form.page.html',
   styleUrls: ['./census-form.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, IonFabList, IonIcon, RecordsListComponent, IonImg]
 })
 export class CensusFormPage implements OnInit {
 
@@ -37,27 +47,37 @@ export class CensusFormPage implements OnInit {
   public faSave = faSave;
   public faTrashCan = faTrashCan;
 
-  @Input()
-  readonly: boolean = false;
-
   segment: string = 'form';
+
+  writeable$: Observable<boolean>;
+  children$: Observable<ClientRecord[]>;
+
+  dirty: boolean = false;
 
   constructor(
     private activeRecordService: ActiveRecordService,
     private alertController: AlertController,
-    private photoService: PhotoService,
-    private storageService: StorageService,
+    private photoService: CameraService,
+    private navigationService: NavigationService,
+    private recordsService: RecordsService,
+    private settingsService: SettingsService,
   ) {
+    this.writeable$ = this.activeRecordService.writeable$;
+    this.children$ = combineLatest([
+      this.activeRecordService.record$,
+      this.settingsService.values$,
+    ]).pipe(
+      map(([record, settings]) => {
+        if (!record) return [];
+        return this.recordsService.getChildRecords(record.client_id)
+          .filter((record) => {
+            return !settings.hideUploaded || !record.isUploaded();
+          });
+      }),
+    );
   }
 
   ngOnInit() {
-    if (this.activeRecordService.getClientId()) {
-      let clientId = this.activeRecordService.getClientId();
-      this.storageService.load('Record_' + clientId).then(record => this.activeRecordService.setValues(record.data));
-    }
-    else {
-      this.activeRecordService.setClientId(UUID.UUID());
-    }
   }
 
   async doCamera() {
@@ -77,7 +97,7 @@ export class CensusFormPage implements OnInit {
         {
           text: 'Yes',
           handler: () => {
-            this.deleteRecord();
+            this.doDeleteRecord();
           }
         },
         {
@@ -88,25 +108,54 @@ export class CensusFormPage implements OnInit {
     await alert.present();
   }
 
-  deleteRecord() {
+  setDirty(dirty: boolean) {
+    this.dirty = dirty;
+  }
+
+  doNewSurvey() {
+    if (!this.dirty) {
+      this.createNewSurvey();
+      return;
+    }
+
+    this.alertController.create({
+      header: 'Census Modified',
+      message: 'Do you want to save the changes?',
+      backdropDismiss: true,
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.activeRecordService.save();
+            this.createNewSurvey();
+          }
+        },
+        {
+          text: 'No',
+          handler: () => {
+            this.createNewSurvey();
+          }
+        }
+      ]
+    }).then((alert) => alert.present());
+  }
+
+  doDeleteRecord() {
+    this.activeRecordService.delete();
   }
 
   doSave() {
-    const formValues = this.activeRecordService.getValues();
+    this.activeRecordService.save();
+  }
 
-    this.storageService.putRecord({
-      // TODO check record valid
-      valid: true, //this.recordForm.valid,
-      client_id: this.activeRecordService.getClientId(),
-      // TODO where should this value be coming from?
-      dataset: 105,
-      datasetName: DATASET_NAME_CENSUS,
-      // TODO get date from Record if set.
-      datetime: new Date().toISOString(),
-      data: formValues,
-      // TODO Count?
-      count: 0,
-      photoIds: [],
+  createNewSurvey() {
+    const record = this.activeRecordService.getRecord();
+    this.activeRecordService.clear({
+      parentId: record.client_id,
+      data: {
+        "Census ID": record.client_id,
+      },
     });
+    this.navigationService.goSurvey();
   }
 }

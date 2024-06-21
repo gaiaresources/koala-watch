@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IonicModule } from "@ionic/angular";
-import { ClientPhoto } from "../../models/client-photo";
-import { NgIf } from "@angular/common";
-import { ActiveRecordService } from "../../services/active-record/active-record.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {IonicModule} from "@ionic/angular";
+import {ClientPhoto} from "../../models/client-photo";
+import {NgIf} from "@angular/common";
+import {ActivePhotoService} from "../../services/active-photo/active-photo.service";
 
 @Component({
   standalone: true,
@@ -23,7 +23,7 @@ export class PhotoComponent implements OnInit {
   index?: number;
 
   constructor(
-    private activeRecordService: ActiveRecordService
+    private activePhotoService: ActivePhotoService,
   ) {
   }
 
@@ -31,8 +31,8 @@ export class PhotoComponent implements OnInit {
   }
 
   doDelete() {
-    if (this.index !== undefined) {
-      this.activeRecordService.deletePhoto(this.index);
+    if (this.photo !== undefined) {
+      this.activePhotoService.deletePhoto(this.photo);
     }
   }
 
