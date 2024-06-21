@@ -1,22 +1,30 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {IonContent, IonHeader, IonTitle, IonToolbar, Platform} from '@ionic/angular/standalone';
+import {AlertController, IonContent, IonHeader, IonTitle, IonToolbar, Platform} from '@ionic/angular/standalone';
 import {ClientRecord} from "../../models/client-record";
 import {DATASET_NAME_CENSUS} from "../../tokens/app";
-import {GoogleMapComponent} from "../../components/google-map/google-map.component";
-import {GoogleMapMarkerComponent} from "../../components/google-map-marker/google-map-marker.component";
 import {map, Observable, shareReplay} from "rxjs";
 import {RecordsService} from "../../services/records/records.service";
+import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
 import * as dayjs from "dayjs";
-import {GoogleMap} from "@angular/google-maps";
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, GoogleMapComponent, GoogleMapMarkerComponent, GoogleMap],
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    GoogleMap,
+    MapMarker,
+    MapAdvancedMarker
+  ],
 })
 export class MapPage implements OnInit {
 
@@ -25,19 +33,23 @@ export class MapPage implements OnInit {
     streetViewControl: false,
     fullscreenControl: false,
     mapTypeControl: false,
+    mapId: '1234',
   };
 
   public records$: Observable<{
-    snippet: string,
+    position: {
+      lat: number,
+      lng: number,
+    },
     title: string,
-    iconUrl: any,
-    lat: number,
-    lng: number,
+    snippet: string,
+    icon: google.maps.Icon,
   }[]>;
 
   constructor(
     private platform: Platform,
     private recordsService: RecordsService,
+    private alertController: AlertController,
   ) {
     this.records$ = this.recordsService.changed$.pipe(
       map(() => {
@@ -50,13 +62,21 @@ export class MapPage implements OnInit {
           })
           .map((record) => {
             const data = record.data || {};
-            return {
+            const marker: any = {
+              position: {
+                lat: (data['Latitude'] ? parseFloat(data['Latitude']) : 0),
+                lng: (data['Longitude'] ? parseFloat(data['Longitude']) : 0),
+
+              },
               title: record.datasetName,
               snippet: dayjs(record.datetime).format('DD/MM/YYYY HH:mm'),
-              iconUrl: this.getIconUrl(record),
-              lat: (data['Latitude'] ? parseFloat(data['Latitude']) : 0),
-              lng: (data['Longitude'] ? parseFloat(data['Longitude']) : 0),
-            }
+              icon: {
+                anchor: new google.maps.Point(22.5, 45),
+                scaledSize: new google.maps.Size(45, 45),
+                url: this.getIconUrl(record),
+              }
+            };
+            return marker;
           });
       }),
       shareReplay(1),
@@ -64,6 +84,14 @@ export class MapPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  doMarkerClick(marker: any, e: google.maps.MapMouseEvent) {
+    this.alertController.create({
+      header: marker.title,
+      message: marker.snippet,
+      buttons: ['OK'],
+    }).then(alert => alert.present());
   }
 
   private getIconUrl(record: ClientRecord) {

@@ -1,18 +1,20 @@
 <ion-content [fullscreen]="true">
 
-  <google-map [id]="'map-page'" [center]="{ lat: -25, lng: 132}" [zoom]="3.5" [options]="options">
+  <google-map class="map-container"
+              width="100%"
+              height="100%"
+              [id]="'map-page'"
+              [center]="{ lat: -25, lng: 132 }"
+              [zoom]="3.5"
+              [options]="options">
+
     <ng-container *ngIf="records$ | async as markers">
-      <!--
-      <app-google-map-marker *ngFor="let marker of markers"
-                             [lat]="marker.lat"
-                             [lng]="marker.lng"
-                             [title]="marker.title"
-                             [snippet]="marker.snippet"
-                             [iconUrl]="marker.iconUrl"
-                             [iconAnchor]="{ x: 22.5, y: 45 }"
-                             [iconSize]="{ width: 45, height: 45}">
-      </app-google-map-marker>
-      -->
+      <map-marker *ngFor="let marker of markers"
+                  [title]="marker.title"
+                  [position]="marker.position"
+                  [clickable]="true"
+                  [icon]="marker.icon" (mapClick)="doMarkerClick(marker, $event)">
+      </map-marker>
     </ng-container>
   </google-map>
 

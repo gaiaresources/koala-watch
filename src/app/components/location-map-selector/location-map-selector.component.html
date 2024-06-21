@@ -1,4 +1,4 @@
-<ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+<ion-modal trigger="open-modal">
   <ng-template>
     <ion-header>
       <ion-toolbar>
@@ -13,13 +13,15 @@
     </ion-header>
     <ion-content class="ion-padding">
 
-      <app-google-map [id]="'location-map-selector'" [lat]="lat" [lng]="lng">
-        <app-google-map-marker [lat]="lat"
-                               [lng]="lng"
-                               [draggable]="true"
-                               (onChanged)="doPosition($event)">
-        </app-google-map-marker>
-      </app-google-map>
+      <google-map width="100%" height="80%"
+                  [center]="{ lat: lat || -25, lng: lng || 132 }"
+                  [zoom]="lat ? 13 : 3.5"
+                  (mapClick)="doUpdatePosition($event)">
+        <map-marker [position]="coords"
+                    [options]="{ draggable: true }"
+                    (mapDragend)="doUpdatePosition($event)">
+        </map-marker>
+      </google-map>
 
       <ion-button (click)="onConfirm()">
         Use this location

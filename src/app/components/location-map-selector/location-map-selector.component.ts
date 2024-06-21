@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar} from "@ionic/angular/standalone";
-import {GoogleMapComponent} from "../google-map/google-map.component";
 import {Coordinates} from "../../models/coordinates";
-import {GoogleMapMarkerComponent} from "../google-map-marker/google-map-marker.component";
+import {GoogleMap, MapMarker} from "@angular/google-maps";
+import {LocationService} from "../../services/location/location.service";
 
 @Component({
   standalone: true,
@@ -17,11 +17,11 @@ import {GoogleMapMarkerComponent} from "../google-map-marker/google-map-marker.c
     IonButtons,
     IonButton,
     IonTitle,
-    GoogleMapComponent,
-    GoogleMapMarkerComponent
+    GoogleMap,
+    MapMarker
   ]
 })
-export class LocationMapSelectorComponent implements OnInit {
+export class LocationMapSelectorComponent implements OnInit, OnChanges {
 
   @ViewChild(IonModal) modal?: IonModal;
 
@@ -31,18 +31,40 @@ export class LocationMapSelectorComponent implements OnInit {
   @Input()
   lng?: number;
 
-  coords: Coordinates = {lat: 0, lng: 0, altitude: -1, accuracy: -1};
+  coords: Coordinates = {lat: 0, lng: 0, altitude: 0, accuracy: 0};
 
   @Output()
   onSelect = new EventEmitter<Coordinates>();
 
-  constructor() {
+  constructor(
+    private locationService: LocationService,
+  ) {
   }
 
   ngOnInit() {
+    if (!this.lat || !this.lng) {
+      this.locationService.getPosition().then((coords) => {
+        this.lat = coords.coords.latitude;
+        this.lng = coords.coords.longitude;
+        this.coords = {
+          lat: this.lat,
+          lng: this.lng,
+          altitude: 0,
+          accuracy: 0,
+        };
+      });
+    }
   }
 
-  onWillDismiss(e: any) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['lat'] || changes['lng']) {
+      this.coords = {
+        lat: this.lat || 0,
+        lng: this.lng || 0,
+        altitude: 0,
+        accuracy: 0,
+      };
+    }
   }
 
   onCancel() {
@@ -54,8 +76,15 @@ export class LocationMapSelectorComponent implements OnInit {
     this.onSelect.emit(this.coords);
   }
 
-  doPosition(coords: Coordinates) {
-    this.coords = coords;
+  doUpdatePosition(e: google.maps.MapMouseEvent) {
+    if (e.latLng) {
+      this.coords = {
+        lat: e.latLng.lat(),
+        lng: e.latLng.lng(),
+        altitude: 0,
+        accuracy: 0,
+      };
+    }
   }
 
 }
