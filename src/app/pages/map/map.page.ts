@@ -4,10 +4,11 @@ import {FormsModule} from '@angular/forms';
 import {AlertController, IonContent, IonHeader, IonTitle, IonToolbar, Platform} from '@ionic/angular/standalone';
 import {ClientRecord} from "../../models/client-record";
 import {DATASET_NAME_CENSUS} from "../../tokens/app";
-import {map, Observable, shareReplay} from "rxjs";
+import {combineLatest, map, Observable, shareReplay} from "rxjs";
 import {RecordsService} from "../../services/records/records.service";
 import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
 import * as dayjs from "dayjs";
+import {GoogleMapsService} from "../../services/google-maps/google-maps.service";
 
 @Component({
   selector: 'app-map',
@@ -50,9 +51,14 @@ export class MapPage implements OnInit {
     private platform: Platform,
     private recordsService: RecordsService,
     private alertController: AlertController,
+    private googleMaps: GoogleMapsService,
   ) {
-    this.records$ = this.recordsService.changed$.pipe(
-      map(() => {
+    this.records$ = combineLatest([
+      this.recordsService.changed$,
+      this.googleMaps.loaded$,
+    ]).pipe(
+      map(([changed, loaded]) => {
+        if (!loaded) return [];
         const records = this.recordsService.getAllRecords();
         return records
           .filter(record => {
