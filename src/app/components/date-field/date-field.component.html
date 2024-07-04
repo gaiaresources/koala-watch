@@ -3,7 +3,14 @@
     {{ field.label }}
   </ion-label>
 
-  <ion-datetime [formControlName]="field.key">
+  <div>
+    <ion-datetime-button [datetime]="'datetime-' + (field.key | classify)"></ion-datetime-button>
 
-  </ion-datetime>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime [id]="'datetime-' + (field.key | classify)" [formControlName]="field.key"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </div>
+
 </div>

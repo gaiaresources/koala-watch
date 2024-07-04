@@ -31,7 +31,7 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
   @Input()
   lng?: number;
 
-  coords: Coordinates = {lat: 0, lng: 0, altitude: 0, accuracy: 0};
+  coords: Coordinates = {lat: 0, lng: 0, altitude: "", accuracy: ""};
 
   @Output()
   onSelect = new EventEmitter<Coordinates>();
@@ -49,8 +49,8 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
         this.coords = {
           lat: this.lat,
           lng: this.lng,
-          altitude: 0,
-          accuracy: 0,
+          altitude: "",
+          accuracy: "",
         };
       });
     }
@@ -61,8 +61,8 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
       this.coords = {
         lat: this.lat || 0,
         lng: this.lng || 0,
-        altitude: 0,
-        accuracy: 0,
+        altitude: "",
+        accuracy: "",
       };
     }
   }
@@ -81,8 +81,8 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
       this.coords = {
         lat: e.latLng.lat(),
         lng: e.latLng.lng(),
-        altitude: 0,
-        accuracy: 0,
+        altitude: "",
+        accuracy: "",
       };
     }
   }
