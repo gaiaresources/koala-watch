@@ -90,14 +90,15 @@ export class FormGeneratorService {
 
   private getOptions(field: any): FieldOption[] {
     const enums: string[] = field.constraints.enum;
+    const prefix: FieldOption[] = field.constraints?.required ? [] : [{ text: "", value: "" }];
 
     const opts = field.options;
     if (!opts?.enum?.titles) {
-      return enums.map(value => ({text: value, value: value}));
+      return prefix.concat(enums.map(value => ({text: value, value: value})));
     }
 
     const titles: string[] = opts.enum.titles;
-    const options: FieldOption[] = [];
+    const options: FieldOption[] = prefix;
     for (let i = 0, enumsLen = enums.length, titlesLen = titles.length; i < enumsLen; i++) {
       options.push({
         text: i < titlesLen ? titles[i] : enums[i],
