@@ -3,7 +3,8 @@
              [placeholder]="field.description || ''"
              [formControlName]="field.key"
              [readonly]="readonly"
-             [type]="field.type"
+             [type]="'number'"
+             [step]="'0.000001'"
              (ionBlur)="checkErrors()">
 
     <div slot="label">
