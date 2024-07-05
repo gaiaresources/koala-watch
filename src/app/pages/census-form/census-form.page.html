@@ -40,11 +40,23 @@
   </ng-container>
 
   <ng-container *ngIf="segment === 'observations'">
-    <ng-container *ngIf="children$ | async as children">
-      <app-records-list [records]="children">
+    <ng-container *ngIf="children$ | async as children; else createObservations">
+      <app-records-list *ngIf="children.length; else createObservations" [records]="children">
 
       </app-records-list>
     </ng-container>
+
+    <ng-template #createObservations>
+      <h1>This census does not have any tree surveys</h1>
+      <p>
+        On this screen you can view the tree surveys related to this census. You can also create a
+        new tree survey. Each census can have many tree surveys.
+      </p>
+      <ion-button class="fab-button" (click)="doNewSurvey()">
+        <ion-img class="fab-button__img"  slot="start" src="../../../assets/imgs/white_tree.png" alt="Koala Tree Survey" aria-hidden="true" />
+        <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
+      </ion-button>
+    </ng-template>
   </ng-container>
 
   <ng-container *ngIf="segment === 'photos'">
@@ -57,11 +69,6 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button *ngIf="segment === 'observations'" aria-label="Create a tree survey" (click)="doNewSurvey()"
-                      color="primary">
-        <ion-img class="fab-button__img" aria-hidden="true"
-                 src="../../../assets/imgs/white_tree.png"></ion-img>
-      </ion-fab-button>
       <ion-fab-button aria-label="Add Photo From Camera" (click)="doCamera()" color="primary">
         <fa-icon class="iconButtons" [icon]="faCamera"></fa-icon>
       </ion-fab-button>

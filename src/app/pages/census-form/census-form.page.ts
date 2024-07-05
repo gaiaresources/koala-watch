@@ -11,7 +11,7 @@ import {
   IonFabList,
   IonHeader,
   IonIcon,
-  IonImg,
+  IonImg, IonLabel,
   IonMenuButton,
   IonSegment,
   IonSegmentButton,
@@ -37,7 +37,7 @@ import {SettingsService} from "../../services/settings/settings.service";
   templateUrl: './census-form.page.html',
   styleUrls: ['./census-form.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, IonFabList, IonIcon, RecordsListComponent, IonImg]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButton, IonButtons, IonFab, IonFabButton, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, IonFabList, IonIcon, RecordsListComponent, IonImg, IonLabel]
 })
 export class CensusFormPage implements OnInit {
 
