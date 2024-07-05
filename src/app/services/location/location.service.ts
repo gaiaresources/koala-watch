@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Geolocation, PermissionStatus} from '@capacitor/geolocation';
+import {Geolocation, PermissionStatus, Position} from '@capacitor/geolocation';
 import {Coordinates} from "../../models/coordinates";
+import {Observable, Subscription} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,23 @@ export class LocationService {
       altitude: location.coords.altitude ?? "",
       accuracy: location.coords.accuracy ?? "",
     };
+  }
+
+  public watchPosition(): Observable<Position | null> {
+    return new Observable(observer => {
+      let id: any;
+      Geolocation.watchPosition({}, (position) => {
+        observer.next(position);
+      }).then(callback => {
+        id = callback;
+      });
+
+      return new Subscription(
+        () => {
+          observer.complete();
+          Geolocation.clearWatch({id})
+        });
+    });
   }
 
 }

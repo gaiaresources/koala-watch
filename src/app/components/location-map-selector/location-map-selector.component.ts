@@ -1,20 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar} from "@ionic/angular/standalone";
 import {Coordinates} from "../../models/coordinates";
 import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
 import {LocationService} from "../../services/location/location.service";
-import {DOCUMENT, NgIf} from "@angular/common";
+import {NgIf} from "@angular/common";
 import {ElevationService} from "../../services/elevation/elevation.service";
+import {Subscription} from "rxjs";
 
 @Component({
   standalone: true,
@@ -52,15 +43,24 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
   @Output()
   onSelect = new EventEmitter<Coordinates>();
 
+  subscription?: Subscription;
+
   constructor(
     private locationService: LocationService,
     private elevationService: ElevationService,
   ) {
+    this.subscription = this.locationService.watchPosition().subscribe((position) => {
+      this.current = {
+        lat: position?.coords?.latitude ?? 0,
+        lng: position?.coords?.longitude ?? 0,
+        altitude: "",
+        accuracy: "",
+      };
+    });
   }
 
   ngOnInit() {
     this.locationService.getPosition().then((location) => {
-      this.current = location;
       if (!this.lat || !this.lng) {
         this.coords = {...location};
       }
@@ -71,8 +71,8 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
       scale: 5,
       fillOpacity: 1,
       strokeWeight: 1,
-      fillColor: '#5384ED',
-      strokeColor: '#ffffff',
+      fillColor: '#5384ed',
+      strokeColor: '#fff',
     };
   }
 
