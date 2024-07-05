@@ -23,4 +23,8 @@ export class NavigationService {
     this.navCtrl.navigateForward('survey/form');
   }
 
+  goRecords() {
+    this.navCtrl.navigateForward('observation');
+  }
+
 }

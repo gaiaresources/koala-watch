@@ -11,12 +11,14 @@ import {
   IonFabList,
   IonHeader,
   IonIcon,
-  IonImg, IonLabel,
+  IonImg,
+  IonLabel,
   IonMenuButton,
   IonSegment,
   IonSegmentButton,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  LoadingController
 } from '@ionic/angular/standalone';
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RecordFormComponent} from "../../components/record-form/record-form.component";
@@ -25,7 +27,7 @@ import {DATASET_NAME_CENSUS} from "../../tokens/app";
 import {faCamera, faImage, faSave, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import {ActiveRecordService} from "../../services/active-record/active-record.service";
 import {CameraService} from "../../services/camera/camera.service";
-import {combineLatest, map, Observable, shareReplay} from "rxjs";
+import {combineLatest, map, Observable} from "rxjs";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {RecordsService} from "../../services/records/records.service";
 import {ClientRecord} from "../../models/client-record";
@@ -61,6 +63,7 @@ export class CensusFormPage implements OnInit {
     private navigationService: NavigationService,
     private recordsService: RecordsService,
     private settingsService: SettingsService,
+    private loadingCtrl: LoadingController,
   ) {
     this.writeable$ = this.activeRecordService.writeable$;
     this.children$ = combineLatest([
@@ -96,8 +99,9 @@ export class CensusFormPage implements OnInit {
       buttons: [
         {
           text: 'Yes',
-          handler: () => {
-            this.doDeleteRecord();
+          handler: async () => {
+            await this.loadingCtrl.create();
+            await this.doDeleteRecord();
           }
         },
         {
@@ -125,14 +129,16 @@ export class CensusFormPage implements OnInit {
       buttons: [
         {
           text: 'Yes',
-          handler: () => {
-            this.activeRecordService.save();
+          handler: async () => {
+            await this.loadingCtrl.create();
+            await this.activeRecordService.save()
             this.createNewSurvey();
           }
         },
         {
           text: 'No',
-          handler: () => {
+          handler: async () => {
+            await this.loadingCtrl.create();
             this.createNewSurvey();
           }
         }
@@ -140,12 +146,20 @@ export class CensusFormPage implements OnInit {
     }).then((alert) => alert.present());
   }
 
-  doDeleteRecord() {
-    this.activeRecordService.delete();
+  async doCompleted() {
+    await this.loadingCtrl.dismiss();
+    await this.navigationService.goRecords();
   }
 
-  doSave() {
-    this.activeRecordService.save();
+  async doDeleteRecord() {
+    await this.activeRecordService.delete();
+    await this.doCompleted();
+  }
+
+  async doSave() {
+    await this.loadingCtrl.create();
+    await this.activeRecordService.save();
+    await this.doCompleted();
   }
 
   createNewSurvey() {

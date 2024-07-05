@@ -1,27 +1,27 @@
 import {Component, OnInit} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {
   IonButtons,
   IonContent,
   IonFab,
   IonFabButton,
+  IonFabList,
   IonHeader,
+  IonIcon,
+  IonImg,
+  IonLabel,
   IonMenuButton,
   IonTabBar,
   IonTabButton,
   IonTabs,
   IonTitle,
-  IonToolbar,
-  IonFabList,
-  IonImg,
-  IonLabel, IonIcon
+  IonToolbar
 } from '@ionic/angular/standalone';
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faList, faMap} from "@fortawesome/free-solid-svg-icons";
 import {UploadService} from "../../services/upload/upload.service";
 import {NavigationService} from "../../services/navigation/navigation.service";
-import {firstValueFrom} from "rxjs";
 import {ActiveRecordService} from "../../services/active-record/active-record.service";
 
 @Component({
@@ -45,6 +45,7 @@ export class ObservationPage implements OnInit {
 
   ngOnInit() {
   }
+
   async doUpload() {
     await this.uploadService.upload();
   }
@@ -57,11 +58,6 @@ export class ObservationPage implements OnInit {
   doNewObservation() {
     this.activeRecordService.clear();
     this.navigationService.goObservation();
-  }
-
-  doNewTreeSurvey() {
-    this.activeRecordService.clear();
-    this.navigationService.goSurvey();
   }
 
 }

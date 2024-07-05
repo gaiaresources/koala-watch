@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
@@ -7,13 +7,16 @@ import {
   IonButtons,
   IonContent,
   IonFab,
-  IonFabButton, IonFabList,
-  IonHeader, IonIcon,
+  IonFabButton,
+  IonFabList,
+  IonHeader,
+  IonIcon,
   IonMenuButton,
   IonSegment,
   IonSegmentButton,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  LoadingController
 } from '@ionic/angular/standalone';
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {RecordFormComponent} from "../../components/record-form/record-form.component";
@@ -24,6 +27,7 @@ import {ActiveRecordService} from "../../services/active-record/active-record.se
 import {CameraService} from "../../services/camera/camera.service";
 import {StorageService} from "../../services/storage/storage.service";
 import {Observable} from "rxjs";
+import {NavigationService} from "../../services/navigation/navigation.service";
 
 @Component({
   selector: 'app-survey-form',
@@ -49,6 +53,8 @@ export class SurveyFormPage implements OnInit {
     private alertController: AlertController,
     private photoService: CameraService,
     private storageService: StorageService,
+    private loadingCtrl: LoadingController,
+    private navigationService: NavigationService,
   ) {
     this.writeable$ = this.activeRecordService.writeable$;
   }
@@ -72,8 +78,9 @@ export class SurveyFormPage implements OnInit {
       buttons: [
         {
           text: 'Yes',
-          handler: () => {
-            this.doDeleteRecord();
+          handler: async () => {
+            await this.loadingCtrl.create();
+            await this.doDeleteRecord();
           }
         },
         {
@@ -84,11 +91,20 @@ export class SurveyFormPage implements OnInit {
     await alert.present();
   }
 
-  doDeleteRecord() {
-    this.activeRecordService.delete();
+  async doCompleted() {
+    await this.loadingCtrl.dismiss();
+    await this.navigationService.goRecords();
   }
 
-  doSave() {
-    this.activeRecordService.save();
+  async doDeleteRecord() {
+    await this.activeRecordService.delete();
+    await this.doCompleted();
   }
+
+  async doSave() {
+    await this.loadingCtrl.create();
+    await this.activeRecordService.save();
+    await this.doCompleted();
+  }
+
 }

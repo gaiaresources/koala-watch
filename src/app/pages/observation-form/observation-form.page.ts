@@ -14,7 +14,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonTitle,
-  IonToolbar
+  IonToolbar, LoadingController
 } from '@ionic/angular/standalone';
 import {RecordFormComponent} from "../../components/record-form/record-form.component";
 import {DATASET_NAME_OBSERVATION} from "../../tokens/app";
@@ -24,6 +24,7 @@ import {CameraService} from "../../services/camera/camera.service";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faCamera, faImage, faSave, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import {Observable} from "rxjs";
+import {NavigationService} from "../../services/navigation/navigation.service";
 
 @Component({
   selector: 'app-observation-form-page',
@@ -68,6 +69,8 @@ export class ObservationFormPage implements OnInit {
     private activeRecordService: ActiveRecordService,
     private alertController: AlertController,
     private photoService: CameraService,
+    private loadingCtrl: LoadingController,
+    private navigationService: NavigationService,
   ) {
     this.writeable$ = this.activeRecordService.writeable$;
   }
@@ -91,7 +94,8 @@ export class ObservationFormPage implements OnInit {
       buttons: [
         {
           text: 'Yes',
-          handler: () => {
+          handler: async () => {
+            await this.loadingCtrl.create();
             this.doDeleteRecord();
           }
         },
@@ -103,12 +107,20 @@ export class ObservationFormPage implements OnInit {
     await alert.present();
   }
 
-  doDeleteRecord() {
-    this.activeRecordService.delete();
+  async doCompleted() {
+    await this.loadingCtrl.dismiss();
+    this.navigationService.goRecords();
   }
 
-  doSave() {
-    this.activeRecordService.save();
+  async doDeleteRecord() {
+    await this.activeRecordService.delete();
+    await this.doCompleted();
+  }
+
+  async doSave() {
+    await this.loadingCtrl.create();
+    await this.activeRecordService.save();
+    await this.doCompleted();
   }
 
 }
