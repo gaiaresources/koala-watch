@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgIf } from "@angular/common";
+import {DatePipe, NgIf} from "@angular/common";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { FieldDescriptor } from "../../models/field-descriptor";
 import { IonicModule } from "@ionic/angular";
@@ -19,6 +19,7 @@ import {ClassifyPipe} from "../../pipes/classify/classify.pipe";
     IonDatetimeButton,
     IonModal,
     ClassifyPipe,
+    DatePipe,
   ]
 })
 export class DateFieldComponent implements OnInit {
@@ -31,6 +32,8 @@ export class DateFieldComponent implements OnInit {
 
   @Input({required: true})
   field?: FieldDescriptor;
+
+  currentDate = new Date();
 
   constructor() {
   }
