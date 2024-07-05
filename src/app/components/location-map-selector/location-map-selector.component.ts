@@ -1,8 +1,20 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar} from "@ionic/angular/standalone";
 import {Coordinates} from "../../models/coordinates";
-import {GoogleMap, MapMarker} from "@angular/google-maps";
+import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
 import {LocationService} from "../../services/location/location.service";
+import {DOCUMENT, NgIf} from "@angular/common";
+import {ElevationService} from "../../services/elevation/elevation.service";
 
 @Component({
   standalone: true,
@@ -18,7 +30,9 @@ import {LocationService} from "../../services/location/location.service";
     IonButton,
     IonTitle,
     GoogleMap,
-    MapMarker
+    MapMarker,
+    NgIf,
+    MapAdvancedMarker
   ]
 })
 export class LocationMapSelectorComponent implements OnInit, OnChanges {
@@ -31,29 +45,35 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
   @Input()
   lng?: number;
 
-  coords: Coordinates = {lat: 0, lng: 0, altitude: "", accuracy: ""};
+  coords?: Coordinates;
+  current?: Coordinates;
+  currentIcon: google.maps.Symbol | string = "";
 
   @Output()
   onSelect = new EventEmitter<Coordinates>();
 
   constructor(
     private locationService: LocationService,
+    private elevationService: ElevationService,
   ) {
   }
 
   ngOnInit() {
-    if (!this.lat || !this.lng) {
-      this.locationService.getPosition().then((coords) => {
-        this.lat = coords.coords.latitude;
-        this.lng = coords.coords.longitude;
-        this.coords = {
-          lat: this.lat,
-          lng: this.lng,
-          altitude: "",
-          accuracy: "",
-        };
-      });
-    }
+    this.locationService.getPosition().then((location) => {
+      this.current = location;
+      if (!this.lat || !this.lng) {
+        this.coords = {...location};
+      }
+    });
+
+    this.currentIcon = {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 5,
+      fillOpacity: 1,
+      strokeWeight: 1,
+      fillColor: '#5384ED',
+      strokeColor: '#ffffff',
+    };
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -78,12 +98,17 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
 
   doUpdatePosition(e: google.maps.MapMouseEvent) {
     if (e.latLng) {
-      this.coords = {
-        lat: e.latLng.lat(),
-        lng: e.latLng.lng(),
-        altitude: "",
-        accuracy: "",
-      };
+      const lat = e.latLng.lat();
+      const lng = e.latLng.lng();
+      this.elevationService.getElevation(lat, lng).then((altitude) => {
+        this.coords = {
+          lat, lng, altitude, accuracy: 0,
+        };
+      }, (error) => {
+        this.coords = {
+          lat, lng, altitude: "", accuracy: "",
+        };
+      });
     }
   }
 

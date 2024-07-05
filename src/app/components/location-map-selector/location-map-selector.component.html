@@ -14,13 +14,18 @@
     <ion-content class="ion-padding">
 
       <google-map width="100%" height="80%"
+                  [mapId]="'location-map-selector'"
                   [center]="{ lat: lat || -25, lng: lng || 132 }"
                   [zoom]="lat ? 13 : 3.5"
                   (mapClick)="doUpdatePosition($event)">
-        <map-marker [position]="coords"
-                    [options]="{ draggable: true }"
-                    (mapDragend)="doUpdatePosition($event)">
+        <map-marker *ngIf="current"
+                             [position]="{ lat: current.lat, lng: current.lng }" [icon]="currentIcon">
         </map-marker>
+        <map-advanced-marker *ngIf="coords"
+                             [position]="{ lat: coords.lat, lng: coords.lng }"
+                             [gmpDraggable]="true"
+                             (mapDragend)="doUpdatePosition($event)">
+        </map-advanced-marker>
       </google-map>
 
       <ion-button (click)="onConfirm()">

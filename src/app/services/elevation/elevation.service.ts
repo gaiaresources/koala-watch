@@ -15,7 +15,7 @@ export class ElevationService {
   ) {
   }
 
-  public async getElevation(lat: number, lng: number): Promise<number> {
+  public async getElevation(lat: number, lng: number): Promise<number | ""> {
     const url = `https://maps.googleapis.com/maps/api/elevation/json?locations=${lat},${lng}&key=${this.apiKey}`;
     return await firstValueFrom(
       this.httpClient.get(url).pipe(
@@ -29,7 +29,7 @@ export class ElevationService {
           return 0;
         }),
         catchError((err) => {
-          return of(-1);
+          return of<"">("");
         }),
       )
     );

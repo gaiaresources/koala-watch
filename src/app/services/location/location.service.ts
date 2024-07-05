@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Geolocation, PermissionStatus} from '@capacitor/geolocation';
+import {Coordinates} from "../../models/coordinates";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class LocationService {
   constructor() {
   }
 
-  public async getPosition() {
+  public async getPosition(): Promise<Coordinates> {
     const granted = (status: PermissionStatus) => {
       return status.coarseLocation === "granted" || status.location === "granted";
     };
@@ -22,7 +23,13 @@ export class LocationService {
       }
     }
 
-    return await Geolocation.getCurrentPosition();
+    const location = await Geolocation.getCurrentPosition();
+    return {
+      lat: location.coords.latitude,
+      lng: location.coords.longitude,
+      altitude: location.coords.altitude ?? "",
+      accuracy: location.coords.accuracy ?? "",
+    };
   }
 
 }

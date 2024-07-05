@@ -12,7 +12,7 @@ import {APP_NAME, PROJECT_NAME} from "./app/tokens/app";
 import {API_URL} from "./app/tokens/api";
 import {IonicStorageModule} from "@ionic/storage-angular";
 import {defineCustomElements} from "@ionic/pwa-elements/loader";
-import {GOOGLE_MAP_API} from "./app/tokens/gmap";
+import {GOOGLE_MAP_API, GOOGLE_MAP_IDS} from "./app/tokens/gmap";
 
 defineCustomElements(window);
 if (environment.production) {
@@ -46,6 +46,10 @@ bootstrapApplication(AppComponent, {
     {
       provide: GOOGLE_MAP_API,
       useValue: environment.googleMapsApi,
+    },
+    {
+      provide: GOOGLE_MAP_IDS,
+      useValue: ['location-map-selector', 'map'],
     }
   ],
 });
