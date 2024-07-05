@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
@@ -28,6 +28,7 @@ import {CameraService} from "../../services/camera/camera.service";
 import {StorageService} from "../../services/storage/storage.service";
 import {Observable} from "rxjs";
 import {NavigationService} from "../../services/navigation/navigation.service";
+import {LoadingOptions} from "@ionic/angular";
 
 @Component({
   selector: 'app-survey-form',
@@ -55,6 +56,7 @@ export class SurveyFormPage implements OnInit {
     private storageService: StorageService,
     private loadingCtrl: LoadingController,
     private navigationService: NavigationService,
+    private zone: NgZone,
   ) {
     this.writeable$ = this.activeRecordService.writeable$;
   }
@@ -78,9 +80,11 @@ export class SurveyFormPage implements OnInit {
       buttons: [
         {
           text: 'Yes',
-          handler: async () => {
-            await this.loadingCtrl.create();
-            await this.doDeleteRecord();
+          handler: () => {
+            this.zone.run(async () => {
+              await this.doLoader();
+              await this.doDeleteRecord();
+            })
           }
         },
         {
@@ -89,6 +93,11 @@ export class SurveyFormPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  async doLoader(options?: LoadingOptions) {
+    const loader = await this.loadingCtrl.create(options);
+    await loader.present();
   }
 
   async doCompleted() {
@@ -102,7 +111,9 @@ export class SurveyFormPage implements OnInit {
   }
 
   async doSave() {
-    await this.loadingCtrl.create();
+    await this.doLoader({
+      message: "Saving...",
+    });
     await this.activeRecordService.save();
     await this.doCompleted();
   }

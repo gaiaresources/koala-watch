@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
@@ -33,6 +33,7 @@ import {RecordsService} from "../../services/records/records.service";
 import {ClientRecord} from "../../models/client-record";
 import {RecordsListComponent} from "../../components/records-list/records-list.component";
 import {SettingsService} from "../../services/settings/settings.service";
+import {LoadingOptions} from "@ionic/angular";
 
 @Component({
   selector: 'app-census-form-page',
@@ -64,6 +65,7 @@ export class CensusFormPage implements OnInit {
     private recordsService: RecordsService,
     private settingsService: SettingsService,
     private loadingCtrl: LoadingController,
+    private zone: NgZone,
   ) {
     this.writeable$ = this.activeRecordService.writeable$;
     this.children$ = combineLatest([
@@ -99,9 +101,11 @@ export class CensusFormPage implements OnInit {
       buttons: [
         {
           text: 'Yes',
-          handler: async () => {
-            await this.loadingCtrl.create();
-            await this.doDeleteRecord();
+          handler: () => {
+            this.zone.run(async () => {
+              await this.doLoader();
+              await this.doDeleteRecord();
+            });
           }
         },
         {
@@ -129,21 +133,28 @@ export class CensusFormPage implements OnInit {
       buttons: [
         {
           text: 'Yes',
-          handler: async () => {
-            await this.loadingCtrl.create();
-            await this.activeRecordService.save()
-            this.createNewSurvey();
+          handler: () => {
+            this.zone.run(async () => {
+              await this.doLoader();
+              await this.activeRecordService.save()
+              await this.loadingCtrl.dismiss();
+              this.createNewSurvey();
+            });
           }
         },
         {
           text: 'No',
-          handler: async () => {
-            await this.loadingCtrl.create();
+          handler: () => {
             this.createNewSurvey();
           }
         }
       ]
     }).then((alert) => alert.present());
+  }
+
+  async doLoader(options?: LoadingOptions) {
+    const loader = await this.loadingCtrl.create(options);
+    await loader.present();
   }
 
   async doCompleted() {
@@ -157,7 +168,9 @@ export class CensusFormPage implements OnInit {
   }
 
   async doSave() {
-    await this.loadingCtrl.create();
+    await this.doLoader({
+      message: "Saving...",
+    });
     await this.activeRecordService.save();
     await this.doCompleted();
   }

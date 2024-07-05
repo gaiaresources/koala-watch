@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
@@ -7,14 +7,17 @@ import {
   IonButtons,
   IonContent,
   IonFab,
-  IonFabButton, IonFabList,
-  IonHeader, IonIcon,
+  IonFabButton,
+  IonFabList,
+  IonHeader,
+  IonIcon,
   IonImg,
   IonMenuButton,
   IonSegment,
   IonSegmentButton,
   IonTitle,
-  IonToolbar, LoadingController
+  IonToolbar,
+  LoadingController
 } from '@ionic/angular/standalone';
 import {RecordFormComponent} from "../../components/record-form/record-form.component";
 import {DATASET_NAME_OBSERVATION} from "../../tokens/app";
@@ -25,6 +28,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faCamera, faImage, faSave, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import {Observable} from "rxjs";
 import {NavigationService} from "../../services/navigation/navigation.service";
+import {LoadingOptions} from "@ionic/angular";
 
 @Component({
   selector: 'app-observation-form-page',
@@ -71,6 +75,7 @@ export class ObservationFormPage implements OnInit {
     private photoService: CameraService,
     private loadingCtrl: LoadingController,
     private navigationService: NavigationService,
+    private zone: NgZone,
   ) {
     this.writeable$ = this.activeRecordService.writeable$;
   }
@@ -94,9 +99,11 @@ export class ObservationFormPage implements OnInit {
       buttons: [
         {
           text: 'Yes',
-          handler: async () => {
-            await this.loadingCtrl.create();
-            this.doDeleteRecord();
+          handler: () => {
+            this.zone.run(async () => {
+              await this.doLoader();
+              await this.doDeleteRecord();
+            })
           }
         },
         {
@@ -105,6 +112,11 @@ export class ObservationFormPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  async doLoader(options?: LoadingOptions) {
+    const loader = await this.loadingCtrl.create(options);
+    await loader.present();
   }
 
   async doCompleted() {
@@ -118,7 +130,9 @@ export class ObservationFormPage implements OnInit {
   }
 
   async doSave() {
-    await this.loadingCtrl.create();
+    await this.doLoader({
+      message: "Saving...",
+    });
     await this.activeRecordService.save();
     await this.doCompleted();
   }
