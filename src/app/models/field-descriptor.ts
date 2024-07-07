@@ -8,4 +8,5 @@ export interface FieldDescriptor {
   format?: string;
   options?: FieldOption[];
   defaultValue?: string;
+  disabled?: boolean;
 }

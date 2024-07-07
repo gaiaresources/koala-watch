@@ -8,7 +8,7 @@ import {AppComponent} from './app/app.component';
 import {environment} from './environments/environment';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthenticationInterceptor} from "./app/services/authentication/authentication.interceptor";
-import {APP_NAME, PROJECT_NAME} from "./app/tokens/app";
+import {APP_NAME, DATASET_OVERRIDES, PROJECT_NAME} from "./app/tokens/app";
 import {API_URL} from "./app/tokens/api";
 import {IonicStorageModule} from "@ionic/storage-angular";
 import {defineCustomElements} from "@ionic/pwa-elements/loader";
@@ -50,6 +50,17 @@ bootstrapApplication(AppComponent, {
     {
       provide: GOOGLE_MAP_IDS,
       useValue: ['location-map-selector', 'map'],
+    },
+    {
+      provide: DATASET_OVERRIDES,
+      useValue: {
+        'Koala Opportunistic Observation': [
+          {
+            'Reason for Invalidation': { 'hidden': true },
+            'Observer Name': { 'computed': 'user' },
+          },
+        ],
+      }
     }
   ],
 });

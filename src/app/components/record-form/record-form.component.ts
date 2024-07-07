@@ -129,8 +129,9 @@ export class RecordFormComponent implements OnInit, OnChanges {
 
         this.readonly = !!record.id;
         this.clientId = record.client_id;
-        this.form = this.formGeneratorService.getFormGroup(this.formBuilder, record?.data || {}, dataset);
-        this.fields = this.formGeneratorService.getFormFields(dataset);
+        const values = record?.data || {};
+        this.form = this.formGeneratorService.getFormGroup(this.formBuilder, values, dataset);
+        this.fields = this.formGeneratorService.getFormFields(dataset, values);
         this.subscriptions = [
           this.form.valueChanges.subscribe((values) => this.valueChanges(values)),
           this.form.statusChanges.subscribe(value => this.statusChanges(value)),

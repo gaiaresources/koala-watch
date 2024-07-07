@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { FormDescriptor } from "../../models/form-descriptor";
-import { FieldOption } from "../../models/field-option";
-import { FieldDescriptor } from "../../models/field-descriptor";
-import { Dataset } from "../../models/dataset";
+import {Injectable} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormDescriptor} from "../../models/form-descriptor";
+import {FieldOption} from "../../models/field-option";
+import {FieldDescriptor} from "../../models/field-descriptor";
+import {Dataset} from "../../models/dataset";
 import * as dayjs from "dayjs";
+import {ComputedFieldService} from "../computed-field/computed-field.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,10 @@ export class FormGeneratorService {
 
   private NON_VALIDATED_SCHEMA_CONSTRAINTS: string[] = ['unique', 'enum'];
   private LOCATION_FIELDS = ['datum', 'lat', 'long', 'lon', 'latitude', 'longitude', 'accuracy', 'location description'];
+
+  constructor(private computedFieldService: ComputedFieldService) {
+
+  }
 
   private isValidatedConstraint(name: string, constraints: any) {
     if (name === "required" && !constraints[name]) return false;
@@ -56,6 +61,10 @@ export class FormGeneratorService {
     }
   }
 
+  private isComputedField(field: any): boolean {
+    return 'computed' in field;
+  }
+
   private isDateField(field: any): boolean {
     if (typeof field === 'object') {
       return field.name.toLowerCase().indexOf('date') > -1;
@@ -82,6 +91,7 @@ export class FormGeneratorService {
 
   private isHiddenField(field: any): boolean {
     if (typeof field === 'object') {
+      if ('hidden' in field) return true;
       return 'constraints' in field && 'enum' in field.constraints && field.constraints.enum.length === 1;
     } else {
       return false;
@@ -90,7 +100,7 @@ export class FormGeneratorService {
 
   private getOptions(field: any): FieldOption[] {
     const enums: string[] = field.constraints.enum;
-    const prefix: FieldOption[] = field.constraints?.required ? [] : [{ text: "", value: "" }];
+    const prefix: FieldOption[] = field.constraints?.required ? [] : [{text: "", value: ""}];
 
     const opts = field.options;
     if (!opts?.enum?.titles) {
@@ -108,13 +118,15 @@ export class FormGeneratorService {
     return options;
   }
 
-  private getFieldDefaultValue(field: any): any | null {
+  private getFieldDefaultValue(field: any, value: any): any | null {
+    if (this.isComputedField(field)) return this.computedFieldService.getComputedValue(field, value);
     if (this.isDateField(field)) return dayjs().format();
     if (!this.isHiddenField(field)) return null;
+    if (field.hidden) return value;
     return field.constraints.enum[0];
   }
 
-  private getFieldDescriptor(field: any): FieldDescriptor {
+  private getFieldDescriptor(field: any, value: any): FieldDescriptor {
     const type: string = this.getFieldType(field);
 
     return {
@@ -124,7 +136,8 @@ export class FormGeneratorService {
       format: field.format,
       type: type,
       options: type === 'select' ? this.getOptions(field) : undefined,
-      defaultValue: this.getFieldDefaultValue(field),
+      defaultValue: this.getFieldDefaultValue(field, value),
+      disabled: field.disabled ?? false,
     };
   }
 
@@ -135,16 +148,16 @@ export class FormGeneratorService {
   getFormGroup(formBuilder: FormBuilder, values: any, dataset: any, resource: number = 0): FormGroup {
     const group: any = {};
     this.getFields(dataset, resource).forEach((field: any, index: any) => {
-      let defaultValue = this.getFieldDefaultValue(field) || '';
+      let defaultValue = this.getFieldDefaultValue(field, values[field.name] ?? null) || '';
       if (values.hasOwnProperty(field.name)) {
         defaultValue = values[field.name];
       }
-      group[field.name] = [defaultValue, this.getConstraints(field.constraints)];
+      group[field.name] = [{value: defaultValue, disabled: !!field.disabled}, this.getConstraints(field.constraints)];
     })
     return formBuilder.group(group);
   }
 
-  getFormFields(dataset: Dataset, resource: number = 0): FormDescriptor {
+  getFormFields(dataset: Dataset, values: any, resource: number = 0): FormDescriptor {
     const dateFields: FieldDescriptor[] = [];
     const locationFields: FieldDescriptor[] = [];
     const requiredFields: FieldDescriptor[] = [];
@@ -152,7 +165,7 @@ export class FormGeneratorService {
     const hiddenFields: FieldDescriptor[] = [];
 
     this.getFields(dataset, resource).forEach((field: any) => {
-      const descriptor = this.getFieldDescriptor(field);
+      const descriptor = this.getFieldDescriptor(field, values[field.name] ?? null);
       if (this.isHiddenField(field)) {
         hiddenFields.push(descriptor);
       } else if (this.isDateField(field)) {
