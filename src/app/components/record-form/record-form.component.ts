@@ -23,6 +23,7 @@ import {faAsterisk} from "@fortawesome/free-solid-svg-icons";
 import {ClientRecord} from "../../models/client-record";
 import {RecordsService} from "../../services/records/records.service";
 import * as dayjs from "dayjs";
+import {AuthenticationService} from "../../services/authentication/authentication.service";
 
 @Component({
   standalone: true,
@@ -89,6 +90,7 @@ export class RecordFormComponent implements OnInit, OnChanges {
     private formGeneratorService: FormGeneratorService,
     private activeRecordService: ActiveRecordService,
     private recordsService: RecordsService,
+    private authenticationService: AuthenticationService,
   ) {
     this.form = this.formBuilder.group({});
     this.dataset$ = combineLatest([
@@ -107,8 +109,9 @@ export class RecordFormComponent implements OnInit, OnChanges {
     this.record$ = combineLatest([
       this.dataset$,
       this.activeRecordService.record$,
+      this.authenticationService.user$,
     ]).pipe(
-      tap(([dataset, record]) => {
+      tap(([dataset, record, user]) => {
         if (record && this.clientId === record.client_id) return;
         if (this.subscriptions.length) {
           this.subscriptions.forEach(sub => sub.unsubscribe());
@@ -117,7 +120,7 @@ export class RecordFormComponent implements OnInit, OnChanges {
 
         this.form = this.formBuilder.group({});
         this.fields = undefined;
-        if (!dataset) return;
+        if (!dataset || !user) return;
 
         if (!record.dataset || !record.datasetName) {
           this.activeRecordService.setValues({
@@ -130,14 +133,14 @@ export class RecordFormComponent implements OnInit, OnChanges {
         this.readonly = !!record.id;
         this.clientId = record.client_id;
         const values = record?.data || {};
-        this.form = this.formGeneratorService.getFormGroup(this.formBuilder, values, dataset);
-        this.fields = this.formGeneratorService.getFormFields(dataset, values);
+        this.form = this.formGeneratorService.getFormGroup(this.formBuilder, values, dataset, user);
+        this.fields = this.formGeneratorService.getFormFields(dataset, values, user);
         this.subscriptions = [
           this.form.valueChanges.subscribe((values) => this.valueChanges(values)),
           this.form.statusChanges.subscribe(value => this.statusChanges(value)),
         ];
       }),
-      map(([dataset, record]) => record),
+      map(([_dataset, record, _user]) => record),
       shareReplay(1),
     );
   }

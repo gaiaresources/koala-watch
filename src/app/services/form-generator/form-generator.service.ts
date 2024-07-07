@@ -6,6 +6,7 @@ import {FieldDescriptor} from "../../models/field-descriptor";
 import {Dataset} from "../../models/dataset";
 import * as dayjs from "dayjs";
 import {ComputedFieldService} from "../computed-field/computed-field.service";
+import {User} from "../../models/user";
 
 @Injectable({
   providedIn: 'root'
@@ -118,15 +119,15 @@ export class FormGeneratorService {
     return options;
   }
 
-  private getFieldDefaultValue(field: any, value: any): any | null {
-    if (this.isComputedField(field)) return this.computedFieldService.getComputedValue(field, value);
+  private getFieldDefaultValue(field: any, value: any, user: User | null): any | null {
+    if (this.isComputedField(field)) return this.computedFieldService.getComputedValue(field, value, user);
     if (this.isDateField(field)) return dayjs().format();
     if (!this.isHiddenField(field)) return null;
     if (field.hidden) return value;
     return field.constraints.enum[0];
   }
 
-  private getFieldDescriptor(field: any, value: any): FieldDescriptor {
+  private getFieldDescriptor(field: any, value: any, user: User | null): FieldDescriptor {
     const type: string = this.getFieldType(field);
 
     return {
@@ -136,7 +137,7 @@ export class FormGeneratorService {
       format: field.format,
       type: type,
       options: type === 'select' ? this.getOptions(field) : undefined,
-      defaultValue: this.getFieldDefaultValue(field, value),
+      defaultValue: this.getFieldDefaultValue(field, value, user),
       disabled: field.disabled ?? false,
     };
   }
@@ -145,10 +146,10 @@ export class FormGeneratorService {
     return dataset.data_package.resources[resource].schema.fields;
   }
 
-  getFormGroup(formBuilder: FormBuilder, values: any, dataset: any, resource: number = 0): FormGroup {
+  getFormGroup(formBuilder: FormBuilder, values: any, dataset: any, user: User | null, resource: number = 0): FormGroup {
     const group: any = {};
     this.getFields(dataset, resource).forEach((field: any, index: any) => {
-      let defaultValue = this.getFieldDefaultValue(field, values[field.name] ?? null) || '';
+      let defaultValue = this.getFieldDefaultValue(field, values[field.name] ?? null, user) || '';
       if (values.hasOwnProperty(field.name)) {
         defaultValue = values[field.name];
       }
@@ -157,7 +158,7 @@ export class FormGeneratorService {
     return formBuilder.group(group);
   }
 
-  getFormFields(dataset: Dataset, values: any, resource: number = 0): FormDescriptor {
+  getFormFields(dataset: Dataset, values: any, user: User | null, resource: number = 0): FormDescriptor {
     const dateFields: FieldDescriptor[] = [];
     const locationFields: FieldDescriptor[] = [];
     const requiredFields: FieldDescriptor[] = [];
@@ -165,7 +166,7 @@ export class FormGeneratorService {
     const hiddenFields: FieldDescriptor[] = [];
 
     this.getFields(dataset, resource).forEach((field: any) => {
-      const descriptor = this.getFieldDescriptor(field, values[field.name] ?? null);
+      const descriptor = this.getFieldDescriptor(field, values[field.name] ?? null, user);
       if (this.isHiddenField(field)) {
         hiddenFields.push(descriptor);
       } else if (this.isDateField(field)) {
