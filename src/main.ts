@@ -56,16 +56,22 @@ bootstrapApplication(AppComponent, {
       useValue: {
         'Koala Opportunistic Observation': [
           {
-            'Reason for Invalidation': { 'hidden': true },
-            'Observer Name': { 'computed': 'user' },
+            'Reason for Invalidation': {'hidden': true},
+            'Observer Name': {'computed': 'user'},
           },
         ],
         'Koala Scat Census': [
           {
-            'Census ID': { 'computed': 'uuid', 'disabled': true },
-            'Census Observers': { 'computed': 'user' },
+            'Census ID': {'computed': 'uuid', 'disabled': true},
+            'Census Observers': {'computed': 'user'},
           }
         ],
+        'Trees Surveyed': [
+          {
+            'Census ID': {'disabled': true},
+            'Species Code': {'hidden': true},
+          }
+        ]
       }
     }
   ],
