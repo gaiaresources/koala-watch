@@ -180,7 +180,7 @@ export class CensusFormPage implements OnInit {
     this.activeRecordService.clear({
       parentId: record.client_id,
       data: {
-        "Census ID": record.client_id,
+        "Census ID": record.data ? record.data['Census ID'] : '',
       },
     });
     this.navigationService.goSurvey();

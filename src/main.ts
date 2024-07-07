@@ -62,6 +62,7 @@ bootstrapApplication(AppComponent, {
         ],
         'Koala Scat Census': [
           {
+            'Census ID': { 'computed': 'uuid', 'disabled': true },
             'Census Observers': { 'computed': 'user' },
           }
         ],
