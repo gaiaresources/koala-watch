@@ -60,6 +60,11 @@ bootstrapApplication(AppComponent, {
             'Observer Name': { 'computed': 'user' },
           },
         ],
+        'Koala Scat Census': [
+          {
+            'Census Observers': { 'computed': 'user' },
+          }
+        ],
       }
     }
   ],
