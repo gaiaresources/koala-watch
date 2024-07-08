@@ -53,6 +53,10 @@ export class ClientRecord implements Record {
     if (data.modified) this.modified = data.modified;
   }
 
+  isWriteable() {
+    return !this.isUploaded();
+  }
+
   isUploaded() {
     return !!this.id;
   }

@@ -68,7 +68,7 @@ import {GoogleMapsService} from "./services/google-maps/google-maps.service";
 export class AppComponent implements OnInit {
   faSignOutAlt = faSignOutAlt;
   public appPages: { title: string, url: string, icon: IconProp }[] = [
-    {title: 'Records', url: '/observation', icon: faTachometerAlt},
+    {title: 'Records', url: '/records', icon: faTachometerAlt},
     {title: 'Settings', url: '/settings', icon: faCog},
     {title: 'About', url: '/about', icon: faInfoCircle},
     {title: 'Help', url: '/help', icon: faQuestionCircle},

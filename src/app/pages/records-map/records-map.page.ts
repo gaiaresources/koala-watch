@@ -1,33 +1,29 @@
 import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {AlertController, IonContent, IonHeader, IonTitle, IonToolbar, Platform} from '@ionic/angular/standalone';
-import {ClientRecord} from "../../models/client-record";
-import {DATASET_NAME_CENSUS} from "../../tokens/app";
+import {AlertController, IonContent, Platform} from '@ionic/angular/standalone';
 import {combineLatest, map, Observable, shareReplay} from "rxjs";
 import {RecordsService} from "../../services/records/records.service";
-import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
-import * as dayjs from "dayjs";
 import {GoogleMapsService} from "../../services/google-maps/google-maps.service";
+import * as dayjs from "dayjs";
+import {ClientRecord} from "../../models/client-record";
+import {DATASET_NAME_CENSUS} from "../../tokens/app";
+import {GoogleMap, MapMarker} from "@angular/google-maps";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-map',
-  templateUrl: './map.page.html',
-  styleUrls: ['./map.page.scss'],
+  selector: 'app-records-map',
+  templateUrl: './records-map.page.html',
+  styleUrls: ['./records-map.page.scss'],
   standalone: true,
   imports: [
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-    CommonModule,
-    FormsModule,
     GoogleMap,
     MapMarker,
-    MapAdvancedMarker
-  ],
+    AsyncPipe,
+    NgIf,
+    NgForOf
+  ]
 })
-export class MapPage implements OnInit {
+export class RecordsMapPage implements OnInit {
 
   options = {
     zoomControl: false,
@@ -106,4 +102,5 @@ export class MapPage implements OnInit {
     url += `${record.valid ? 'complete' : 'incomplete'}.png`;
     return url;
   }
+
 }

@@ -5,12 +5,11 @@ import {ClientRecord} from "../../models/client-record";
 import {StorageService} from "../../services/storage/storage.service";
 import {DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESURVEY} from "../../tokens/app";
 import {NavigationService} from "../../services/navigation/navigation.service";
-import {ActiveRecordService} from "../../services/active-record/active-record.service";
 
 @Component({
-  selector: 'app-records-list',
-  templateUrl: './records-list.component.html',
-  styleUrls: ['./records-list.component.scss'],
+  selector: 'app-record-list',
+  templateUrl: './record-list.component.html',
+  styleUrls: ['./record-list.component.scss'],
   standalone: true,
   imports: [
     IonicModule,
@@ -19,7 +18,7 @@ import {ActiveRecordService} from "../../services/active-record/active-record.se
     DatePipe
   ]
 })
-export class RecordsListComponent implements OnChanges {
+export class RecordListComponent implements OnChanges {
 
   @Input()
   showLegend: boolean = true;
@@ -38,7 +37,6 @@ export class RecordsListComponent implements OnChanges {
   constructor(
     private storageService: StorageService,
     private navigationService: NavigationService,
-    private activeRecordService: ActiveRecordService,
   ) {
   }
 
@@ -113,18 +111,16 @@ export class RecordsListComponent implements OnChanges {
   }
 
   doRecordClicked(record: ClientRecord) {
-    this.activeRecordService.clear();
     if (record.client_id) {
-      this.activeRecordService.setRecord(record);
       switch (record.datasetName) {
         case DATASET_NAME_OBSERVATION:
-          this.navigationService.goObservation();
+          this.navigationService.goObservation(record);
           break;
         case DATASET_NAME_CENSUS:
-          this.navigationService.goCensus();
+          this.navigationService.goCensus(record);
           break;
         case DATASET_NAME_TREESURVEY:
-          this.navigationService.goSurvey();
+          this.navigationService.goSurvey(new ClientRecord({client_id: record.parentId}), record);
           break;
         default:
           alert('Unable to determine record type');

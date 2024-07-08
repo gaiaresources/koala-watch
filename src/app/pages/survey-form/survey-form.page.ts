@@ -50,7 +50,6 @@ export class SurveyFormPage implements OnInit {
   writeable$: Observable<boolean>;
 
   constructor(
-    private activeRecordService: ActiveRecordService,
     private alertController: AlertController,
     private photoService: CameraService,
     private storageService: StorageService,
@@ -58,7 +57,6 @@ export class SurveyFormPage implements OnInit {
     private navigationService: NavigationService,
     private zone: NgZone,
   ) {
-    this.writeable$ = this.activeRecordService.writeable$;
   }
 
   ngOnInit() {
@@ -106,7 +104,6 @@ export class SurveyFormPage implements OnInit {
   }
 
   async doDeleteRecord() {
-    await this.activeRecordService.delete();
     await this.doCompleted();
   }
 
@@ -114,7 +111,6 @@ export class SurveyFormPage implements OnInit {
     await this.doLoader({
       message: "Saving...",
     });
-    await this.activeRecordService.save();
     await this.doCompleted();
   }
 

@@ -1,4 +1,4 @@
-<ng-container *ngIf="record$ | async">
+<ng-container *ngIf="record; else noFields">
   <ng-container *ngIf="fields; else noFields">
     <form [formGroup]="form">
 
@@ -61,8 +61,8 @@
     </form>
 
   </ng-container>
-
-  <ng-template #noFields>
-    There are no fields defined as part of the dataset.
-  </ng-template>
 </ng-container>
+
+<ng-template #noFields>
+  There are no fields defined as part of the dataset.
+</ng-template>

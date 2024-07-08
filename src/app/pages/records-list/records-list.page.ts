@@ -1,38 +1,34 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {
-  IonButton,
-  IonButtons,
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonHeader,
-  IonImg,
-  IonLabel,
-  IonRow,
-  IonTitle,
-  IonToolbar
-} from '@ionic/angular/standalone';
-import {RecordsListComponent} from "../../components/records-list/records-list.component";
-import {APP_NAME, DATASET_NAME_OBSERVATION} from "../../tokens/app";
+import {combineLatest, map, Observable} from "rxjs";
+import {ClientRecord} from "../../models/client-record";
+import {APP_NAME} from "../../tokens/app";
 import {UploadService} from "../../services/upload/upload.service";
 import {NavigationService} from "../../services/navigation/navigation.service";
-import {combineLatest, map, Observable} from "rxjs";
 import {RecordsService} from "../../services/records/records.service";
-import {ClientRecord} from "../../models/client-record";
-import {ActiveRecordService} from "../../services/active-record/active-record.service";
 import {SettingsService} from "../../services/settings/settings.service";
+import {AsyncPipe, NgIf} from "@angular/common";
+import {RecordListComponent} from "../../components/record-list/record-list.component";
+import {IonButton, IonCol, IonContent, IonGrid, IonImg, IonLabel, IonRow} from "@ionic/angular/standalone";
 
 @Component({
-  selector: 'app-observation-list',
-  templateUrl: './observation-list.page.html',
-  styleUrls: ['./observation-list.page.scss'],
+  selector: 'app-records-list',
+  templateUrl: './records-list.page.html',
+  styleUrls: ['./records-list.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RecordsListComponent, IonButtons, IonImg, IonLabel, IonGrid, IonRow, IonCol, IonButton]
+  imports: [
+    NgIf,
+    AsyncPipe,
+    RecordListComponent,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonImg,
+    IonButton,
+    IonLabel,
+  ]
 })
-export class ObservationListPage implements OnInit {
-  protected readonly DATASET_NAME_OBSERVATION = DATASET_NAME_OBSERVATION;
+export class RecordsListPage implements OnInit {
 
   public records$: Observable<ClientRecord[]>;
 
@@ -41,7 +37,6 @@ export class ObservationListPage implements OnInit {
     private uploadService: UploadService,
     private navigationService: NavigationService,
     private recordsService: RecordsService,
-    private activeRecordService: ActiveRecordService,
     private settingsService: SettingsService,
   ) {
     this.records$ = combineLatest([
@@ -66,13 +61,10 @@ export class ObservationListPage implements OnInit {
   }
 
   doNewObservation() {
-    this.activeRecordService.clear();
     this.navigationService.goObservation();
   }
 
   doNewCensus() {
-    this.activeRecordService.clear();
     this.navigationService.goCensus();
   }
-
 }

@@ -1,6 +1,6 @@
 <ng-container *ngIf="photos$ | async as photos">
   <ng-container *ngIf="photos.length === 0">
-    <ng-container *ngIf="!readonly">
+    <ng-container *ngIf="writeable">
       <ion-card>
         <ion-card-content>
           <p>
@@ -23,7 +23,7 @@
       </ion-card>
     </ng-container>
 
-    <ng-container *ngIf="readonly">
+    <ng-container *ngIf="writeable">
       <ion-card>
         <ion-card-content>
           This record has been uploaded, photos cannot be added or deleted.

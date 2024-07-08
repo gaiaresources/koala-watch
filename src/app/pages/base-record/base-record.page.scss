@@ -1,0 +1,30 @@
+:host {
+  display: contents;
+}
+
+ion-fab-button {
+  margin-bottom: 20px;
+}
+
+.ion-tab-button {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+
+  &__icon {
+    margin: 0 8px;
+  }
+
+  &__text {
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.iconButtons {
+  margin: 0;
+  font-size: 1.5em;
+}

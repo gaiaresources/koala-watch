@@ -1,16 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AsyncPipe, NgIf } from "@angular/common";
-import { ActiveRecordService } from "../../services/active-record/active-record.service";
-import { Observable } from "rxjs";
-import { ClientPhoto } from "../../models/client-photo";
-import { IonButton, IonCard, IonCardContent } from "@ionic/angular/standalone";
-import { CameraService } from "../../services/camera/camera.service";
-import { PhotoGalleryComponent } from "../photo-gallery/photo-gallery.component";
-import { tap } from "rxjs/operators";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faCamera, faImage } from "@fortawesome/free-solid-svg-icons";
+import {Component, Input, OnInit} from '@angular/core';
+import {AsyncPipe, NgIf} from "@angular/common";
+import {Observable} from "rxjs";
+import {ClientPhoto} from "../../models/client-photo";
+import {IonButton, IonCard, IonCardContent} from "@ionic/angular/standalone";
+import {CameraService} from "../../services/camera/camera.service";
+import {PhotoGalleryComponent} from "../photo-gallery/photo-gallery.component";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {faCamera, faImage} from "@fortawesome/free-solid-svg-icons";
 import {ActivePhotoService} from "../../services/active-photo/active-photo.service";
-
+import {ClientRecord} from "../../models/client-record";
 
 @Component({
   selector: 'app-record-photos',
@@ -33,7 +31,10 @@ export class RecordPhotosComponent implements OnInit {
   public faImage = faImage
 
   @Input()
-  readonly: boolean = false;
+  record: ClientRecord | null = null;
+
+  @Input()
+  writeable: boolean = false;
 
   photos$: Observable<ClientPhoto[]>;
 
