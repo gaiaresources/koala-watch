@@ -1,11 +1,9 @@
-<ion-card *ngIf="photo">
-  <ion-card-header>
-    <ion-button (click)="doDelete()">
-      Delete
-    </ion-button>
-  </ion-card-header>
+<div *ngIf="photo" class="photo">
+  <div (click)="doDelete()" class="photo__delete" aria-label="Delete">
+    <fa-icon [icon]="faTrashAlt" aria-hidden="true"/>
+  </div>
 
-  <ion-card-content>
+  <div>
     <ion-img [src]="photo.base64"/>
-  </ion-card-content>
-</ion-card>
+  </div>
+</div>

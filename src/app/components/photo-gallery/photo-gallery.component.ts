@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ClientPhoto} from "../../models/client-photo";
-import {IonButton, IonButtons} from "@ionic/angular/standalone";
+import {IonButton, IonButtons, IonCard, IonCardContent} from "@ionic/angular/standalone";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {PhotoComponent} from "../photo/photo.component";
 import {combineLatest, map, Observable, tap} from "rxjs";
 import {ActivePhotoService} from "../../services/active-photo/active-photo.service";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   standalone: true,
@@ -17,6 +19,9 @@ import {ActivePhotoService} from "../../services/active-photo/active-photo.servi
     PhotoComponent,
     IonButtons,
     AsyncPipe,
+    FaIconComponent,
+    IonCard,
+    IonCardContent,
   ]
 })
 export class PhotoGalleryComponent implements OnInit {
@@ -54,4 +59,6 @@ export class PhotoGalleryComponent implements OnInit {
     this.next = current < length - 1;
   }
 
+  protected readonly faChevronLeft = faChevronLeft;
+  protected readonly faChevronRight = faChevronRight;
 }

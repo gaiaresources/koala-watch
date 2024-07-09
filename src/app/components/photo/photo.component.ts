@@ -1,8 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IonicModule} from "@ionic/angular";
 import {ClientPhoto} from "../../models/client-photo";
 import {NgIf} from "@angular/common";
 import {ActivePhotoService} from "../../services/active-photo/active-photo.service";
+import {IonImg} from "@ionic/angular/standalone";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {faTrash, faTrashAlt, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   standalone: true,
@@ -10,8 +12,9 @@ import {ActivePhotoService} from "../../services/active-photo/active-photo.servi
   templateUrl: './photo.component.html',
   styleUrls: ['./photo.component.scss'],
   imports: [
-    IonicModule,
-    NgIf
+    NgIf,
+    IonImg,
+    FaIconComponent,
   ]
 })
 export class PhotoComponent implements OnInit {
@@ -36,4 +39,7 @@ export class PhotoComponent implements OnInit {
     }
   }
 
+  protected readonly faTrashCan = faTrashCan;
+  protected readonly faTrash = faTrash;
+  protected readonly faTrashAlt = faTrashAlt;
 }

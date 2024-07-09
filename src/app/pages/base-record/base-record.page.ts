@@ -29,6 +29,7 @@ import {RecordsService} from "../../services/records/records.service";
 import {LoadingOptions} from "@ionic/angular";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {ActivePhotoService} from "../../services/active-photo/active-photo.service";
+import {CameraService} from "../../services/camera/camera.service";
 
 @Component({
   selector: 'app-base-record',
@@ -104,6 +105,7 @@ export class BaseRecordPage implements OnInit {
     private navigationController: NavigationService,
     private zone: NgZone,
     private photoService: ActivePhotoService,
+    private cameraService: CameraService,
   ) {
   }
 
@@ -200,9 +202,11 @@ export class BaseRecordPage implements OnInit {
   }
 
   async doCamera() {
+    await this.cameraService.getCameraPhoto();
   }
 
   async doGallery() {
+    await this.cameraService.getLibraryPhoto();
   }
 
   protected createRecord() {
