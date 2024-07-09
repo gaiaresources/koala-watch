@@ -162,7 +162,6 @@ export class FormGeneratorService {
   }
 
   getFormFields(dataset: Dataset, form: FormGroup, record: ClientRecord | null, user: User | null = null, resource: number = 0): FormDescriptor {
-    const data = record?.data || {};
     const dateFields: FieldDescriptor[] = [];
     const locationFields: FieldDescriptor[] = [];
     const requiredFields: FieldDescriptor[] = [];
@@ -171,9 +170,6 @@ export class FormGeneratorService {
 
     this.getFields(dataset, resource).forEach((field: any) => {
       const control = form.get(field.name);
-      if (control && data.hasOwnProperty(field.name)) {
-        control.setValue(data[field.name]);
-      }
       const descriptor = this.getFieldDescriptor(field, control?.value, user);
       if (this.isHiddenField(field)) {
         hiddenFields.push(descriptor);
@@ -194,7 +190,7 @@ export class FormGeneratorService {
   getFormDisabledValues(dataset: Dataset, form: FormGroup, resource: number = 0): any {
     const defaults: any = {};
     this.getFields(dataset, resource).forEach((field: any) => {
-      if (field.disabled && this.isComputedField(field)) {
+      if (field.disabled) {
         defaults[field.name] = form.get(field.name)?.value;
       }
     });
