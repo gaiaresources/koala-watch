@@ -158,8 +158,11 @@ export class RecordFormComponent implements OnInit, OnChanges {
       record.datetime = dayjs(values[this.dateField]).format();
     }
 
-    this.onValid.emit(this.form.valid);
-    this.onDirty.emit(this.form.dirty);
+    // Stop triggering issues with templates that use valid/dirty.
+    setTimeout(() => {
+      this.onValid.emit(this.form.valid);
+      this.onDirty.emit(this.form.dirty);
+    }, 0);
   }
 
   statusChanges(value: string) {

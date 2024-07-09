@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {IonButton, IonImg, IonLabel, IonSegmentButton} from '@ionic/angular/standalone';
 import {BaseRecordPage} from "../base-record/base-record.page";
@@ -10,6 +10,7 @@ import {RecordListComponent} from "../../components/record-list/record-list.comp
 import {ClientRecord} from "../../models/client-record";
 import {RecordsService} from "../../services/records/records.service";
 import {NavigationService} from "../../services/navigation/navigation.service";
+import {ViewWillEnter} from "@ionic/angular";
 
 @Component({
   selector: 'app-census',
@@ -27,7 +28,7 @@ import {NavigationService} from "../../services/navigation/navigation.service";
     IonLabel
   ]
 })
-export class CensusPage implements OnInit, OnChanges {
+export class CensusPage implements OnInit, ViewWillEnter {
 
   @ViewChild(BaseRecordPage)
   private recordPage?: BaseRecordPage;
@@ -66,17 +67,20 @@ export class CensusPage implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['census']) {
-      this.recordsService.getRecord$(this.census).then((record) => {
-        if (record) {
-          this._record.next(record);
-          this.valid = record.valid;
-        } else {
-          this._record.next(new ClientRecord());
-        }
-      });
-    }
+  ionViewWillEnter() {
+    this.segment = 'form';
+    this.setRecord();
+  }
+
+  setRecord() {
+    this.recordsService.getRecord$(this.census).then((record) => {
+      if (record) {
+        this._record.next(record);
+        this.valid = record.valid;
+      } else {
+        this._record.next(new ClientRecord());
+      }
+    });
   }
 
   doValid(valid: boolean) {

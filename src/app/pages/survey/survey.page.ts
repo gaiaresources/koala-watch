@@ -7,6 +7,8 @@ import {ClientRecord} from "../../models/client-record";
 import {DatasetService} from "../../services/dataset/dataset.service";
 import {DATASET_NAME_TREESURVEY} from "../../tokens/app";
 import {RecordsService} from "../../services/records/records.service";
+import {Router} from "@angular/router";
+import {ViewWillEnter} from "@ionic/angular";
 
 @Component({
   selector: 'app-survey',
@@ -19,7 +21,7 @@ import {RecordsService} from "../../services/records/records.service";
     BaseRecordPage
   ]
 })
-export class SurveyPage implements OnInit, OnChanges {
+export class SurveyPage implements OnInit, ViewWillEnter {
 
   @Input()
   census: string = "";
@@ -37,6 +39,7 @@ export class SurveyPage implements OnInit, OnChanges {
   constructor(
     private datasetService: DatasetService,
     private recordsService: RecordsService,
+    private router: Router,
   ) {
     this.dataset$ = this.datasetService.getDataset$(DATASET_NAME_TREESURVEY);
   }
@@ -44,10 +47,8 @@ export class SurveyPage implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['census'] || changes['survey']) {
-      this.setRecord();
-    }
+  ionViewWillEnter(): void {
+    this.setRecord();
   }
 
   async setRecord() {
