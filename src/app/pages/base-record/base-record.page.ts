@@ -72,9 +72,12 @@ export class BaseRecordPage implements OnInit {
   onValid = new EventEmitter<boolean>();
 
   _segment = 'form';
+  @Input()
   set segment(value: string) {
-    this._segment = value;
-    this.onSegment.emit(value);
+    if (this._segment !== value) {
+      this._segment = value;
+      this.onSegment.emit(value);
+    }
   };
 
   get segment() {

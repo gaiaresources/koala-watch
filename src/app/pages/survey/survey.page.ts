@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AsyncPipe, NgIf} from '@angular/common';
 import {BaseRecordPage} from "../base-record/base-record.page";
 import {BehaviorSubject, Observable, shareReplay} from "rxjs";
