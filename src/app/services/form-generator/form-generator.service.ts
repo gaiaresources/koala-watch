@@ -102,7 +102,7 @@ export class FormGeneratorService {
 
   private getOptions(field: any): FieldOption[] {
     const enums: string[] = field.constraints.enum;
-    const prefix: FieldOption[] = field.constraints?.required ? [] : [{text: "", value: ""}];
+    const prefix: FieldOption[] = [{text: "", value: ""}];
 
     const opts = field.options;
     if (!opts?.enum?.titles) {
