@@ -35,7 +35,7 @@ export class ClientRecord implements Record {
     this.parentId = data.parentId || "";
     this.datetime = data.datetime || dayjs().format();
     this.count = data.count || 0;
-    this.photoIds = data.photoIds || [];
+    this.photoIds = [...(data.photoIds || [])];
     if (data.id) this.id = data.id;
     if (data.dataset) this.dataset = data.dataset;
     if (data.site) this.site = data.site;

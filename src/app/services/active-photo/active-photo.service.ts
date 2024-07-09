@@ -94,8 +94,6 @@ export class ActivePhotoService {
   }
 
   setRecord(record: ClientRecord) {
-    const existing = this._record.value;
-    if (existing?.client_id === record?.client_id) return;
     this._record.next(record);
     this._addedPhotos.next([]);
     this._deletedPhotos.next([]);
@@ -112,6 +110,9 @@ export class ActivePhotoService {
     const photos = this._addedPhotos.value;
     photos.push(photo);
     this._addedPhotos.next(photos);
+
+    const record = this._record.value;
+    record.photoIds.push(photo.clientId);
   }
 
   deletePhoto(photo: ClientPhoto) {
@@ -121,6 +122,9 @@ export class ActivePhotoService {
     added = added.filter((p) => p.clientId !== photo.clientId);
     this._deletedPhotos.next(photos);
     this._addedPhotos.next(added);
+
+    const record = this._record.value;
+    record.photoIds = record.photoIds.filter((s) => s != photo.clientId);
   }
 
   getCurrentPhoto(): number {

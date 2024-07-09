@@ -165,7 +165,7 @@ export class RecordsService {
 
   getRecord(clientId: string) {
     if (!this.records.has(clientId)) return null;
-    return this.records.get(clientId) as ClientRecord;
+    return new ClientRecord(this.records.get(clientId));
   }
 
   getRecord$(clientId: string): Promise<ClientRecord | null> {

@@ -28,6 +28,7 @@ import {Dataset} from "../../models/dataset";
 import {RecordsService} from "../../services/records/records.service";
 import {LoadingOptions} from "@ionic/angular";
 import {NavigationService} from "../../services/navigation/navigation.service";
+import {ActivePhotoService} from "../../services/active-photo/active-photo.service";
 
 @Component({
   selector: 'app-base-record',
@@ -85,6 +86,7 @@ export class BaseRecordPage implements OnInit {
       value = this.createRecord();
     }
     this._record.next(value);
+    this.photoService.setRecord(value);
   }
 
   _record = new BehaviorSubject<ClientRecord | null>(null);
@@ -101,6 +103,7 @@ export class BaseRecordPage implements OnInit {
     private loadingController: LoadingController,
     private navigationController: NavigationService,
     private zone: NgZone,
+    private photoService: ActivePhotoService,
   ) {
   }
 
@@ -164,6 +167,7 @@ export class BaseRecordPage implements OnInit {
       message: "Saving...",
     });
     await this.recordsService.setRecord(record);
+    await this.photoService.save();
     await this.doCompleted();
   }
 

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {BaseRecordPage} from "../base-record/base-record.page";
 import {DATASET_NAME_OBSERVATION} from "../../tokens/app";
 import {DatasetService} from "../../services/dataset/dataset.service";
@@ -48,5 +48,6 @@ export class ObservationPage implements OnInit {
 
   ngOnInit() {
   }
+
 
 }
