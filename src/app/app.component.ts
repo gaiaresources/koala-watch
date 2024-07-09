@@ -13,7 +13,7 @@ import {
   IonListHeader,
   IonMenu,
   IonMenuToggle,
-  IonNote, IonRouterLink,
+  IonNote,
   IonRouterOutlet,
   IonSplitPane,
   IonToolbar
