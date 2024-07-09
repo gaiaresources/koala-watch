@@ -28,3 +28,15 @@ ion-fab-button {
   margin: 0;
   font-size: 1.5em;
 }
+
+@media only screen and (max-width: 450px) {
+  .base-record__button {
+    fa-icon {
+      margin: 0
+    }
+
+    &-text {
+      display: none;
+    }
+  }
+}
