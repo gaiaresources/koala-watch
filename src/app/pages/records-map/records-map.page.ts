@@ -50,7 +50,7 @@ export class RecordsMapPage implements OnInit {
     private googleMaps: GoogleMapsService,
   ) {
     this.records$ = combineLatest([
-      this.recordsService.loaded$,
+      this.recordsService.changed$,
       this.googleMaps.loaded$,
     ]).pipe(
       map(([changed, loaded]) => {
