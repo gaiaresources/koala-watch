@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Records</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-tabs>
+    <ion-tab-bar slot="top">
+      <ion-tab-button class="ion-tab-button" tab="list">
+        <fa-icon class="ion-tab-button__icon" [icon]="faList"/>
+        <ion-label class="ion-tab-button__text">List View</ion-label>
+      </ion-tab-button>
+      <ion-tab-button class="ion-tab-button" tab="map">
+        <fa-icon class="ion-tab-button__icon" [icon]="faMap"/>
+        <ion-label class="ion-tab-button__text">Map</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+
+  <ion-fab slot="fixed" horizontal="start" vertical="bottom">
+    <ion-fab-button (click)="doUpload()">
+      <ion-img class="fab-button__img" aria-hidden="true"
+               src="../../../assets/imgs/white_upload.png"></ion-img>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab class="form-hover-buttons" slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="doNewObservation()" color="primary">
+        <ion-img class="fab-button__img" aria-hidden="true"
+                 src="../../../assets/imgs/white_eye.png"></ion-img>
+      </ion-fab-button>
+      <ion-fab-button (click)="doNewCensus()" color="primary">
+        <ion-img class="fab-button__img" aria-hidden="true"
+                 src="../../../assets/imgs/white_poop.png"></ion-img>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+</ion-content>

@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { FieldDescriptor } from "../../models/field-descriptor";
-import { BaseFieldComponent } from "../base-field/base-field.component";
-import { IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonText } from "@ionic/angular/standalone";
-import { NgForOf, NgIf } from "@angular/common";
+import {Component} from '@angular/core';
+import {ReactiveFormsModule} from "@angular/forms";
+import {BaseFieldComponent} from "../base-field/base-field.component";
+import {IonItem, IonLabel, IonSelect, IonSelectOption, IonText} from "@ionic/angular/standalone";
+import {NgForOf, NgIf} from "@angular/common";
+import {HelpButtonComponent} from "../help-button/help-button.component";
+import {ClassifyPipe} from "../../pipes/classify/classify.pipe";
 
 @Component({
   selector: 'app-select-field',
@@ -19,6 +20,8 @@ import { NgForOf, NgIf } from "@angular/common";
     IonSelectOption,
     NgForOf,
     IonText,
+    HelpButtonComponent,
+    ClassifyPipe,
   ]
 })
 export class SelectFieldComponent extends BaseFieldComponent {

@@ -1,18 +1,19 @@
 import {enableProdMode, importProvidersFrom} from '@angular/core';
 import {bootstrapApplication} from '@angular/platform-browser';
-import {provideRouter, RouteReuseStrategy, withComponentInputBinding} from '@angular/router';
-import {IonicRouteStrategy, provideIonicAngular} from '@ionic/angular/standalone';
+import {provideRouter, RouteReuseStrategy, withComponentInputBinding, withRouterConfig} from '@angular/router';
+import {provideIonicAngular} from '@ionic/angular/standalone';
 
 import {routes} from './app/app.routes';
 import {AppComponent} from './app/app.component';
 import {environment} from './environments/environment';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthenticationInterceptor} from "./app/services/authentication/authentication.interceptor";
-import {APP_NAME, PROJECT_NAME} from "./app/tokens/app";
+import {APP_NAME, DATASET_OVERRIDES, PROJECT_NAME} from "./app/tokens/app";
 import {API_URL} from "./app/tokens/api";
 import {IonicStorageModule} from "@ionic/storage-angular";
 import {defineCustomElements} from "@ionic/pwa-elements/loader";
-import {GOOGLE_MAP_API} from "./app/tokens/gmap";
+import {GOOGLE_MAP_API, GOOGLE_MAP_IDS} from "./app/tokens/gmap";
+import {RouteReloadStrategy} from "./app/strategy/route-reload/route-reload.strategy";
 
 defineCustomElements(window);
 if (environment.production) {
@@ -21,9 +22,9 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    {provide: RouteReuseStrategy, useClass: RouteReloadStrategy},
     provideIonicAngular(),
-    provideRouter(routes, withComponentInputBinding()),
+    provideRouter(routes, withComponentInputBinding(), withRouterConfig({onSameUrlNavigation: 'reload'})),
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(IonicStorageModule.forRoot()),
     {
@@ -46,6 +47,33 @@ bootstrapApplication(AppComponent, {
     {
       provide: GOOGLE_MAP_API,
       useValue: environment.googleMapsApi,
+    },
+    {
+      provide: GOOGLE_MAP_IDS,
+      useValue: ['location-map-selector', 'map'],
+    },
+    {
+      provide: DATASET_OVERRIDES,
+      useValue: {
+        'Koala Opportunistic Observation': [
+          {
+            'Reason for Invalidation': {'hidden': true},
+            'Observer Name': {'computed': 'user'},
+          },
+        ],
+        'Koala Scat Census': [
+          {
+            'Census ID': {'computed': 'uuid', 'disabled': true},
+            'Census Observers': {'computed': 'user'},
+          }
+        ],
+        'Trees Surveyed': [
+          {
+            'Census ID': {'disabled': true},
+            'Species Code': {'hidden': true},
+          }
+        ]
+      }
     }
   ],
 });

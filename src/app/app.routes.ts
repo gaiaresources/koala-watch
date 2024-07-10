@@ -1,10 +1,10 @@
-import { Routes } from '@angular/router';
-import { AuthenticationGuardFn } from "./services/authentication/authentication.guard";
+import {Routes} from '@angular/router';
+import {AuthenticationGuardFn} from "./guards/authentication/authentication.guard";
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'observation',
+    redirectTo: 'records',
     pathMatch: 'full',
   },
   {
@@ -40,89 +40,40 @@ export const routes: Routes = [
     canActivate: [AuthenticationGuardFn],
   },
   {
-    path: 'observation',
+    path: 'records',
+    loadComponent: () => import('./pages/records/records.page').then(m => m.RecordsPage),
+    canActivate: [AuthenticationGuardFn],
+    children: [
+      {
+        path: '',
+        redirectTo: 'list',
+        pathMatch: 'full',
+      },
+      {
+        path: 'list',
+        loadComponent: () => import('./pages/records-list/records-list.page').then(m => m.RecordsListPage),
+        canActivate: [AuthenticationGuardFn],
+      },
+      {
+        path: 'map',
+        loadComponent: () => import('./pages/records-map/records-map.page').then(m => m.RecordsMapPage),
+        canActivate: [AuthenticationGuardFn],
+      },
+    ],
+  },
+  {
+    path: 'observation/:observation',
     loadComponent: () => import('./pages/observation/observation.page').then(m => m.ObservationPage),
     canActivate: [AuthenticationGuardFn],
-    children: [
-      {
-        path: '',
-        redirectTo: 'list',
-        pathMatch: 'full',
-      },
-      {
-        path: 'list',
-        loadComponent: () => import('./pages/observation-list/observation-list.page').then(m => m.ObservationListPage),
-        canActivate: [AuthenticationGuardFn],
-      },
-      {
-        path: 'map',
-        loadComponent: () => import('./pages/map/map.page').then(m => m.MapPage),
-        canActivate: [AuthenticationGuardFn],
-        data: {dataset: 'observation'},
-      },
-    ],
   },
   {
-    path: 'observation/form',
-    loadComponent: () => import('./pages/observation-form/observation-form.page').then(m => m.ObservationFormPage),
-    canActivate: [AuthenticationGuardFn],
-  },
-  {
-    path: 'census',
+    path: 'census/:census',
     loadComponent: () => import('./pages/census/census.page').then(m => m.CensusPage),
     canActivate: [AuthenticationGuardFn],
-    children: [
-      {
-        path: '',
-        redirectTo: 'list',
-        pathMatch: 'full',
-      },
-      {
-        path: 'list',
-        loadComponent: () => import('./pages/list/list.page').then(m => m.ListPage),
-        canActivate: [AuthenticationGuardFn],
-        data: {dataset: 'census'},
-      },
-      {
-        path: 'map',
-        loadComponent: () => import('./pages/map/map.page').then(m => m.MapPage),
-        canActivate: [AuthenticationGuardFn],
-        data: {dataset: 'census'},
-      },
-    ],
   },
   {
-    path: 'census/form',
-    loadComponent: () => import('./pages/census-form/census-form.page').then(m => m.CensusFormPage),
-    canActivate: [AuthenticationGuardFn],
-  },
-  {
-    path: 'survey',
+    path: 'census/:census/survey/:survey',
     loadComponent: () => import('./pages/survey/survey.page').then(m => m.SurveyPage),
-    canActivate: [AuthenticationGuardFn],
-    children: [
-      {
-        path: '',
-        redirectTo: 'list',
-        pathMatch: 'full',
-      },
-      {
-        path: 'list',
-        loadComponent: () => import('./pages/list/list.page').then(m => m.ListPage),
-        canActivate: [AuthenticationGuardFn],
-        data: {dataset: 'census'},
-      },
-      {
-        path: 'map',
-        loadComponent: () => import('./pages/map/map.page').then(m => m.MapPage),
-        canActivate: [AuthenticationGuardFn],
-        data: {dataset: 'census'},
-      },
-    ],
-  },
-  {
-    path: 'survey/form',
-    loadComponent: () => import('./pages/survey-form/survey-form.page').then(m => m.SurveyFormPage),
     canActivate: [AuthenticationGuardFn],
   },
 ];

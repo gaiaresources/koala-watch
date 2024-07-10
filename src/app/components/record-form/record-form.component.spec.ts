@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { RecordFormComponent } from './record-form.component';
+import {RecordFormComponent} from './record-form.component';
 
 describe('RecordFormComponent', () => {
   let component: RecordFormComponent;

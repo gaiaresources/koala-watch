@@ -3,7 +3,8 @@
              [placeholder]="field.description || ''"
              [formControlName]="field.key"
              [readonly]="readonly"
-             [type]="field.type"
+             [type]="'number'"
+             [step]="'1'"
              (ionBlur)="checkErrors()">
 
     <div slot="label">
@@ -12,4 +13,8 @@
     </div>
 
   </ion-input>
+
+  <app-help-button *ngIf="field.description" [id]="'help-' + (field.key | classify)">
+    {{ field.description }}
+  </app-help-button>
 </ion-item>

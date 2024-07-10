@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {APIService} from "../api/api.service";
 import {StorageService} from "../storage/storage.service";
 import {ClientRecord} from "../../models/client-record";
-import {BehaviorSubject, combineLatest, firstValueFrom, from, Observable, switchMap} from "rxjs";
+import {BehaviorSubject, combineLatest, firstValueFrom, from, map, Observable, shareReplay, switchMap} from "rxjs";
 import {NetworkService} from "../network/network.service";
 import {DatasetService} from "../dataset/dataset.service";
 import {Dataset} from "../../models/dataset";
@@ -18,6 +18,9 @@ export class RecordsService {
 
   private _changed = new BehaviorSubject<boolean>(false);
   public changed$ = this._changed.asObservable();
+
+  private _loaded = new BehaviorSubject<void>(undefined);
+  public loaded$ = this._loaded.asObservable().pipe(shareReplay(1));
 
   constructor(
     private apiService: APIService,
@@ -38,6 +41,7 @@ export class RecordsService {
       for (let key in records) {
         this.records.set(key, new ClientRecord(records[key]));
       }
+      this._loaded.next();
       this._changed.next(true);
     });
   }
@@ -161,7 +165,15 @@ export class RecordsService {
 
   getRecord(clientId: string) {
     if (!this.records.has(clientId)) return null;
-    return this.records.get(clientId);
+    return new ClientRecord(this.records.get(clientId));
+  }
+
+  getRecord$(clientId: string): Promise<ClientRecord | null> {
+    return firstValueFrom(this.loaded$.pipe(
+      map(() => {
+        return this.getRecord(clientId);
+      }),
+    ));
   }
 
   async deleteRecord(clientId: string) {

@@ -1,21 +1,45 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Census Records</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ng-container *ngIf="record$ | async as record">
+  <ng-container *ngIf="dataset$ | async as dataset">
+    <app-base-record [title]="'Scat Census'"
+                     [dataset]="dataset"
+                     [record]="record"
+                     [segment]="segment"
+                     (onSegment)="doSegment($event)"
+                     (onValid)="doValid($event)"
+                     (onDirty)="doDirty($event)"
+                     [deleteHeader]="'Scat Census'"
+                     [deleteQuestion]="'Do you want to delete this scat census?'">
 
-<ion-content>
-  <ion-tabs>
-    <ion-tab-bar slot="top">
-      <ion-tab-button tab="list">
-        List
-      </ion-tab-button>
-      <ion-tab-button tab="map">
-        Map
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
-</ion-content>
+      <ng-container content-segments>
+        <ion-segment-button value="observations" *ngIf="valid">
+          Tree Surveys
+        </ion-segment-button>
+      </ng-container>
+
+      <ng-container content-page>
+        <ng-container *ngIf="segment === 'observations'">
+          <ng-container *ngIf="children$ | async as children; else createObservations">
+            <app-record-list *ngIf="children.length; else createObservations" [records]="children">
+            </app-record-list>
+          </ng-container>
+
+          <ng-template #createObservations>
+            <h1>This census does not have any tree surveys</h1>
+            <p>
+              On this screen you can view the tree surveys related to this census. You can also create a
+              new tree survey. Each census can have many tree surveys.
+            </p>
+          </ng-template>
+
+          <ion-button class="fab-button" (click)="doNewSurvey()">
+            <ion-img class="fab-button__img" slot="start" src="../../../assets/imgs/white_tree.png"
+                     alt="Koala Tree Survey"
+                     aria-hidden="true"/>
+            <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
+          </ion-button>
+        </ng-container>
+      </ng-container>
+
+    </app-base-record>
+  </ng-container>
+</ng-container>

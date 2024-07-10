@@ -6,7 +6,6 @@ import {IonButton, IonButtons, IonIcon} from "@ionic/angular/standalone";
 import {faLocationArrow, faLocationCrosshairs, faMapPin} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {LocationService} from "../../services/location/location.service";
-import {Position} from "@capacitor/geolocation";
 import {LocationMapSelectorComponent} from "../location-map-selector/location-map-selector.component";
 import {Coordinates} from "../../models/coordinates";
 import {ElevationService} from "../../services/elevation/elevation.service";
@@ -40,7 +39,7 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
 
   subscription?: Subscription;
 
-  accuracy: number | "" = -1;
+  accuracy: number | "" = "";
 
   lat?: number;
   lng?: number;
@@ -72,7 +71,7 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
 
     // Process form value changes internally.
     this.subscription = this.formGroup.valueChanges.subscribe((values) => {
-      this.accuracy = values.Accuracy ?? -1;
+      this.accuracy = values.Accuracy ?? "";
     });
 
     if (this.formGroup.contains("Latitude")) {
@@ -86,7 +85,7 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
   }
 
   setLocationValues(lat: number, lng: number, accuracy: number | "", altitude: number | "") {
-    const promise = altitude === -1 ? this.elevationService.getElevation(lat, lng) : Promise.resolve(altitude);
+    const promise = altitude === "" ? this.elevationService.getElevation(lat, lng) : Promise.resolve(altitude);
 
     promise.then((alt) => {
       if (!this.formGroup) return;
@@ -117,13 +116,12 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
   }
 
   doGpsSelect() {
-    this.locationService.getPosition().then((position: Position) => {
-      const coords = position.coords;
+    this.locationService.getPosition().then((coords: Coordinates) => {
       this.setLocationValues(
-        coords.latitude,
-        coords.longitude,
+        coords.lat,
+        coords.lng,
         coords.accuracy,
-        coords.altitude ?? -1,
+        coords.altitude ?? "",
       );
     });
   }

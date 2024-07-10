@@ -6,3 +6,5 @@ export const DATASET_NAME_TREESURVEY = 'Trees Surveyed';
 
 export const APP_NAME = new InjectionToken<string>('The app name');
 export const PROJECT_NAME = new InjectionToken<string>('The internal name used for the project');
+
+export const DATASET_OVERRIDES = new InjectionToken<any>('The dataset overrides');

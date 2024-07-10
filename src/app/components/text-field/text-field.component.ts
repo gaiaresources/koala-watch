@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-import { ReactiveFormsModule } from "@angular/forms";
-import { NgIf } from "@angular/common";
-import { IonInput, IonItem, IonLabel, IonText } from "@ionic/angular/standalone";
-import { BaseFieldComponent } from "../base-field/base-field.component";
+import {Component} from '@angular/core';
+import {ReactiveFormsModule} from "@angular/forms";
+import {NgIf} from "@angular/common";
+import {IonInput, IonItem, IonLabel, IonText} from "@ionic/angular/standalone";
+import {BaseFieldComponent} from "../base-field/base-field.component";
+import {HelpButtonComponent} from "../help-button/help-button.component";
+import {ClassifyPipe} from "../../pipes/classify/classify.pipe";
 
 @Component({
   selector: 'app-text-field',
@@ -16,6 +18,8 @@ import { BaseFieldComponent } from "../base-field/base-field.component";
     IonLabel,
     IonItem,
     IonText,
+    HelpButtonComponent,
+    ClassifyPipe,
   ]
 })
 export class TextFieldComponent extends BaseFieldComponent {

@@ -13,4 +13,9 @@
       {{ option.text }}
     </ion-select-option>
   </ion-select>
+
+  <app-help-button *ngIf="field.description" [id]="'help-' + (field.key | classify)">
+    {{ field.description }}
+  </app-help-button>
+
 </ion-item>

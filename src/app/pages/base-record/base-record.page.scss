@@ -1,0 +1,48 @@
+:host {
+  display: contents;
+}
+
+ion-fab-button {
+  margin-bottom: 20px;
+}
+
+.ion-tab-button {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+
+  &__icon {
+    margin: 0 8px;
+  }
+
+  &__text {
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.iconButtons {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.base-record__button {
+  fa-icon {
+    margin-right: 1.5em;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .base-record__button {
+    fa-icon {
+      margin: 0
+    }
+
+    &-text {
+      display: none;
+    }
+  }
+}

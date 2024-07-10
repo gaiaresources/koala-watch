@@ -4,9 +4,8 @@ import {FormDescriptor} from "../../models/form-descriptor";
 import {DatasetService} from "../../services/dataset/dataset.service";
 import {FormGeneratorService} from "../../services/form-generator/form-generator.service";
 import {AsyncPipe, JsonPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
-import {BehaviorSubject, combineLatest, map, Observable, shareReplay, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {Dataset} from "../../models/dataset";
-import {tap} from "rxjs/operators";
 import {DateFieldComponent} from "../date-field/date-field.component";
 import {IntegerFieldComponent} from "../integer-field/integer-field.component";
 import {NumberFieldComponent} from "../number-field/number-field.component";
@@ -15,7 +14,6 @@ import {SelectFieldComponent} from "../select-field/select-field.component";
 import {FieldComponent} from "../field/field.component";
 import {HiddenFieldComponent} from "../hidden-field/hidden-field.component";
 import {LocationSelectorComponent} from "../location-selector/location-selector.component";
-import {ActiveRecordService} from "../../services/active-record/active-record.service";
 import {IonItem, IonItemDivider, IonItemGroup, IonList} from "@ionic/angular/standalone";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faCalendar, faStar} from "@fortawesome/free-regular-svg-icons";
@@ -23,6 +21,7 @@ import {faAsterisk} from "@fortawesome/free-solid-svg-icons";
 import {ClientRecord} from "../../models/client-record";
 import {RecordsService} from "../../services/records/records.service";
 import * as dayjs from "dayjs";
+import {AuthenticationService} from "../../services/authentication/authentication.service";
 
 @Component({
   standalone: true,
@@ -60,7 +59,13 @@ export class RecordFormComponent implements OnInit, OnChanges {
   public faAsterisk = faAsterisk;
 
   @Input()
-  dataset: string = "";
+  dataset?: Dataset;
+
+  @Input()
+  record: ClientRecord | null = null;
+
+  @Input()
+  writeable: boolean = false;
 
   @Input()
   countField?: string;
@@ -71,14 +76,14 @@ export class RecordFormComponent implements OnInit, OnChanges {
   @Output()
   onDirty = new EventEmitter<boolean>();
 
+  @Output()
+  onValid = new EventEmitter<boolean>();
+
   form: FormGroup;
   fields?: FormDescriptor;
 
-  _datasetName = new BehaviorSubject<string>("");
-  _dataset?: Dataset;
-  dataset$: Observable<Dataset | undefined>;
-  record$: Observable<ClientRecord | undefined>;
   subscriptions: Subscription[] = [];
+  disabled: any = {};
   clientId: string = "";
 
   readonly: boolean = false;
@@ -87,58 +92,10 @@ export class RecordFormComponent implements OnInit, OnChanges {
     private formBuilder: FormBuilder,
     private datasetService: DatasetService,
     private formGeneratorService: FormGeneratorService,
-    private activeRecordService: ActiveRecordService,
     private recordsService: RecordsService,
+    private authenticationService: AuthenticationService,
   ) {
     this.form = this.formBuilder.group({});
-    this.dataset$ = combineLatest([
-      this._datasetName.asObservable(),
-      this.datasetService.datasets$,
-    ]).pipe(
-      map(([datasetName, datasets]) => datasets.find(d => d.name === datasetName)),
-      shareReplay(1),
-      tap((dataset) => {
-        if (dataset) {
-          this._dataset = dataset;
-        }
-      }),
-    );
-
-    this.record$ = combineLatest([
-      this.dataset$,
-      this.activeRecordService.record$,
-    ]).pipe(
-      tap(([dataset, record]) => {
-        if (record && this.clientId === record.client_id) return;
-        if (this.subscriptions.length) {
-          this.subscriptions.forEach(sub => sub.unsubscribe());
-          this.subscriptions = [];
-        }
-
-        this.form = this.formBuilder.group({});
-        this.fields = undefined;
-        if (!dataset) return;
-
-        if (!record.dataset || !record.datasetName) {
-          this.activeRecordService.setValues({
-            dataset: dataset.id,
-            datasetName: dataset.name,
-          })
-          return;
-        }
-
-        this.readonly = !!record.id;
-        this.clientId = record.client_id;
-        this.form = this.formGeneratorService.getFormGroup(this.formBuilder, record?.data || {}, dataset);
-        this.fields = this.formGeneratorService.getFormFields(dataset);
-        this.subscriptions = [
-          this.form.valueChanges.subscribe((values) => this.valueChanges(values)),
-          this.form.statusChanges.subscribe(value => this.statusChanges(value)),
-        ];
-      }),
-      map(([dataset, record]) => record),
-      shareReplay(1),
-    );
   }
 
   ngOnInit() {
@@ -146,26 +103,53 @@ export class RecordFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['dataset']) {
-      this._datasetName.next(this.dataset);
+      this.setDataset();
+    }
+    if (changes['record']) {
+      this.setRecord();
     }
   }
 
-  valueChanges(values: any) {
-    const record: any = {
-      dataset: this._dataset?.id,
-      datasetName: this._dataset?.name,
-      data: values,
-      count: 0,
-      valid: this.form.valid,
-      modified: this.form.dirty,
+  async setDataset() {
+    if (this.subscriptions.length) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
     }
+    const user = this.authenticationService.getUser();
+    const data = this.record?.data || {};
+    this.form = this.formGeneratorService.getFormGroup(this.formBuilder, data, this.dataset, user);
+    this.subscriptions = [
+      this.form.valueChanges.subscribe((values) => this.setValues(values)),
+      this.form.statusChanges.subscribe((values) => this.statusChanges(values)),
+    ];
+  }
+
+  setRecord() {
+    if (!this.dataset || !this.record) return;
+    const user = this.authenticationService.getUser();
+    this.fields = this.formGeneratorService.getFormFields(this.dataset, this.form, this.record, user);
+    this.disabled = this.formGeneratorService.getFormDisabledValues(this.dataset, this.form);
+
+    // Ensure any disabled values are also updated for the record.
+    this.setValues(this.form.getRawValue());
+  }
+
+  setValues(values: any) {
+    const dataset = this.dataset;
+    const record = this.record;
+    if (!record || !dataset) return;
+
+    record.dataset = dataset.id;
+    record.datasetName = dataset.name || "";
+    record.count = 0;
+    record.valid = this.form.valid;
+    record.modified = this.form.dirty;
+    record.data = {...this.disabled, ...values};
 
     // Default behaviour of count callback is how many child records exist.
     if (this.countField && values.hasOwnProperty(this.countField)) {
       record.count = values[this.countField] ? parseInt(values[this.countField], 10) : 0;
     } else {
-      const clientId = this.activeRecordService.getClientId();
-      const records = this.recordsService.getChildRecords(clientId);
+      const records = this.recordsService.getChildRecords(record.parentId);
       record.count = records.length;
       record.valid = record.valid && !records.some(record => !record.valid);
     }
@@ -174,13 +158,14 @@ export class RecordFormComponent implements OnInit, OnChanges {
       record.datetime = dayjs(values[this.dateField]).format();
     }
 
-    this.activeRecordService.setValues(record);
-
-    this.onDirty.emit(this.form.dirty);
+    // Stop triggering issues with templates that use valid/dirty.
+    setTimeout(() => {
+      this.onValid.emit(this.form.valid);
+      this.onDirty.emit(this.form.dirty);
+    }, 0);
   }
 
   statusChanges(value: string) {
-    this.activeRecordService.setStatus(value);
   }
 
 }

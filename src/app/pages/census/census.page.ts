@@ -1,31 +1,110 @@
-import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  IonTitle,
-  IonToolbar
-} from '@ionic/angular/standalone';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {IonButton, IonImg, IonLabel, IonSegmentButton} from '@ionic/angular/standalone';
+import {BaseRecordPage} from "../base-record/base-record.page";
+import {BehaviorSubject, distinctUntilChanged, map, Observable, shareReplay} from "rxjs";
+import {Dataset} from "../../models/dataset";
+import {DatasetService} from "../../services/dataset/dataset.service";
+import {DATASET_NAME_CENSUS} from "../../tokens/app";
+import {RecordListComponent} from "../../components/record-list/record-list.component";
+import {ClientRecord} from "../../models/client-record";
+import {RecordsService} from "../../services/records/records.service";
+import {NavigationService} from "../../services/navigation/navigation.service";
+import {ViewWillEnter} from "@ionic/angular";
 
 @Component({
   selector: 'app-census',
   templateUrl: './census.page.html',
   styleUrls: ['./census.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonTabBar, IonTabButton, IonTabs]
+  imports: [
+    RecordListComponent,
+    NgIf,
+    AsyncPipe,
+    BaseRecordPage,
+    IonSegmentButton,
+    IonButton,
+    IonImg,
+    IonLabel
+  ]
 })
-export class CensusPage implements OnInit {
+export class CensusPage implements OnInit, ViewWillEnter {
 
-  constructor() {
+  @ViewChild(BaseRecordPage)
+  private recordPage?: BaseRecordPage;
+
+  @Input()
+  census: string = "";
+
+  dataset$: Observable<Dataset | null>;
+
+  _record = new BehaviorSubject<ClientRecord | null>(null);
+  record$ = this._record.asObservable().pipe(
+    distinctUntilChanged(),
+    shareReplay(1),
+  );
+
+  children$: Observable<ClientRecord[]> = this.record$.pipe(
+    map((record) => {
+      if (!record) return [];
+      return this.recordsService.getChildRecords(record.client_id);
+    }),
+    shareReplay(1),
+  );
+
+  segment: string = 'form';
+  valid: boolean = false;
+  dirty: boolean = false;
+
+  constructor(
+    private datasetService: DatasetService,
+    private recordsService: RecordsService,
+    private navigationService: NavigationService,
+  ) {
+    this.dataset$ = this.datasetService.getDataset$(DATASET_NAME_CENSUS);
   }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
+    this.segment = 'form';
+    this.setRecord();
+  }
+
+  setRecord() {
+    this.recordsService.getRecord$(this.census).then((record) => {
+      if (record) {
+        this._record.next(record);
+        this.valid = record.valid;
+      } else {
+        this._record.next(new ClientRecord());
+      }
+    });
+  }
+
+  doValid(valid: boolean) {
+    this.valid = valid;
+  }
+
+  doDirty(dirty: boolean) {
+    this.dirty = dirty;
+  }
+
+  doSegment(segment: string) {
+    this.segment = segment;
+  }
+
+  async doNewSurvey() {
+    const record = this._record.value;
+    if (!record || !this.recordPage) return;
+
+    const choice = await this.recordPage.shouldSave();
+    if (choice) {
+      await this.recordPage.doSave();
+    }
+
+    this.navigationService.goSurvey(record);
   }
 
 }

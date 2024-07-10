@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { FieldDescriptor } from "../../models/field-descriptor";
-import { IonInput, IonItem, IonText } from "@ionic/angular/standalone";
-import { NgIf } from "@angular/common";
-import { BaseFieldComponent } from "../base-field/base-field.component";
+import {Component} from '@angular/core';
+import {ReactiveFormsModule} from "@angular/forms";
+import {IonInput, IonItem, IonText} from "@ionic/angular/standalone";
+import {NgIf} from "@angular/common";
+import {BaseFieldComponent} from "../base-field/base-field.component";
+import {HelpButtonComponent} from "../help-button/help-button.component";
+import {ClassifyPipe} from "../../pipes/classify/classify.pipe";
 
 @Component({
   selector: 'app-number-field',
@@ -15,7 +16,9 @@ import { BaseFieldComponent } from "../base-field/base-field.component";
     IonText,
     NgIf,
     ReactiveFormsModule,
-    IonItem
+    IonItem,
+    HelpButtonComponent,
+    ClassifyPipe
   ]
 })
 export class NumberFieldComponent extends BaseFieldComponent {

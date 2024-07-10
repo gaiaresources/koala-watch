@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgIf } from "@angular/common";
-import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { FieldDescriptor } from "../../models/field-descriptor";
-import { IonicModule } from "@ionic/angular";
-import {IonDatetime, IonDatetimeButton, IonLabel, IonModal} from "@ionic/angular/standalone";
+import {Component, Input, OnInit} from '@angular/core';
+import {DatePipe, NgIf} from "@angular/common";
+import {FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FieldDescriptor} from "../../models/field-descriptor";
+import {IonDatetime, IonDatetimeButton, IonItem, IonLabel, IonModal} from "@ionic/angular/standalone";
 import {ClassifyPipe} from "../../pipes/classify/classify.pipe";
+import {HelpButtonComponent} from "../help-button/help-button.component";
 
 @Component({
   selector: 'app-date-field',
@@ -19,6 +19,9 @@ import {ClassifyPipe} from "../../pipes/classify/classify.pipe";
     IonDatetimeButton,
     IonModal,
     ClassifyPipe,
+    DatePipe,
+    IonItem,
+    HelpButtonComponent,
   ]
 })
 export class DateFieldComponent implements OnInit {
@@ -31,6 +34,8 @@ export class DateFieldComponent implements OnInit {
 
   @Input({required: true})
   field?: FieldDescriptor;
+
+  currentDate = new Date();
 
   constructor() {
   }

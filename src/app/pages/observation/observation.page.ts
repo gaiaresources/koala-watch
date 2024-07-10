@@ -1,67 +1,60 @@
-import {Component, OnInit} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import {
-  IonButtons,
-  IonContent,
-  IonFab,
-  IonFabButton,
-  IonHeader,
-  IonMenuButton,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  IonTitle,
-  IonToolbar,
-  IonFabList,
-  IonImg,
-  IonLabel, IonIcon
-} from '@ionic/angular/standalone';
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {faList, faMap} from "@fortawesome/free-solid-svg-icons";
-import {UploadService} from "../../services/upload/upload.service";
-import {NavigationService} from "../../services/navigation/navigation.service";
-import {firstValueFrom} from "rxjs";
-import {ActiveRecordService} from "../../services/active-record/active-record.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {BaseRecordPage} from "../base-record/base-record.page";
+import {DATASET_NAME_OBSERVATION} from "../../tokens/app";
+import {DatasetService} from "../../services/dataset/dataset.service";
+import {BehaviorSubject, Observable, shareReplay} from "rxjs";
+import {Dataset} from "../../models/dataset";
+import {AsyncPipe, NgIf} from "@angular/common";
+import {ClientRecord} from "../../models/client-record";
+import {RecordsService} from "../../services/records/records.service";
+import {ViewWillEnter} from "@ionic/angular";
 
 @Component({
   selector: 'app-observation',
   templateUrl: './observation.page.html',
   styleUrls: ['./observation.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonTabBar, IonTabButton, IonTabs, IonFab, IonFabButton, IonFabList, IonImg, FaIconComponent, IonLabel, IonIcon]
+  imports: [
+    BaseRecordPage,
+    NgIf,
+    AsyncPipe
+  ]
 })
-export class ObservationPage implements OnInit {
+export class ObservationPage implements OnInit, ViewWillEnter {
 
-  public faList = faList;
-  public faMap = faMap;
+  dataset$: Observable<Dataset | null>;
+
+  @Input()
+  observation: string = "";
+
+  _record = new BehaviorSubject<ClientRecord | null>(null);
+  record$ = this._record.asObservable().pipe(
+    shareReplay(1),
+  );
 
   constructor(
-    private uploadService: UploadService,
-    private navigationService: NavigationService,
-    private activeRecordService: ActiveRecordService,
+    private datasetService: DatasetService,
+    private recordsService: RecordsService,
   ) {
+    this.dataset$ = this.datasetService.getDataset$(DATASET_NAME_OBSERVATION);
   }
 
   ngOnInit() {
   }
-  async doUpload() {
-    await this.uploadService.upload();
+
+  ionViewWillEnter() {
+    this.setRecord();
   }
 
-  doNewCensus() {
-    this.activeRecordService.clear();
-    this.navigationService.goCensus();
+  setRecord() {
+    this.recordsService.getRecord$(this.observation).then((record) => {
+      if (record) {
+        this._record.next(record);
+      } else {
+        this._record.next(new ClientRecord());
+      }
+    });
   }
 
-  doNewObservation() {
-    this.activeRecordService.clear();
-    this.navigationService.goObservation();
-  }
-
-  doNewTreeSurvey() {
-    this.activeRecordService.clear();
-    this.navigationService.goSurvey();
-  }
 
 }

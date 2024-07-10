@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from "../storage/storage.service";
-import { BehaviorSubject } from "rxjs";
+import {BehaviorSubject, shareReplay} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class SettingsService {
   private values = new BehaviorSubject<any>({
     'hideUploaded': true,
   });
-  public values$ = this.values.asObservable();
+  public values$ = this.values.asObservable().pipe(shareReplay(1));
 
   constructor(private storageService: StorageService) {
     this.storageService.getPrefixed('Setting_')?.then((list) => {

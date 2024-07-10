@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { IntegerFieldComponent } from './integer-field.component';
+import {IntegerFieldComponent} from './integer-field.component';
 
 describe('IntegerFieldComponent', () => {
   let component: IntegerFieldComponent;

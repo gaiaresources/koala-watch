@@ -1,13 +1,17 @@
-<div *ngIf="gallery$ | async as gallery">
-  <app-photo [photo]="gallery.photos[gallery.current]" [index]="gallery.current"/>
+<ion-card>
+  <ion-card-content>
+    <div *ngIf="gallery$ | async as gallery" class="photo-gallery">
+      <app-photo [photo]="gallery.photos[gallery.current]" [index]="gallery.current"/>
 
-  <ion-buttons>
-    <ion-button *ngIf="previous" (click)="doChangePhoto(gallery.current - 1)">
-      Previous
-    </ion-button>
+      <div *ngIf="previous" (click)="doChangePhoto(gallery.current - 1)"
+           class="photo-gallery__button photo-gallery__previous" aria-label="Previous">
+        <fa-icon [icon]="faChevronLeft" aria-hidden="true"/>
+      </div>
 
-    <ion-button *ngIf="next" (click)="doChangePhoto(gallery.current + 1)">
-      Next
-    </ion-button>
-  </ion-buttons>
-</div>
+      <div *ngIf="next" (click)="doChangePhoto(gallery.current + 1)" class="photo-gallery__button photo-gallery__next"
+           aria-label="Next">
+        <fa-icon [icon]="faChevronRight" aria-hidden="true"/>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>

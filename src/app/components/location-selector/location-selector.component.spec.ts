@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { LocationSelectorComponent } from './location-selector.component';
+import {LocationSelectorComponent} from './location-selector.component';
 
 describe('LocationSelectorComponent', () => {
   let component: LocationSelectorComponent;

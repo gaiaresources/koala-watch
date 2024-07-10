@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { PrivacyPolicyComponent } from './privacy-policy.component';
+import {PrivacyPolicyComponent} from './privacy-policy.component';
 
 describe('PrivacyPolicyComponent', () => {
   let component: PrivacyPolicyComponent;

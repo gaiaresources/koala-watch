@@ -1,21 +1,12 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Survey Records</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <ion-tabs>
-    <ion-tab-bar slot="top">
-      <ion-tab-button tab="list">
-        List
-      </ion-tab-button>
-      <ion-tab-button tab="map">
-        Map
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
-</ion-content>
+<ng-container *ngIf="record$ | async as record">
+  <ng-container *ngIf="dataset$ | async as dataset">
+    <app-base-record [title]="'Tree Survey'"
+                     [dataset]="dataset"
+                     [record]="record"
+                     [countField]="'Count'"
+                     [dateField]="'First Date'"
+                     [deleteHeader]="'Tree Survey'"
+                     [deleteQuestion]="'Do you want to delete this Tree Survey?'">
+    </app-base-record>
+  </ng-container>
+</ng-container>

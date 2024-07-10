@@ -18,8 +18,6 @@ import {
 } from '@ionic/angular/standalone';
 import {APP_NAME} from "../../tokens/app";
 import {UploadService} from "../../services/upload/upload.service";
-import {NavigationService} from "../../services/navigation/navigation.service";
-import {ActiveRecordService} from "../../services/active-record/active-record.service";
 
 @Component({
   selector: 'app-help',
@@ -33,8 +31,6 @@ export class HelpPage implements OnInit {
   constructor(
     @Inject(APP_NAME) public appName: string,
     private uploadService: UploadService,
-    private navigationService: NavigationService,
-    private activeRecordService: ActiveRecordService,
   ) {
   }
 
@@ -43,21 +39,6 @@ export class HelpPage implements OnInit {
 
   async doUpload() {
     await this.uploadService.upload();
-  }
-
-  doNewObservation() {
-    this.activeRecordService.clear();
-    this.navigationService.goObservation();
-  }
-
-  doNewCensus() {
-    this.activeRecordService.clear();
-    this.navigationService.goCensus();
-  }
-
-  doNewTreeSurvey() {
-    this.activeRecordService.clear();
-    this.navigationService.goSurvey();
   }
 
 }
