@@ -1,17 +1,19 @@
-<div *ngIf="field && formGroup" [formGroup]="formGroup">
+<ion-item *ngIf="field && formGroup" [formGroup]="formGroup">
   <ion-label>
     {{ field.label }}
   </ion-label>
 
-  <div>
-    <ion-datetime-button [datetime]="'datetime-' + (field.key | classify)"></ion-datetime-button>
+  <ion-datetime-button [datetime]="'datetime-' + (field.key | classify)"></ion-datetime-button>
 
-    <ion-modal [keepContentsMounted]="true">
-      <ng-template>
-        <ion-datetime [id]="'datetime-' + (field.key | classify)" [formControlName]="field.key"
-                      [max]="currentDate | date: 'yyyy-MM-dd'"></ion-datetime>
-      </ng-template>
-    </ion-modal>
-  </div>
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime [id]="'datetime-' + (field.key | classify)" [formControlName]="field.key"
+                    [max]="currentDate | date: 'yyyy-MM-dd'"></ion-datetime>
+    </ng-template>
+  </ion-modal>
 
-</div>
+
+  <app-help-button *ngIf="field.description" [id]="'help-' + (field.key | classify)">
+    {{ field.description }}
+  </app-help-button>
+</ion-item>

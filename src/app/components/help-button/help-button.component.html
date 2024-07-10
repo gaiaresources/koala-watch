@@ -1,0 +1,10 @@
+<ion-button [id]="id" color="primary" size="medium" fill="clear">
+  <fa-icon [icon]="faCircleQuestion" />
+</ion-button>
+<ion-popover [trigger]="id" triggerAction="click">
+  <ng-template>
+    <ion-content class="ion-padding">
+      <ng-content></ng-content>
+    </ion-content>
+  </ng-template>
+</ion-popover>

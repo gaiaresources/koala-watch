@@ -3,6 +3,8 @@ import {NgIf} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
 import {IonInput, IonItem, IonText} from "@ionic/angular/standalone";
 import {BaseFieldComponent} from "../base-field/base-field.component";
+import {HelpButtonComponent} from "../help-button/help-button.component";
+import {ClassifyPipe} from "../../pipes/classify/classify.pipe";
 
 @Component({
   selector: 'app-integer-field',
@@ -14,7 +16,9 @@ import {BaseFieldComponent} from "../base-field/base-field.component";
     ReactiveFormsModule,
     IonInput,
     IonText,
-    IonItem
+    IonItem,
+    HelpButtonComponent,
+    ClassifyPipe
   ]
 })
 export class IntegerFieldComponent extends BaseFieldComponent {
