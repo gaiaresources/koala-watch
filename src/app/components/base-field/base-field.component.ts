@@ -1,7 +1,7 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup, ValidationErrors } from "@angular/forms";
-import { FieldDescriptor } from "../../models/field-descriptor";
-import { Subscription } from "rxjs";
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {FormGroup, ValidationErrors} from "@angular/forms";
+import {FieldDescriptor} from "../../models/field-descriptor";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-base-field',
@@ -71,6 +71,10 @@ export abstract class BaseFieldComponent implements OnInit, OnChanges {
         return `Maximum length: ${error['maxLength']}`;
       case 'pattern':
         return `Must match pattern: ${error['pattern']}`;
+      case 'invalidInteger':
+        return 'Must be a valid integer';
+      case 'invalidDecimal':
+        return 'Must be a valid decimal up to 9 places';
       default:
         return `Unknown error result`;
     }

@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { HiddenFieldComponent } from './hidden-field.component';
+import {HiddenFieldComponent} from './hidden-field.component';
 
 describe('HiddenFieldComponent', () => {
   let component: HiddenFieldComponent;

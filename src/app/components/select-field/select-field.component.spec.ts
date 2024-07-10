@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { SelectFieldComponent } from './select-field.component';
+import {SelectFieldComponent} from './select-field.component';
 
 describe('SelectFieldComponent', () => {
   let component: SelectFieldComponent;

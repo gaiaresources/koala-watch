@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { RecordListComponent } from './record-list.component';
+import {RecordListComponent} from './record-list.component';
 
 describe('RecordListComponent', () => {
   let component: RecordListComponent;

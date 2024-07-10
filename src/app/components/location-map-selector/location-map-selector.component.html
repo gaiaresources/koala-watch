@@ -19,7 +19,7 @@
                   [zoom]="lat ? 13 : 3.5"
                   (mapClick)="doUpdatePosition($event)">
         <map-marker *ngIf="current"
-                             [position]="{ lat: current.lat, lng: current.lng }" [icon]="currentIcon">
+                    [position]="{ lat: current.lat, lng: current.lng }" [icon]="currentIcon">
         </map-marker>
         <map-advanced-marker *ngIf="coords"
                              [position]="{ lat: coords.lat, lng: coords.lng }"

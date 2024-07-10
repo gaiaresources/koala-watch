@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { LocationMapSelectorComponent } from './location-map-selector.component';
+import {LocationMapSelectorComponent} from './location-map-selector.component';
 
 describe('LocationMapSelectorComponent', () => {
   let component: LocationMapSelectorComponent;
@@ -9,7 +9,7 @@ describe('LocationMapSelectorComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LocationMapSelectorComponent ],
+      declarations: [LocationMapSelectorComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

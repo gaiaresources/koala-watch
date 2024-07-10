@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { PhotoGalleryComponent } from './photo-gallery.component';
+import {PhotoGalleryComponent} from './photo-gallery.component';
 
 describe('PhotoGalleryComponent', () => {
   let component: PhotoGalleryComponent;

@@ -1,9 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { FieldDescriptor } from "../../models/field-descriptor";
-import { IonInput, IonItem, IonText } from "@ionic/angular/standalone";
-import { NgIf } from "@angular/common";
-import { BaseFieldComponent } from "../base-field/base-field.component";
+import {Component} from '@angular/core';
+import {ReactiveFormsModule} from "@angular/forms";
+import {IonInput, IonItem, IonText} from "@ionic/angular/standalone";
+import {NgIf} from "@angular/common";
+import {BaseFieldComponent} from "../base-field/base-field.component";
 
 @Component({
   selector: 'app-number-field',

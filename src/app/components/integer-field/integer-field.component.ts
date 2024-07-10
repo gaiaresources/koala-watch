@@ -1,10 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IonicModule } from "@ionic/angular";
-import { NgIf } from "@angular/common";
-import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { FieldDescriptor } from "../../models/field-descriptor";
-import { IonInput, IonItem, IonText } from "@ionic/angular/standalone";
-import { BaseFieldComponent } from "../base-field/base-field.component";
+import {Component} from '@angular/core';
+import {NgIf} from "@angular/common";
+import {ReactiveFormsModule} from "@angular/forms";
+import {IonInput, IonItem, IonText} from "@ionic/angular/standalone";
+import {BaseFieldComponent} from "../base-field/base-field.component";
 
 @Component({
   selector: 'app-integer-field',

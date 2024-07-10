@@ -8,6 +8,7 @@ import * as dayjs from "dayjs";
 import {ComputedFieldService} from "../computed-field/computed-field.service";
 import {User} from "../../models/user";
 import {ClientRecord} from "../../models/client-record";
+import {NumberValidator} from "../../validators/number.validator";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,15 @@ export class FormGeneratorService {
 
   constructor(private computedFieldService: ComputedFieldService) {
 
+  }
+
+  private getDefaultConstraints(field: any): any {
+    if (field.type === 'integer') {
+      return {'integer': true};
+    } else if (field.type === 'number') {
+      return {'decimal': true};
+    }
+    return {};
   }
 
   private isValidatedConstraint(name: string, constraints: any) {
@@ -41,6 +51,10 @@ export class FormGeneratorService {
         return Validators.min(constraint);
       case 'maximum':
         return Validators.max(constraint);
+      case 'integer':
+        return NumberValidator.integer;
+      case 'decimal':
+        return NumberValidator.decimal;
       default:
         // for minLength, maxLength and pattern the schema constraint name is the same as the validator name
         return (Validators as any)[name](constraint);
@@ -156,7 +170,10 @@ export class FormGeneratorService {
       if (values.hasOwnProperty(field.name)) {
         defaultValue = values[field.name];
       }
-      group[field.name] = [{value: defaultValue, disabled: !!field.disabled}, this.getConstraints(field.constraints)];
+      const defaultConstraints = this.getDefaultConstraints(field);
+      const fieldConstraints = field.constraints || {};
+      const constraints = {...defaultConstraints, ...fieldConstraints};
+      group[field.name] = [{value: defaultValue, disabled: !!field.disabled}, this.getConstraints(constraints)];
     })
     return formBuilder.group(group);
   }

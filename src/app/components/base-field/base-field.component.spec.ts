@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { BaseFieldComponent } from './base-field.component';
+import {BaseFieldComponent} from './base-field.component';
 
 describe('BaseFieldComponent', () => {
   let component: BaseFieldComponent;

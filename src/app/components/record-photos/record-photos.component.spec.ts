@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { RecordPhotosComponent } from './record-photos.component';
+import {RecordPhotosComponent} from './record-photos.component';
 
 describe('RecordPhotosComponent', () => {
   let component: RecordPhotosComponent;

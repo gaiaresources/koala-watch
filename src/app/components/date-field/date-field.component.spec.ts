@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { DateFieldComponent } from './date-field.component';
+import {DateFieldComponent} from './date-field.component';
 
 describe('DateFieldComponent', () => {
   let component: DateFieldComponent;

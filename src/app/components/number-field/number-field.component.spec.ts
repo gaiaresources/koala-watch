@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { NumberFieldComponent } from './number-field.component';
+import {NumberFieldComponent} from './number-field.component';
 
 describe('NumberFieldComponent', () => {
   let component: NumberFieldComponent;

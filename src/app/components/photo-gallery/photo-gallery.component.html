@@ -3,12 +3,14 @@
     <div *ngIf="gallery$ | async as gallery" class="photo-gallery">
       <app-photo [photo]="gallery.photos[gallery.current]" [index]="gallery.current"/>
 
-      <div *ngIf="previous" (click)="doChangePhoto(gallery.current - 1)" class="photo-gallery__button photo-gallery__previous" aria-label="Previous">
+      <div *ngIf="previous" (click)="doChangePhoto(gallery.current - 1)"
+           class="photo-gallery__button photo-gallery__previous" aria-label="Previous">
         <fa-icon [icon]="faChevronLeft" aria-hidden="true"/>
       </div>
 
-      <div *ngIf="next" (click)="doChangePhoto(gallery.current + 1)" class="photo-gallery__button photo-gallery__next" aria-label="Next">
-        <fa-icon [icon]="faChevronRight" aria-hidden="true" />
+      <div *ngIf="next" (click)="doChangePhoto(gallery.current + 1)" class="photo-gallery__button photo-gallery__next"
+           aria-label="Next">
+        <fa-icon [icon]="faChevronRight" aria-hidden="true"/>
       </div>
     </div>
   </ion-card-content>
