@@ -151,6 +151,7 @@ export class FormGeneratorService {
       key: field.name,
       label: field.title ? field.title : field.name,
       description: field.description,
+      example: field.example,
       format: field.format,
       type: type,
       options: type === 'select' ? this.getOptions(field) : undefined,

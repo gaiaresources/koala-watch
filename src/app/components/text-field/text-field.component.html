@@ -13,8 +13,8 @@
 
   </ion-input>
 
-  <app-help-button *ngIf="field.description" [id]="'help-' + (field.key | classify)">
-    {{ field.description }}
+  <app-help-button *ngIf="field.example" [id]="'help-' + (field.key | classify)">
+    {{ field.example }}
   </app-help-button>
 
 </ion-item>

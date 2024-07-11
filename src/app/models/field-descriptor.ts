@@ -4,6 +4,7 @@ export interface FieldDescriptor {
   key: string;
   label: string;
   description?: string;
+  example?: string;
   type: string;
   format?: string;
   options?: FieldOption[];
