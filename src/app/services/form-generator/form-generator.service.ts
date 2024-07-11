@@ -151,6 +151,7 @@ export class FormGeneratorService {
       key: field.name,
       label: field.title ? field.title : field.name,
       description: field.description,
+      example: field.example,
       format: field.format,
       type: type,
       options: type === 'select' ? this.getOptions(field) : undefined,
@@ -212,6 +213,43 @@ export class FormGeneratorService {
       }
     });
     return defaults;
+  }
+
+  postProcessFormValues(dataset: Dataset, form: FormGroup, values: any, resource: number = 0) {
+    const fields = this.getFields(dataset, resource);
+    fields.forEach((field: any) => {
+      if (!field.postProcess || !field.postProcess.type) return;
+      this.postProcessValue(fields, field, form, values);
+    });
+  }
+
+  postProcessValue(fields: any[], field: any, form: FormGroup, values: any) {
+    const postProcess = field.postProcess;
+    switch (postProcess.type) {
+      case 'option':
+        this.postProcessOptions(postProcess, fields, field, form, values);
+        break;
+
+      default:
+    }
+  }
+
+  postProcessOptions(postProcess: any, fields: any[], field: any, form: FormGroup, values: any) {
+    if (!postProcess.field) return;
+
+    // Target field must exist.
+    const targetField = fields.find((field) => field.name === postProcess.field);
+    if (!targetField) return;
+
+    // Find the index of the target option.
+    const targetOptions = this.getOptions(targetField);
+    const value = values[postProcess.field] ?? "";
+    const idx = targetOptions.findIndex((opt) => opt.value === value);
+    if (idx < 0) return;
+
+    // Get the equivalent option value
+    const options = this.getOptions(field);
+    values[field.name] = options[idx].value;
   }
 
 }

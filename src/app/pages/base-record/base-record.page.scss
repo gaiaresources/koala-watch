@@ -24,25 +24,23 @@ ion-fab-button {
   }
 }
 
+.base-record__buttons {
+  fa-icon {
+    margin-right: 0.5em;
+  }
+}
+
 .iconButtons {
   margin: 0;
   font-size: 1.5em;
 }
 
-.base-record__button {
-  fa-icon {
-    margin-right: 1.5em;
-  }
-}
-
 @media only screen and (max-width: 450px) {
-  .base-record__button {
-    fa-icon {
-      margin: 0
-    }
-
-    &-text {
-      display: none;
-    }
+  .base-record__buttons {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 0.5em;
+    gap: 0.5em;
+    align-items: flex-end;
   }
 }

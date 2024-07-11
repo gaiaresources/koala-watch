@@ -70,7 +70,11 @@ bootstrapApplication(AppComponent, {
         'Trees Surveyed': [
           {
             'Census ID': {'disabled': true},
-            'Species Code': {'hidden': true},
+            'SpeciesCode': {
+              'computed': 'value',
+              'hidden': true,
+              'postProcess': {'type': 'option', 'field': 'ScientificName'}
+            },
           }
         ]
       }
