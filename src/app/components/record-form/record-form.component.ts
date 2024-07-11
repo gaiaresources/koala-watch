@@ -145,6 +145,8 @@ export class RecordFormComponent implements OnInit, OnChanges {
     record.modified = this.form.dirty;
     record.data = {...this.disabled, ...values};
 
+    this.formGeneratorService.postProcessFormValues(dataset, this.form, record.data);
+
     // Default behaviour of count callback is how many child records exist.
     if (this.countField && values.hasOwnProperty(this.countField)) {
       record.count = values[this.countField] ? parseInt(values[this.countField], 10) : 0;
