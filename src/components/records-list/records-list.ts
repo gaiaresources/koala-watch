@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, NavParams } from '@ionic/angular';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
 import { ANY_ANGULAR_DATETIME_FORMAT } from '../../biosys-core/utils/consts';
 import {
@@ -10,65 +10,71 @@ import { isDatasetCensus } from '../../shared/utils/functions';
 import { StorageService } from '../../shared/services/storage.service';
 import '../../shared/utils/consts';
 import { FormNavigationRecord, ActiveRecordService } from '../../providers/activerecordservice/active-record.service';
+import { EventService } from "../../shared/services/event.service";
+import { Router } from "@angular/router";
 
 @Component({
-    selector: 'records-list',
-    templateUrl: 'records-list.html'
+  selector: 'records-list',
+  templateUrl: 'records-list.html',
+  styleUrls: ['records-list.scss']
 })
 
 export class RecordsListComponent {
-    public angularDateFormat: string = ANY_ANGULAR_DATETIME_FORMAT;
-    public items: Array<{ title: string, note: string, icon: string }>;
+  public angularDateFormat: string = ANY_ANGULAR_DATETIME_FORMAT;
+  public items: Array<{ title: string, note: string, icon: string }>;
 
-    // consts used in template
-    public DATASETNAME_TREESURVEY = DATASET_NAME_TREESURVEY;
-    public DATASETNAME_CENSUS = DATASET_NAME_CENSUS;
-    public DATASETNAME_OBSERVATION = DATASET_NAME_OBSERVATION;
+  // consts used in template
+  public DATASETNAME_TREESURVEY = DATASET_NAME_TREESURVEY;
+  public DATASETNAME_CENSUS = DATASET_NAME_CENSUS;
+  public DATASETNAME_OBSERVATION = DATASET_NAME_OBSERVATION;
 
-    public APP_NAME = APP_NAME;
+  public APP_NAME = APP_NAME;
 
-    @Input()
-    public records: ClientRecord[];
+  @Input()
+  public records: ClientRecord[];
 
 
-    @Input()
-    public baseNavController: NavController;
+  @Input()
+  public baseNavController: NavController | undefined;
 
-    @Input()
-    public parentId: string;
+  @Input()
+  public parentId: string;
 
-    @Input()
-    public showHowto = true;
+  @Input()
+  public showHowto = true;
 
-    @Input()
-    public showLegend = true;
+  @Input()
+  public showLegend = true;
 
-    @Input()
-    public readonly = false;
+  @Input()
+  public readonly = false;
 
-    @Output()
-    public enteringRecord = new EventEmitter();
+  @Output()
+  public enteringRecord = new EventEmitter();
 
-    constructor(public navCtrl: NavController,
-                public navParams: NavParams,
-                private storage: StorageService,
-                private events: Events,
-                public activeRecordService: ActiveRecordService) {
-        this.baseNavController = (this.navParams.data.hasOwnProperty('navCtrl') ? this.navParams.get('navCtrl') : undefined);
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private router: Router,
+    private storage: StorageService,
+    public activeRecordService: ActiveRecordService,
+    private events: EventService) {
 
-        this.records = (this.navParams.data.hasOwnProperty('data') ? this.navParams.get('data') : []);
+    this.baseNavController = (this.navParams.data.hasOwnProperty('navCtrl') ? this.navParams.get('navCtrl') : undefined);
 
-        if (this.navParams.data.hasOwnProperty('showLegend')) {
-            this.showLegend = this.navParams.get('showLegend');
-        }
+    this.records = (this.navParams.data.hasOwnProperty('data') ? this.navParams.get('data') : []);
+
+    if (this.navParams.data.hasOwnProperty('showLegend')) {
+      this.showLegend = this.navParams.get('showLegend');
     }
+  }
 
-    public getStatusColor(record: ClientRecord) {
-        if (record.id) {
-            return RECORD_UPLOADED;
-        }
-        return record.valid ? RECORD_COMPLETE : RECORD_INCOMPLETE;
+  public getStatusColor(record: ClientRecord) {
+    if (record.id) {
+      return RECORD_UPLOADED;
     }
+    return record.valid ? RECORD_COMPLETE : RECORD_INCOMPLETE;
+  }
 
   public getAltText(record: ClientRecord): string {
     let rv = '';
@@ -93,70 +99,76 @@ export class RecordsListComponent {
 
 
   public getDatasetIcon(record: ClientRecord): string {
-        switch (record.datasetName) {
-            case DATASET_NAME_OBSERVATION:
-                return 'assets/imgs/eye.png';
-            case DATASET_NAME_CENSUS:
-                return 'assets/imgs/trees.png';
-            case DATASET_NAME_TREESURVEY:
-                return 'assets/imgs/tree.png';
-        }
+    switch (record.datasetName) {
+      case DATASET_NAME_OBSERVATION:
+        return 'assets/imgs/eye.png';
+      case DATASET_NAME_CENSUS:
+        return 'assets/imgs/trees.png';
+      case DATASET_NAME_TREESURVEY:
+        return 'assets/imgs/tree.png';
+      default:
+        return 'assets/imgs/koala.png';
     }
+  }
 
-    public getCountIcon(record: ClientRecord): string {
-        switch (record.datasetName) {
-            case DATASET_NAME_OBSERVATION:
-                return 'assets/imgs/koala.png';
-            case DATASET_NAME_CENSUS:
-                return 'assets/imgs/tree.png';
-            case DATASET_NAME_TREESURVEY:
-                return 'assets/imgs/koala.png';
-        }
+  public getCountIcon(record: ClientRecord): string {
+    switch (record.datasetName) {
+      case DATASET_NAME_OBSERVATION:
+        return 'assets/imgs/koala.png';
+      case DATASET_NAME_CENSUS:
+        return 'assets/imgs/tree.png';
+      case DATASET_NAME_TREESURVEY:
+        return 'assets/imgs/koala.png';
+      default:
+        return 'assets/imgs/koala.png';
     }
+  }
 
-    private navPush(page, params) {
-        this.enteringRecord.emit();
+  private navPush(page: string, params: {
+    datasetName: string;
+    recordClientId?: string | undefined;
+    parentId?: string | null | undefined;
+    readonly?: boolean;
+  }) {
+    // this.enteringRecord.emit();
+    this.navCtrl.navigateForward(page, { state: params })
+  }
 
-        if (!this.baseNavController) {
-            this.navCtrl.push(page, params);
-        } else {
-            this.baseNavController.push(page, params);
-        }
+  public itemTapped(record: ClientRecord) {
+
+    const page = isDatasetCensus(record.datasetName) ? '/census' : '/observation';
+    const params = {
+      datasetName: record.datasetName,
+      recordClientId: record.client_id,
+      parentId: record.parentId,
+      readonly: this.readonly
+    };
+
+    this.activeRecordService.setActiveFormNavigationRecord({
+      page: page,
+      params: params
+    } as FormNavigationRecord);
+    this.navPush(page, params);
+  }
+
+  public onClickedNewRecord(datasetName: string) {
+    let page;
+    const params: { datasetName: string; parentId: string | null } = {
+      datasetName: datasetName,
+      parentId: null
+    };
+    if (isDatasetCensus(datasetName)) {
+      page = '/census';
+    } else {
+      if (this.parentId) {
+        params['parentId'] = this.parentId;
+      }
+      page = '/observation';
     }
+    this.navPush(page, params);
+  }
 
-    public itemTapped(event, record) {
-        const page = isDatasetCensus(record.datasetName) ? 'CensusPage' : 'ObservationPage';
-        const params = {
-            datasetName: record.datasetName,
-            recordClientId: record.client_id,
-            parentId: record.parentId,
-            readonly: this.readonly
-        };
-
-        this.activeRecordService.setActiveFormNavigationRecord({
-          page: page,
-          params: params
-        } as FormNavigationRecord);
-        this.navPush(page, params);
-    }
-
-    public onClickedNewRecord(datasetName: string) {
-        let page;
-        const params = {
-            datasetName: datasetName,
-        };
-        if (isDatasetCensus(datasetName)) {
-            page = 'CensusPage';
-        } else {
-            if (this.parentId) {
-                params['parentId'] = this.parentId;
-            }
-            page = 'ObservationPage';
-        }
-        this.navPush(page, params);
-    }
-
-    public uploadClicked() {
-        this.events.publish('upload-clicked');
-    }
+  public uploadClicked() {
+    this.events.publishEvent('upload-clicked');
+  }
 }

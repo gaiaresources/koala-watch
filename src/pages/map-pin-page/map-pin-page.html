@@ -6,18 +6,18 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-nav>
       <ion-title>Map Coordinates</ion-title>
       <ion-buttons end>
-      <button ion-button (click)="closeModal()">Close</button>
+          <ion-button (click)="closeModal()">Close</ion-button>
       </ion-buttons>
-  </ion-navbar>
+  </ion-nav>
 
   </ion-header>
 
 
   <ion-content padding>
     <div class="map-getpin" id="map-getpin"></div>
-    <button ion-button id="use" (click)="useClicked()">Use this location</button>
+      <ion-button id="use" (click)="useClicked()">Use this location</ion-button>
 
   </ion-content>

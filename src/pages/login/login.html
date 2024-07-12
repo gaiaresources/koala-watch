@@ -1,39 +1,37 @@
-<ion-content padding class="vertical-align-content">
+<ion-content class="ion-padding vertical-align-content">
     <ion-grid>
         <ion-row>
-            <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                <img width="100%" src="assets/imgs/koalawatch_heading.png"/>
+            <ion-col>
+                <ion-img style="width: 100%" src="../../assets/imgs/koalawatch_heading.png"/>
             </ion-col>
         </ion-row>
         <form [formGroup]="form">
             <ion-row>
-                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                    <ion-item no-padding>
-                        <ion-label color="primary" floating>Username</ion-label>
-                        <ion-input formControlName="username" autocapitalize=off></ion-input>
+                <ion-col class="login-col">
+                    <ion-item class="ion-no-padding">
+                        <ion-input label="Username" label-placement="floating" formControlName="username" autocapitalize=off></ion-input>
                     </ion-item>
-                    <ion-item no-padding>
-                        <ion-label color="primary" floating>Password</ion-label>
-                        <ion-input formControlName="password" type="password"></ion-input>
+                    <ion-item class="ion-no-padding">
+                        <ion-input label="Password" label-placement="floating" formControlName="password" type="password"></ion-input>
                     </ion-item>
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-7 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-3>
-                    <button ion-button type="submit" [disabled]="!form.valid" full
-                            (click)="login()">Log in</button>
+                <ion-col class="login-options" >
+                    <ion-button type="submit" expand="block" [disabled]="!form.valid" (click)="login()">Log in</ion-button>
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-7 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-3>
-                    <button ion-button type="submit" full (click)="signup()">Sign Up</button>
+                <ion-col class="login-options">
+                    <ion-button type="submit" expand="block" (click)="signup()">Sign Up</ion-button>
                 </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col col-7 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-3>
-                    <button ion-button type="submit" full (click)="resetPassword()">Forgotten Password?</button>
+                <ion-col class="login-options">
+                    <ion-button type="submit" expand="block" (click)="resetPassword()">Forgotten Password?</ion-button>
                 </ion-col>
             </ion-row>
         </form>
     </ion-grid>
 </ion-content>
+

@@ -1,137 +1,151 @@
-import { GoogleMap, GoogleMaps, LatLng, Marker } from '@ionic-native/google-maps';
-import { Component, Input } from '@angular/core/';
+import { Marker } from '@capacitor/google-maps';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ClientRecord } from '../../shared/interfaces/mobile.interfaces';
-import { Events, NavParams, Platform } from 'ionic-angular';
-import { timer } from 'rxjs/observable/timer';
+import { NavParams, Platform } from '@ionic/angular';
+import { timer } from 'rxjs';
 import { isDatasetCensus } from '../../shared/utils/functions';
-import * as moment from 'moment/moment';
+import moment from "moment";
+import { EventService } from "../../shared/services/event.service";
+import { environment } from "../../environments/environment";
 
 @Component({
-    selector: 'records-map',
-    templateUrl: 'records-map.html'
+  selector: 'records-map',
+  templateUrl: 'records-map.html',
+  styleUrls: ['records-map.scss']
 })
 export class RecordsMapComponent {
-    @Input()
-    public set records(records: ClientRecord[]) {
-        this._records = records;
+
+  @ViewChild('map') mapRef?: ElementRef;
+
+  @Input()
+  public set records(records: ClientRecord[]) {
+    this._records = records;
+  }
+
+  private map?: google.maps.Map;
+  private markers: google.maps.Marker[] = []
+  private dragMarker?: Marker;
+
+
+  private _records?: ClientRecord[];
+
+  constructor(private navParams: NavParams,
+              private events: EventService,
+              private platform: Platform) {
+  }
+
+  ionViewDidEnter() {
+    this.platform.ready().then(() => {
+      this.loadMap();
+    });
+  }
+
+  ionViewDidLeave() {
+    if (this.map) {
+      this.map?.unbindAll()
+      this.cleanup();
+    }
+  }
+
+  private cleanup() {
+    const nodeList = document.querySelectorAll('._gmaps_cdv_');
+
+    for (let k = 0; k < nodeList.length; ++k) {
+      nodeList.item(k).classList.remove('_gmaps_cdv_');
+    }
+  }
+
+  loadMap(): void {
+    if (this.mapRef?.nativeElement != null) {
+      this.map = new google.maps.Map(this.mapRef.nativeElement, {
+        center: {lat: -25, lng: 132},
+        zoom: 3.5
+      })
     }
 
-    private map: GoogleMap;
-    private _records: ClientRecord[];
-    private dragMarker: Marker;
-
-    constructor(private navParams: NavParams,
-                private events: Events,
-                private platform: Platform) {
+    if (this.navParams.data.hasOwnProperty('data')) {
+      this.records = this.navParams.get('data');
     }
 
-    ionViewDidEnter() {
-      this.platform.ready().then(() => {
-        this.loadMap();
-      });
-    }
+    this.events.getObservableForEvent('home-willenter').subscribe(() => this.ionViewWillEnter());
+    this.events.getObservableForEvent('map-whereispin').subscribe(() => this.dragMarkerLocation());
+  }
 
-    ionViewDidLeave() {
-      if (this.map){
-        this.map.remove();
+  public ionViewWillEnter() {
+    timer(500).subscribe(() => this.loadMarkers());
+  }
 
-        this.cleanup();
+  private dragMarkerLocation() {
+    this.events.publish('map-specifiedcoordinates', this.dragMarker?.coordinate);
+  }
+
+  private loadMarkers() {
+    if (this.map) {
+      this.removeMarkers()
+      if (this._records && this._records.length) {
+        for (const record of this._records) {
+          if (record.hasOwnProperty('data') &&
+            record.data?.hasOwnProperty('Latitude') &&
+            record.data.hasOwnProperty('Longitude')) {
+            const title = record.datasetName;
+            const snippet = moment(record.datetime).format('DD/MM/YYYY HH:mm');
+            let url = 'assets/imgs/';
+            url += `${isDatasetCensus(record.datasetName) ? 'tree' : 'eye'}-pin-`;
+            url += `${record.valid ? 'complete' : 'incomplete'}.png`;
+
+            this.addMarker(
+              record.data["Latitude"],
+              record.data["Longitude"],
+              title,
+              snippet,
+              url
+            )
+          }
+        }
       }
     }
+  }
 
-    private cleanup() {
-      const nodeList = document.querySelectorAll('._gmaps_cdv_');
+  private removeMarkers() {
+    this.markers.forEach(marker => {
+      marker.setMap(null);
+    });
 
-      for (let k = 0; k < nodeList.length; ++k) {
-          nodeList.item(k).classList.remove('_gmaps_cdv_');
-      }
+    this.markers = [];
+  }
+
+  private addMarker(lat: any, lng: any, title: string, snippet: string, iconUrl: string) {
+    const marker = new google.maps.Marker({
+      position: {lat, lng},
+      map: this.map,
+      title: title,
+      icon: iconUrl ? {url: iconUrl, scaledSize: new google.maps.Size(45, 45)} : null
+    })
+
+    if (title) {
+      const infoWindow = new google.maps.InfoWindow({
+        content: snippet
+      })
+
+      marker.addListener('click', () => {
+        infoWindow.open(this.map, marker)
+      })
     }
 
+    // FIXME: work out why selector toggles slow to a crawl
+    // marker.addEventListener(GoogleMapsEvent.MARKER_CLICK).subscribe(
+    //     (value) => {
+    //         const page = record.datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
+    //         const params = {
+    //             datasetName: record.datasetName,
+    //             recordClientId: record.client_id,
+    //             parentId: record.parentId
+    //         };
+    //         this.navParams.get('navCtrl').push(page, params);
+    //         return;
+    //     });
 
-    loadMap(): void {
-        this.map = GoogleMaps.create('map');
-        this.map.setOptions({
-            'backgroundColor': 'white',
-            'building': false,
-            'mapType': 'MAP_TYPE_HYBRID',
-            'controls': {
-                'compass': false,
-                'zoom': false,
-                'indoorPicker': false,
-            },
-            'gestures': {
-                'scroll': true,
-                'zoom': true,
-                'tilt': false,
-                'rotate': false,
-            },
-            'camera': {
-                'target': new LatLng(-25, 132),
-                'zoom': 3.5,
-            }
-        });
-        this.map.setMyLocationEnabled(true);
-        this.map.setMyLocationButtonEnabled(true);
-        if (this.navParams.data.hasOwnProperty('data')) {
-            this.records = this.navParams.get('data');
-        }
-        this.events.subscribe('home-willenter', () => this.ionViewWillEnter());
-        this.events.subscribe('map-whereispin', () => this.dragMarkerLocation());
-    }
+    this.markers.push(marker)
+  }
 
-    public ionViewWillEnter() {
-        timer(500).subscribe(() => this.loadMarkers());
-    }
-
-    private dragMarkerLocation() {
-      this.events.publish('map-specifiedcoordinates', this.dragMarker.getPosition());
-    }
-
-    private loadMarkers() {
-        if (this.map) {
-            this.map.clear();
-            if (this._records && this._records.length) {
-                for (const record of this._records) {
-                    if (record.hasOwnProperty('data') &&
-                        record.data.hasOwnProperty('Latitude') &&
-                        record.data.hasOwnProperty('Longitude')) {
-                        const title = record.datasetName;
-                        const snippet = moment(record.datetime).format('DD/MM/YYYY HH:mm');
-                        let url = 'assets/imgs/';
-                        url += `${isDatasetCensus(record.datasetName) ? 'tree' : 'eye'}-pin-`;
-                        url += `${record.valid ? 'complete' : 'incomplete'}.png`;
-
-                        const marker = this.map.addMarkerSync({
-                            snippet: snippet,
-                            title: title,
-                            icon: {
-                                url: url,
-                                size: {
-                                    width: 45,
-                                    height: 45
-                                }
-                            },
-                            animation: 'DROP',
-                            position: {
-                                lat: record.data.Latitude,
-                                lng: record.data.Longitude,
-                            }
-                        });
-                        // FIXME: work out why selector toggles slow to a crawl
-                        // marker.addEventListener(GoogleMapsEvent.MARKER_CLICK).subscribe(
-                        //     (value) => {
-                        //         const page = record.datasetName.toLowerCase().indexOf('census') > -1 ? 'CensusPage' : 'ObservationPage';
-                        //         const params = {
-                        //             datasetName: record.datasetName,
-                        //             recordClientId: record.client_id,
-                        //             parentId: record.parentId
-                        //         };
-                        //         this.navParams.get('navCtrl').push(page, params);
-                        //         return;
-                        //     });
-                    }
-                }
-            }
-        }
-    }
 }

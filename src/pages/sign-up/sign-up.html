@@ -4,121 +4,100 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<!--<ion-header>-->
+<ion-content>
+  <ion-grid>
+    <!-- Spacing -->
+    <ion-row>
+      <ion-col size="12"></ion-col>
+    </ion-row>
 
-<!--<ion-navbar>-->
-<!--<ion-title>Sign Up To {{APP_NAME}}</ion-title>-->
-<!--</ion-navbar>-->
+    <!-- Header Image -->
+    <ion-row>
+      <ion-col size="12">
+        <ion-img style="width: 100%; height: auto; display: block; align-content: center; padding-top: 2em; max-height: 10em" src="../../assets/imgs/koalawatch_heading.png"/>
+      </ion-col>
+    </ion-row>
 
-<!--</ion-header>-->
+    <!-- Text Info -->
+    <ion-row>
+      <ion-col size="12" style="padding-top: 6em;"> <!-- Adjust padding-top as needed -->
+        To use {{APP_NAME}}, please fill out the details below to sign up
+        for an account. Please note that all fields are mandatory.
+      </ion-col>
+    </ion-row>
 
-<form [formGroup]="form" (ngSubmit)="signup()" style="width: 100%; height: 100%">
-    <ion-content>
-        <ion-grid>
-            <ion-row>
-                <ion-col col-12>
-                </ion-col>
-            </ion-row>
+    <form [formGroup]="form" (ngSubmit)="signup()" style="width: 100%; height: 100%;" class="ion-padding">
+      <ion-grid>
+        <!-- Username -->
+        <ion-row>
+          <ion-col>
+            <ion-item class="custom-item-test" >
+              <ion-input color="primary" label-placement="floating" label="Username (visible to other users)" (ionChange)="usernameCheck()" formControlName="name_user" autocapitalize="false"></ion-input>
+            </ion-item>
+            <ion-item class="errorLabel custom-item-test" [hidden]="usernameOK" >Username may only contain alphanumeric characters, or .@+-_</ion-item>
+          </ion-col>
+        </ion-row>
 
-            <ion-row style="align-items: center; align-self: center; align-content: center">
-                <ion-col col-12>
-                    <img style="width: auto; height: auto; display: block; max-width: 100%; align-content: center; padding-top: 2em; max-height: 10em" src="assets/imgs/koalawatch_heading.png"/>
-                </ion-col>
-            </ion-row>
+        <!-- Email Address -->
+        <ion-row>
+          <ion-col>
+            <ion-item class="custom-item-test" >
+              <ion-input color="primary" label-placement="floating" label="Email Address" formControlName="email" type="email" autocapitalize=off></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
 
-            <ion-row>
-                <ion-col col-12>
-                    To use {{APP_NAME}}, please full out the details below to sign up
-                    for an account. Please note that all fields are mandatory.
-                </ion-col>
-            </ion-row>
+        <!-- Given Names -->
+        <ion-row>
+          <ion-col>
+            <ion-item class="custom-item-test" >
+              <ion-input color="primary" label-placement="floating" label="Given Names" formControlName="name_given" autocapitalize=off></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <!-- Last Name -->
+        <ion-row>
+          <ion-col>
+            <ion-item class="custom-item-test" >
+              <ion-input color="primary" label-placement="floating" label="Last Name" formControlName="name_last" autocapitalize=off></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
 
-            <ion-row>
-                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                    <ion-item>
-                        <ion-label color="primary" floating>Username (visible to other users)</ion-label>
-                        <ion-input (ionChange)="usernameCheck()" formControlName="name_user" autocapitalize=off></ion-input>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row [hidden]="usernameOK" >
-                <ion-col>
-                    <ion-item no-lines>
-                        <ion-label color="danger">Username may only contain alphanumeric<br/>
-                            characters, or .@+-_
-                        </ion-label>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
+        <!-- Password -->
+        <ion-row>
+          <ion-col>
+            <ion-item class="custom-item-test" >
+              <ion-input color="primary" label-placement="floating" label="Password" (ionChange)="passwordCheck()" formControlName="password" type="password"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <!-- Repeat Password -->
+        <ion-row>
+          <ion-col>
+            <ion-item class="custom-item-test" >
+              <ion-input color="primary" label-placement="floating" label="Repeat Password" (paste)="$event.preventDefault()" (ionChange)="passwordCheck()" formControlName="password_again" type="password"></ion-input>
+            </ion-item>
+            <!-- Password errors -->
+            <ion-item class="errorLabel custom-item-test" [hidden]="passwordsMatch && getPasswordAdvice().trim() === ''" >{{getPasswordAdvice()}}</ion-item>
+          </ion-col>
+        </ion-row>
 
-            <ion-row>
-                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                    <ion-item>
-                        <ion-label color="primary" floating>Email address</ion-label>
-                        <ion-input formControlName="email" type="email" autocapitalize=off></ion-input>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
+        <!-- Signup button -->
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" type="submit" (click)="signup()" [disabled]="!form.valid || !passwordsOK || getPasswordAdvice().trim().length > 0" >Sign Up</ion-button>
+          </ion-col>
+        </ion-row>
 
-            <ion-row>
-                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                    <ion-item>
-                        <ion-label color="primary" floating>Given Names</ion-label>
-                        <ion-input formControlName="name_given" autocapitalize=off></ion-input>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
+        <!-- Back button -->
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" type="button" (click)="goBack()">Go Back</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ion-grid>
+</ion-content>
 
-            <ion-row>
-                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                    <ion-item>
-                        <ion-label color="primary" floating>Last Name</ion-label>
-                        <ion-input formControlName="name_last" autocapitalize=off></ion-input>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-
-            <ion-row>
-                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                    <ion-item>
-                        <ion-label color="primary" floating>Password</ion-label>
-                        <ion-input (ionChange)="passwordCheck()" formControlName="password" type="password"></ion-input>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col col-12 col-lg-6 col-md-6 offset-lg-3 offset-md-3>
-                    <ion-item>
-                        <ion-label color="primary" floating>Repeat Password</ion-label>
-                        <ion-input (paste)="$event.preventDefault()" (ionChange)="passwordCheck()" formControlName="password_again" type="password"></ion-input>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <ion-item no-lines>
-                        <ion-label [hidden]="passwordsMatch" color="danger">Passwords must match</ion-label>
-                    </ion-item>
-                    <ion-item no-lines>
-                        <ion-label [hidden]="passwordsOK" color="danger">{{passwordsAdvice}}</ion-label>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-
-            <ion-row>
-                <ion-col col-8 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-2>
-                    <button ion-button type="submit"
-                            [disabled]="!form.valid || !passwordsOK || passwordsAdvice.length > 0" full
-                            (click)="signup()">Sign Up</button>
-                </ion-col>
-            </ion-row>
-
-            <ion-row>
-                <ion-col col-8 col-lg-4 col-md-4 offset-md-4 offset-lg-4 offset-2>
-                    <button ion-button full type="button"
-                            (click)="goBack()">Go Back</button>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </ion-content>
-</form>

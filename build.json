@@ -1,0 +1,21 @@
+{
+  "android": {
+    "release": {
+      "keystore": "koala-release-key.jks",
+      "storePassword": "",
+      "alias": "",
+      "password": "",
+      "keystoreType": "jks"
+    }
+  },
+  "ios": {
+    "debug": {
+      "buildFlag": ["-UseModernBuildSystem=0"],
+      "developmentTeam": ""
+    },
+    "release": {
+      "buildFlag": ["-UseModernBuildSystem=0"],
+      "developmentTeam": ""
+    }
+  }
+}

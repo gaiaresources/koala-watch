@@ -2,6 +2,16 @@
 
 Koala survey collection mobile-app based on Ionic Framework / Angular.
 
+## Notes
+### Android
+The version of Gradle and Java required will be determined by the Android platform version that is used.
+Currently it is installing Gradle 7.6 which requires Java 19
+
+You can find the installed Gradle version here 'platforms/android/cdv-gradle-config.json' with GRADLE_VERSION
+https://docs.gradle.org/current/userguide/compatibility.html
+
+Its recommended to have the global Gradle and local gradle wrapper using the same version (both running 7.6 for example)
+
 ### Installation
 
 Install the Ionic and Cordova CLI (note: you may need to have root access for this):
@@ -43,6 +53,8 @@ cordova plugin add cordova-android-support-gradle-release --variable ANDROID_SUP
 
 It may be necessary to remove the duplicate `<uses feature="gps.location...`
 from the `AndroidManifest.xml`
+
+From the 'plugins/cordova-plugin-googlemaps/plugin.xml' then remove and add android platform
 
 
 ### Running

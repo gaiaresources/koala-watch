@@ -5,3 +5,8 @@
         padding: 0;
     }
 }
+
+.image-container ion-img {
+    height: 80px;
+    object-fit: contain;
+}

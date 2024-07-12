@@ -1,7 +1,7 @@
 {
-  "name": "i-see-koalas",
+  "name": "koala-watch-new",
   "integrations": {
     "cordova": {}
   },
-  "type": "ionic-angular"
+  "type": "angular"
 }

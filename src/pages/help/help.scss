@@ -1,3 +1,22 @@
-page-help {
+.fab-button {
+  position: relative;
+  color: white;
+  background-color: #417c3a;
+  display: flex;
+  justify-content: flex-start;
+  border: 1px solid black;
+  height: 100px;
+  width: 100%;
+  margin: 10px 0;
 
+  &__img {
+    margin: 10px 30px 10px 16px;
+    width: 80px;
+    height: auto;
+  }
+
+  &__text {
+    text-align: left;
+    font-weight: 500;
+  }
 }

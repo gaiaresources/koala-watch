@@ -2,14 +2,26 @@ page-sign-up {
 
 }
 
-.text-input::-moz-placeholder {
-    color: primary;
+ion-grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
-.text-input:-ms-input-placeholder {
-    color: primary;
+.errorLabel {
+    color: #f53d3d; // danger
+    font-size: 0.6em;
+    margin-top: 0;
+    padding-top: 0;
+    --inner-border-width: 0 !important;
 }
 
-.text-input::-webkit-input-placeholder {
-    color: primary;
+[hidden] {
+    display: none !important;
+}
+
+.custom-item-test {
+    min-width: max-content !important;
 }
