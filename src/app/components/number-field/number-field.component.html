@@ -5,6 +5,7 @@
              [readonly]="readonly"
              [type]="'number'"
              [step]="'0.000000001'"
+             (ionChange)="doChange()"
              (ionBlur)="checkErrors()">
 
     <div slot="label">

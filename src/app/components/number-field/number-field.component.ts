@@ -23,4 +23,7 @@ import {ClassifyPipe} from "../../pipes/classify/classify.pipe";
 })
 export class NumberFieldComponent extends BaseFieldComponent {
 
+  doChange() {
+    // Required as Safari doesn't trigger value changes otherwise.
+  }
 }

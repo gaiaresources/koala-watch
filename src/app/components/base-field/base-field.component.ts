@@ -54,8 +54,7 @@ export abstract class BaseFieldComponent implements OnInit, OnChanges {
     if (!errors) {
       return "";
     }
-
-    const errorKey = Object.keys(errors)[0];
+    const errorKey = Object.keys(errors).pop() || "";
     const error = errors[errorKey];
 
     switch (errorKey) {
