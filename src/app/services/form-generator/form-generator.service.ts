@@ -144,7 +144,7 @@ export class FormGeneratorService {
     return field.constraints.enum[0];
   }
 
-  private getFieldDescriptor(field: any, value: any, user: User | null): FieldDescriptor {
+  private getFieldDescriptor(field: any, value: any, writeable: boolean, user: User | null): FieldDescriptor {
     const type: string = this.getFieldType(field);
 
     return {
@@ -156,7 +156,7 @@ export class FormGeneratorService {
       type: type,
       options: type === 'select' ? this.getOptions(field) : undefined,
       defaultValue: this.getFieldDefaultValue(field, value, user),
-      disabled: field.disabled ?? false,
+      disabled: (field.disabled || !writeable),
     };
   }
 
@@ -164,7 +164,7 @@ export class FormGeneratorService {
     return dataset.data_package.resources[resource].schema.fields;
   }
 
-  getFormGroup(formBuilder: FormBuilder, values: any, dataset: any, user: User | null = null, resource: number = 0): FormGroup {
+  getFormGroup(formBuilder: FormBuilder, values: any, dataset: any, writeable: boolean, user: User | null = null, resource: number = 0): FormGroup {
     const group: any = {};
     this.getFields(dataset, resource).forEach((field: any, index: any) => {
       let defaultValue = this.getFieldDefaultValue(field, values[field.name] ?? null, user) || '';
@@ -174,7 +174,7 @@ export class FormGeneratorService {
       const defaultConstraints = this.getDefaultConstraints(field);
       const fieldConstraints = field.constraints || {};
       const constraints = {...defaultConstraints, ...fieldConstraints};
-      group[field.name] = [{value: defaultValue, disabled: !!field.disabled}, this.getConstraints(constraints)];
+      group[field.name] = [{value: defaultValue, disabled: !!field.disabled || !writeable}, this.getConstraints(constraints)];
     })
     return formBuilder.group(group);
   }
@@ -188,7 +188,8 @@ export class FormGeneratorService {
 
     this.getFields(dataset, resource).forEach((field: any) => {
       const control = form.get(field.name);
-      const descriptor = this.getFieldDescriptor(field, control?.value, user);
+      const descriptor = this.getFieldDescriptor(field, control?.value, !record || record.isWriteable(), user);
+      console.log(descriptor);
       if (this.isHiddenField(field)) {
         hiddenFields.push(descriptor);
       } else if (this.isDateField(field)) {

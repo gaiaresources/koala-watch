@@ -3,7 +3,7 @@
     {{ field.label }}
   </ion-label>
 
-  <ion-datetime-button [datetime]="'datetime-' + (field.key | classify)"></ion-datetime-button>
+  <ion-datetime-button [datetime]="'datetime-' + (field.key | classify)" [disabled]="readonly || field.disabled"></ion-datetime-button>
 
   <ion-modal [keepContentsMounted]="true">
     <ng-template>

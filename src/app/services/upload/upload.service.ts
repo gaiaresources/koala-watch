@@ -3,6 +3,7 @@ import {firstValueFrom} from "rxjs";
 import {APIService} from "../api/api.service";
 import {RecordsService} from "../records/records.service";
 import {PhotoService} from "../photo/photo.service";
+import {AlertController, LoadingController} from "@ionic/angular/standalone";
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,17 @@ export class UploadService {
     private apiService: APIService,
     private recordsService: RecordsService,
     private photoService: PhotoService,
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController,
   ) {
   }
 
   async upload() {
     const promises: Promise<any>[] = [];
+    await this.loadingCtrl.create({
+      message: "Uploading records",
+    });
+
 
     // Generate promises to upload, then update the storage with the newly created ID.
     const records = this.recordsService.getUploadableRecords();
@@ -47,6 +54,12 @@ export class UploadService {
     })
 
     await Promise.all(promises);
+
+    await this.loadingCtrl.dismiss();
+    const alert = await this.alertCtrl.create({
+      message: "Records uploaded"
+    });
+    await alert.present;
   }
 
 }
