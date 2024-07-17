@@ -82,6 +82,14 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
       const value = this.formGroup.get('Longitude')?.value;
       this.lng = value ? parseFloat(value) : undefined;
     }
+
+    if (!this.lat || !this.lng) {
+      this.locationService.getPosition().then((coords) => {
+        this.lat = coords.lat;
+        this.lng = coords.lng;
+        this.setLocationValues(coords.lat, coords.lng, coords.accuracy, coords.altitude);
+      })
+    }
   }
 
   setLocationValues(lat: number, lng: number, accuracy: number | "", altitude: number | "") {
