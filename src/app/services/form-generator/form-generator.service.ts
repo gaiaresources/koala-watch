@@ -189,7 +189,6 @@ export class FormGeneratorService {
     this.getFields(dataset, resource).forEach((field: any) => {
       const control = form.get(field.name);
       const descriptor = this.getFieldDescriptor(field, control?.value, !record || record.isWriteable(), user);
-      console.log(descriptor);
       if (this.isHiddenField(field)) {
         hiddenFields.push(descriptor);
       } else if (this.isDateField(field)) {
