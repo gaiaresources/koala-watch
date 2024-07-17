@@ -21,10 +21,10 @@ export class UploadService {
 
   async upload() {
     const promises: Promise<any>[] = [];
-    await this.loadingCtrl.create({
+    const loader = await this.loadingCtrl.create({
       message: "Uploading records",
     });
-
+    await loader.present();
 
     // Generate promises to upload, then update the storage with the newly created ID.
     const records = this.recordsService.getUploadableRecords();
@@ -59,7 +59,7 @@ export class UploadService {
     const alert = await this.alertCtrl.create({
       message: "Records uploaded"
     });
-    await alert.present;
+    await alert.present();
   }
 
 }
