@@ -142,17 +142,18 @@ export class RecordFormComponent implements OnInit, OnChanges {
     record.dataset = dataset.id;
     record.datasetName = dataset.name || "";
     record.count = 0;
-    record.valid = this.form.valid;
-    record.modified = this.form.dirty;
     record.data = {...this.disabled, ...values};
 
     this.formGeneratorService.postProcessFormValues(dataset, this.form, record.data);
+
+    record.valid = this.form.valid;
+    record.modified = this.form.dirty;
 
     // Default behaviour of count callback is how many child records exist.
     if (this.countField && values.hasOwnProperty(this.countField)) {
       record.count = values[this.countField] ? parseInt(values[this.countField], 10) : 0;
     } else {
-      const records = this.recordsService.getChildRecords(record.parentId);
+      const records = this.recordsService.getChildRecords(record.client_id);
       record.count = records.length;
       record.valid = record.valid && !records.some(record => !record.valid);
     }

@@ -174,7 +174,10 @@ export class FormGeneratorService {
       const defaultConstraints = this.getDefaultConstraints(field);
       const fieldConstraints = field.constraints || {};
       const constraints = {...defaultConstraints, ...fieldConstraints};
-      group[field.name] = [{value: defaultValue, disabled: !!field.disabled || !writeable}, this.getConstraints(constraints)];
+      group[field.name] = [{
+        value: defaultValue,
+        disabled: !!field.disabled || !writeable
+      }, this.getConstraints(constraints)];
     })
     return formBuilder.group(group);
   }
@@ -250,6 +253,10 @@ export class FormGeneratorService {
     // Get the equivalent option value
     const options = this.getOptions(field);
     values[field.name] = options[idx].value;
+    const formElement = form.get(field.name);
+    if (formElement) {
+      formElement.setValue(values[field.name]);
+    }
   }
 
 }
