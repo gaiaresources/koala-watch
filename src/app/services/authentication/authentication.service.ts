@@ -88,7 +88,7 @@ export class AuthenticationService {
         else
           this.clearToken();
       }),
-      switchMap(() => this.apiService.whoAmI()),
+      switchMap((res) => res ? this.apiService.whoAmI() : of(null) ),
       tap((user: User | null) => {
         this.setUser(user);
       }),
