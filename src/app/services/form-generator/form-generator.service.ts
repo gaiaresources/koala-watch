@@ -138,13 +138,13 @@ export class FormGeneratorService {
     if (this.isComputedField(field)) {
       return value === null ? this.computedFieldService.getComputedValue(field, value, user) : value;
     }
-    if (this.isDateField(field)) return dayjs().format();
+    if (this.isDateField(field)) return this.getFieldDateValue(field.defaultValue);
     if (!this.isHiddenField(field)) return null;
     if (field.hidden) return value;
     return field.constraints.enum[0];
   }
 
-  private getFieldDescriptor(field: any, value: any, user: User | null): FieldDescriptor {
+  private getFieldDescriptor(field: any, value: any, writeable: boolean, user: User | null): FieldDescriptor {
     const type: string = this.getFieldType(field);
 
     return {
@@ -156,15 +156,39 @@ export class FormGeneratorService {
       type: type,
       options: type === 'select' ? this.getOptions(field) : undefined,
       defaultValue: this.getFieldDefaultValue(field, value, user),
-      disabled: field.disabled ?? false,
+      disabled: (field.disabled || !writeable),
+      min: this.getFieldMinMaxValue(field, field.min),
+      max: this.getFieldMinMaxValue(field, field.max),
     };
   }
+
+  private getFieldMinMaxValue(field: any, key: any) {
+    if (!key) return null;
+    switch (key) {
+      case 'current':
+        return this.getFieldDateValue(key);
+
+      default:
+        return key;
+    }
+  }
+
+  private getFieldDateValue(value: any) {
+    switch (value) {
+      case 'current':
+        return dayjs().toISOString();
+
+      default:
+        return "";
+    }
+  }
+
 
   private getFields(dataset: Dataset, resource: number) {
     return dataset.data_package.resources[resource].schema.fields;
   }
 
-  getFormGroup(formBuilder: FormBuilder, values: any, dataset: any, user: User | null = null, resource: number = 0): FormGroup {
+  getFormGroup(formBuilder: FormBuilder, values: any, dataset: any, writeable: boolean, user: User | null = null, resource: number = 0): FormGroup {
     const group: any = {};
     this.getFields(dataset, resource).forEach((field: any, index: any) => {
       let defaultValue = this.getFieldDefaultValue(field, values[field.name] ?? null, user) || '';
@@ -174,7 +198,10 @@ export class FormGeneratorService {
       const defaultConstraints = this.getDefaultConstraints(field);
       const fieldConstraints = field.constraints || {};
       const constraints = {...defaultConstraints, ...fieldConstraints};
-      group[field.name] = [{value: defaultValue, disabled: !!field.disabled}, this.getConstraints(constraints)];
+      group[field.name] = [{
+        value: defaultValue,
+        disabled: !!field.disabled || !writeable
+      }, this.getConstraints(constraints)];
     })
     return formBuilder.group(group);
   }
@@ -188,7 +215,7 @@ export class FormGeneratorService {
 
     this.getFields(dataset, resource).forEach((field: any) => {
       const control = form.get(field.name);
-      const descriptor = this.getFieldDescriptor(field, control?.value, user);
+      const descriptor = this.getFieldDescriptor(field, control?.value, !record || record.isWriteable(), user);
       if (this.isHiddenField(field)) {
         hiddenFields.push(descriptor);
       } else if (this.isDateField(field)) {
@@ -249,6 +276,10 @@ export class FormGeneratorService {
 
     // Get the equivalent option value
     const options = this.getOptions(field);
+    const formElement = form.get(field.name);
+    if (formElement && values[field.name] !== options[idx].value) {
+      formElement.setValue(options[idx].value);
+    }
     values[field.name] = options[idx].value;
   }
 

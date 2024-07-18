@@ -35,8 +35,6 @@ export class DateFieldComponent implements OnInit {
   @Input({required: true})
   field?: FieldDescriptor;
 
-  currentDate = new Date();
-
   constructor() {
   }
 

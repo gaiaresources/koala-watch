@@ -62,6 +62,7 @@ export class SurveyPage implements OnInit, ViewWillEnter {
         parentId: parent.client_id,
         data: {
           'Census ID': parentData['Census ID'],
+          'SiteNo': parentData['SiteNo'],
         },
       }));
     } else {

@@ -1,4 +1,4 @@
-import { FieldOption } from "./field-option";
+import {FieldOption} from "./field-option";
 
 export interface FieldDescriptor {
   key: string;
@@ -10,4 +10,6 @@ export interface FieldDescriptor {
   options?: FieldOption[];
   defaultValue?: string;
   disabled?: boolean;
+  min?: string;
+  max?: string;
 }

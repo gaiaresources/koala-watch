@@ -116,7 +116,8 @@ export class RecordFormComponent implements OnInit, OnChanges {
     }
     const user = this.authenticationService.getUser();
     const data = this.record?.data || {};
-    this.form = this.formGeneratorService.getFormGroup(this.formBuilder, data, this.dataset, user);
+    const writeable = !this.record || this.record.isWriteable();
+    this.form = this.formGeneratorService.getFormGroup(this.formBuilder, data, this.dataset, writeable, user);
     this.subscriptions = [
       this.form.valueChanges.subscribe((values) => this.setValues(values)),
       this.form.statusChanges.subscribe((values) => this.statusChanges(values)),
@@ -141,17 +142,18 @@ export class RecordFormComponent implements OnInit, OnChanges {
     record.dataset = dataset.id;
     record.datasetName = dataset.name || "";
     record.count = 0;
-    record.valid = this.form.valid;
-    record.modified = this.form.dirty;
     record.data = {...this.disabled, ...values};
 
     this.formGeneratorService.postProcessFormValues(dataset, this.form, record.data);
+
+    record.valid = this.form.valid;
+    record.modified = this.form.dirty;
 
     // Default behaviour of count callback is how many child records exist.
     if (this.countField && values.hasOwnProperty(this.countField)) {
       record.count = values[this.countField] ? parseInt(values[this.countField], 10) : 0;
     } else {
-      const records = this.recordsService.getChildRecords(record.parentId);
+      const records = this.recordsService.getChildRecords(record.client_id);
       record.count = records.length;
       record.valid = record.valid && !records.some(record => !record.valid);
     }

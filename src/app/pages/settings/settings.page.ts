@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
+  AlertController,
   IonButton,
   IonButtons,
   IonCard,
@@ -14,11 +15,11 @@ import {
   IonRow,
   IonTitle,
   IonToggle,
-  IonToolbar
+  IonToolbar,
+  LoadingController
 } from '@ionic/angular/standalone';
 import {Observable} from "rxjs";
 import {SettingsService} from "../../services/settings/settings.service";
-import {StorageService} from "../../services/storage/storage.service";
 import {RecordsService} from "../../services/records/records.service";
 
 @Component({
@@ -35,6 +36,8 @@ export class SettingsPage implements OnInit {
   constructor(
     private settingsService: SettingsService,
     private recordsService: RecordsService,
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController,
   ) {
     this.settings$ = this.settingsService.values$;
   }
@@ -46,8 +49,20 @@ export class SettingsPage implements OnInit {
     this.settingsService.set(key, value);
   }
 
-  doClearUploaded() {
-    this.recordsService.deleteUploadedRecords();
+  async doClearUploaded() {
+    const loader = await this.loadingCtrl.create({
+      message: "Removing uploaded records",
+    })
+    await loader.present();
+
+    await this.recordsService.deleteUploadedRecords();
+
+    await loader.dismiss();
+    const alert = await this.alertCtrl.create({
+      header: "Settings",
+      message: "Uploaded records deleted",
+    });
+    await alert.present();
   }
 
 }

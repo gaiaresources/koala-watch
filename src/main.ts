@@ -58,23 +58,28 @@ bootstrapApplication(AppComponent, {
         'Koala Opportunistic Observation': [
           {
             'Reason for Invalidation': {'hidden': true},
-            'Observer Name': {'computed': 'user'},
+            'Observer Name': {'computed': 'user', 'disabled': true},
+            'First Date': {'max': 'current', 'defaultValue': 'current'},
           },
         ],
         'Koala Scat Census': [
           {
             'Census ID': {'computed': 'uuid', 'disabled': true},
-            'Census Observers': {'computed': 'user'},
+            'Census Observers': {'computed': 'user', 'disabled': true},
+            'Start Date and time': {'max': 'current', 'defaultValue': 'current'},
+            'End Date and time': {'defaultValue': 'current'},
           }
         ],
         'Trees Surveyed': [
           {
             'Census ID': {'disabled': true},
+            'SiteNo': {'disabled': true},
             'SpeciesCode': {
               'computed': 'value',
               'hidden': true,
               'postProcess': {'type': 'option', 'field': 'ScientificName'}
             },
+            'DateFirst': {'max': 'current', 'defaultValue': 'current'},
           }
         ]
       }
