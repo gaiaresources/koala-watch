@@ -8,7 +8,8 @@
   <ion-modal [keepContentsMounted]="true">
     <ng-template>
       <ion-datetime [id]="'datetime-' + (field.key | classify)" [formControlName]="field.key"
-                    [max]="currentDate | date: 'yyyy-MM-dd'"></ion-datetime>
+                    [min]="field.min ? field.min : undefined"
+                    [max]="field.max ? field.max : undefined"></ion-datetime>
     </ng-template>
   </ion-modal>
 

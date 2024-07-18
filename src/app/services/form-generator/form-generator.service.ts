@@ -138,7 +138,7 @@ export class FormGeneratorService {
     if (this.isComputedField(field)) {
       return value === null ? this.computedFieldService.getComputedValue(field, value, user) : value;
     }
-    if (this.isDateField(field)) return dayjs().format();
+    if (this.isDateField(field)) return this.getFieldDateValue(field.defaultValue);
     if (!this.isHiddenField(field)) return null;
     if (field.hidden) return value;
     return field.constraints.enum[0];
@@ -157,8 +157,32 @@ export class FormGeneratorService {
       options: type === 'select' ? this.getOptions(field) : undefined,
       defaultValue: this.getFieldDefaultValue(field, value, user),
       disabled: (field.disabled || !writeable),
+      min: this.getFieldMinMaxValue(field, field.min),
+      max: this.getFieldMinMaxValue(field, field.max),
     };
   }
+
+  private getFieldMinMaxValue(field: any, key: any) {
+    if (!key) return null;
+    switch (key) {
+      case 'current':
+        return this.getFieldDateValue(key);
+
+      default:
+        return key;
+    }
+  }
+
+  private getFieldDateValue(value: any) {
+    switch (value) {
+      case 'current':
+        return dayjs().toISOString();
+
+      default:
+        return "";
+    }
+  }
+
 
   private getFields(dataset: Dataset, resource: number) {
     return dataset.data_package.resources[resource].schema.fields;
@@ -252,11 +276,11 @@ export class FormGeneratorService {
 
     // Get the equivalent option value
     const options = this.getOptions(field);
-    values[field.name] = options[idx].value;
     const formElement = form.get(field.name);
-    if (formElement) {
-      formElement.setValue(values[field.name]);
+    if (formElement && values[field.name] !== options[idx].value) {
+      formElement.setValue(options[idx].value);
     }
+    values[field.name] = options[idx].value;
   }
 
 }
