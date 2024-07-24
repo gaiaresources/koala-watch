@@ -64,6 +64,7 @@ export class AuthenticationService {
   private clearToken() {
     localStorage.removeItem('auth_token');
     this.auth_token.next("");
+    this.setUser(null);
   }
 
   public getUser(): User | null {

@@ -2,9 +2,10 @@ import {Inject, Injectable} from '@angular/core';
 import {AuthenticationService} from "../authentication/authentication.service";
 import {APIService} from "../api/api.service";
 import {DATASET_OVERRIDES, PROJECT_NAME} from "../../tokens/app";
-import {firstValueFrom, from, map, Observable, shareReplay, switchMap} from "rxjs";
+import {BehaviorSubject, combineLatest, firstValueFrom, map, Observable, of, shareReplay, switchMap} from "rxjs";
 import {StorageService} from "../storage/storage.service";
 import {Dataset} from "../../models/dataset";
+import {User} from "../../models/user";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,10 @@ import {Dataset} from "../../models/dataset";
 export class DatasetService {
   private readonly DATASET_PREFIX = 'Dataset_';
 
+  private _dataset = new BehaviorSubject<Dataset[]>([]);
   public datasets$: Observable<Dataset[]>;
+
+  private _user?: User | null;
 
   constructor(
     @Inject(PROJECT_NAME) private projectName: string,
@@ -21,18 +25,31 @@ export class DatasetService {
     private storageService: StorageService,
     @Inject(DATASET_OVERRIDES) private datasetOverrides: any,
   ) {
-    this.datasets$ = this.authenticationService.loggedIn$
-      .pipe(
-        switchMap((status) => {
-          // Not logged in, ensure dataset information not continued to be stored.
-          if (!status) {
-            return from(this.removeStoredDatasets());
-          }
-          // Logged in, ensure datasets either loaded from storage, or use API to load.
-          return from(this.loadStoredDatasets());
-        }),
-        shareReplay(1),
-      );
+    this.datasets$ = combineLatest([
+      this.authenticationService.loggedIn$,
+      this._dataset.asObservable(),
+    ]).pipe(
+      switchMap(([status, datasets]) => {
+        if (!status) return of([]);
+        return of(datasets);
+      }),
+      shareReplay(1),
+    );
+
+    this.authenticationService.user$.subscribe(async (user) => {
+      if (this._user !== undefined) {
+        await this.removeStoredDatasets();
+      }
+      this._user = user;
+
+      if (!user) {
+        await this.removeStoredDatasets()
+        this._dataset.next([]);
+      } else {
+        const datasets = await this.loadStoredDatasets();
+        this._dataset.next(datasets);
+      }
+    });
   }
 
   private overrideDatasets(datasets: Dataset[]) {
@@ -79,7 +96,7 @@ export class DatasetService {
   private async removeStoredDatasets(): Promise<Dataset[]> {
     return this.storageService.getPrefixed(this.DATASET_PREFIX).then((records: any) => {
       return Promise.all(
-        Object.keys(records).map((key) => this.storageService.remove(key))
+        Object.keys(records).map((key) => this.storageService.remove(`${this.DATASET_PREFIX}${key}`))
       )
     }).then(() => []);
   }
