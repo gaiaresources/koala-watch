@@ -176,7 +176,7 @@ export class FormGeneratorService {
   private getFieldDateValue(value: any) {
     switch (value) {
       case 'current':
-        return dayjs().toISOString();
+        return dayjs().format();
 
       default:
         return "";
