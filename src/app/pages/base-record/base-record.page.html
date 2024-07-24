@@ -55,19 +55,12 @@
                          [writeable]="record.isWriteable()">
       </app-record-photos>
 
-      <ion-fab class="form-hover-buttons" *ngIf="record.isWriteable()" slot="fixed" horizontal="end" vertical="bottom">
-        <ion-fab-button>
-          <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-list side="top">
-          <ion-fab-button aria-label="Add Photo From Camera" (click)="doCamera()" color="primary">
-            <fa-icon class="iconButtons" [icon]="faCamera"></fa-icon>
-          </ion-fab-button>
-          <ion-fab-button aria-label="Add Photo From Gallery" (click)="doGallery()" color="primary">
-            <fa-icon class="iconButtons" [icon]="faImage"></fa-icon>
-          </ion-fab-button>
-        </ion-fab-list>
-      </ion-fab>
+      <app-fab-slot *ngIf="record.isWriteable()" horizontal="end" vertical="bottom">
+        <app-fab-button [icon]="faCamera" [text]="'Camera'" (click)="doCamera()">
+        </app-fab-button>
+        <app-fab-button [icon]="faImage" [text]="'Gallery'" (click)="doGallery()">
+        </app-fab-button>
+      </app-fab-slot>
     </ng-container>
 
   </ion-content>

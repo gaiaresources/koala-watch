@@ -1,0 +1,7 @@
+<div class="fab-button">
+  <ion-button class="fab-button__btn" color="primary" fill="solid" shape="round">
+    <ion-img *ngIf="src" class="fab-button__img" slot="icon-only" [src]="src"></ion-img>
+    <fa-icon *ngIf="icon" class="fab-button__img" slot="icon-only" [icon]="icon" size="2x"></fa-icon>
+  </ion-button>
+  <ion-label class="fab-button__text" slot="end" aria-hidden="true">{{ text }}</ion-label>
+</div>

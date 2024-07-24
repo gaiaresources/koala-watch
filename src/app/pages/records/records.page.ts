@@ -7,10 +7,7 @@ import {
   IonButtons,
   IonContent,
   IonFab,
-  IonFabButton,
-  IonFabList,
   IonHeader,
-  IonIcon,
   IonImg,
   IonLabel,
   IonMenuButton,
@@ -20,6 +17,8 @@ import {
   IonTitle,
   IonToolbar
 } from "@ionic/angular/standalone";
+import {FabButtonComponent} from "../../components/fab-button/fab-button.component";
+import {FabSlotComponent} from "../../components/fab-slot/fab-slot.component";
 
 @Component({
   selector: 'app-records',
@@ -40,9 +39,8 @@ import {
     IonTabButton,
     IonLabel,
     IonFab,
-    IonFabButton,
-    IonIcon,
-    IonFabList
+    FabButtonComponent,
+    FabSlotComponent
   ]
 })
 export class RecordsPage implements OnInit {

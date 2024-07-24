@@ -22,26 +22,21 @@
   </ion-tabs>
 
   <ion-fab slot="fixed" horizontal="start" vertical="bottom">
-    <ion-fab-button (click)="doUpload()">
-      <ion-img class="fab-button__img" aria-hidden="true"
-               src="../../../assets/imgs/white_upload.png"></ion-img>
-    </ion-fab-button>
+    <app-fab-button [src]="'../../../assets/imgs/white_upload.png'"
+                    [text]="'Upload'"
+                    (click)="doUpload()">
+    </app-fab-button>
   </ion-fab>
 
-  <ion-fab class="form-hover-buttons" slot="fixed" horizontal="end" vertical="bottom">
-    <ion-fab-button>
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button (click)="doNewObservation()" color="primary">
-        <ion-img class="fab-button__img" aria-hidden="true"
-                 src="../../../assets/imgs/white_eye.png"></ion-img>
-      </ion-fab-button>
-      <ion-fab-button (click)="doNewCensus()" color="primary">
-        <ion-img class="fab-button__img" aria-hidden="true"
-                 src="../../../assets/imgs/white_poop.png"></ion-img>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
+  <app-fab-slot horizontal="end" vertical="bottom">
+    <app-fab-button [src]="'../../../assets/imgs/white_eye.png'"
+                    [text]="'Observation'"
+                    (click)="doNewObservation()">
+    </app-fab-button>
+    <app-fab-button [src]="'../../../assets/imgs/white_trees.png'"
+                    [text]="'Scat Census'"
+                    (click)="doNewCensus()">
+    </app-fab-button>
+  </app-fab-slot>
 
 </ion-content>

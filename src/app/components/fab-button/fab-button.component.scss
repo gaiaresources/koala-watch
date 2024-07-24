@@ -1,0 +1,34 @@
+.fab-button {
+  position: relative;
+  display: block;
+  width: 64px;
+
+  &__btn {
+    --padding-start: 5px;
+    --padding-end: 5px;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+  }
+
+  &__img {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg.svg-inline--fa {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &__text {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 90%;
+  }
+}
