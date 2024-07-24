@@ -4,7 +4,7 @@ export class NumberValidator {
 
   static integer(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
-    if (!value) {
+    if (!value && value !== null) {
       return null;
     }
 
@@ -14,7 +14,7 @@ export class NumberValidator {
 
   static decimal(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
-    if (!value) {
+    if (!value && value !== null) {
       return null;
     }
 
