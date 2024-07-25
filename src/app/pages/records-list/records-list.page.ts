@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {combineLatest, map, Observable} from "rxjs";
 import {ClientRecord} from "../../models/client-record";
-import {APP_NAME} from "../../tokens/app";
+import {APP_NAME, DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION} from "../../tokens/app";
 import {UploadService} from "../../services/upload/upload.service";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {RecordsService} from "../../services/records/records.service";
@@ -29,6 +29,7 @@ import {IonButton, IonCol, IonContent, IonGrid, IonImg, IonLabel, IonRow} from "
   ]
 })
 export class RecordsListPage implements OnInit {
+  private static DISPLAY_RECORDS = [DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS];
 
   public records$: Observable<ClientRecord[]>;
 
@@ -48,6 +49,8 @@ export class RecordsListPage implements OnInit {
         // TODO: The records should be ordered by datetime.
         return records.filter((record) => {
           return !settings.hideUploaded || !record.isUploaded();
+        }).filter((record) => {
+          return RecordsListPage.DISPLAY_RECORDS.find((datasetName) => record.datasetName === datasetName);
         });
       })
     );

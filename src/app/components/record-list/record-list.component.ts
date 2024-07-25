@@ -89,7 +89,7 @@ export class RecordListComponent implements OnChanges {
       case DATASET_NAME_OBSERVATION:
         return 'assets/imgs/eye.png';
       case DATASET_NAME_CENSUS:
-        return 'assets/imgs/poop.png';
+        return 'assets/imgs/trees.png';
       case DATASET_NAME_TREESURVEY:
         return 'assets/imgs/tree.png';
       default:

@@ -17,7 +17,6 @@ import {
   IonToolbar
 } from '@ionic/angular/standalone';
 import {APP_NAME} from "../../tokens/app";
-import {UploadService} from "../../services/upload/upload.service";
 
 @Component({
   selector: 'app-help',
@@ -30,15 +29,10 @@ export class HelpPage implements OnInit {
 
   constructor(
     @Inject(APP_NAME) public appName: string,
-    private uploadService: UploadService,
   ) {
   }
 
   ngOnInit() {
-  }
-
-  async doUpload() {
-    await this.uploadService.upload();
   }
 
 }
