@@ -1,5 +1,14 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar} from "@ionic/angular/standalone";
+import {
+  AlertController,
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonModal,
+  IonTitle,
+  IonToolbar
+} from "@ionic/angular/standalone";
 import {Coordinates} from "../../models/coordinates";
 import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
 import {LocationService} from "../../services/location/location.service";
@@ -48,6 +57,7 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
   constructor(
     private locationService: LocationService,
     private elevationService: ElevationService,
+    private alertController: AlertController,
   ) {
     this.subscription = this.locationService.watchPosition().subscribe((position) => {
       this.current = {
@@ -64,6 +74,11 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
       if (!this.lat || !this.lng) {
         this.coords = {...location};
       }
+    }, async (_e) => {
+      const alert = await this.alertController.create({
+        message: 'Location unavailable',
+      });
+      await alert.present();
     });
 
     this.currentIcon = {
