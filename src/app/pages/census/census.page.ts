@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, NgIf} from '@angular/common';
-import {IonButton, IonImg, IonLabel, IonSegmentButton} from '@ionic/angular/standalone';
+import {IonButton, IonContent, IonImg, IonLabel, IonSegmentButton} from '@ionic/angular/standalone';
 import {BaseRecordPage} from "../base-record/base-record.page";
 import {BehaviorSubject, distinctUntilChanged, map, Observable, shareReplay} from "rxjs";
 import {Dataset} from "../../models/dataset";
@@ -25,7 +25,8 @@ import {ViewWillEnter} from "@ionic/angular";
     IonSegmentButton,
     IonButton,
     IonImg,
-    IonLabel
+    IonLabel,
+    IonContent,
   ]
 })
 export class CensusPage implements OnInit, ViewWillEnter {
