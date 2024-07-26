@@ -130,9 +130,7 @@ export class RecordsService {
     const records: ClientRecord[] = [];
     this.records.forEach((value) => {
       if (value.valid && !value.isUploaded()) {
-        // if (value.valid && (!value.id || value.modified)) {
         records.push(value);
-        this.getChildRecords(value.client_id).forEach(v => records.push(v));
       }
     });
     return records;
@@ -143,7 +141,6 @@ export class RecordsService {
     this.records.forEach((value) => {
       if (value.isUploaded()) {
         records.push(value);
-        this.getChildRecords(value.client_id).forEach(v => records.push(v));
       }
     });
     return records;
