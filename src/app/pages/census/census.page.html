@@ -24,9 +24,7 @@
               </app-record-list>
 
               <ion-button class="fab-button" (click)="doNewSurvey()">
-                <ion-img class="fab-button__img" slot="start" src="../../../assets/imgs/white_tree.png"
-                         alt="Koala Tree Survey"
-                         aria-hidden="true"/>
+                <app-image-icon slot="start" [src]="'../../../assets/imgs/white_tree.png'" [ariaLabel]="'Koala Tree Survey'" />
                 <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
               </ion-button>
             </ng-container>
@@ -40,9 +38,7 @@
                 </p>
 
                 <ion-button class="fab-button" (click)="doNewSurvey()">
-                  <ion-img class="fab-button__img" slot="start" src="../../../assets/imgs/white_tree.png"
-                           alt="Koala Tree Survey"
-                           aria-hidden="true"/>
+                  <app-image-icon slot="start" [src]="'../../../assets/imgs/white_tree.png'" [ariaLabel]="'Koala Tree Survey'" />
                   <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
                 </ion-button>
               </ion-content>

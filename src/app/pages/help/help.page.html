@@ -30,14 +30,13 @@
     <p>
 
       <ion-button class="fab-button" color="primary" expand="full" fill="solid">
-        <ion-img class="fab-button__img" slot="start" aria-hidden="true"
-                 src="../../../assets/imgs/white_eye.png"></ion-img>
+        <app-image-icon slot="start" [src]="'../../../assets/imgs/white_eye.png'"
+                        [ariaLabel]="'Record an observation'"/>
         <ion-label class="fab-button__text">Record an observation</ion-label>
       </ion-button>
 
       <ion-button class="fab-button" color="primary" expand="full" fill="solid">
-        <ion-img class="fab-button__img" slot="start" aria-hidden="true"
-                 src="../../../assets/imgs/white_trees.png"></ion-img>
+        <app-image-icon slot="start" [src]="'../../../assets/imgs/white_trees.png'" [ariaLabel]="'Start a census'"/>
         <ion-label class="fab-button__text">Start a Census</ion-label>
       </ion-button>
 
@@ -57,8 +56,7 @@
     </p>
 
     <ion-button class="fab-button" color="primary" expand="full" fill="solid">
-      <ion-img class="fab-button__img" slot="start" aria-hidden="true"
-               src="../../../assets/imgs/white_upload.png"></ion-img>
+      <app-image-icon slot="start" [src]="'../../../assets/imgs/white_upload.png'" [ariaLabel]="'Upload data'"/>
       <ion-label class="fab-button__text">Upload Data</ion-label>
     </ion-button>
 
@@ -69,8 +67,7 @@
     </p>
 
     <ion-button class="fab-button" color="primary" expand="full" fill="solid">
-      <ion-img class="fab-button__img" slot="start" aria-hidden="true"
-               src="../../../assets/imgs/white_tree.png"></ion-img>
+      <app-image-icon slot="start" [src]="'../../../assets/imgs/white_tree.png'" [ariaLabel]="'Create a tree survey'"/>
       <ion-label class="fab-button__text">Create a tree survey</ion-label>
     </ion-button>
 

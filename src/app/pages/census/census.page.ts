@@ -11,6 +11,7 @@ import {ClientRecord} from "../../models/client-record";
 import {RecordsService} from "../../services/records/records.service";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {ViewWillEnter} from "@ionic/angular";
+import {ImageIconComponent} from "../../components/image-icon/image-icon.component";
 
 @Component({
   selector: 'app-census',
@@ -27,6 +28,7 @@ import {ViewWillEnter} from "@ionic/angular";
     IonImg,
     IonLabel,
     IonContent,
+    ImageIconComponent,
   ]
 })
 export class CensusPage implements OnInit, ViewWillEnter {
