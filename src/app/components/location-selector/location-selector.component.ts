@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import {FormGroup} from "@angular/forms";
 import {DecimalPipe, NgIf} from "@angular/common";
 import {Subscription} from "rxjs";
-import {AlertController, IonButton, IonButtons, IonIcon} from "@ionic/angular/standalone";
+import {IonButton, IonButtons, IonIcon} from "@ionic/angular/standalone";
 import {faLocationArrow, faLocationCrosshairs, faMapPin} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {LocationService} from "../../services/location/location.service";
@@ -37,7 +37,7 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
   @Input({required: true})
   formGroup?: FormGroup;
 
-  subscription?: Subscription;
+  subscription: Subscription[] = [];
 
   accuracy: number | "" = "";
 
@@ -47,7 +47,6 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
   constructor(
     private locationService: LocationService,
     private elevationService: ElevationService,
-    private alertController: AlertController,
   ) {
   }
 
@@ -62,18 +61,20 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
 
   setup() {
     // There is an existing subscription to the formGroup.
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-      this.subscription = undefined;
+    if (this.subscription.length > 0) {
+      this.subscription.forEach(sub => sub.unsubscribe());
+      this.subscription = [];
     }
 
     // No form group so ignore setup.
     if (!this.formGroup) return;
 
     // Process form value changes internally.
-    this.subscription = this.formGroup.valueChanges.subscribe((values) => {
-      this.accuracy = values.Accuracy ?? "";
-    });
+    this.subscription.push(
+      this.formGroup.valueChanges.subscribe((values) => {
+        this.accuracy = values.Accuracy ?? "";
+      })
+    );
 
     if (this.formGroup.contains("Latitude")) {
       const value = this.formGroup.get('Latitude')?.value;
@@ -85,19 +86,14 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
     }
 
     if (!this.lat || !this.lng) {
-      this.locationService.getPosition().then((coords) => {
-        this.lat = coords.lat;
-        this.lng = coords.lng;
-        this.setLocationValues(coords.lat, coords.lng, coords.accuracy, coords.altitude);
-      });
+      this.subscription.push(
+        this.locationService.getLocation((coords) => {
+          this.lat = coords.lat;
+          this.lng = coords.lng;
+          this.setLocationValues(coords.lat, coords.lng, coords.accuracy, coords.altitude);
+        })
+      );
     }
-  }
-
-  async showUnavailable() {
-    const alert = await this.alertController.create({
-      message: 'Location unavailable',
-    });
-    await alert.present();
   }
 
   setLocationValues(lat: number, lng: number, accuracy: number | "", altitude: number | "") {
@@ -132,16 +128,16 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
   }
 
   doGpsSelect() {
-    this.locationService.getPosition().then((coords: Coordinates) => {
-      this.setLocationValues(
-        coords.lat,
-        coords.lng,
-        coords.accuracy,
-        coords.altitude ?? "",
-      );
-    }, async (_e) => {
-      await this.showUnavailable();
-    });
+    this.subscription.push(
+      this.locationService.getLocation((location) => {
+        this.setLocationValues(
+          location.lat,
+          location.lng,
+          location.accuracy,
+          location.altitude ?? "",
+        );
+      }),
+    );
   }
 
 }

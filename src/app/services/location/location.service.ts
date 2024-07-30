@@ -1,14 +1,17 @@
 import {Injectable} from '@angular/core';
 import {Geolocation, PermissionStatus, Position} from '@capacitor/geolocation';
 import {Coordinates} from "../../models/coordinates";
-import {Observable, Subscription} from "rxjs";
+import {from, Observable, Subscription} from "rxjs";
+import {AlertController} from "@ionic/angular/standalone";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
 
-  constructor() {
+  constructor(
+    private alertController: AlertController,
+  ) {
   }
 
   public async getPosition(): Promise<Coordinates> {
@@ -47,6 +50,20 @@ export class LocationService {
           observer.complete();
           Geolocation.clearWatch({id})
         });
+    });
+  }
+
+  public getLocation(callback: (location: Coordinates) => void): Subscription {
+    return from(this.getPosition()).subscribe({
+      next: (location) => {
+        callback(location);
+      },
+      error: async (_e) => {
+        const alert = await this.alertController.create({
+          message: 'Location unavailable',
+        });
+        await alert.present();
+      }
     });
   }
 
