@@ -9,6 +9,7 @@ import {SettingsService} from "../../services/settings/settings.service";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {RecordListComponent} from "../../components/record-list/record-list.component";
 import {IonButton, IonCol, IonContent, IonGrid, IonImg, IonLabel, IonRow} from "@ionic/angular/standalone";
+import {ImageIconComponent} from "../../components/image-icon/image-icon.component";
 
 @Component({
   selector: 'app-records-list',
@@ -26,6 +27,7 @@ import {IonButton, IonCol, IonContent, IonGrid, IonImg, IonLabel, IonRow} from "
     IonImg,
     IonButton,
     IonLabel,
+    ImageIconComponent,
   ]
 })
 export class RecordsListPage implements OnInit {

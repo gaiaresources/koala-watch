@@ -1,14 +1,15 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {
-  AlertController,
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonModal,
-  IonTitle,
-  IonToolbar
-} from "@ionic/angular/standalone";
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar} from "@ionic/angular/standalone";
 import {Coordinates} from "../../models/coordinates";
 import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
 import {LocationService} from "../../services/location/location.service";
@@ -35,7 +36,7 @@ import {Subscription} from "rxjs";
     MapAdvancedMarker
   ]
 })
-export class LocationMapSelectorComponent implements OnInit, OnChanges {
+export class LocationMapSelectorComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(IonModal) modal?: IonModal;
 
@@ -52,35 +53,23 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
   @Output()
   onSelect = new EventEmitter<Coordinates>();
 
-  subscription?: Subscription;
+  subscription: Subscription[] = [];
 
   constructor(
     private locationService: LocationService,
     private elevationService: ElevationService,
-    private alertController: AlertController,
   ) {
-    this.subscription = this.locationService.watchPosition().subscribe((position) => {
+    this.subscription.push(this.locationService.watchPosition().subscribe((position) => {
       this.current = {
         lat: position?.coords?.latitude ?? 0,
         lng: position?.coords?.longitude ?? 0,
         altitude: "",
         accuracy: "",
       };
-    });
+    }));
   }
 
   ngOnInit() {
-    this.locationService.getPosition().then((location) => {
-      if (!this.lat || !this.lng) {
-        this.coords = {...location};
-      }
-    }, async (_e) => {
-      const alert = await this.alertController.create({
-        message: 'Location unavailable',
-      });
-      await alert.present();
-    });
-
     this.currentIcon = {
       path: google.maps.SymbolPath.CIRCLE,
       scale: 5,
@@ -89,6 +78,10 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges {
       fillColor: '#5384ed',
       strokeColor: '#fff',
     };
+  }
+
+  ngOnDestroy() {
+    this.subscription.forEach(sub => sub.unsubscribe());
   }
 
   ngOnChanges(changes: SimpleChanges) {

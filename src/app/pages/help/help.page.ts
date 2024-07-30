@@ -17,13 +17,14 @@ import {
   IonToolbar
 } from '@ionic/angular/standalone';
 import {APP_NAME} from "../../tokens/app";
+import {ImageIconComponent} from "../../components/image-icon/image-icon.component";
 
 @Component({
   selector: 'app-help',
   templateUrl: './help.page.html',
   styleUrls: ['./help.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol, IonImg, IonButton, IonIcon, IonLabel]
+    imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol, IonImg, IonButton, IonIcon, IonLabel, ImageIconComponent]
 })
 export class HelpPage implements OnInit {
 
