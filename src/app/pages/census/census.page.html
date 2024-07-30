@@ -22,6 +22,13 @@
             <ng-container *ngIf="children$ | async as children; else createObservations">
               <app-record-list *ngIf="children.length; else createObservations" [records]="children">
               </app-record-list>
+
+              <ion-button class="fab-button" (click)="doNewSurvey()">
+                <ion-img class="fab-button__img" slot="start" src="../../../assets/imgs/white_tree.png"
+                         alt="Koala Tree Survey"
+                         aria-hidden="true"/>
+                <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
+              </ion-button>
             </ng-container>
 
             <ng-template #createObservations>
@@ -31,15 +38,16 @@
                   On this screen you can view the tree surveys related to this census. You can also create a
                   new tree survey. Each census can have many tree surveys.
                 </p>
+
+                <ion-button class="fab-button" (click)="doNewSurvey()">
+                  <ion-img class="fab-button__img" slot="start" src="../../../assets/imgs/white_tree.png"
+                           alt="Koala Tree Survey"
+                           aria-hidden="true"/>
+                  <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
+                </ion-button>
               </ion-content>
             </ng-template>
 
-            <ion-button class="fab-button" (click)="doNewSurvey()">
-              <ion-img class="fab-button__img" slot="start" src="../../../assets/imgs/white_tree.png"
-                       alt="Koala Tree Survey"
-                       aria-hidden="true"/>
-              <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
-            </ion-button>
           </ng-container>
           <ng-container *ngIf="!valid">
             <ion-content class="ion-padding">
