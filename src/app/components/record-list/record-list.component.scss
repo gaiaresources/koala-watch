@@ -47,10 +47,22 @@ ion-item.uploaded {
   --ion-item-background: #ebf0df;
 }
 
-ion-img.data-row {
-  height: 40px;
-  width: 40px;
-  vertical-align: middle;
+ion-item {
+  *[slot="start"] {
+    margin-inline-end: 8px;
+  }
+
+  *[slot="end"] {
+    margin-inline-start: 8px;
+  }
+}
+
+ion-img {
+  &.data-row {
+    height: 40px;
+    width: 40px;
+    vertical-align: middle;
+  }
 }
 
 .ion-item {
@@ -75,8 +87,8 @@ ion-img.data-row {
     font-size: 2.4rem;
     font-weight: 500;
   }
-}
 
+}
 
 .row {
   align-items: center;
@@ -97,4 +109,16 @@ ion-img.data-row {
 .fabbed-img {
   width: 60px;
   height: 60px;
+}
+
+@media screen and (min-width: 450px) {
+  ion-item {
+    *[slot="start"] {
+      margin-inline-end: 32px;
+    }
+
+    *[slot="end"] {
+      margin-inline-start: 32px;
+    }
+  }
 }

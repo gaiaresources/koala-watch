@@ -12,6 +12,8 @@ import {RecordsService} from "../../services/records/records.service";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {ViewWillEnter} from "@ionic/angular";
 import {ImageIconComponent} from "../../components/image-icon/image-icon.component";
+import {FabButtonComponent} from "../../components/fab-button/fab-button.component";
+import {FabSlotComponent} from "../../components/fab-slot/fab-slot.component";
 
 @Component({
   selector: 'app-census',
@@ -29,6 +31,8 @@ import {ImageIconComponent} from "../../components/image-icon/image-icon.compone
     IonLabel,
     IonContent,
     ImageIconComponent,
+    FabButtonComponent,
+    FabSlotComponent,
   ]
 })
 export class CensusPage implements OnInit, ViewWillEnter {

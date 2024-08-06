@@ -28,15 +28,17 @@
     </app-fab-button>
   </ion-fab>
 
-  <app-fab-slot horizontal="end" vertical="bottom">
-    <app-fab-button [src]="'../../../assets/imgs/white_eye.png'"
-                    [text]="'Observation'"
-                    (click)="doNewObservation()">
-    </app-fab-button>
-    <app-fab-button [src]="'../../../assets/imgs/white_trees.png'"
-                    [text]="'Scat Census'"
-                    (click)="doNewCensus()">
-    </app-fab-button>
-  </app-fab-slot>
+  <ng-container *ngIf="records$ | async as records">
+    <app-fab-slot *ngIf="records.length > 0" horizontal="end" vertical="bottom">
+      <app-fab-button [src]="'../../../assets/imgs/white_eye.png'"
+                      [text]="'Observation'"
+                      (click)="doNewObservation()">
+      </app-fab-button>
+      <app-fab-button [src]="'../../../assets/imgs/white_trees.png'"
+                      [text]="'Census'"
+                      (click)="doNewCensus()">
+      </app-fab-button>
+    </app-fab-slot>
+  </ng-container>
 
 </ion-content>

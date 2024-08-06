@@ -7,11 +7,14 @@ import {NetworkService} from "../network/network.service";
 import {DatasetService} from "../dataset/dataset.service";
 import {Dataset} from "../../models/dataset";
 import {PhotoService} from "../photo/photo.service";
+import {SettingsService} from "../settings/settings.service";
+import {DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION} from "../../tokens/app";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecordsService {
+  private static DISPLAY_RECORDS = [DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS];
   private readonly RECORD_PREFIX = 'Record_';
 
   private records = new Map<string, ClientRecord>();
@@ -28,6 +31,7 @@ export class RecordsService {
     private storageService: StorageService,
     private networkService: NetworkService,
     private photoService: PhotoService,
+    private settingsService: SettingsService,
   ) {
     this.loadRecordsFromAPI();
 
@@ -201,6 +205,23 @@ export class RecordsService {
 
     // Notify of changes.
     this._changed.next(true);
+  }
+
+  getDisplayRecords$(): Observable<ClientRecord[]> {
+    return combineLatest([
+      this.changed$,
+      this.settingsService.values$,
+    ]).pipe(
+      map(([_, settings]) => {
+        const records = this.getAllRecords();
+        // TODO: The records should be ordered by datetime.
+        return records.filter((record) => {
+          return !settings.hideUploaded || !record.isUploaded();
+        }).filter((record) => {
+          return RecordsService.DISPLAY_RECORDS.find((datasetName) => record.datasetName === datasetName);
+        });
+      })
+    );
   }
 
 }

@@ -1,11 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {combineLatest, map, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {ClientRecord} from "../../models/client-record";
-import {APP_NAME, DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION} from "../../tokens/app";
+import {APP_NAME} from "../../tokens/app";
 import {UploadService} from "../../services/upload/upload.service";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {RecordsService} from "../../services/records/records.service";
-import {SettingsService} from "../../services/settings/settings.service";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {RecordListComponent} from "../../components/record-list/record-list.component";
 import {IonButton, IonCol, IonContent, IonGrid, IonImg, IonLabel, IonRow} from "@ionic/angular/standalone";
@@ -31,7 +30,6 @@ import {ImageIconComponent} from "../../components/image-icon/image-icon.compone
   ]
 })
 export class RecordsListPage implements OnInit {
-  private static DISPLAY_RECORDS = [DATASET_NAME_OBSERVATION, DATASET_NAME_CENSUS];
 
   public records$: Observable<ClientRecord[]>;
 
@@ -40,22 +38,8 @@ export class RecordsListPage implements OnInit {
     private uploadService: UploadService,
     private navigationService: NavigationService,
     private recordsService: RecordsService,
-    private settingsService: SettingsService,
   ) {
-    this.records$ = combineLatest([
-      this.recordsService.changed$,
-      this.settingsService.values$,
-    ]).pipe(
-      map(([_, settings]) => {
-        const records = this.recordsService.getAllRecords();
-        // TODO: The records should be ordered by datetime.
-        return records.filter((record) => {
-          return !settings.hideUploaded || !record.isUploaded();
-        }).filter((record) => {
-          return RecordsListPage.DISPLAY_RECORDS.find((datasetName) => record.datasetName === datasetName);
-        });
-      })
-    );
+    this.records$ = this.recordsService.getDisplayRecords$();
   }
 
   ngOnInit() {
