@@ -23,10 +23,12 @@
               <app-record-list *ngIf="children.length; else createObservations" [records]="children">
               </app-record-list>
 
-              <ion-button class="fab-button" (click)="doNewSurvey()">
-                <app-image-icon slot="start" [src]="'../../../assets/imgs/white_tree.png'" [ariaLabel]="'Koala Tree Survey'" />
-                <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
-              </ion-button>
+              <app-fab-slot horizontal="end" vertical="bottom">
+                <app-fab-button [src]="'../../../assets/imgs/white_tree.png'"
+                                [text]="'Tree'"
+                                (click)="doNewSurvey()">
+                </app-fab-button>
+              </app-fab-slot>
             </ng-container>
 
             <ng-template #createObservations>
@@ -38,7 +40,8 @@
                 </p>
 
                 <ion-button class="fab-button" (click)="doNewSurvey()">
-                  <app-image-icon slot="start" [src]="'../../../assets/imgs/white_tree.png'" [ariaLabel]="'Koala Tree Survey'" />
+                  <app-image-icon slot="start" [src]="'../../../assets/imgs/white_tree.png'"
+                                  [ariaLabel]="'Koala Tree Survey'"/>
                   <ion-label class="fab-button__text" slot="start">Create a tree survey for this census</ion-label>
                 </ion-button>
               </ion-content>
@@ -55,5 +58,6 @@
       </ng-container>
 
     </app-base-record>
+
   </ng-container>
 </ng-container>

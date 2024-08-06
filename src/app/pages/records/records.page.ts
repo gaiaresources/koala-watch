@@ -19,6 +19,10 @@ import {
 } from "@ionic/angular/standalone";
 import {FabButtonComponent} from "../../components/fab-button/fab-button.component";
 import {FabSlotComponent} from "../../components/fab-slot/fab-slot.component";
+import {RecordsService} from "../../services/records/records.service";
+import {AsyncPipe, NgIf} from "@angular/common";
+import {Observable} from "rxjs";
+import {ClientRecord} from "../../models/client-record";
 
 @Component({
   selector: 'app-records',
@@ -40,7 +44,9 @@ import {FabSlotComponent} from "../../components/fab-slot/fab-slot.component";
     IonLabel,
     IonFab,
     FabButtonComponent,
-    FabSlotComponent
+    FabSlotComponent,
+    NgIf,
+    AsyncPipe
   ]
 })
 export class RecordsPage implements OnInit {
@@ -48,10 +54,14 @@ export class RecordsPage implements OnInit {
   public faList = faList;
   public faMap = faMap;
 
+  public records$: Observable<ClientRecord[]>;
+
   constructor(
     private uploadService: UploadService,
     private navigationService: NavigationService,
+    private recordsService: RecordsService,
   ) {
+    this.records$ = this.recordsService.getDisplayRecords$();
   }
 
   ngOnInit() {
