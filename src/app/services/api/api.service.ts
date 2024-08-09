@@ -1,4 +1,4 @@
-import {forkJoin, map, Observable, of, switchMap} from 'rxjs';
+import {map, Observable, of, switchMap} from 'rxjs';
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
@@ -83,9 +83,17 @@ export class APIService {
         if (!status) return of(null);
         return this.httpClient.post(url, body,
           {
-            headers: new HttpHeaders({'content-type': 'application/json'})
+            headers: new HttpHeaders({'content-type': 'application/json'}),
+            observe: 'response',
           })
           .pipe(
+            map((response) => {
+              // 204 responses don't provide a body which is expected as a successful result.
+              if (response.status === 204) {
+                return {success: true};
+              }
+              return response.body;
+            }),
             catchError((err, caught) => this.error(err, caught))
           );
       }),
@@ -789,7 +797,7 @@ export class APIService {
 
   public getRecordsByDatasetId(id: number, params: any = {}): Observable<ClientRecord[]> {
     return this.getRequest(
-      this.buildAbsoluteUrl('records/', ), {
+      this.buildAbsoluteUrl('records/',), {
         ...params,
         "dataset__id": id.toString(),
       },
