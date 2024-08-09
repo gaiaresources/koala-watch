@@ -17,7 +17,7 @@
 
       <ion-item-group *ngIf="fields.locationFields && fields.locationFields.length">
         <ion-item-divider color="secondary">
-          <app-location-selector [formGroup]="form" [readonly]="readonly"/>
+          <app-location-selector [formGroup]="form" [readonly]="readonly" [id]="formId"/>
         </ion-item-divider>
 
         <ion-list>

@@ -88,6 +88,8 @@ export class RecordFormComponent implements OnInit, OnChanges {
 
   readonly: boolean = false;
 
+  formId: string = "";
+
   constructor(
     private formBuilder: FormBuilder,
     private datasetService: DatasetService,
@@ -118,6 +120,7 @@ export class RecordFormComponent implements OnInit, OnChanges {
     const data = this.record?.data || {};
     const writeable = !this.record || this.record.isWriteable();
     this.form = this.formGeneratorService.getFormGroup(this.formBuilder, data, this.dataset, writeable, user);
+    this.formId = `form-${this.dataset?.id?.toString()}`;
     this.subscriptions = [
       this.form.valueChanges.subscribe((values) => this.setValues(values)),
       this.form.statusChanges.subscribe((values) => this.statusChanges(values)),

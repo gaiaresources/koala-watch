@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Geolocation, PermissionStatus, Position} from '@capacitor/geolocation';
+import {Geolocation, PermissionStatus} from '@capacitor/geolocation';
 import {Coordinates} from "../../models/coordinates";
-import {from, Observable, Subscription} from "rxjs";
+import {Observable, shareReplay, Subscription, take} from "rxjs";
 import {AlertController} from "@ionic/angular/standalone";
 
 @Injectable({
@@ -9,9 +9,39 @@ import {AlertController} from "@ionic/angular/standalone";
 })
 export class LocationService {
 
+  private readonly watcher: Observable<Coordinates>;
+
   constructor(
     private alertController: AlertController,
   ) {
+    const watcher: Observable<Coordinates> = new Observable(observer => {
+      let id: any;
+
+      this.getPosition().then((location) => {
+        observer.next(location);
+      }).then(() => {
+        return Geolocation.watchPosition({}, (location) => {
+          if (!location || !location.coords) return;
+          const coords = location.coords;
+          observer.next({
+            lat: coords.latitude,
+            lng: coords.longitude,
+            altitude: coords.altitude ?? "",
+            accuracy: coords.accuracy ?? "",
+          });
+        });
+      }).then(callback => {
+        id = callback;
+      });
+
+      return new Subscription(
+        () => {
+          observer.complete();
+          Geolocation.clearWatch({id})
+        });
+    });
+
+    this.watcher = watcher.pipe(shareReplay(1));
   }
 
   public async getPosition(): Promise<Coordinates> {
@@ -36,25 +66,12 @@ export class LocationService {
     };
   }
 
-  public watchPosition(): Observable<Position | null> {
-    return new Observable(observer => {
-      let id: any;
-      Geolocation.watchPosition({}, (position) => {
-        observer.next(position);
-      }).then(callback => {
-        id = callback;
-      });
-
-      return new Subscription(
-        () => {
-          observer.complete();
-          Geolocation.clearWatch({id})
-        });
-    });
+  public watchPosition(): Observable<Coordinates> {
+    return this.watcher;
   }
 
   public getLocation(callback: (location: Coordinates) => void): Subscription {
-    return from(this.getPosition()).subscribe({
+    return this.watcher.pipe(take(1)).subscribe({
       next: (location) => {
         callback(location);
       },

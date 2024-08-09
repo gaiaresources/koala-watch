@@ -7,10 +7,11 @@
 
   <ion-buttons class="location-buttons" *ngIf="!readonly">
 
-    <ion-button id="open-modal" class="location-button">
+    <ion-button [id]="id + '-modal'" class="location-button">
       <fa-icon [icon]="faMapPin"/>
       Map
       <app-location-map-selector (onSelect)="doMapSelect($event)"
+                                 [toggleId]="id + '-modal'"
                                  [lat]="lat"
                                  [lng]="lng">
       </app-location-map-selector>
