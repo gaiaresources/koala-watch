@@ -46,6 +46,9 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges, OnDestro
   @Input()
   lng?: number;
 
+  @Input({required: true})
+  toggleId!: string;
+
   coords?: Coordinates;
   current?: Coordinates;
   currentIcon: google.maps.Symbol | string = "";
@@ -59,24 +62,13 @@ export class LocationMapSelectorComponent implements OnInit, OnChanges, OnDestro
     private locationService: LocationService,
     private elevationService: ElevationService,
   ) {
-    // TODO: For some reason iOS fails the Geolocation.getCurrentPosition() when Geolocation.watchPosition() has been
-    // called, so might be best to have either one or the other function for getting position.
-
-    // this.subscription.push(this.locationService.watchPosition().subscribe((position) => {
-    //   this.current = {
-    //     lat: position?.coords?.latitude ?? 0,
-    //     lng: position?.coords?.longitude ?? 0,
-    //     altitude: "",
-    //     accuracy: "",
-    //   };
-    // }));
   }
 
   ngOnInit() {
     this.subscription.push(
-      this.locationService.getLocation((location) => {
+      this.locationService.watchPosition().subscribe((location) => {
         this.current = location;
-      }),
+      })
     );
 
     this.currentIcon = {

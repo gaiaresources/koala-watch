@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormGroup} from "@angular/forms";
 import {DecimalPipe, NgIf} from "@angular/common";
 import {Subscription} from "rxjs";
@@ -25,7 +25,7 @@ import {ElevationService} from "../../services/elevation/elevation.service";
     DecimalPipe,
   ]
 })
-export class LocationSelectorComponent implements OnInit, OnChanges {
+export class LocationSelectorComponent implements OnInit, OnDestroy, OnChanges {
 
   public faLocationArrow = faLocationArrow;
   public faMapPin = faMapPin;
@@ -36,6 +36,9 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
 
   @Input({required: true})
   formGroup?: FormGroup;
+
+  @Input({required: true})
+  id!: string;
 
   subscription: Subscription[] = [];
 
@@ -51,6 +54,19 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.subscription.push(
+      this.locationService.watchPosition().subscribe((location) => {
+        if (!this.lat || !this.lng) {
+          this.lat = location.lat;
+          this.lng = location.lng;
+          this.setLocationValues(location.lat, location.lng, location.accuracy, location.altitude);
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.forEach(sub => sub.unsubscribe());
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -83,16 +99,6 @@ export class LocationSelectorComponent implements OnInit, OnChanges {
     if (this.formGroup.contains('Longitude')) {
       const value = this.formGroup.get('Longitude')?.value;
       this.lng = value ? parseFloat(value) : undefined;
-    }
-
-    if (!this.lat || !this.lng) {
-      this.subscription.push(
-        this.locationService.getLocation((coords) => {
-          this.lat = coords.lat;
-          this.lng = coords.lng;
-          this.setLocationValues(coords.lat, coords.lng, coords.accuracy, coords.altitude);
-        })
-      );
     }
   }
 

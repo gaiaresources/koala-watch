@@ -21,24 +21,26 @@
     </ion-tab-bar>
   </ion-tabs>
 
-  <ion-fab slot="fixed" horizontal="start" vertical="bottom">
-    <app-fab-button [src]="'../../../assets/imgs/white_upload.png'"
-                    [text]="'Upload'"
-                    (click)="doUpload()">
-    </app-fab-button>
-  </ion-fab>
-
   <ng-container *ngIf="records$ | async as records">
-    <app-fab-slot *ngIf="records.length > 0" horizontal="end" vertical="bottom">
-      <app-fab-button [src]="'../../../assets/imgs/white_eye.png'"
-                      [text]="'Observation'"
-                      (click)="doNewObservation()">
-      </app-fab-button>
-      <app-fab-button [src]="'../../../assets/imgs/white_trees.png'"
-                      [text]="'Census'"
-                      (click)="doNewCensus()">
-      </app-fab-button>
-    </app-fab-slot>
+    <ng-container *ngIf="records.length > 0">
+      <ion-fab slot="fixed" horizontal="start" vertical="bottom">
+        <app-fab-button [src]="'../../../assets/imgs/white_upload.png'"
+                        [text]="'Upload'"
+                        (click)="doUpload()">
+        </app-fab-button>
+      </ion-fab>
+
+      <app-fab-slot horizontal="end" vertical="bottom">
+        <app-fab-button [src]="'../../../assets/imgs/white_eye.png'"
+                        [text]="'Observation'"
+                        (click)="doNewObservation()">
+        </app-fab-button>
+        <app-fab-button [src]="'../../../assets/imgs/white_trees.png'"
+                        [text]="'Census'"
+                        (click)="doNewCensus()">
+        </app-fab-button>
+      </app-fab-slot>
+    </ng-container>
   </ng-container>
 
 </ion-content>

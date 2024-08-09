@@ -20,15 +20,17 @@
         <ng-container *ngIf="segment === 'observations'">
           <ng-container *ngIf="valid">
             <ng-container *ngIf="children$ | async as children; else createObservations">
-              <app-record-list *ngIf="children.length; else createObservations" [records]="children">
-              </app-record-list>
+              <ng-container *ngIf="children.length; else createObservations">
+                <app-record-list [records]="children">
+                </app-record-list>
 
-              <app-fab-slot horizontal="end" vertical="bottom">
-                <app-fab-button [src]="'../../../assets/imgs/white_tree.png'"
-                                [text]="'Tree'"
-                                (click)="doNewSurvey()">
-                </app-fab-button>
-              </app-fab-slot>
+                <app-fab-slot horizontal="end" vertical="bottom">
+                  <app-fab-button [src]="'../../../assets/imgs/white_tree.png'"
+                                  [text]="'Tree'"
+                                  (click)="doNewSurvey()">
+                  </app-fab-button>
+                </app-fab-slot>
+              </ng-container>
             </ng-container>
 
             <ng-template #createObservations>
