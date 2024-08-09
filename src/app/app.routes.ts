@@ -16,10 +16,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/sign-up/sign-up.page').then(m => m.SignUpPage)
   },
   {
-    path: 'forgot-password',
-    loadComponent: () => import('./pages/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
-  },
-  {
     path: 'about',
     loadComponent: () => import('./pages/about/about.page').then(m => m.AboutPage),
     canActivate: [AuthenticationGuardFn],
