@@ -134,7 +134,18 @@ export class RecordFormComponent implements OnInit, OnChanges {
     this.disabled = this.formGeneratorService.getFormDisabledValues(this.dataset, this.form);
 
     // Ensure any disabled values are also updated for the record.
+    const hasData = !!this.record.data;
     this.setValues(this.form.getRawValue());
+
+    // Run validation to ensure any invalid fields automatically display their issues.
+    if (hasData) {
+      Object.keys(this.form.controls).forEach(field => {
+        const control = this.form.get(field);
+        if (!control) return;
+        control.updateValueAndValidity({onlySelf: true, emitEvent: false});
+      });
+      this.form.markAllAsTouched();
+    }
   }
 
   setValues(values: any) {
