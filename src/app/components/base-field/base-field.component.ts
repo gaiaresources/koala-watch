@@ -36,9 +36,7 @@ export abstract class BaseFieldComponent implements OnInit, OnChanges {
     const control = this.formGroup.get(this.field.key);
     if (!control) return;
     // Errors may already exist on the form control.
-    if (control.getRawValue()) {
-      this.error = this.processErrors(control.errors);
-    }
+    this.error = this.processErrors(control.errors);
     this.subscriptions.push(
       control.statusChanges.subscribe((status) => {
         this.error = this.processErrors(control.errors);
