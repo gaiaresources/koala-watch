@@ -20,7 +20,7 @@ export class UploadService {
   }
 
   async upload() {
-    const promises: Promise<any>[] = [];
+    let promises: Promise<any>[];
     const loader = await this.loadingCtrl.create({
       message: "Uploading records",
     });
@@ -28,7 +28,7 @@ export class UploadService {
 
     // Generate promises to upload, then update the storage with the newly created ID.
     const records = this.recordsService.getUploadableRecords();
-    records.forEach((record) => {
+    promises = records.map((record) => {
       delete record.modified;
       return firstValueFrom(this.apiService.createRecord(record)).then((result) => {
         if (result && result.id) {
@@ -39,11 +39,13 @@ export class UploadService {
       });
     })
 
+    await Promise.all(promises);
+
     // Generate promises to upload, then update the storage with the newly created id.
     const photos = await this.photoService.getUploadablePhotos();
-    photos.forEach((photo) => {
+    promises = photos.map((photo) => {
       const record = this.recordsService.getRecord(photo.recordClientId);
-      if (!record || !record.id) return;
+      if (!record || !record.id) return Promise.resolve(null);
       return firstValueFrom(this.apiService.uploadRecordMediaBase64(record.id, photo.base64)).then((result) => {
         if (result && result.id) {
           photo.id = result.id;
