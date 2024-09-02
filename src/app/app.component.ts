@@ -27,7 +27,8 @@ import {
   faLock,
   faQuestionCircle,
   faSignOutAlt,
-  faTachometerAlt
+  faTachometerAlt,
+  faPerson
 } from "@fortawesome/free-solid-svg-icons";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {AuthenticationService} from "./services/authentication/authentication.service";
@@ -72,6 +73,7 @@ export class AppComponent implements OnInit {
     {title: 'Settings', url: '/settings', icon: faCog},
     {title: 'About', url: '/about', icon: faInfoCircle},
     {title: 'Help', url: '/help', icon: faQuestionCircle},
+    {title: 'Account', url: '/account', icon: faPerson },
     {title: 'Privacy Policy', url: '/privacy-policy', icon: faLock},
   ];
 
