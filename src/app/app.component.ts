@@ -80,12 +80,10 @@ export class AppComponent implements OnInit {
   user$: Observable<User | null>;
 
   constructor(
-    @Inject(GOOGLE_MAP_API) private googleMapApi: string,
     @Inject(DOCUMENT) private document: any,
     private authenticationService: AuthenticationService,
     private alertController: AlertController,
     private router: Router,
-    private googleMaps: GoogleMapsService,
   ) {
     this.user$ = this.authenticationService.user$;
     addIcons({

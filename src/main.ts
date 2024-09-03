@@ -14,6 +14,7 @@ import {IonicStorageModule} from "@ionic/storage-angular";
 import {defineCustomElements} from "@ionic/pwa-elements/loader";
 import {GOOGLE_MAP_API, GOOGLE_MAP_IDS} from "./app/tokens/gmap";
 import {RouteReloadStrategy} from "./app/strategy/route-reload/route-reload.strategy";
+import {EmailComposer} from "@awesome-cordova-plugins/email-composer/ngx";
 
 defineCustomElements(window);
 if (environment.production) {
@@ -27,6 +28,7 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes, withComponentInputBinding(), withRouterConfig({onSameUrlNavigation: 'reload'})),
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(IonicStorageModule.forRoot()),
+    EmailComposer,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
