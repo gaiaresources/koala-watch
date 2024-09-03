@@ -28,7 +28,7 @@ export class EmailService {
       const alert = await this.alertController.create({
         message: "Unable to open default mail client",
       });
-      await alert.present;
+      await alert.present();
     });
   }
 
