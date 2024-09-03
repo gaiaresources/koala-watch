@@ -1,7 +1,14 @@
 import {Injectable} from '@angular/core';
-import {EmailComposer, OpenOptions} from "capacitor-email-composer";
-import {Platform} from "@ionic/angular/standalone";
+import {AlertController, Platform} from "@ionic/angular/standalone";
 import {Browser} from "@capacitor/browser";
+
+export interface EmailOptions {
+  to?: string[];
+  cc?: string[];
+  bcc?: string[];
+  subject?: string;
+  body?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -10,28 +17,30 @@ export class EmailService {
 
   constructor(
     private platform: Platform,
+    private alertController: AlertController,
   ) {
   }
 
-  async open(email: OpenOptions) {
-    if (this.platform.is('mobileweb')) {
-      return Browser.open({
-        url: this.buildUrl(email),
+  async open(email: EmailOptions) {
+    return Browser.open({
+      url: this.buildUrl(email),
+    }).catch(async (e) => {
+      const alert = await this.alertController.create({
+        message: "Unable to open default mail client",
       });
-    } else {
-      return EmailComposer.open(email);
-    }
+      await alert.present;
+    });
   }
 
   private buildQueryParam(key: string, value: any) {
     if (value === undefined) return '';
     if (Array.isArray(value)) {
-      return (key ? key + '=' : '') + value.join(',');
+      return (key ? key + '=' : '') + encodeURIComponent(value.join(','));
     }
-    return (key ? key + '=' : '') + value;
+    return (key ? key + '=' : '') + encodeURIComponent(value);
   }
 
-  private buildUrl(email: OpenOptions) {
+  private buildUrl(email: EmailOptions) {
     const params = [];
     const buildParam = this.buildQueryParam;
     params.push(buildParam('cc', email.cc));
