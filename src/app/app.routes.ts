@@ -21,6 +21,11 @@ export const routes: Routes = [
     canActivate: [AuthenticationGuardFn],
   },
   {
+    path: 'account',
+    loadComponent: () => import('./pages/account/account.page').then( m => m.AccountPage),
+    canActivate: [AuthenticationGuardFn],
+  },
+  {
     path: 'privacy-policy',
     loadComponent: () => import('./pages/privacy-policy/privacy-policy.page').then(m => m.PrivacyPolicyPage),
     canActivate: [AuthenticationGuardFn],
