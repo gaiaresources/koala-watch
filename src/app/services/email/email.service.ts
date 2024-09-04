@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AlertController, Platform} from "@ionic/angular/standalone";
 import {Browser} from "@capacitor/browser";
-import {EmailComposer} from "@awesome-cordova-plugins/email-composer/ngx";
 
 export interface EmailOptions {
   to?: string[];
@@ -19,16 +18,10 @@ export class EmailService {
   constructor(
     private platform: Platform,
     private alertController: AlertController,
-    private emailComposer: EmailComposer
   ) {
   }
 
   async open(email: EmailOptions) {
-    const hasAccount = await this.emailComposer.hasAccount();
-    if (hasAccount) {
-      return await this.emailComposer.open(email);
-    }
-
     return Browser.open({
       url: this.buildUrl(email),
     }).catch(async (e) => {

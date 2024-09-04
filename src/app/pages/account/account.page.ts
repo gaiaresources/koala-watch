@@ -49,7 +49,7 @@ export class AccountPage implements OnInit {
 
             await this.emailService.open({
               to: ['bionet@environment.nsw.gov.au'],
-              subject: 'I Spy Koala account deletion request',
+              subject: 'I Spy Koalas account deletion request',
               body: `I Spy Koala account deletion request for the Username - ${user.username} (${user.email})` +
                 "\n" +
                 "An email confirming the request will be sent to the email address associated with this account within 48 hours of submission.\n" +
