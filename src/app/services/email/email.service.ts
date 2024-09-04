@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AlertController, Platform} from "@ionic/angular/standalone";
 import {Browser} from "@capacitor/browser";
+import {EmailComposer} from 'capacitor-email-composer'
 
 export interface EmailOptions {
   to?: string[];
@@ -22,6 +23,12 @@ export class EmailService {
   }
 
   async open(email: EmailOptions) {
+    if (!this.platform.is('mobileweb')) {
+      const hasAccount = await EmailComposer.hasAccount();
+      if (hasAccount) {
+        return EmailComposer.open(email);
+      }
+    }
     return Browser.open({
       url: this.buildUrl(email),
     }).catch(async (e) => {
