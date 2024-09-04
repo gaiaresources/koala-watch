@@ -25,7 +25,7 @@ export class EmailService {
   async open(email: EmailOptions) {
     if (!this.platform.is('mobileweb')) {
       const hasAccount = await EmailComposer.hasAccount();
-      if (hasAccount) {
+      if (hasAccount && hasAccount.hasAccount) {
         return EmailComposer.open(email);
       }
     }
