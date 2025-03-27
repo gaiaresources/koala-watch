@@ -1,0 +1,17 @@
+.info {
+
+  .about-subtitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 400;
+
+    ion-label {
+      font-size: 40px;
+    }
+  }
+
+  .about-text {
+    font-weight: 300;
+  }
+}

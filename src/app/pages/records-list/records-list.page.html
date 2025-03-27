@@ -1,58 +1,16 @@
 <ion-content class="ion-padding">
 
-  <app-record-list *ngIf="records$ | async as records" [records]="records">
+  <app-record-list *ngIf="records$ | async as records" [records]="records"> </app-record-list>
+  <ion-label *ngIf="!(records$ | async)?.length">No records found</ion-label>
+  <div class="action-btns">
+    <ion-button [disabled]="!(records$ | async)?.length" (click)="doUpload()">Upload my records</ion-button>
 
-    <ion-grid class="no-grid-padding">
-      <ion-row>
-        <ion-col>
-          <ion-img style="float: left" src="assets/imgs/about_footer.png"/>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <div class="record-new-action">
+      <ion-label>Record a new</ion-label>
+      <ion-button (click)="doNewObservation()">Observation</ion-button>
+      <ion-button (click)="doNewCensus()">Scat census</ion-button>
+    </div>
 
-    <h1>Welcome to {{ appName }}</h1>
-    <p>
-      To get started, go to the 'Records' screen and choose from the buttons below to record an observation or start a
-      koala
-      census. An observation is a one-off recording of a koala sighting at a particular location. A census is part of a
-      systematic survey that is generally conducted at a defined site. The census method recorded by this app is the
-      Spot
-      Assessment Technique (SAT) (Phillips and Callaghan, 2011). 'Trees searched' are always part of the SAT census and
-      record the individual tree species, at a site, that have been searched for koalas and their scats.
-    <p>
-
-      <ion-button class="fab-button" color="primary" (click)="doNewObservation()" expand="full" fill="solid">
-        <app-image-icon slot="start" [src]="'../../../assets/imgs/white_eye.png'"
-                        [ariaLabel]="'Record an observation'"/>
-        <ion-label class="fab-button__text">Record an observation</ion-label>
-      </ion-button>
-
-      <ion-button class="fab-button" color="primary" (click)="doNewCensus()" expand="full" fill="solid">
-        <app-image-icon slot="start" [src]="'../../../assets/imgs/white_trees.png'" [ariaLabel]="'Start a census'"/>
-        <ion-label class="fab-button__text">Start a Census</ion-label>
-      </ion-button>
-
-    <p>
-      Once you have recorded your data, a list of the records will be displayed here.
-      You can also switch to see the records displayed on a map view using the tab buttons above.
-      Click on a record in the list to continue editing that record.
-    </p>
-    <h2>
-      Uploading Records
-    </h2>
-    <p>
-      When one or more records have been completed, you can upload them to the server by clicking the upload
-      button. Completed records (shown in green) are those where all required fields are entered and within
-      the allowable constraints. You can still upload completed records even if some are incomplete
-      (shown in blue). Incomplete records will not be uploaded.
-    </p>
-
-    <ion-button class="fab-button" color="primary" expand="full" fill="solid" (click)="doUpload()">
-      <app-image-icon slot="start" [src]="'../../../assets/imgs/white_upload.png'" [ariaLabel]="'Upload data'"/>
-      <ion-label class="fab-button__text">Upload Data</ion-label>
-    </ion-button>
-
-  </app-record-list>
-
+  </div>
 </ion-content>
 

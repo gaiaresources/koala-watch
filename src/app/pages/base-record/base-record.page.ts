@@ -32,13 +32,14 @@ import {ActivePhotoService} from "../../services/active-photo/active-photo.servi
 import {CameraService} from "../../services/camera/camera.service";
 import {FabSlotComponent} from "../../components/fab-slot/fab-slot.component";
 import {FabButtonComponent} from "../../components/fab-button/fab-button.component";
+import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
 
 @Component({
   selector: 'app-base-record',
   templateUrl: './base-record.page.html',
   styleUrls: ['./base-record.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, FaIconComponent, IonButtons, IonFab, IonFabButton, IonFabList, IonIcon, IonMenuButton, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, IonButton, FabSlotComponent, FabButtonComponent]
+  imports: [IonContent, CommonModule, FormsModule, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, FabSlotComponent, FabButtonComponent, HeaderToolbarComponent]
 })
 export class BaseRecordPage implements OnInit {
   protected readonly faCamera = faCamera;

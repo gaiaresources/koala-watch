@@ -31,11 +31,16 @@ ion-fab {
   margin: 20px;
 }
 
-.info {
-  padding-top: 5%;
-  padding-left: 10%;
-  padding-right: 10%;
+ion-button {
+  border: 2px solid var(--ion-color-primary);
+  color: var(--ion-color-primary);
+  --background: var(--ion-color-light);
+  font-weight: 500;
+  border-radius: 4px;
+  text-transform: none;
+}
 
+.info {
   h1 {
     color: black;
   }

@@ -1,0 +1,24 @@
+.header-toolbar {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-light);}
+
+ion-menu-button {
+  font-size: 40px;
+}
+
+ion-title {
+  font-size: 26px;
+
+  &.md {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    height: 0;
+    text-align: center;
+  }
+}
+
+.header-logo {
+  height: 50px;
+  width: auto;
+}

@@ -12,10 +12,10 @@ import {
   IonImg,
   IonInput,
   IonItem,
+  IonLabel,
   IonMenuButton,
   IonRow,
   IonTitle,
-  IonToolbar,
   LoadingController,
   ModalController
 } from '@ionic/angular/standalone';
@@ -25,13 +25,14 @@ import { firstValueFrom } from "rxjs";
 import { APIService } from "../../services/api/api.service";
 import { SignupModalComponent } from "../../components/signup-modal/signup-modal.component";
 import { Router } from "@angular/router";
+import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol, IonImg, ReactiveFormsModule, IonItem, IonInput, IonButton]
+  imports: [IonContent, IonTitle, CommonModule, FormsModule, IonGrid, IonRow, IonCol, ReactiveFormsModule, IonLabel, IonInput, IonButton, HeaderToolbarComponent]
 })
 export class LoginPage implements OnInit {
 

@@ -4,7 +4,7 @@ import {AuthenticationGuardFn} from "./guards/authentication/authentication.guar
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'records',
+    redirectTo: 'home',
     pathMatch: 'full',
   },
   {
@@ -28,6 +28,11 @@ export const routes: Routes = [
   {
     path: 'privacy-policy',
     loadComponent: () => import('./pages/privacy-policy/privacy-policy.page').then(m => m.PrivacyPolicyPage),
+    canActivate: [AuthenticationGuardFn],
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./pages/home/home.page').then(m => m.HomePage),
     canActivate: [AuthenticationGuardFn],
   },
   {
