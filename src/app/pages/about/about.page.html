@@ -1,60 +1,46 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>About</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-toolbar [title]="'I Spy Koala'"></app-header-toolbar>
 
 <ion-content class="ion-padding">
   <div class="info">
-    <ion-grid>
-      <ion-row class="ion-justify-content-between">
-        <ion-col size-md="6">
-          <img src="../../assets/imgs/about_footer.png"/>
-        </ion-col>
-        <ion-col size="auto">
-          <img src="../../assets/imgs/waratah-nsw-government-square-png-logo.png" height="80px"/>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
 
-    <h1>{{ appName }}</h1>
-
-    <h2>Department of Climate Change, Energy, the Environment and Water, NSW</h2>
-    <p>
-      I Spy Koala app is for the collection of koala observation and survey data for all koalas.
-      For sick or injured koalas needing immediate care, also contact your local
-      <a
-        href="https://www.environment.nsw.gov.au/topics/animals-and-plants/native-animals/rehabilitating-native-animals/licensed-wildlife-rehabilitation-providers-in-nsw">
-        wildlife rehabilitation organisation
-      </a>.
-    </p>
-    <p>
-      This app was developed in 2019 by the then NSW Department of Planning, Industry and Environment
-      (DPIE) to improve the flow of koala observation data to NSW planning and decision tools.
-    </p>
-    <p>
-      All submitted records will be combined with other koala observations and made available in BioNet,
-      the repository for NSW biodiversity data. Records are searchable through
-      <a href="https://www.environment.nsw.gov.au/topics/animals-and-plants/biodiversity/nsw-bionet">
-        BioNet
-      </a>
-      and associated
-      data services, including the
-      <a href="https://www.seed.nsw.gov.au/">
-        SEED
-      </a>
-      data portal where you can conveniently view the data using
-      the interactive Koala Sightings - BioNet map. This data is accessible to researchers, land
-      managers, planners, consultants, government and the public, and assists the implementation
-      of long-term conservation strategies to secure healthy koala populations in the wild.
-    </p>
-    <p>Please contact
-      <a href="mailto:bionet@environment.nsw.gov.au">
-        BioNet
-      </a>
-      for I Spy Koala app support or to provide feedback.</p>
+    <div class="about-subtitle">
+      <ion-label>About</ion-label>
+      <ion-label>{{ appName }}</ion-label>
+    </div>
+    <div class="about-text">
+      <p>
+        I Spy Koala app is for the collection of koala observation and survey data for all koalas.
+        For sick or injured koalas needing immediate care, also contact your local
+        <a
+          href="https://www.environment.nsw.gov.au/topics/animals-and-plants/native-animals/rehabilitating-native-animals/licensed-wildlife-rehabilitation-providers-in-nsw">
+          wildlife rehabilitation organisation
+        </a>.
+      </p>
+      <p>
+        This app was developed in 2019 by the then NSW Department of Planning, Industry and Environment
+        (DPIE) to improve the flow of koala observation data to NSW planning and decision tools.
+      </p>
+      <p>
+        All submitted records will be combined with other koala observations and made available in BioNet,
+        the repository for NSW biodiversity data. Records are searchable through
+        <a href="https://www.environment.nsw.gov.au/topics/animals-and-plants/biodiversity/nsw-bionet">
+          BioNet
+        </a>
+        and associated
+        data services, including the
+        <a href="https://www.seed.nsw.gov.au/">
+          SEED
+        </a>
+        data portal where you can conveniently view the data using
+        the interactive Koala Sightings - BioNet map. This data is accessible to researchers, land
+        managers, planners, consultants, government and the public, and assists the implementation
+        of long-term conservation strategies to secure healthy koala populations in the wild.
+      </p>
+      <p>Please contact
+        <a href="mailto:bionet@environment.nsw.gov.au">
+          BioNet
+        </a>
+        for I Spy Koala app support or to provide feedback.</p>
+    </div>
   </div>
 </ion-content>

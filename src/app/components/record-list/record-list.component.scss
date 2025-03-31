@@ -1,124 +1,32 @@
-table#category-legend {
-  min-height: 2em;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.category-legend-colour {
-  height: 2em;
-  width: 2em;
-}
-
-.category-legend-label {
-  vertical-align: middle;
-  padding-left: 1em;
-  padding-right: 1em;
-  margin-left: 1em;
-  margin-right: 1em;
+.record-time {
   text-align: center;
+  flex-grow: 2;
 }
 
-div#category-legend-div {
-  margin-bottom: 1em;
-  margin-top: 1em;
+.record-type, .record-status {
+  font-weight: 500;
 }
 
-#category-completed {
-  background-color: #ebffef;
+fa-icon {
+  margin-left: 12px;
+  font-size: 20px;
+  color: var(--ion-color-primary);
 }
 
-ion-item.completed {
-  --ion-item-background: #ebffef;
-}
+.record-status {
+  padding: 10px;
+  text-align: center;
 
-#category-incomplete {
-  background-color: #ebf6ff;
-}
-
-ion-item.incomplete {
-  --ion-item-background: #ebf6ff;
-}
-
-#category-uploaded {
-  background-color: #ebf0df;
-}
-
-ion-item.uploaded {
-  --ion-item-background: #ebf0df;
-}
-
-ion-item {
-  *[slot="start"] {
-    margin-inline-end: 8px;
+  &.complete {
+    background: rgb(210,236,251);
   }
 
-  *[slot="end"] {
-    margin-inline-start: 8px;
-  }
-}
-
-ion-img {
-  &.data-row {
-    height: 40px;
-    width: 40px;
-    vertical-align: middle;
-  }
-}
-
-.ion-item {
-  position: relative;
-  color: white;
-  background-color: #417c3a;
-  display: flex;
-  align-items: center;
-  border: 1px solid black;
-  height: 100px;
-  width: 100%;
-  margin: 10px 0;
-
-  &__img {
-    margin: 10px 30px 10px 10px;
-    width: 80px;
-    height: auto;
+  &.incomplete {
+    background: rgb(255,237,229);
   }
 
-  &__text {
-    text-align: left;
-    font-size: 2.4rem;
-    font-weight: 500;
+  &.uploaded {
+    background: rgb(226,246,231);
   }
 
-}
-
-.row {
-  align-items: center;
-}
-
-.vertical-align-middle {
-  vertical-align: middle
-}
-
-.fab-img {
-  min-width: 80px;
-  min-height: 80px;
-  width: 80px;
-  height: 80px;
-  padding: 0;
-}
-
-.fabbed-img {
-  width: 60px;
-  height: 60px;
-}
-
-@media screen and (min-width: 450px) {
-  ion-item {
-    *[slot="start"] {
-      margin-inline-end: 32px;
-    }
-
-    *[slot="end"] {
-      margin-inline-start: 32px;
-    }
-  }
 }

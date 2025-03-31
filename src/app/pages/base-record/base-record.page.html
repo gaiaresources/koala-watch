@@ -1,24 +1,6 @@
 <ng-container *ngIf="record$ | async as record">
-  <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>
-      <ion-title>{{ title }}</ion-title>
 
-      <ion-buttons *ngIf="record.isWriteable()" slot="end" class="base-record__buttons">
-        <ion-button fill="solid" color="primary" size="small" (click)="doDelete()" class="base-record__button">
-          <fa-icon [icon]="faTrashCan"></fa-icon>
-          <span class="base-record__button-text">Delete</span>
-        </ion-button>
-        <ion-button fill="solid" color="primary" size="small" (click)="doSave()"
-                    class="base-record__button">
-          <fa-icon [icon]="faSave"></fa-icon>
-          <span class="base-record__button-text">Save</span>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+  <app-header-toolbar [title]="title"></app-header-toolbar>
 
   <ion-content>
 

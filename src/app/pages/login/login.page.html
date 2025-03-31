@@ -1,56 +1,49 @@
-<ion-content class="ion-padding">
-  <ion-grid>
-    <ion-row>
-      <ion-col size-lg="6" size-md="6" offset-lg="3" offset-md="3">
-        <ion-img style="width: 100%" src="../../assets/imgs/koalawatch_heading.png"/>
-      </ion-col>
-    </ion-row>
+<app-header-toolbar></app-header-toolbar>
 
+<ion-content class="ion-padding">
+  <ion-title class="sub-title">I Spy Koala</ion-title>
+  <ion-grid>
     <form [formGroup]="form">
-      <ion-row>
+      <ion-row class="login-fields">
         <ion-col size="12" size-lg="6" size-md="6" offset-lg="3" offset-md="3">
-          <ion-item>
             <ion-input label="Username"
                        label-placement="floating"
+                       fill="outline"
                        formControlName="username"
-                       autocapitalize=off></ion-input>
-          </ion-item>
-          <ion-item>
+                       autocapitalize=off
+                       class="field-spacing"></ion-input>
             <ion-input label="Password"
                        label-placement="floating"
+                       fill="outline"
                        formControlName="password"
                        type="password"></ion-input>
-          </ion-item>
         </ion-col>
       </ion-row>
 
-      <ion-row>
-        <ion-col size="7" size-lg="4" size-md="4" offset-md="4" offset-lg="4" offset="3">
+      <ion-row class="login-actions">
+        <ion-col size="7" size-lg="4" size-md="4" offset-md="4" offset-lg="4">
+          <ion-label
+            class="forgot-pwd-btn"
+            (click)="doForgotPassword()">
+            Forgotten password?
+          </ion-label>
+        </ion-col>
+
+        <ion-col size="12" size-lg="4" size-md="4" offset-md="4" offset-lg="4">
           <ion-button type="submit"
                       expand="block"
+                      class="login-btn"
                       [disabled]="!form.valid"
                       (click)="doLogin()">
             Log in
           </ion-button>
         </ion-col>
-      </ion-row>
 
-      <ion-row>
-        <ion-col size="7" size-lg="4" size-md="4" offset-md="4" offset-lg="4" offset="3">
+        <ion-col size="12" size-lg="4" size-md="4" offset-md="4" offset-lg="4">
           <ion-button type="submit"
                       expand="block"
                       (click)="doSignup()">
-            Sign Up
-          </ion-button>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="7" size-lg="4" size-md="4" offset-md="4" offset-lg="4" offset="3">
-          <ion-button type="submit"
-                      expand="block"
-                      (click)="doForgotPassword()">
-            Forgotten Password?
+            Register
           </ion-button>
         </ion-col>
       </ion-row>

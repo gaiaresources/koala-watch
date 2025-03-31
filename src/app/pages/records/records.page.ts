@@ -4,6 +4,7 @@ import {NavigationService} from "../../services/navigation/navigation.service";
 import {faList, faMap} from "@fortawesome/free-solid-svg-icons";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonFab,
@@ -16,13 +17,14 @@ import {
   IonTabs,
   IonTitle,
   IonToolbar
-} from "@ionic/angular/standalone";
+} from '@ionic/angular/standalone';
 import {FabButtonComponent} from "../../components/fab-button/fab-button.component";
 import {FabSlotComponent} from "../../components/fab-slot/fab-slot.component";
 import {RecordsService} from "../../services/records/records.service";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {Observable} from "rxjs";
 import {ClientRecord} from "../../models/client-record";
+import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
 
 @Component({
   selector: 'app-records',
@@ -31,22 +33,12 @@ import {ClientRecord} from "../../models/client-record";
   standalone: true,
   imports: [
     FaIconComponent,
-    IonImg,
-    IonHeader,
-    IonToolbar,
-    IonButtons,
-    IonMenuButton,
-    IonTitle,
     IonContent,
     IonTabs,
     IonTabBar,
     IonTabButton,
     IonLabel,
-    IonFab,
-    FabButtonComponent,
-    FabSlotComponent,
-    NgIf,
-    AsyncPipe
+    HeaderToolbarComponent
   ]
 })
 export class RecordsPage implements OnInit {

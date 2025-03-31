@@ -5,38 +5,27 @@ import {
   AlertController,
   IonApp,
   IonContent,
-  IonHeader,
-  IonIcon,
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader,
   IonMenu,
   IonMenuToggle,
-  IonNote,
   IonRouterOutlet,
   IonSplitPane,
-  IonToolbar
 } from '@ionic/angular/standalone';
-import {addIcons} from 'ionicons';
-import {add, locate, pin,} from 'ionicons/icons';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {
-  faCog,
-  faInfoCircle,
-  faLock,
-  faQuestionCircle,
   faSignOutAlt,
-  faTachometerAlt,
-  faPerson
-} from "@fortawesome/free-solid-svg-icons";
-import {IconProp} from "@fortawesome/fontawesome-svg-core";
+} from '@fortawesome/free-solid-svg-icons';
 import {AuthenticationService} from "./services/authentication/authentication.service";
 import {Observable} from "rxjs";
 import {HttpClientModule} from "@angular/common/http";
 import {User} from "./models/user";
 import {GOOGLE_MAP_API} from "./tokens/gmap";
 import {GoogleMapsService} from "./services/google-maps/google-maps.service";
+import {HeaderToolbarComponent} from './components/header-toolbar/header-toolbar.component';
+import {faClose} from '@fortawesome/free-solid-svg-icons/faClose';
+import {MenuController} from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -52,32 +41,32 @@ import {GoogleMapsService} from "./services/google-maps/google-maps.service";
     IonMenu,
     IonContent,
     IonList,
-    IonListHeader,
-    IonNote,
     IonMenuToggle,
     IonItem,
-    IonIcon,
     IonLabel,
     IonRouterOutlet,
-    IonHeader,
-    IonToolbar,
     HttpClientModule,
     FontAwesomeModule,
+    HeaderToolbarComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppComponent implements OnInit {
   faSignOutAlt = faSignOutAlt;
-  public appPages: { title: string, url: string, icon: IconProp }[] = [
-    {title: 'Records', url: '/records', icon: faTachometerAlt},
-    {title: 'Settings', url: '/settings', icon: faCog},
-    {title: 'About', url: '/about', icon: faInfoCircle},
-    {title: 'Help', url: '/help', icon: faQuestionCircle},
-    {title: 'Account', url: '/account', icon: faPerson },
-    {title: 'Privacy Policy', url: '/privacy-policy', icon: faLock},
+  public appPages: { title: string, url: string}[] = [
+    {title: 'Home', url: '/home'},
+    {title: 'My records', url: '/records'},
+    {title: 'Scat census', url: '/census'},
+    {title: 'Settings', url: '/settings'},
+    {title: 'About', url: '/about'},
+    {title: 'Resources', url: '/resources'},
+    {title: 'Help', url: '/help'},
+    {title: 'Account', url: '/account'},
+    {title: 'Privacy Policy', url: '/privacy-policy'},
   ];
 
   user$: Observable<User | null>;
+  protected readonly faClose = faClose;
 
   constructor(
     @Inject(GOOGLE_MAP_API) private googleMapApi: string,
@@ -85,14 +74,10 @@ export class AppComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private alertController: AlertController,
     private router: Router,
+    private menu: MenuController,
     private googleMaps: GoogleMapsService,
   ) {
     this.user$ = this.authenticationService.user$;
-    addIcons({
-      add,
-      locate,
-      pin,
-    });
   }
 
   ngOnInit() {

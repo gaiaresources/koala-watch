@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons *ngIf="title" class="menu" slot="start">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      <ng-container *ngIf="!title; else textTitle">
+        <img class="header-logo" src="./assets/imgs/nsw-gov-logo.png" alt="Logo">
+      </ng-container>
+      <ng-template #textTitle>
+        {{ title }}
+      </ng-template>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>

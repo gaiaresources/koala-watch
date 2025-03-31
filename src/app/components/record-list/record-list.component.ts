@@ -5,6 +5,9 @@ import {ClientRecord} from "../../models/client-record";
 import {StorageService} from "../../services/storage/storage.service";
 import {DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION, DATASET_NAME_TREESURVEY} from "../../tokens/app";
 import {NavigationService} from "../../services/navigation/navigation.service";
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {faArrowRight, faChevronRight} from '@fortawesome/free-solid-svg-icons';
+import {faCaretRight} from '@fortawesome/free-solid-svg-icons/faCaretRight';
 
 @Component({
   selector: 'app-record-list',
@@ -15,7 +18,8 @@ import {NavigationService} from "../../services/navigation/navigation.service";
     IonicModule,
     NgIf,
     NgForOf,
-    DatePipe
+    DatePipe,
+    FaIconComponent
   ]
 })
 export class RecordListComponent implements OnChanges {
@@ -30,8 +34,7 @@ export class RecordListComponent implements OnChanges {
     data: ClientRecord,
     statusClass: string,
     altText: string,
-    datasetIcon: string,
-    countIcon: string
+    recordType: string,
   }[] = [];
 
   constructor(
@@ -48,19 +51,18 @@ export class RecordListComponent implements OnChanges {
             data: record,
             statusClass: this.getStatusClass(record),
             altText: this.getAltText(record),
-            datasetIcon: this.getDatasetIcon(record),
-            countIcon: this.getCountIcon(record),
+            recordType: this.getRecordType(record),
           };
         }
       );
     }
   }
 
-  public getStatusClass(record: ClientRecord) {
+  public getStatusClass(record: ClientRecord): string {
     if (record.id) {
-      return 'uploaded';
+      return 'Uploaded';
     }
-    return record.valid ? 'completed' : 'incomplete';
+    return record.valid ? 'Complete' : 'Incomplete';
   }
 
   public getAltText(record: ClientRecord): string {
@@ -84,29 +86,16 @@ export class RecordListComponent implements OnChanges {
     return rv;
   }
 
-  public getDatasetIcon(record: ClientRecord): string {
+  public getRecordType(record: ClientRecord): string {
     switch (record.datasetName) {
       case DATASET_NAME_OBSERVATION:
-        return 'assets/imgs/eye.png';
+        return 'Observation';
       case DATASET_NAME_CENSUS:
-        return 'assets/imgs/trees.png';
+        return 'Scat census';
       case DATASET_NAME_TREESURVEY:
-        return 'assets/imgs/tree.png';
+        return 'Tree survey';
       default:
-        return 'assets/imgs/koala.png';
-    }
-  }
-
-  public getCountIcon(record: ClientRecord): string {
-    switch (record.datasetName) {
-      case DATASET_NAME_OBSERVATION:
-        return 'assets/imgs/koala.png';
-      case DATASET_NAME_CENSUS:
-        return 'assets/imgs/tree.png';
-      case DATASET_NAME_TREESURVEY:
-        return 'assets/imgs/koala.png';
-      default:
-        return 'assets/imgs/koala.png';
+        return '';
     }
   }
 
@@ -128,4 +117,6 @@ export class RecordListComponent implements OnChanges {
     }
   }
 
+  protected readonly ClientRecord = ClientRecord;
+  protected readonly faChevronRight = faChevronRight;
 }

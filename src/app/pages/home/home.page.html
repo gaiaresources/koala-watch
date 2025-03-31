@@ -1,0 +1,28 @@
+<app-header-toolbar [title]="'I Spy Koala'"></app-header-toolbar>
+<img src="../../assets/imgs/koala-tree.jpg">
+
+<ion-content class="ion-padding">
+  <div class="info">
+
+    <div class="welcome-title">
+      <ion-label>Welcome to</ion-label>
+      <ion-label>{{ appName }}</ion-label>
+    </div>
+
+    <p>
+      I Spy Koala app is for the collection of koala observation and survey data for all koalas.
+    </p>
+
+    <p class="injured-txt">For sick or injured koalas needing immediate care, also contact your local
+      <a
+      href="https://www.environment.nsw.gov.au/topics/animals-and-plants/native-animals/rehabilitating-native-animals/licensed-wildlife-rehabilitation-providers-in-nsw">
+      wildlife rehabilitation organisation
+      </a>
+    </p>
+  </div>
+
+  <div class="home-actions">
+    <ion-label>Record a new</ion-label>
+    <ion-button (click)="doNewObservation()">Observation</ion-button>
+  </div>
+</ion-content>
