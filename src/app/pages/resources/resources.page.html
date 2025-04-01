@@ -1,0 +1,22 @@
+<app-header-toolbar [title]="'Resources'"></app-header-toolbar>
+
+<ion-content class="ion-padding">
+  <div class="resource-dividers">
+    <ion-item-divider>
+      <ion-label>How to find koalas in the wild</ion-label>
+      <iframe src="https://www.youtube.com/embed/GnY2jmV9zbI?si=RXrbK0VSIE1k7Pjo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </ion-item-divider>
+
+    <ion-item-divider>
+      <ion-label>Search all NSW koala records</ion-label>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+      <ion-button (click)="doOpenKoalaSearch()">Search NSW koala records</ion-button>
+    </ion-item-divider>
+
+    <ion-item-divider>
+      <ion-label>Learn more about the work Koala Strategy is doing to conserve koalas</ion-label>
+      <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
+      <ion-button (click)="doOpenKoalaStrategy()">Learn more about Koala Strategy</ion-button>
+    </ion-item-divider>
+  </div>
+</ion-content>

@@ -41,6 +41,11 @@ export const routes: Routes = [
     canActivate: [AuthenticationGuardFn],
   },
   {
+    path: 'resources',
+    loadComponent: () => import('./pages/resources/resources.page').then( m => m.ResourcesPage),
+    canActivate: [AuthenticationGuardFn],
+  },
+  {
     path: 'settings',
     loadComponent: () => import('./pages/settings/settings.page').then(m => m.SettingsPage),
     canActivate: [AuthenticationGuardFn],

@@ -1,26 +1,6 @@
 <ng-container *ngIf="photos$ | async as photos">
   <ng-container *ngIf="photos.length === 0">
     <ng-container *ngIf="writeable">
-      <ion-card>
-        <ion-card-content>
-          <p>
-            Use the camera button to add photos to your record.
-          <p>
-            <ion-button (click)="doCameraPhoto()">
-              <fa-icon class="iconButtons" [icon]="faCamera"></fa-icon>
-              Take a photo
-            </ion-button>
-            <ion-button (click)="doLibraryPhoto()">
-              <fa-icon class="iconButtons" [icon]="faImage"></fa-icon>
-              Use an existing photo
-            </ion-button>
-          <p>
-            All photos relating to this record will be displayed here. You will be able
-            to view each photo using the left and right chevrons. Photos can be deleted
-            using the trash icon.
-          </p>
-        </ion-card-content>
-      </ion-card>
     </ng-container>
 
     <ng-container *ngIf="!writeable">

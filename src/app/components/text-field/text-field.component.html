@@ -1,5 +1,6 @@
-<ion-item *ngIf="field && formGroup" [formGroup]="formGroup">
+<div class='app-field' *ngIf="field && formGroup" [formGroup]="formGroup">
   <ion-input labelPlacement="stacked"
+             fill="outline"
              [placeholder]="field.description || ''"
              [formControlName]="field.key"
              [type]="field.type"
@@ -7,13 +8,11 @@
 
     <div slot="label">
       {{ field.label }}
-      <ion-text *ngIf="error" color="danger">({{ error }})</ion-text>
+      <ion-text *ngIf="error && this.isBlurred" color="danger">({{ error }})</ion-text>
     </div>
 
   </ion-input>
-
   <app-help-button *ngIf="field.example" [id]="'help-' + (field.key | classify)">
     {{ field.example }}
   </app-help-button>
-
-</ion-item>
+</div>

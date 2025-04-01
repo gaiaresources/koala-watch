@@ -9,6 +9,7 @@ import {Dataset} from "../../models/dataset";
 import {PhotoService} from "../photo/photo.service";
 import {SettingsService} from "../settings/settings.service";
 import {DATASET_NAME_CENSUS, DATASET_NAME_OBSERVATION} from "../../tokens/app";
+import {AuthenticationService} from '../authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,7 @@ export class RecordsService {
 
   constructor(
     private apiService: APIService,
+    private authService: AuthenticationService,
     private datasetService: DatasetService,
     private storageService: StorageService,
     private networkService: NetworkService,
@@ -116,6 +118,20 @@ export class RecordsService {
         records.push(value);
       }
     });
+    return records;
+  }
+
+  doAppendEmailToObserver(records: ClientRecord[]) {
+    const email = this.authService.getUser()?.email
+    records.forEach((record) => {
+      if(email && record.data) {
+        if ('Observer Name' in record.data) {
+          record.data['Observer Name'] = record.data['Observer Name'] + " " + email;
+        } else if ('Census Observers' in record.data) {
+          record.data['Census Observers'] = record.data['Census Observers'] + " " + email;
+        }
+      }
+    })
     return records;
   }
 

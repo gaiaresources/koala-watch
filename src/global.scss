@@ -31,10 +31,22 @@ ion-fab {
   margin: 20px;
 }
 
+.app-field {
+  display: flex;
+  align-items: center;
+
+  fa-icon {
+    color: var(--ion-color-primary);
+    font-size: 18px;
+    margin: 12px;
+  }
+}
+
 ion-button {
   border: 2px solid var(--ion-color-primary);
   color: var(--ion-color-primary);
   --background: var(--ion-color-light);
+  background: var(--ion-color-light);
   font-weight: 500;
   border-radius: 4px;
   text-transform: none;
@@ -56,6 +68,21 @@ ion-button {
   overflow-y: auto;
 }
 
+// Ensure ion-segments and ion-tabs are formatted the same throughout the app
+ion-segment, ion-tab-bar, ion-tab-button {
+  background: var(--ion-color-tertiary);
+
+  ion-segment-button, ion-tab-button {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: none;
+
+    &.tab-selected {
+      border-bottom: 2px solid var(--ion-color-primary);
+    }
+  }
+}
+
 ion-segment {
-  padding-bottom: 16px;
+  //padding: 6px 40px 0 40px;
 }

@@ -15,8 +15,6 @@ import {ClassifyPipe} from "../../pipes/classify/classify.pipe";
     NgIf,
     ReactiveFormsModule,
     IonInput,
-    IonLabel,
-    IonItem,
     IonText,
     HelpButtonComponent,
     ClassifyPipe,

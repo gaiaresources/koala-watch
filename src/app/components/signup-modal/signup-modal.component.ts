@@ -2,16 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {
   IonButton,
   IonButtons,
-  IonCol,
-  IonContent,
-  IonHeader,
-  IonRow,
-  IonTitle,
-  IonToolbar,
+  IonContent, IonFooter,
   ModalController
-} from "@ionic/angular/standalone";
+} from '@ionic/angular/standalone';
 import {Router} from "@angular/router";
 import {PrivacyPolicyComponent} from "../privacy-policy/privacy-policy.component";
+import {HeaderToolbarComponent} from '../header-toolbar/header-toolbar.component';
 
 @Component({
   standalone: true,
@@ -19,15 +15,12 @@ import {PrivacyPolicyComponent} from "../privacy-policy/privacy-policy.component
   templateUrl: './signup-modal.component.html',
   styleUrls: ['./signup-modal.component.scss'],
   imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonButtons,
     IonButton,
     IonContent,
-    IonRow,
-    IonCol,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    HeaderToolbarComponent,
+    IonFooter
   ]
 })
 export class SignupModalComponent implements OnInit {

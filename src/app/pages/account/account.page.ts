@@ -4,24 +4,19 @@ import {FormsModule} from '@angular/forms';
 import {
   AlertController,
   IonButton,
-  IonButtons,
   IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonTitle,
-  IonToolbar,
-  Platform
 } from '@ionic/angular/standalone';
-import {AuthenticationService} from "../../services/authentication/authentication.service";
-import {EmailService} from "../../services/email/email.service";
-import {firstValueFrom} from "rxjs";
+import {AuthenticationService} from '../../services/authentication/authentication.service';
+import {EmailService} from '../../services/email/email.service';
+import {firstValueFrom} from 'rxjs';
+import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.page.html',
   styleUrls: ['./account.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonButton]
+  imports: [IonContent, CommonModule, FormsModule, IonButton, HeaderToolbarComponent]
 })
 export class AccountPage implements OnInit {
 
@@ -45,18 +40,20 @@ export class AccountPage implements OnInit {
           role: 'delete',
           handler: async (info) => {
             const user = await firstValueFrom(this.authenticationService.user$);
-            if (!user) return;
+            if (!user) {
+              return;
+            }
 
             await this.emailService.open({
               to: ['bionet@environment.nsw.gov.au'],
               subject: 'I Spy Koala account deletion request',
               body: `I Spy Koala account deletion request for the Username - ${user.username} (${user.email})` +
-                "\n" +
-                "An email confirming the request will be sent to the email address associated with this account within 48 hours of submission.\n" +
-                "\n" +
-                "Thanks\n" +
-                "\n" +
-                "I Spy Koala team",
+                '\n' +
+                'An email confirming the request will be sent to the email address associated with this account within 48 hours of submission.\n' +
+                '\n' +
+                'Thanks\n' +
+                '\n' +
+                'I Spy Koala team',
             });
           }
         },

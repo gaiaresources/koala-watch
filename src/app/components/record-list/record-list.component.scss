@@ -1,6 +1,6 @@
 .record-time {
+  font-size: 14px;
   text-align: center;
-  flex-grow: 2;
 }
 
 .record-type, .record-status {
@@ -14,7 +14,7 @@ fa-icon {
 }
 
 .record-status {
-  padding: 10px;
+  padding: 8px;
   text-align: center;
 
   &.complete {

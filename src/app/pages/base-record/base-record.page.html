@@ -3,19 +3,20 @@
   <app-header-toolbar [title]="title"></app-header-toolbar>
 
   <ion-content>
+    <ion-item-divider sticky color="tertiary">
+      <ion-segment [(ngModel)]="segment" color="primary">
+        <ion-segment-button value="form">
+          Form
+        </ion-segment-button>
 
-    <ion-segment [(ngModel)]="segment" color="primary">
-      <ion-segment-button value="form">
-        Form
-      </ion-segment-button>
+        <ng-content select="[content-segments]">
+        </ng-content>
 
-      <ng-content select="[content-segments]">
-      </ng-content>
-
-      <ion-segment-button value="photos">
-        Photos
-      </ion-segment-button>
-    </ion-segment>
+        <ion-segment-button value="photos">
+          Photos
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item-divider>
 
 
     <ng-container *ngIf="segment === 'form'">
@@ -33,17 +34,29 @@
     </ng-content>
 
     <ng-container *ngIf="segment === 'photos'">
+      <ion-buttons *ngIf="record.isWriteable()">
+        <ion-button (click)="doCamera()">
+          Take a photo
+        </ion-button>
+        <ion-button (click)="doGallery()">
+          Use an existing photo
+        </ion-button>
+      </ion-buttons>
+
       <app-record-photos [record]="record"
                          [writeable]="record.isWriteable()">
       </app-record-photos>
-
-      <app-fab-slot *ngIf="record.isWriteable()" horizontal="end" vertical="bottom">
-        <app-fab-button [icon]="faCamera" [text]="'Camera'" (click)="doCamera()">
-        </app-fab-button>
-        <app-fab-button [icon]="faImage" [text]="'Gallery'" (click)="doGallery()">
-        </app-fab-button>
-      </app-fab-slot>
     </ng-container>
 
   </ion-content>
+  <ion-footer *ngIf="segment === 'form'" slot="fixed">
+    <ion-buttons *ngIf="record.isWriteable()">
+      <ion-button (click)="doSave()">
+        Save
+      </ion-button>
+      <ion-button class="delete" (click)="doDelete()">
+        Delete
+      </ion-button>
+    </ion-buttons>
+  </ion-footer>
 </ng-container>

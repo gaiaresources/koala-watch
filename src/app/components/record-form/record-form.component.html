@@ -3,8 +3,7 @@
     <form [formGroup]="form">
 
       <ion-item-group *ngIf="fields.dateFields && fields.dateFields.length">
-        <ion-item-divider color="secondary">
-          <fa-icon [icon]="faCalendar" class="record-form__header-button"></fa-icon>
+        <ion-item-divider>
           Dates
         </ion-item-divider>
 
@@ -16,11 +15,11 @@
       </ion-item-group>
 
       <ion-item-group *ngIf="fields.locationFields && fields.locationFields.length">
-        <ion-item-divider color="secondary">
+        <ion-item-divider>
           <app-location-selector [formGroup]="form" [readonly]="readonly" [id]="formId"/>
         </ion-item-divider>
 
-        <ion-list>
+        <ion-list class="form-fields" lines="none">
           <ng-container *ngFor="let field of fields.locationFields">
             <app-field [formGroup]="form" [field]="field" [readonly]="readonly"/>
           </ng-container>
@@ -28,12 +27,11 @@
       </ion-item-group>
 
       <ion-item-group *ngIf="fields.requiredFields && fields.requiredFields.length">
-        <ion-item-divider color="secondary">
-          <fa-icon [icon]="faAsterisk" class="record-form__header-button"/>
-          Required fields
+        <ion-item-divider>
+          Observation
         </ion-item-divider>
 
-        <ion-list>
+        <ion-list class="form-fields" lines="none">
           <ng-container *ngFor="let field of fields.requiredFields">
             <app-field [formGroup]="form" [field]="field" [readonly]="readonly"/>
           </ng-container>
@@ -41,12 +39,11 @@
       </ion-item-group>
 
       <ion-item-group *ngIf="fields.optionalFields && fields.optionalFields.length">
-        <ion-item-divider color="secondary">
-          <fa-icon [icon]="faStar" class="record-form__header-button" />
+        <ion-item-divider>
           Optional fields
         </ion-item-divider>
 
-        <ion-list>
+        <ion-list class="form-fields" lines="none">
           <ng-container *ngFor="let field of fields.optionalFields">
             <app-field [formGroup]="form" [field]="field" [readonly]="readonly"/>
           </ng-container>

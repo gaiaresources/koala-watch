@@ -6,32 +6,25 @@ import {
   IonButton,
   IonButtons,
   IonContent,
-  IonFab,
-  IonFabButton,
-  IonFabList,
-  IonHeader,
-  IonIcon,
-  IonMenuButton,
+  IonFooter,
+  IonItemDivider,
   IonSegment,
   IonSegmentButton,
-  IonTitle,
   IonToolbar,
   LoadingController
 } from '@ionic/angular/standalone';
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {RecordFormComponent} from "../../components/record-form/record-form.component";
-import {RecordPhotosComponent} from "../../components/record-photos/record-photos.component";
-import {BehaviorSubject, distinctUntilChanged, Observable, shareReplay} from "rxjs";
-import {ClientRecord} from "../../models/client-record";
-import {faCamera, faImage, faSave, faTrashCan} from "@fortawesome/free-solid-svg-icons";
-import {Dataset} from "../../models/dataset";
-import {RecordsService} from "../../services/records/records.service";
-import {LoadingOptions} from "@ionic/angular";
-import {NavigationService} from "../../services/navigation/navigation.service";
-import {ActivePhotoService} from "../../services/active-photo/active-photo.service";
-import {CameraService} from "../../services/camera/camera.service";
-import {FabSlotComponent} from "../../components/fab-slot/fab-slot.component";
-import {FabButtonComponent} from "../../components/fab-button/fab-button.component";
+import {RecordFormComponent} from '../../components/record-form/record-form.component';
+import {RecordPhotosComponent} from '../../components/record-photos/record-photos.component';
+import {BehaviorSubject, distinctUntilChanged, Observable, shareReplay} from 'rxjs';
+import {ClientRecord} from '../../models/client-record';
+import {Dataset} from '../../models/dataset';
+import {RecordsService} from '../../services/records/records.service';
+import {LoadingOptions} from '@ionic/angular';
+import {NavigationService} from '../../services/navigation/navigation.service';
+import {ActivePhotoService} from '../../services/active-photo/active-photo.service';
+import {CameraService} from '../../services/camera/camera.service';
+import {FabSlotComponent} from '../../components/fab-slot/fab-slot.component';
+import {FabButtonComponent} from '../../components/fab-button/fab-button.component';
 import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
 
 @Component({
@@ -39,13 +32,12 @@ import {HeaderToolbarComponent} from '../../components/header-toolbar/header-too
   templateUrl: './base-record.page.html',
   styleUrls: ['./base-record.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, FormsModule, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, FabSlotComponent, FabButtonComponent, HeaderToolbarComponent]
+  imports: [IonContent, CommonModule, FormsModule, IonSegment, IonSegmentButton, RecordFormComponent, RecordPhotosComponent, FabSlotComponent, FabButtonComponent, HeaderToolbarComponent, IonButtons, IonButton, IonFooter, IonToolbar, IonItemDivider]
 })
 export class BaseRecordPage implements OnInit {
-  protected readonly faCamera = faCamera;
-  protected readonly faImage = faImage;
-  protected readonly faSave = faSave;
-  protected readonly faTrashCan = faTrashCan;
+
+  @Input()
+  isSurvey: boolean = false;
 
   @Input()
   title: string = '';
@@ -139,7 +131,7 @@ export class BaseRecordPage implements OnInit {
             this.zone.run(async () => {
               await this.doLoader();
               await this.doDeleteRecord();
-            })
+            });
           }
         },
         {
@@ -155,28 +147,39 @@ export class BaseRecordPage implements OnInit {
     await loader.present();
   }
 
-  async doCompleted() {
+  async doCompleted(record?: ClientRecord) {
     await this.loadingController.dismiss();
-    await this.navigationController.goRecords();
+    if (this.isSurvey && record) {
+      const parentRecord = this.recordsService.getRecord(record.parentId);
+      if (parentRecord) {
+        await this.navigationController.goSurveyRecords(parentRecord);
+      }
+    } else {
+      await this.navigationController.goRecords();
+    }
   }
 
   async doDeleteRecord() {
     const record = this._record.value;
-    if (!record || !record.client_id) return;
+    if (!record || !record.client_id) {
+      return;
+    }
     await this.recordsService.deleteRecord(record.client_id);
     await this.doCompleted();
   }
 
   async doSave() {
     const record = this._record.value;
-    if (!record) return;
+    if (!record) {
+      return;
+    }
 
     await this.doLoader({
-      message: "Saving...",
+      message: 'Saving...',
     });
     await this.recordsService.setRecord(record);
     await this.photoService.save();
-    await this.doCompleted();
+    await this.doCompleted(record);
   }
 
   public async shouldSave(): Promise<boolean> {

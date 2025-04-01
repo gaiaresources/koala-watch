@@ -1,14 +1,12 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {FormGroup} from "@angular/forms";
-import {DecimalPipe, NgIf} from "@angular/common";
-import {Subscription} from "rxjs";
-import {IonButton, IonButtons, IonIcon} from "@ionic/angular/standalone";
-import {faLocationArrow, faLocationCrosshairs, faMapPin} from "@fortawesome/free-solid-svg-icons";
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {LocationService} from "../../services/location/location.service";
-import {LocationMapSelectorComponent} from "../location-map-selector/location-map-selector.component";
-import {Coordinates} from "../../models/coordinates";
-import {ElevationService} from "../../services/elevation/elevation.service";
+import {FormGroup} from '@angular/forms';
+import {NgIf} from '@angular/common';
+import {Subscription} from 'rxjs';
+import {IonButton, IonButtons, IonIcon, IonLabel} from '@ionic/angular/standalone';
+import {LocationService} from '../../services/location/location.service';
+import {LocationMapSelectorComponent} from '../location-map-selector/location-map-selector.component';
+import {Coordinates} from '../../models/coordinates';
+import {ElevationService} from '../../services/elevation/elevation.service';
 
 @Component({
   selector: 'app-location-selector',
@@ -19,17 +17,11 @@ import {ElevationService} from "../../services/elevation/elevation.service";
     NgIf,
     IonButtons,
     IonButton,
-    IonIcon,
-    FaIconComponent,
     LocationMapSelectorComponent,
-    DecimalPipe,
+    IonLabel,
   ]
 })
 export class LocationSelectorComponent implements OnInit, OnDestroy, OnChanges {
-
-  public faLocationArrow = faLocationArrow;
-  public faMapPin = faMapPin;
-  public faLocationCrosshairs = faLocationCrosshairs;
 
   @Input()
   readonly: boolean = false;
@@ -42,7 +34,7 @@ export class LocationSelectorComponent implements OnInit, OnDestroy, OnChanges {
 
   subscription: Subscription[] = [];
 
-  accuracy: number | "" = "";
+  accuracy: number | '' = '';
 
   lat?: number;
   lng?: number;
@@ -83,16 +75,18 @@ export class LocationSelectorComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     // No form group so ignore setup.
-    if (!this.formGroup) return;
+    if (!this.formGroup) {
+      return;
+    }
 
     // Process form value changes internally.
     this.subscription.push(
       this.formGroup.valueChanges.subscribe((values) => {
-        this.accuracy = values.Accuracy ?? "";
+        this.accuracy = values.Accuracy ?? '';
       })
     );
 
-    if (this.formGroup.contains("Latitude")) {
+    if (this.formGroup.contains('Latitude')) {
       const value = this.formGroup.get('Latitude')?.value;
       this.lat = value ? parseFloat(value) : undefined;
     }
@@ -102,26 +96,29 @@ export class LocationSelectorComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  setLocationValues(lat: number, lng: number, accuracy: number | "", altitude: number | "") {
-    const promise = altitude === "" ? this.elevationService.getElevation(lat, lng) : Promise.resolve(altitude);
+  setLocationValues(lat: number, lng: number, accuracy: number | '', altitude: number | '') {
+    const promise = altitude === '' ? this.elevationService.getElevation(lat, lng) : Promise.resolve(altitude);
 
     promise.then((alt) => {
-      if (!this.formGroup) return;
+      if (!this.formGroup) {
+        return;
+      }
       const values: any = {};
-      if (this.formGroup.contains("Latitude")) {
+      if (this.formGroup.contains('Latitude')) {
         values['Latitude'] = lat.toFixed(6);
       }
       if (this.formGroup.contains('Longitude')) {
         values['Longitude'] = lng.toFixed(6);
       }
       if (this.formGroup.contains('Accuracy')) {
-        values['Accuracy'] = accuracy ? Math.round(accuracy) : "";
+        values['Accuracy'] = accuracy ? Math.round(accuracy) : '';
+        this.formGroup.get('Accuracy')?.markAsPristine();
       }
       if (this.formGroup.contains('Altitude')) {
-        values['Altitude'] = alt ? Math.round(alt) : "";
+        values['Altitude'] = alt ? Math.round(alt) : '';
       }
       this.formGroup.patchValue(values);
-    })
+    });
   }
 
   doMapSelect(coords: Coordinates) {
@@ -130,7 +127,7 @@ export class LocationSelectorComponent implements OnInit, OnDestroy, OnChanges {
       coords.lng,
       coords.accuracy,
       coords.altitude,
-    )
+    );
   }
 
   doGpsSelect() {
@@ -140,7 +137,7 @@ export class LocationSelectorComponent implements OnInit, OnDestroy, OnChanges {
           location.lat,
           location.lng,
           location.accuracy,
-          location.altitude ?? "",
+          location.altitude ?? '',
         );
       }),
     );

@@ -1,21 +1,11 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Privacy Policy</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="reject()">Close</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-header-toolbar [title]="'Privacy Policy'" [showSideMenu]="false"></app-header-toolbar>
 
 <ion-content class="ion-padding">
   <app-privacy-policy></app-privacy-policy>
-
-  <ion-row>
-    <ion-col>
-      <ion-button expand="full" (click)="accept()">Yes</ion-button>
-    </ion-col>
-    <ion-col>
-      <ion-button expand="full" (click)="reject()">No</ion-button>
-    </ion-col>
-  </ion-row>
 </ion-content>
+<ion-footer slot="fixed">
+  <ion-buttons>
+    <ion-button expand="full" (click)="accept()">Yes</ion-button>
+    <ion-button expand="full" (click)="reject()">No</ion-button>
+  </ion-buttons>
+</ion-footer>

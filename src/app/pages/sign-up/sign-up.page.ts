@@ -11,7 +11,7 @@ import {
   IonHeader,
   IonImg,
   IonInput,
-  IonItem,
+  IonItem, IonLabel,
   IonMenuButton,
   IonRow,
   IonTitle,
@@ -25,13 +25,14 @@ import { Errors } from "../../validators/errors";
 import { Router } from "@angular/router";
 import { APIService } from "../../services/api/api.service";
 import { firstValueFrom } from "rxjs";
+import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.page.html',
   styleUrls: ['./sign-up.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonButton, IonCol, IonGrid, IonImg, IonInput, IonItem, IonRow, ReactiveFormsModule]
+  imports: [IonContent, IonTitle, CommonModule, FormsModule, IonButton, IonGrid, IonInput, ReactiveFormsModule, HeaderToolbarComponent, IonLabel]
 })
 export class SignUpPage implements OnInit, OnDestroy {
 
@@ -129,6 +130,15 @@ export class SignUpPage implements OnInit, OnDestroy {
     });
   }
 
+  getSignUpErrorMsg(lastError: any) {
+    if(lastError?.['username']) {
+      return 'The Username is already in use. Please use a different Username';
+    } else if(lastError?.['email']) {
+      return 'A user account with that email already exists. Go to the login page and use the password reset function to recover your account or create an account with a different email address';
+    }
+    return "Unknown Error"
+  }
+
   async showProblem() {
     let lastError = this.apiService.getLastError();
 
@@ -137,7 +147,7 @@ export class SignUpPage implements OnInit, OnDestroy {
 
     switch (this.apiService.getLastErrorStatus()) {
       case 400:
-        lastError = 'This username is already taken.';
+        lastError = this.getSignUpErrorMsg(lastError)
         break;
       case 409:
         // technically this is a "account already exists" but we need to be vague?

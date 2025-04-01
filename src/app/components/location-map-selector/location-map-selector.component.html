@@ -1,13 +1,6 @@
 <ion-modal [trigger]="toggleId">
   <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Map Coordinates</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="onCancel()">Cancel</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
+    <app-header-toolbar [title]="'Map Coordinates'" [showSideMenu]="false"></app-header-toolbar>
     <ion-content class="ion-padding">
 
       <google-map width="100%" height="80%"
@@ -25,9 +18,14 @@
         </map-advanced-marker>
       </google-map>
 
-      <ion-button (click)="onConfirm()">
-        Use this location
-      </ion-button>
+      <ion-buttons>
+        <ion-button (click)="onCancel()">
+          Go Back
+        </ion-button>
+        <ion-button (click)="onConfirm()">
+          Use this location
+        </ion-button>
+      </ion-buttons>
     </ion-content>
   </ng-template>
 </ion-modal>

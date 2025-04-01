@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {AlertController, IonContent, Platform} from '@ionic/angular/standalone';
-import {combineLatest, map, Observable, shareReplay} from "rxjs";
-import {RecordsService} from "../../services/records/records.service";
-import {GoogleMapsService} from "../../services/google-maps/google-maps.service";
-import * as dayjs from "dayjs";
-import {ClientRecord} from "../../models/client-record";
-import {DATASET_NAME_CENSUS} from "../../tokens/app";
-import {GoogleMap, MapMarker} from "@angular/google-maps";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {AlertController, IonContent} from '@ionic/angular/standalone';
+import {combineLatest, map, Observable, shareReplay} from 'rxjs';
+import {RecordsService} from '../../services/records/records.service';
+import {GoogleMapsService} from '../../services/google-maps/google-maps.service';
+import * as dayjs from 'dayjs';
+import {ClientRecord} from '../../models/client-record';
+import {DATASET_NAME_CENSUS} from '../../tokens/app';
+import {GoogleMap, MapMarker} from '@angular/google-maps';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-records-map',
@@ -29,7 +29,6 @@ export class RecordsMapPage implements OnInit {
     zoomControl: false,
     streetViewControl: false,
     fullscreenControl: false,
-    mapTypeControl: false,
     mapId: '1234',
   };
 
@@ -44,7 +43,6 @@ export class RecordsMapPage implements OnInit {
   }[]>;
 
   constructor(
-    private platform: Platform,
     private recordsService: RecordsService,
     private alertController: AlertController,
     private googleMaps: GoogleMapsService,
