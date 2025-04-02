@@ -1,8 +1,7 @@
 <app-header-toolbar></app-header-toolbar>
 
 <ion-content class="ion-padding">
-  <ion-title class="sub-title">I Spy Koala</ion-title>
-  <ion-grid>
+  <div class="sub-title">I Spy Koala</div>
     <form [formGroup]="form">
       <ion-row class="login-fields">
         <ion-col size="12" size-lg="6" size-md="6" offset-lg="3" offset-md="3">
@@ -11,10 +10,12 @@
                        fill="outline"
                        formControlName="username"
                        autocapitalize=off
+                       mode="md"
                        class="field-spacing"></ion-input>
             <ion-input label="Password"
                        label-placement="stacked"
                        fill="outline"
+                       mode="md"
                        formControlName="password"
                        type="password"></ion-input>
         </ion-col>
@@ -30,7 +31,9 @@
         </ion-col>
 
         <ion-col size="12" size-lg="4" size-md="4" offset-md="4" offset-lg="4">
-          <ion-button type="submit"
+          <ion-button
+                      mode="md"
+                      type="submit"
                       expand="block"
                       class="login-btn"
                       [disabled]="!form.valid"
@@ -41,6 +44,7 @@
 
         <ion-col size="12" size-lg="4" size-md="4" offset-md="4" offset-lg="4">
           <ion-button type="submit"
+                      mode="md"
                       expand="block"
                       (click)="doSignup()">
             Register
@@ -48,5 +52,4 @@
         </ion-col>
       </ion-row>
     </form>
-  </ion-grid>
 </ion-content>

@@ -1,6 +1,7 @@
 <div class='app-field' *ngIf="field && formGroup && field.options" [formGroup]="formGroup">
   <ion-select labelPlacement="floating"
               fill="outline"
+              mode="md"
               [placeholder]="field.description || ''"
               [formControlName]="field.key"
               (ionBlur)="checkErrors()">

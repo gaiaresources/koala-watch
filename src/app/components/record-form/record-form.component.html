@@ -3,7 +3,7 @@
     <form [formGroup]="form">
 
       <ion-item-group *ngIf="fields.dateFields && fields.dateFields.length">
-        <ion-item-divider>
+        <ion-item-divider mode="md">
           Dates
         </ion-item-divider>
 
@@ -15,7 +15,7 @@
       </ion-item-group>
 
       <ion-item-group *ngIf="fields.locationFields && fields.locationFields.length">
-        <ion-item-divider>
+        <ion-item-divider mode="md">
           <app-location-selector [formGroup]="form" [readonly]="readonly" [id]="formId"/>
         </ion-item-divider>
 
@@ -27,7 +27,7 @@
       </ion-item-group>
 
       <ion-item-group *ngIf="fields.requiredFields && fields.requiredFields.length">
-        <ion-item-divider>
+        <ion-item-divider mode="md">
           Observation
         </ion-item-divider>
 
@@ -39,7 +39,7 @@
       </ion-item-group>
 
       <ion-item-group *ngIf="fields.optionalFields && fields.optionalFields.length">
-        <ion-item-divider>
+        <ion-item-divider mode="md">
           Optional fields
         </ion-item-divider>
 

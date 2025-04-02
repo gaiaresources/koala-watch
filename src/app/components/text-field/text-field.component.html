@@ -1,6 +1,7 @@
 <div class='app-field' *ngIf="field && formGroup" [formGroup]="formGroup">
   <ion-input labelPlacement="stacked"
              fill="outline"
+             mode="md"
              [placeholder]="field.description || ''"
              [formControlName]="field.key"
              [type]="field.type"
