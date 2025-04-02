@@ -24,6 +24,10 @@ export class NavigationService {
     this.navCtrl.navigateForward('census/' + parent.client_id + '/survey/' + (record ? record.client_id : 'create'));
   }
 
+  goSurveyRecords(parent: ClientRecord) {
+    this.navCtrl.navigateForward('census/' + parent.client_id, {queryParams: { segmentId: 'observations' }});
+  }
+
   goRecords() {
     this.navCtrl.navigateForward('records');
   }

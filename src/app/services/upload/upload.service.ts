@@ -27,7 +27,9 @@ export class UploadService {
     await loader.present();
 
     // Generate promises to upload, then update the storage with the newly created ID.
-    const records = this.recordsService.getUploadableRecords();
+    let records = this.recordsService.getUploadableRecords();
+    records = this.recordsService.doAppendEmailToObserver(records)
+
     promises = records.map((record) => {
       delete record.modified;
       return firstValueFrom(this.apiService.createRecord(record)).then((result) => {

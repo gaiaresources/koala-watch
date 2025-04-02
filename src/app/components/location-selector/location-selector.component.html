@@ -1,27 +1,22 @@
 <ng-container *ngIf="formGroup">
-  <fa-icon [icon]="faLocationArrow"></fa-icon>
-  Location (Current Accuracy:
-  <span *ngIf="accuracy === -1">Waiting for reading...</span>
-  <span *ngIf="accuracy !== -1">{{ accuracy | number: '1.0-0' }}</span>
-  )
+  <div class="location-selector">
+    <ion-label>Location</ion-label>
+    <ion-buttons class="location-buttons" *ngIf="!readonly">
 
-  <ion-buttons class="location-buttons" *ngIf="!readonly">
+      <ion-button [id]="id + '-modal'" class="location-button">
+        Map
+        <app-location-map-selector (onSelect)="doMapSelect($event)"
+                                   [toggleId]="id + '-modal'"
+                                   [lat]="lat"
+                                   [lng]="lng">
+        </app-location-map-selector>
+      </ion-button>
 
-    <ion-button [id]="id + '-modal'" class="location-button">
-      <fa-icon [icon]="faMapPin"/>
-      Map
-      <app-location-map-selector (onSelect)="doMapSelect($event)"
-                                 [toggleId]="id + '-modal'"
-                                 [lat]="lat"
-                                 [lng]="lng">
-      </app-location-map-selector>
-    </ion-button>
+      <ion-button class="location-button" (click)="doGpsSelect()">
+        GPS
+      </ion-button>
 
-    <ion-button class="location-button" (click)="doGpsSelect()">
-      <fa-icon [icon]="faLocationCrosshairs"/>&nbsp;
-      GPS
-    </ion-button>
-
-  </ion-buttons>
+    </ion-buttons>
+  </div>
 
 </ng-container>

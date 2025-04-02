@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {FormGroup, ValidationErrors} from "@angular/forms";
-import {FieldDescriptor} from "../../models/field-descriptor";
-import {Subscription} from "rxjs";
+import {FormGroup, ValidationErrors} from '@angular/forms';
+import {FieldDescriptor} from '../../models/field-descriptor';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-base-field',
@@ -20,7 +20,8 @@ export abstract class BaseFieldComponent implements OnInit, OnChanges {
   field?: FieldDescriptor;
 
   subscriptions: Subscription[] = [];
-  error: string = "";
+  error: string = '';
+  isBlurred: boolean = false;
 
   constructor() {
   }
@@ -31,10 +32,14 @@ export abstract class BaseFieldComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
     this.subscriptions = [];
-    if (!this.formGroup || !this.field) return;
+    if (!this.formGroup || !this.field) {
+      return;
+    }
 
     const control = this.formGroup.get(this.field.key);
-    if (!control) return;
+    if (!control) {
+      return;
+    }
     // Errors may already exist on the form control.
     this.error = this.processErrors(control.errors);
     this.subscriptions.push(
@@ -45,18 +50,23 @@ export abstract class BaseFieldComponent implements OnInit, OnChanges {
   }
 
   public checkErrors() {
-    if (!this.formGroup || !this.field) return;
+    this.isBlurred = true;
+    if (!this.formGroup || !this.field) {
+      return;
+    }
 
     const control = this.formGroup.get(this.field.key);
-    if (!control) return;
+    if (!control) {
+      return;
+    }
     this.error = this.processErrors(control.errors);
   }
 
   private processErrors(errors: ValidationErrors | null): string {
     if (!errors) {
-      return "";
+      return '';
     }
-    const errorKey = Object.keys(errors).pop() || "";
+    const errorKey = Object.keys(errors).pop() || '';
     const error = errors[errorKey];
 
     switch (errorKey) {

@@ -1,0 +1,21 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sub-title {
+  margin: 20px 0;
+  text-align: center;
+  font-size: 40px;
+}
+
+.register-fields {
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.go-back {
+  text-decoration: underline;
+  color: var(--ion-color-primary);
+}

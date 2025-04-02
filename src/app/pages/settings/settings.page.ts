@@ -4,30 +4,26 @@ import {FormsModule} from '@angular/forms';
 import {
   AlertController,
   IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonContent,
   IonGrid,
-  IonHeader,
   IonLabel,
-  IonMenuButton,
   IonRow,
-  IonTitle,
   IonToggle,
-  IonToolbar,
   LoadingController
 } from '@ionic/angular/standalone';
 import {Observable} from "rxjs";
 import {SettingsService} from "../../services/settings/settings.service";
 import {RecordsService} from "../../services/records/records.service";
+import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonCard, IonCardContent, IonGrid, IonRow, IonLabel, IonToggle, IonButton]
+  imports: [IonContent, CommonModule, FormsModule, IonCard, IonCardContent, IonGrid, IonRow, IonLabel, IonToggle, IonButton, HeaderToolbarComponent]
 })
 export class SettingsPage implements OnInit {
 

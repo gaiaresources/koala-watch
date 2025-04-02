@@ -9,13 +9,14 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar} from "@ionic/angular/standalone";
+import {IonButton, IonButtons, IonContent, IonModal} from "@ionic/angular/standalone";
 import {Coordinates} from "../../models/coordinates";
 import {GoogleMap, MapAdvancedMarker, MapMarker} from "@angular/google-maps";
 import {LocationService} from "../../services/location/location.service";
 import {NgIf} from "@angular/common";
 import {ElevationService} from "../../services/elevation/elevation.service";
 import {Subscription} from "rxjs";
+import {HeaderToolbarComponent} from '../header-toolbar/header-toolbar.component';
 
 @Component({
   standalone: true,
@@ -25,15 +26,13 @@ import {Subscription} from "rxjs";
   imports: [
     IonContent,
     IonModal,
-    IonHeader,
-    IonToolbar,
     IonButtons,
     IonButton,
-    IonTitle,
     GoogleMap,
     MapMarker,
     NgIf,
-    MapAdvancedMarker
+    MapAdvancedMarker,
+    HeaderToolbarComponent
   ]
 })
 export class LocationMapSelectorComponent implements OnInit, OnChanges, OnDestroy {

@@ -1,14 +1,19 @@
+:host {
+  width: 100%;
+}
+
+.location-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .location-buttons {
   margin: 10px 0;
 }
 
 .location-button {
-  margin: 0 10px;
-  background-color: #327037;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12)
-}
-
-fa-icon {
-  margin-right: 0.5em;
+  padding: 0 5px;
+  margin-right: 10px;
 }
 

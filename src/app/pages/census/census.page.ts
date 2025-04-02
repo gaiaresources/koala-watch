@@ -1,19 +1,17 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, NgIf} from '@angular/common';
-import {IonButton, IonContent, IonImg, IonLabel, IonSegmentButton} from '@ionic/angular/standalone';
-import {BaseRecordPage} from "../base-record/base-record.page";
-import {BehaviorSubject, distinctUntilChanged, map, Observable, shareReplay} from "rxjs";
-import {Dataset} from "../../models/dataset";
-import {DatasetService} from "../../services/dataset/dataset.service";
-import {DATASET_NAME_CENSUS} from "../../tokens/app";
-import {RecordListComponent} from "../../components/record-list/record-list.component";
-import {ClientRecord} from "../../models/client-record";
-import {RecordsService} from "../../services/records/records.service";
-import {NavigationService} from "../../services/navigation/navigation.service";
-import {ViewWillEnter} from "@ionic/angular";
-import {ImageIconComponent} from "../../components/image-icon/image-icon.component";
-import {FabButtonComponent} from "../../components/fab-button/fab-button.component";
-import {FabSlotComponent} from "../../components/fab-slot/fab-slot.component";
+import {IonButton, IonContent, IonSegmentButton} from '@ionic/angular/standalone';
+import {BaseRecordPage} from '../base-record/base-record.page';
+import {BehaviorSubject, distinctUntilChanged, map, Observable, shareReplay} from 'rxjs';
+import {Dataset} from '../../models/dataset';
+import {DatasetService} from '../../services/dataset/dataset.service';
+import {DATASET_NAME_CENSUS} from '../../tokens/app';
+import {RecordListComponent} from '../../components/record-list/record-list.component';
+import {ClientRecord} from '../../models/client-record';
+import {RecordsService} from '../../services/records/records.service';
+import {NavigationService} from '../../services/navigation/navigation.service';
+import {ViewWillEnter} from '@ionic/angular';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-census',
@@ -27,12 +25,7 @@ import {FabSlotComponent} from "../../components/fab-slot/fab-slot.component";
     BaseRecordPage,
     IonSegmentButton,
     IonButton,
-    IonImg,
-    IonLabel,
-    IonContent,
-    ImageIconComponent,
-    FabButtonComponent,
-    FabSlotComponent,
+    IonContent
   ]
 })
 export class CensusPage implements OnInit, ViewWillEnter {
@@ -41,7 +34,7 @@ export class CensusPage implements OnInit, ViewWillEnter {
   private recordPage?: BaseRecordPage;
 
   @Input()
-  census: string = "";
+  census: string = '';
 
   dataset$: Observable<Dataset | null>;
 
@@ -53,7 +46,9 @@ export class CensusPage implements OnInit, ViewWillEnter {
 
   children$: Observable<ClientRecord[]> = this.record$.pipe(
     map((record) => {
-      if (!record) return [];
+      if (!record) {
+        return [];
+      }
       return this.recordsService.getChildRecords(record.client_id);
     }),
     shareReplay(1),
@@ -64,6 +59,7 @@ export class CensusPage implements OnInit, ViewWillEnter {
   dirty: boolean = false;
 
   constructor(
+    private route: ActivatedRoute,
     private datasetService: DatasetService,
     private recordsService: RecordsService,
     private navigationService: NavigationService,
@@ -72,10 +68,17 @@ export class CensusPage implements OnInit, ViewWillEnter {
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      const segmentId = params['segmentId'];
+      if (segmentId) {
+        this.segment = segmentId;
+      } else {
+        this.segment = 'form';
+      }
+    });
   }
 
   ionViewWillEnter() {
-    this.segment = 'form';
     this.setRecord();
   }
 
@@ -104,7 +107,9 @@ export class CensusPage implements OnInit, ViewWillEnter {
 
   async doNewSurvey() {
     const record = this._record.value;
-    if (!record || !this.recordPage) return;
+    if (!record || !this.recordPage) {
+      return;
+    }
 
     const choice = await this.recordPage.shouldSave();
     if (choice) {

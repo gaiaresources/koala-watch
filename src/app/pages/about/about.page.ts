@@ -2,16 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  IonButtons,
-  IonCol,
   IonContent,
-  IonGrid,
-  IonHeader,
-  IonImg, IonLabel,
-  IonMenuButton,
-  IonRow,
-  IonTitle,
-  IonToolbar
+  IonLabel,
 } from '@ionic/angular/standalone';
 import { APP_NAME } from "../../tokens/app";
 import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';

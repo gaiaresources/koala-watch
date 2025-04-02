@@ -13,5 +13,8 @@ import {NgIf} from '@angular/common';
 export class HeaderToolbarComponent {
 
   @Input()
-  title: string = ""
+  title: string = "";
+
+  @Input()
+  showSideMenu: boolean = true;
 }

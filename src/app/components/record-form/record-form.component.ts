@@ -3,21 +3,14 @@ import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {FormDescriptor} from "../../models/form-descriptor";
 import {DatasetService} from "../../services/dataset/dataset.service";
 import {FormGeneratorService} from "../../services/form-generator/form-generator.service";
-import {AsyncPipe, JsonPipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {Subscription} from "rxjs";
 import {Dataset} from "../../models/dataset";
 import {DateFieldComponent} from "../date-field/date-field.component";
-import {IntegerFieldComponent} from "../integer-field/integer-field.component";
-import {NumberFieldComponent} from "../number-field/number-field.component";
-import {TextFieldComponent} from "../text-field/text-field.component";
-import {SelectFieldComponent} from "../select-field/select-field.component";
 import {FieldComponent} from "../field/field.component";
 import {HiddenFieldComponent} from "../hidden-field/hidden-field.component";
 import {LocationSelectorComponent} from "../location-selector/location-selector.component";
-import {IonItem, IonItemDivider, IonItemGroup, IonList} from "@ionic/angular/standalone";
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {faCalendar, faStar} from "@fortawesome/free-regular-svg-icons";
-import {faAsterisk} from "@fortawesome/free-solid-svg-icons";
+import {IonItemDivider, IonItemGroup, IonList} from "@ionic/angular/standalone";
 import {ClientRecord} from "../../models/client-record";
 import {RecordsService} from "../../services/records/records.service";
 import * as dayjs from "dayjs";
@@ -29,34 +22,19 @@ import {AuthenticationService} from "../../services/authentication/authenticatio
   templateUrl: './record-form.component.html',
   styleUrls: ['./record-form.component.scss'],
   imports: [
-    JsonPipe,
     NgIf,
-    AsyncPipe,
     NgForOf,
     DateFieldComponent,
-    IntegerFieldComponent,
-    NgSwitchCase,
-    NgSwitch,
-    NumberFieldComponent,
-    TextFieldComponent,
-    NgSwitchDefault,
-    SelectFieldComponent,
     FieldComponent,
     HiddenFieldComponent,
     LocationSelectorComponent,
     ReactiveFormsModule,
     IonList,
-    IonItem,
     IonItemGroup,
     IonItemDivider,
-    FaIconComponent,
   ]
 })
 export class RecordFormComponent implements OnInit, OnChanges {
-
-  public faCalendar = faCalendar;
-  public faStar = faStar;
-  public faAsterisk = faAsterisk;
 
   @Input()
   dataset?: Dataset;

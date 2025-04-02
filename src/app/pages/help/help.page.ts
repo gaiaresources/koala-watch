@@ -3,28 +3,23 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
   IonButton,
-  IonButtons,
   IonCol,
   IonContent,
   IonGrid,
-  IonHeader,
-  IonIcon,
   IonImg,
   IonLabel,
-  IonMenuButton,
   IonRow,
-  IonTitle,
-  IonToolbar
 } from '@ionic/angular/standalone';
-import {APP_NAME} from "../../tokens/app";
-import {ImageIconComponent} from "../../components/image-icon/image-icon.component";
+import {APP_NAME} from '../../tokens/app';
+import {ImageIconComponent} from '../../components/image-icon/image-icon.component';
+import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
 
 @Component({
   selector: 'app-help',
   templateUrl: './help.page.html',
   styleUrls: ['./help.page.scss'],
   standalone: true,
-    imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton, IonGrid, IonRow, IonCol, IonImg, IonButton, IonIcon, IonLabel, ImageIconComponent]
+  imports: [IonContent, CommonModule, FormsModule, IonGrid, IonRow, IonCol, IonImg, IonButton, IonLabel, ImageIconComponent, HeaderToolbarComponent]
 })
 export class HelpPage implements OnInit {
 

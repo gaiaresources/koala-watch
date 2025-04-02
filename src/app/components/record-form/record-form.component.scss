@@ -1,3 +1,23 @@
- fa-icon {
+fa-icon {
   margin-right: 0.5em;
+}
+
+form {
+  padding: 0 10px;
+}
+
+ion-item-divider {
+  margin-top: 20px;
+  color: var(--ion-color-secondary);
+  font-weight: 700;
+  font-size: 16px;
+  border-width: 2px;
+  border-color: var(--ion-color-primary)
+}
+
+.form-fields {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }

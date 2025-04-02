@@ -1,4 +1,4 @@
-import {CommonModule, DOCUMENT} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {Component, CUSTOM_ELEMENTS_SCHEMA, Inject, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {
@@ -21,11 +21,8 @@ import {AuthenticationService} from "./services/authentication/authentication.se
 import {Observable} from "rxjs";
 import {HttpClientModule} from "@angular/common/http";
 import {User} from "./models/user";
-import {GOOGLE_MAP_API} from "./tokens/gmap";
-import {GoogleMapsService} from "./services/google-maps/google-maps.service";
 import {HeaderToolbarComponent} from './components/header-toolbar/header-toolbar.component';
-import {faClose} from '@fortawesome/free-solid-svg-icons/faClose';
-import {MenuController} from '@ionic/angular';
+
 
 @Component({
   selector: 'app-root',
@@ -56,7 +53,7 @@ export class AppComponent implements OnInit {
   public appPages: { title: string, url: string}[] = [
     {title: 'Home', url: '/home'},
     {title: 'My records', url: '/records'},
-    {title: 'Scat census', url: '/census'},
+    {title: 'Scat census', url: '/census/:census'},
     {title: 'Settings', url: '/settings'},
     {title: 'About', url: '/about'},
     {title: 'Resources', url: '/resources'},
@@ -66,21 +63,18 @@ export class AppComponent implements OnInit {
   ];
 
   user$: Observable<User | null>;
-  protected readonly faClose = faClose;
 
   constructor(
-    @Inject(GOOGLE_MAP_API) private googleMapApi: string,
-    @Inject(DOCUMENT) private document: any,
     private authenticationService: AuthenticationService,
     private alertController: AlertController,
     private router: Router,
-    private menu: MenuController,
-    private googleMaps: GoogleMapsService,
   ) {
     this.user$ = this.authenticationService.user$;
+
   }
 
   ngOnInit() {
+
   }
 
   askLogout() {

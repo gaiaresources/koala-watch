@@ -1,0 +1,28 @@
+.resource-dividers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  ion-item-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 20px;
+
+    iframe {
+      width: 100%;
+    }
+
+    ion-label {
+      color: var(--ion-color-secondary);
+      font-size: 18px;
+      font-weight: 500;
+      padding-bottom: 4px;
+      width: 100%;
+    }
+
+    ion-button {
+      margin-top: 12px;
+    }
+  }
+}

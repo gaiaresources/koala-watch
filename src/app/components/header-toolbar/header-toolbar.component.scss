@@ -1,6 +1,9 @@
 .header-toolbar {
   --background: var(--ion-color-primary);
-  --color: var(--ion-color-light);}
+  --color: var(--ion-color-light);
+  height: 100px;
+  display:flex;
+}
 
 ion-menu-button {
   font-size: 40px;
@@ -8,6 +11,7 @@ ion-menu-button {
 
 ion-title {
   font-size: 26px;
+  align-self: center;
 
   &.md {
     width: 100%;

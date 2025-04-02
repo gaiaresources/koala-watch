@@ -1,6 +1,7 @@
 <ng-container *ngIf="record$ | async as record">
   <ng-container *ngIf="dataset$ | async as dataset">
-    <app-base-record [title]="'Tree Survey'"
+    <app-base-record [isSurvey]="true"
+                     [title]="'Tree Survey'"
                      [dataset]="dataset"
                      [record]="record"
                      [countField]="'Koala count'"
