@@ -3,6 +3,10 @@ ion-content {
   display: flex;
 }
 
+.ios ion-tab-bar {
+  margin-top: -50px;
+}
+
 ion-tabs {
 
   .ion-tab-button {

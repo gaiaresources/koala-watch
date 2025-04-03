@@ -1,8 +1,8 @@
 .header-toolbar {
   --background: var(--ion-color-primary);
   --color: var(--ion-color-light);
-  height: 100px;
   display:flex;
+  padding-top: 50px;
 }
 
 ion-menu-button {

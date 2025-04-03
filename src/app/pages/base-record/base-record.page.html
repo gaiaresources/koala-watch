@@ -4,7 +4,7 @@
 
   <ion-content>
     <ion-item-divider sticky color="tertiary">
-      <ion-segment [(ngModel)]="segment" color="primary">
+      <ion-segment [(ngModel)]="segment" color="primary" mode="md">
         <ion-segment-button value="form">
           Form
         </ion-segment-button>
@@ -34,7 +34,7 @@
     </ng-content>
 
     <ng-container *ngIf="segment === 'photos'">
-      <ion-buttons *ngIf="record.isWriteable()">
+      <ion-buttons mode="md" *ngIf="record.isWriteable()">
         <ion-button (click)="doCamera()">
           Take a photo
         </ion-button>
@@ -50,7 +50,7 @@
 
   </ion-content>
   <ion-footer *ngIf="segment === 'form'" slot="fixed">
-    <ion-buttons *ngIf="record.isWriteable()">
+    <ion-buttons mode="md" *ngIf="record.isWriteable()">
       <ion-button (click)="doSave()">
         Save
       </ion-button>

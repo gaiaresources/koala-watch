@@ -1,7 +1,7 @@
 <app-header-toolbar></app-header-toolbar>
 
 <ion-content class="ion-padding">
-  <ion-title class="sub-title">I Spy Koala</ion-title>
+  <div class="sub-title">I Spy Koala</div>
   <ion-grid>
 
     <form [formGroup]="form" *ngIf="errors.errors$ | async as messages">
@@ -9,6 +9,7 @@
                  label-placement="stacked"
                  fill="outline"
                  label="Username (visible to other users)"
+                 mode="md"
                  formControlName="name_user"
                  [errorText]="messages['name_user']"
                  autocapitalize="false"></ion-input>
@@ -19,6 +20,7 @@
                  fill="outline"
                  label="Email Address"
                  [errorText]="messages['email']"
+                 mode="md"
                  formControlName="email"
                  type="email"
                  autocapitalize=off></ion-input>
@@ -28,6 +30,7 @@
                  fill="outline"
                  label="Given Names"
                  [errorText]="messages['name_given']"
+                 mode="md"
                  formControlName="name_given"
                  autocapitalize=off></ion-input>
 
@@ -36,6 +39,7 @@
                  fill="outline"
                  label="Last Name"
                  [errorText]="messages['name_last']"
+                 mode="md"
                  formControlName="name_last"
                  autocapitalize=off></ion-input>
 
@@ -44,7 +48,9 @@
                  fill="outline"
                  label="Password"
                  [errorText]="messages['password']"
-                 formControlName="password" type="password"></ion-input>
+                 mode="md"
+                 formControlName="password"
+                 type="password"></ion-input>
 
       <ion-input color="primary"
                  label-placement="stacked"
@@ -52,9 +58,11 @@
                  label="Repeat Password"
                  [errorText]="messages['password_again']"
                  (paste)="$event.preventDefault()"
-                 formControlName="password_again" type="password"></ion-input>
+                 mode="md"
+                 formControlName="password_again"
+                 type="password"></ion-input>
 
-      <ion-button expand="block" type="submit" (click)="doSignup()"
+      <ion-button mode="md" expand="block" type="submit" (click)="doSignup()"
                   [disabled]="!form.valid">
         Sign Up
       </ion-button>
