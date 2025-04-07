@@ -49,7 +49,7 @@
     </ng-container>
 
   </ion-content>
-  <ion-footer *ngIf="segment === 'form'" slot="fixed">
+  <ion-footer *ngIf="segment === 'form' && this.showFooter" slot="fixed">
     <ion-buttons mode="md" *ngIf="record.isWriteable()">
       <ion-button (click)="doSave()">
         Save
