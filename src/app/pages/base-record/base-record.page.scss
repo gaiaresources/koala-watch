@@ -2,6 +2,15 @@
   display: contents;
 }
 
+
+ion-item-divider {
+  --padding-start: none;
+
+  .ios > ion-segment-button {
+    font-size: 14px;
+  }
+}
+
 ion-buttons {
   display: flex;
   flex-direction: column;

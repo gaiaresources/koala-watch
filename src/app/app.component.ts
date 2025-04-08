@@ -22,6 +22,7 @@ import {Observable} from "rxjs";
 import {HttpClientModule} from "@angular/common/http";
 import {User} from "./models/user";
 import {HeaderToolbarComponent} from './components/header-toolbar/header-toolbar.component';
+import {GoogleMapsService} from '../app/services/google-maps/google-maps.service';
 
 
 @Component({
@@ -67,6 +68,7 @@ export class AppComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private alertController: AlertController,
+    private googleMapsService: GoogleMapsService,
     private router: Router,
   ) {
     this.user$ = this.authenticationService.user$;

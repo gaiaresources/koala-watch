@@ -112,6 +112,9 @@ export class BaseRecordPage implements OnInit {
   ngOnInit() {
     Keyboard.addListener('keyboardWillShow', info => {
       this.showFooter = false;
+      if (document.activeElement) {
+        document.activeElement.scrollIntoView({behavior: "smooth", block: "center"});
+      }
     });
     Keyboard.addListener('keyboardWillHide', () => {
       this.showFooter = true;

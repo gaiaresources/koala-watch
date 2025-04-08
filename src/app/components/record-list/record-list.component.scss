@@ -1,5 +1,8 @@
-.record-time {
+ion-item {
   font-size: 14px;
+}
+
+.record-time {
   text-align: center;
 }
 
@@ -14,7 +17,7 @@ fa-icon {
 }
 
 .record-status {
-  padding: 12px;
+  padding: 8px;
   text-align: center;
 
   &.complete {
