@@ -1,7 +1,5 @@
 require_relative '../../node_modules/@capacitor/ios/scripts/pods_helpers'
 
-project 'App.xcodeproj'
-
 platform :ios, '14.0'
 use_frameworks!
 
@@ -24,7 +22,7 @@ def capacitor_pods
   pod 'CapacitorEmailComposer', :path => '../../node_modules/capacitor-email-composer'
 end
 
-target 'I Spy Koala' do
+target 'App' do
   capacitor_pods
   # Add your Pods here
 end

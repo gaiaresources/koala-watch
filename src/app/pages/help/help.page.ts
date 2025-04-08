@@ -13,6 +13,8 @@ import {
 import {APP_NAME} from '../../tokens/app';
 import {ImageIconComponent} from '../../components/image-icon/image-icon.component';
 import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
+import {NavigationService} from '../../services/navigation/navigation.service';
+import {UploadService} from '../../services/upload/upload.service';
 
 @Component({
   selector: 'app-help',

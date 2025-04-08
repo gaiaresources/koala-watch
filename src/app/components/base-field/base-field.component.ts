@@ -21,7 +21,6 @@ export abstract class BaseFieldComponent implements OnInit, OnChanges {
 
   subscriptions: Subscription[] = [];
   error: string = '';
-  isBlurred: boolean = false;
 
   constructor() {
   }
@@ -50,7 +49,6 @@ export abstract class BaseFieldComponent implements OnInit, OnChanges {
   }
 
   public checkErrors() {
-    this.isBlurred = true;
     if (!this.formGroup || !this.field) {
       return;
     }

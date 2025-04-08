@@ -5,16 +5,16 @@
 
 .record-type, .record-status {
   font-weight: 500;
+  text-wrap: nowrap;
 }
 
 fa-icon {
-  margin-left: 12px;
   font-size: 20px;
   color: var(--ion-color-primary);
 }
 
 .record-status {
-  padding: 8px;
+  padding: 12px;
   text-align: center;
 
   &.complete {

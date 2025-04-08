@@ -26,6 +26,7 @@ import {CameraService} from '../../services/camera/camera.service';
 import {FabSlotComponent} from '../../components/fab-slot/fab-slot.component';
 import {FabButtonComponent} from '../../components/fab-button/fab-button.component';
 import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
+import {Keyboard} from '@capacitor/keyboard';
 
 @Component({
   selector: 'app-base-record',
@@ -95,6 +96,7 @@ export class BaseRecordPage implements OnInit {
   );
 
   dirty: boolean = false;
+  showFooter: boolean = true;
 
   constructor(
     private recordsService: RecordsService,
@@ -108,6 +110,12 @@ export class BaseRecordPage implements OnInit {
   }
 
   ngOnInit() {
+    Keyboard.addListener('keyboardWillShow', info => {
+      this.showFooter = false;
+    });
+    Keyboard.addListener('keyboardWillHide', () => {
+      this.showFooter = true;
+    });
   }
 
   doValid(valid: boolean) {
