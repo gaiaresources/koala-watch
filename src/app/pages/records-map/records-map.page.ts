@@ -52,7 +52,6 @@ export class RecordsMapPage implements OnInit {
       this.googleMaps.loaded$,
     ]).pipe(
       map(([changed, loaded]) => {
-        console.log(changed, loaded)
         if (!loaded) return [];
         const records = this.recordsService.getAllRecords();
         return records
