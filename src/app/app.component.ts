@@ -4,7 +4,7 @@ import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {
   AlertController,
   IonApp,
-  IonContent,
+  IonContent, IonIcon,
   IonItem,
   IonLabel,
   IonList,
@@ -15,6 +15,8 @@ import {
 } from '@ionic/angular/standalone';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {
+  faArrowDown,
+  faArrowRight, faChevronDown, faChevronRight,
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import {AuthenticationService} from "./services/authentication/authentication.service";
@@ -46,21 +48,40 @@ import {GoogleMapsService} from '../app/services/google-maps/google-maps.service
     HttpClientModule,
     FontAwesomeModule,
     HeaderToolbarComponent,
+    IonIcon,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppComponent implements OnInit {
   faSignOutAlt = faSignOutAlt;
-  public appPages: { title: string, url: string}[] = [
+  public appPages: { title: string, children?: any[], url?: string, isOpen?: boolean}[] = [
     {title: 'Home', url: '/home'},
-    {title: 'My records', url: '/records'},
-    {title: 'Scat census', url: '/census/:census'},
-    {title: 'Settings', url: '/settings'},
-    {title: 'About', url: '/about'},
-    {title: 'Resources', url: '/resources'},
-    {title: 'Help', url: '/help'},
-    {title: 'Account', url: '/account'},
-    {title: 'Privacy Policy', url: '/privacy-policy'},
+    {title: 'Records',
+      children:
+        [
+          {title: "My records", url: '/records'},
+          {title: "Record display", url: '/settings'},
+        ],
+      isOpen: false
+    },
+    {title: 'Resources',
+      children:
+        [
+          {title: "About I Spy Koala", url: '/about'},
+          {title: "How to: Observations", url: '/help'},
+          {title: "How to: Scat census", url: '/census-help'},
+          {title: "Additional resources", url: '/resources'},
+        ],
+      isOpen: false
+    },
+    {title: 'Account',
+      children:
+        [
+          {title: "Terms and conditions", url: '/privacy-policy'},
+          {title: "Delete account", url: '/account'}
+        ],
+      isOpen: false
+    }
   ];
 
   user$: Observable<User | null>;
@@ -98,4 +119,9 @@ export class AppComponent implements OnInit {
         }]
     }).then(alert => alert.present())
   }
+
+  protected readonly faArrowRight = faArrowRight;
+  protected readonly faArrowDown = faArrowDown;
+  protected readonly faChevronRight = faChevronRight;
+  protected readonly faChevronDown = faChevronDown;
 }

@@ -83,6 +83,11 @@ export const routes: Routes = [
     canActivate: [AuthenticationGuardFn],
   },
   {
+    path: 'census-help',
+    loadComponent: () => import('./pages/census-help/census-help.page').then(m => m.CensusHelpPage),
+    canActivate: [AuthenticationGuardFn],
+  },
+  {
     path: 'census/:census/survey/:survey',
     loadComponent: () => import('./pages/survey/survey.page').then(m => m.SurveyPage),
     canActivate: [AuthenticationGuardFn],

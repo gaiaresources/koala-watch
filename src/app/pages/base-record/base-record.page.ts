@@ -185,12 +185,37 @@ export class BaseRecordPage implements OnInit {
       return;
     }
 
-    await this.doLoader({
-      message: 'Saving...',
-    });
-    await this.recordsService.setRecord(record);
-    await this.photoService.save();
-    await this.doCompleted(record);
+
+    let proceedWithSave = this.photoService.doPhotosExist()
+    if(!proceedWithSave) {
+        const ionicAlert = await this.alertController.create({
+          header: 'No photos detected',
+          message: 'Your record quality improves if photos are added',
+          backdropDismiss: true,
+          buttons: [
+            {
+              text: 'Add photos',
+              handler: () => {
+                this._segment = "photos"
+              }
+            },
+            {
+              text: 'Save',
+              handler: () => proceedWithSave = true
+            }
+          ]
+        });
+        await ionicAlert.present();
+        await ionicAlert.onDidDismiss();
+    }
+    if(proceedWithSave) {
+      await this.photoService.save();
+      await this.doLoader({
+        message: 'Saving...',
+      });
+      await this.recordsService.setRecord(record);
+      await this.doCompleted(record);
+    }
   }
 
   public async shouldSave(): Promise<boolean> {
