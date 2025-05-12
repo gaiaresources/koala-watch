@@ -6,6 +6,7 @@ import {NetworkService} from "../network/network.service";
 import {tap} from "rxjs/operators";
 import {ClientRecord} from "../../models/client-record";
 import {PhotoService} from "../photo/photo.service";
+import {AlertController} from '@ionic/angular/standalone';
 
 export interface PhotoMap {
   [key: string]: ClientPhoto | null;
@@ -51,6 +52,7 @@ export class ActivePhotoService {
     private networkService: NetworkService,
     private apiService: APIService,
     private photoService: PhotoService,
+    private alertController: AlertController,
   ) {
     this.photos$ = this._record.asObservable().pipe(
       switchMap((record) => {
@@ -191,6 +193,10 @@ export class ActivePhotoService {
 
     // Return the combined photo list.
     return promise.then(() => photos.concat(addedPhotos));
+  }
+
+  doPhotosExist() {
+    return this._record.value.photoIds.length>0
   }
 
   async save() {

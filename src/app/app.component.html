@@ -3,21 +3,34 @@
     <ion-menu contentId="main-content" type="overlay">
       <app-header-toolbar></app-header-toolbar>
       <ion-content>
-        <ion-list>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+          <div *ngFor="let p of appPages; let i = index">
+          <ion-menu-toggle *ngIf="p.url" auto-hide="false">
             <ion-item routerDirection="root" [routerLink]="[p.url]" detail="false"
                       routerLinkActive="selected">
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
-
-          <ion-menu-toggle auto-hide="true">
-            <ion-item (click)="askLogout()">
-              <fa-icon [icon]="faSignOutAlt"></fa-icon>
-              <ion-label>Log out</ion-label>
+            <ion-item *ngIf="p.children && p.children.length > 0" (click)="p.isOpen = !p.isOpen">
+              <ion-label>{{p.title}}</ion-label>
+              <fa-icon *ngIf="!p.isOpen" [icon]="faChevronRight"></fa-icon>
+              <fa-icon *ngIf="p.isOpen" [icon]="faChevronDown"></fa-icon>
             </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
+
+            <ion-list *ngIf="p.isOpen">
+              <ion-menu-toggle *ngFor="let item of p.children" auto-hide="false" class="sub-menu">
+                <ion-item routerDirection="root" [routerLink]="[item.url]" detail="false"
+                          routerLinkActive="selected">
+                  <ion-label>{{ item.title }}</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
+              <ion-menu-toggle *ngIf="p.title === 'Account'" auto-hide="true">
+                <ion-item (click)="askLogout()">
+                  <ion-label>Log out</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
+            </ion-list>
+
+          </div>
       </ion-content>
     </ion-menu>
 

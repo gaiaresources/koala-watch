@@ -17,13 +17,13 @@ import {NavigationService} from '../../services/navigation/navigation.service';
 import {UploadService} from '../../services/upload/upload.service';
 
 @Component({
-  selector: 'app-help',
-  templateUrl: './help.page.html',
-  styleUrls: ['./help.page.scss'],
+  selector: 'app-census-help',
+  templateUrl: './census-help.page.html',
+  styleUrls: ['./census-help.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, IonItemDivider, FormsModule, IonGrid, IonRow, IonCol, IonImg, IonButton, IonLabel, ImageIconComponent, HeaderToolbarComponent]
+  imports: [IonContent, IonItemDivider, CommonModule, FormsModule, IonGrid, IonRow, IonCol, IonImg, IonButton, IonLabel, ImageIconComponent, HeaderToolbarComponent]
 })
-export class HelpPage implements OnInit {
+export class CensusHelpPage implements OnInit {
 
   constructor(
     @Inject(APP_NAME) public appName: string,
