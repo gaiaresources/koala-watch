@@ -48,8 +48,19 @@
       </app-record-photos>
     </ng-container>
 
+    <ion-footer *ngIf="this.showFooter && this.isLandscape">
+      <ion-buttons mode="md" *ngIf="record.isWriteable()">
+        <ion-button (click)="doSave()">
+          Save
+        </ion-button>
+        <ion-button *ngIf="segment === 'form'" class="delete" (click)="doDelete()">
+          Delete
+        </ion-button>
+      </ion-buttons>
+    </ion-footer>
   </ion-content>
-  <ion-footer *ngIf="this.showFooter" slot="fixed">
+
+  <ion-footer *ngIf="this.showFooter && !this.isLandscape" slot="fixed">
     <ion-buttons mode="md" *ngIf="record.isWriteable()">
       <ion-button (click)="doSave()">
         Save

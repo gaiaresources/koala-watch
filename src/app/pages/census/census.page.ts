@@ -107,16 +107,21 @@ export class CensusPage implements OnInit, ViewWillEnter {
 
   async doNewSurvey() {
     const record = this._record.value;
+
     if (!record || !this.recordPage) {
       return;
     }
 
     const choice = await this.recordPage.shouldSave();
+
+    let didSave = false
     if (choice) {
-      await this.recordPage.doSave();
+      didSave = await this.recordPage.doSave();
     }
 
-    this.navigationService.goSurvey(record);
+    if(didSave || !choice) {
+      this.navigationService.goSurvey(record);
+    }
   }
 
 }

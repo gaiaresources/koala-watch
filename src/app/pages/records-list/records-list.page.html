@@ -2,15 +2,16 @@
 
   <app-record-list *ngIf="records$ | async as records" [records]="records"> </app-record-list>
   <ion-label *ngIf="!(records$ | async)?.length">No records found</ion-label>
-  <div class="action-btns">
-    <ion-button mode="md" [disabled]="!(records$ | async)?.length" (click)="doUpload()">Upload my records</ion-button>
-
-    <div class="record-new-action">
-      <ion-label>Record a new</ion-label>
-      <ion-button mode="md" (click)="doNewObservation()">Observation</ion-button>
-      <ion-button mode="md" (click)="doNewCensus()">Scat census</ion-button>
-    </div>
-
-  </div>
 </ion-content>
+
+<ion-footer class="action-btns" slot="fixed">
+  <ion-button mode="md" [disabled]="!(records$ | async)?.length" (click)="doUpload()">Upload my records</ion-button>
+
+  <div class="record-new-action">
+    <ion-label>Record a new</ion-label>
+    <ion-button mode="md" (click)="doNewObservation()">Observation</ion-button>
+    <ion-button mode="md" (click)="doNewCensus()">Scat census</ion-button>
+  </div>
+
+</ion-footer>
 

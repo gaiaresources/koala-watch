@@ -19,6 +19,8 @@ PODS:
     - Capacitor
   - CapacitorNetwork (7.0.0):
     - Capacitor
+  - CapacitorScreenOrientation (7.0.1):
+    - Capacitor
   - CapacitorStatusBar (7.0.0):
     - Capacitor
   - IONGeolocationLib (1.0.0)
@@ -34,6 +36,7 @@ DEPENDENCIES:
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorNetwork (from `../../node_modules/@capacitor/network`)"
+  - "CapacitorScreenOrientation (from `../../node_modules/@capacitor/screen-orientation`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
 
 SPEC REPOS:
@@ -61,6 +64,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorNetwork:
     :path: "../../node_modules/@capacitor/network"
+  CapacitorScreenOrientation:
+    :path: "../../node_modules/@capacitor/screen-orientation"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
 
@@ -75,9 +80,10 @@ SPEC CHECKSUMS:
   CapacitorHaptics: 7be406a91e4eb87287f321c6c68e1709d6837b3a
   CapacitorKeyboard: 4db71e694e7afb5d7c0be09b05495c19f7d6c914
   CapacitorNetwork: 30c2e78a0ed32530656cb426c8ee6c2caec10dbf
+  CapacitorScreenOrientation: 6d989dff97440c7bfa78deee13952d7fb03c27f3
   CapacitorStatusBar: a8c4c83ed2e973bdafb979e80e4b00d027832cb7
   IONGeolocationLib: 81f33f88d025846946de2cf63b0c7628e7c6bc9d
 
-PODFILE CHECKSUM: 0535c5707ee2e306bff26e2d035f6c8b5e9067e0
+PODFILE CHECKSUM: 9886a90407b1f6447a02b4e66e4c22c3bc7d5b78
 
 COCOAPODS: 1.16.2
