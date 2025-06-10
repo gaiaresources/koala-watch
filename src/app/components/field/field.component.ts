@@ -6,6 +6,7 @@ import {IntegerFieldComponent} from "../integer-field/integer-field.component";
 import {NumberFieldComponent} from "../number-field/number-field.component";
 import {TextFieldComponent} from "../text-field/text-field.component";
 import {SelectFieldComponent} from "../select-field/select-field.component";
+import {Keyboard} from '@capacitor/keyboard';
 
 @Component({
   selector: 'app-field',
@@ -33,5 +34,9 @@ export class FieldComponent {
 
   @Input({required: true})
   field?: FieldDescriptor;
+
+  async closeKeyboard() {
+    await Keyboard.hide()
+  }
 
 }

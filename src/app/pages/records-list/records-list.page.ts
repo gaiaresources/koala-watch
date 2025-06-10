@@ -7,7 +7,7 @@ import {NavigationService} from "../../services/navigation/navigation.service";
 import {RecordsService} from "../../services/records/records.service";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {RecordListComponent} from "../../components/record-list/record-list.component";
-import {IonButton, IonContent, IonLabel} from "@ionic/angular/standalone";
+import {IonButton, IonContent, IonFooter, IonLabel} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-records-list',
@@ -21,6 +21,7 @@ import {IonButton, IonContent, IonLabel} from "@ionic/angular/standalone";
     IonContent,
     IonButton,
     IonLabel,
+    IonFooter,
   ]
 })
 export class RecordsListPage implements OnInit {

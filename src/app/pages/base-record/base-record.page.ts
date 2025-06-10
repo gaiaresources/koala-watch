@@ -27,6 +27,7 @@ import {FabSlotComponent} from '../../components/fab-slot/fab-slot.component';
 import {FabButtonComponent} from '../../components/fab-button/fab-button.component';
 import {HeaderToolbarComponent} from '../../components/header-toolbar/header-toolbar.component';
 import {Keyboard} from '@capacitor/keyboard';
+import {ScreenOrientation} from '@capacitor/screen-orientation';
 
 @Component({
   selector: 'app-base-record',
@@ -68,6 +69,7 @@ export class BaseRecordPage implements OnInit {
   onValid = new EventEmitter<boolean>();
 
   _segment = 'form';
+
   @Input()
   set segment(value: string) {
     if (this._segment !== value) {
@@ -97,6 +99,7 @@ export class BaseRecordPage implements OnInit {
 
   dirty: boolean = false;
   showFooter: boolean = true;
+  isLandscape: boolean = false;
 
   constructor(
     private recordsService: RecordsService,
@@ -119,6 +122,14 @@ export class BaseRecordPage implements OnInit {
     Keyboard.addListener('keyboardWillHide', () => {
       this.showFooter = true;
     });
+
+    ScreenOrientation.addListener('screenOrientationChange', (orientation) => {
+      if(orientation.type.includes('landscape')) {
+        this.isLandscape = true;
+      } else {
+        this.isLandscape = false;
+      }
+    })
   }
 
   doValid(valid: boolean) {
@@ -182,9 +193,8 @@ export class BaseRecordPage implements OnInit {
   async doSave() {
     const record = this._record.value;
     if (!record) {
-      return;
+      return false;
     }
-
 
     let proceedWithSave = this.photoService.doPhotosExist()
     if(!proceedWithSave) {
@@ -197,6 +207,7 @@ export class BaseRecordPage implements OnInit {
               text: 'Add photos',
               handler: () => {
                 this._segment = "photos"
+                this.onSegment.emit("photos");
               }
             },
             {
@@ -216,6 +227,7 @@ export class BaseRecordPage implements OnInit {
       await this.recordsService.setRecord(record);
       await this.doCompleted(record);
     }
+    return proceedWithSave
   }
 
   public async shouldSave(): Promise<boolean> {

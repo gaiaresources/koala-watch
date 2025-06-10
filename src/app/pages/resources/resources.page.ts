@@ -26,7 +26,7 @@ export class ResourcesPage implements OnInit {
 
 
   async doOpenKoalaSearch() {
-    await Browser.open({ url: 'https://geo.seed.nsw.gov.au/vertigisstudio/web/?app=cabd04d595ec43c1aaf4298e80e83ec2&workflow=36ea26c1-e8e2-4355-8600-5d1558259ad3&workflowParams=%7B%22portalItems%22:%20%5B%7B%22itemId%22:%20%2278e6c517ee764c8c831bc54d2f2ac3ac%22,%20%22layerIds%22:%20%220%22%7D'});
+    await Browser.open({ url: 'https://geo.seed.nsw.gov.au/vertigisstudio/web/?app=cabd04d595ec43c1aaf4298e80e83ec2&workflow=36ea26c1-e8e2-4355-8600-5d1558259ad3&workflowParams=%7B%22portalItems%22:%20%5B%7B%22itemId%22:%20%2278e6c517ee764c8c831bc54d2f2ac3ac%22,%20%22layerIds%22:%20%220%22%7D]}'});
   }
 
   async doOpenKoalaStrategy() {

@@ -2,14 +2,14 @@
 
 - JAVA_HOME must be set to JDK 21 (Capacitor V7)
 
-Setup Android:
+Setup Dev Android:
 ```agsl
 - npx cap sync android
 - npm run build
 - androidStartDev.sh
 ```
 
-Setup Ios:
+Setup Dev Ios:
 
 ```agsl
 - npx cap sync android
