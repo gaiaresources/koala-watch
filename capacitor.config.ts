@@ -10,8 +10,11 @@ const config: CapacitorConfig = {
   plugins: {
     Keyboard: {
       resize: 'body',
-      resizeOnFullScreen: true,
+      resizeOnFullScreen: false,
     },
+    EdgeToEdge: {
+      "backgroundColor": "#002664"
+    }
   }
 };
 
