@@ -46,6 +46,8 @@ export class ObservationPage implements OnInit, ViewWillEnter {
     this.setRecord();
   }
 
+  foo() {}
+
   setRecord() {
     this.recordsService.getRecord$(this.observation).then((record) => {
       if (record) {
