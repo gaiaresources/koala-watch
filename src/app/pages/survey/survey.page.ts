@@ -51,7 +51,7 @@ export class SurveyPage implements OnInit, ViewWillEnter {
     this.setRecord();
   }
 
-  foo() {}
+  doSegment() {}
 
   async setRecord() {
     const parent = await this.recordsService.getRecord$(this.census);
