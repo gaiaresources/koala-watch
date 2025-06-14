@@ -174,10 +174,10 @@ export class BaseRecordPage implements OnInit {
     if (this.isSurvey && record) {
       const parentRecord = this.recordsService.getRecord(record.parentId);
       if (parentRecord) {
-        await this.navigationController.goSurveyRecords(parentRecord);
+        this.navigationController.goSurveyRecords(parentRecord);
       }
     } else {
-      await this.navigationController.goRecords();
+      this.navigationController.goRecords();
     }
   }
 

@@ -29,7 +29,7 @@ export class NavigationService {
   }
 
   goRecords() {
-    this.navCtrl.navigateForward('records');
+    this.navCtrl.navigateBack('records');
   }
 
 }
