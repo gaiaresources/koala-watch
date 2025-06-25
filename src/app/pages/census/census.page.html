@@ -21,11 +21,11 @@
           <ng-container *ngIf="valid">
             <ng-container *ngIf="children$ | async as children; else createObservations">
               <ng-container *ngIf="children.length; else createObservations">
-                <ion-content class="ion-padding">
+                <ion-content class="ion-padding survey-list">
                   <app-record-list [records]="children">
                   </app-record-list>
-                  <ion-button mode="md" (click)="doNewSurvey()">Create a tree survey for census</ion-button>
                 </ion-content>
+                <ion-button mode="md" (click)="doNewSurvey()" class="create-survey">Create a tree survey for census</ion-button>
               </ng-container>
             </ng-container>
 

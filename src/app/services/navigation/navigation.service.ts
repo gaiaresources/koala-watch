@@ -25,7 +25,7 @@ export class NavigationService {
   }
 
   goSurveyRecords(parent: ClientRecord) {
-    this.navCtrl.navigateForward('census/' + parent.client_id, {queryParams: { segmentId: 'observations' }});
+    this.navCtrl.navigateBack('census/' + parent.client_id, {queryParams: { segmentId: 'observations' }});
   }
 
   goRecords() {
