@@ -11,7 +11,7 @@
         <ion-label class="record-time">
           {{ record.data.datetime | date: 'dd/MM/yyyy HH:mm' }}
         </ion-label>
-        <ion-label class="record-status" [class]="record.statusClass.toLowerCase()">{{record.statusClass}}</ion-label>
+        <ion-label class="record-status" [class]="record.statusClass.toLowerCase()">{{getStatusLabel(record.statusClass)}}</ion-label>
         <fa-icon [icon]="faChevronRight"></fa-icon>
     </ion-item>
   </ion-list>

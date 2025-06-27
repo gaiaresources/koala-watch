@@ -7,7 +7,7 @@ import {
   IonCol,
   IonContent,
   IonGrid,
-  IonInput,
+  IonInput, IonInputPasswordToggle,
   IonLabel,
   IonRow,
   IonTitle,
@@ -27,7 +27,7 @@ import {HeaderToolbarComponent} from '../../components/header-toolbar/header-too
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonContent, IonTitle, CommonModule, FormsModule, IonGrid, IonRow, IonCol, ReactiveFormsModule, IonLabel, IonInput, IonButton, HeaderToolbarComponent]
+  imports: [IonContent, IonTitle, CommonModule, FormsModule, IonGrid, IonRow, IonCol, ReactiveFormsModule, IonLabel, IonInput, IonButton, HeaderToolbarComponent, IonInputPasswordToggle]
 })
 export class LoginPage implements OnInit {
 

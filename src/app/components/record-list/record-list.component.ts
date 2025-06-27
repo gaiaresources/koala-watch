@@ -62,7 +62,11 @@ export class RecordListComponent implements OnChanges {
     if (record.id) {
       return 'Uploaded';
     }
-    return record.valid ? 'Complete' : 'Incomplete';
+    return record.valid ? 'To-upload' : 'Incomplete';
+  }
+
+  public getStatusLabel(status: string): string {
+    return status.replace('-', ' ')
   }
 
   public getAltText(record: ClientRecord): string {

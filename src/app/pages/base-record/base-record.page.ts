@@ -113,15 +113,6 @@ export class BaseRecordPage implements OnInit {
   }
 
   ngOnInit() {
-    Keyboard.addListener('keyboardWillShow', info => {
-      this.showFooter = false;
-      if (document.activeElement) {
-        document.activeElement.scrollIntoView({behavior: "smooth", block: "center"});
-      }
-    });
-    Keyboard.addListener('keyboardWillHide', () => {
-      this.showFooter = true;
-    });
 
     ScreenOrientation.addListener('screenOrientationChange', (orientation) => {
       if(orientation.type.includes('landscape')) {
@@ -231,9 +222,6 @@ export class BaseRecordPage implements OnInit {
   }
 
   public async shouldSave(): Promise<boolean> {
-    if (!this.dirty) {
-      return false;
-    }
 
     return await new Promise((resolve, reject) => {
       this.alertController.create({
@@ -242,15 +230,15 @@ export class BaseRecordPage implements OnInit {
         backdropDismiss: true,
         buttons: [
           {
-            text: 'Yes',
-            handler: async () => {
-              resolve(true);
-            }
-          },
-          {
             text: 'No',
             handler: () => {
               resolve(false);
+            }
+          },
+          {
+            text: 'Yes',
+            handler: async () => {
+              resolve(true);
             }
           }
         ]
