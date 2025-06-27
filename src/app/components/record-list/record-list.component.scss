@@ -20,12 +20,12 @@ fa-icon {
   padding: 8px;
   text-align: center;
 
-  &.complete {
-    background: rgb(210,236,251);
+  &.to-upload {
+    background: rgb(253,237,223);
   }
 
   &.incomplete {
-    background: rgb(255,237,229);
+    background: rgb(255,230,234);
   }
 
   &.uploaded {
